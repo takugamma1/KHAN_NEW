@@ -148,7 +148,14 @@
   {%- if section.settings.show_asterisks -%}
     <div class="rocks-hero__asterisks">
       {%- for i in (1..section.settings.asterisk_count) -%}
-        <span class="rocks-hero__asterisk">{{ 'asterisk.svg' | inline_asset_content }}</span>
+        <img
+          class="rocks-hero__asterisk"
+          src="{{ 'asterisk.png' | asset_url }}"
+          alt=""
+          loading="lazy"
+          width="258"
+          height="320"
+        >
       {%- endfor -%}
     </div>
   {%- endif -%}
@@ -362,14 +369,8 @@
   .rocks-hero__asterisk {
     display: block;
     width: var(--rocks-ast-size, 44px);
-    height: var(--rocks-ast-size, 44px);
+    height: auto;
     flex: 0 0 auto;
-  }
-
-  .rocks-hero__asterisk svg {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
 
   @media screen and (max-width: 749px) {
@@ -383,7 +384,6 @@
 
     .rocks-hero__asterisk {
       width: calc(var(--rocks-ast-size, 44px) * 0.7);
-      height: calc(var(--rocks-ast-size, 44px) * 0.7);
     }
   }
 {% endstylesheet %}
