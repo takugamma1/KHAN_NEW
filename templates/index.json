@@ -13,6 +13,7 @@
       "type": "rocks-hero",
       "settings": {
         "media_type": "image",
+        "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
         "frame_fit": "cover",
         "logo_white": true,
         "logo_width": 220,
