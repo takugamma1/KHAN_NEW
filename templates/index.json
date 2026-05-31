@@ -67,41 +67,6 @@
         "padding-block-end": 40
       }
     },
-    "hero_Xhj76J": {
-      "type": "hero",
-      "name": "t:names.hero",
-      "settings": {
-        "media_type_1": "video",
-        "video_1": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": false,
-        "overlay_color": "rgba(0,0,0,0)",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
-      }
-    },
     "hero_r78h3y": {
       "type": "hero",
       "blocks": {
@@ -207,12 +172,36 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
+    },
+    "rocks_hero_6ig48b": {
+      "type": "rocks-hero",
+      "name": "Rocks hero",
+      "settings": {
+        "media_type": "video",
+        "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
+        "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T203828.976_1.png",
+        "frame_fit": "cover",
+        "logo_white": true,
+        "logo_width": 220,
+        "logo_width_mobile": 140,
+        "logo_pulse": true,
+        "pulse_amount": 35,
+        "pulse_opacity": 90,
+        "pulse_speed": 3,
+        "section_height": "full-screen",
+        "section_height_custom": 100,
+        "color_scheme": "",
+        "toggle_overlay": false,
+        "overlay_color": "#00000040",
+        "overlay_style": "solid",
+        "gradient_direction": "to top"
+      }
     }
   },
   "order": [
     "rocks_hero_Ax9Kp2",
     "hero_bpj7B9",
-    "hero_Xhj76J",
-    "hero_r78h3y"
+    "hero_r78h3y",
+    "rocks_hero_6ig48b"
   ]
 }
