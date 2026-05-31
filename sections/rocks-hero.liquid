@@ -1,0 +1,453 @@
+{% liquid
+  assign bg_type = section.settings.media_type
+  assign has_image = false
+  assign has_video = false
+  if bg_type == 'image' and section.settings.background_image != blank
+    assign has_image = true
+  endif
+  if bg_type == 'video' and section.settings.background_video != blank
+    assign has_video = true
+  endif
+
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+%}
+
+<div
+  id="RocksHero-{{ section.id }}"
+  class="rocks-hero color-{{ section.settings.color_scheme }}"
+  style="
+    {% if section.settings.section_height == 'custom' %}
+      --rocks-hero-min-height: {{ section.settings.section_height_custom }}svh;
+    {% elsif section.settings.section_height == 'full-screen' %}
+      --rocks-hero-min-height: 100svh;
+    {% else %}
+      --rocks-hero-min-height: var(--section-height-{{ section.settings.section_height }});
+    {% endif %}
+    --rocks-frame-fit: {{ section.settings.frame_fit }};
+    --rocks-logo-width: {{ section.settings.logo_width }}px;
+    --rocks-logo-width-mobile: {{ section.settings.logo_width_mobile }}px;
+    --rocks-pulse-duration: {{ section.settings.pulse_speed }}s;
+    --rocks-pulse-scale: {{ section.settings.pulse_amount | divided_by: 1000.0 | plus: 1 }};
+    --rocks-pulse-min-opacity: {{ section.settings.pulse_opacity | divided_by: 100.0 }};
+  "
+  {% if request.visual_preview_mode %}
+    data-shopify-visual-preview
+  {% endif %}
+>
+  {%- comment -%} Layer 1: background media (image or video). Black when empty -> drop video here. {%- endcomment -%}
+  <div class="rocks-hero__media" data-testid="rocks-hero-media">
+    {%- if has_image -%}
+      {{
+        section.settings.background_image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.background_image.width,
+          widths: '832, 1200, 1600, 1920, 2560, 3840',
+          height: section.settings.background_image.height,
+          alt: section.settings.background_image.alt,
+          class: 'rocks-hero__media-item',
+          sizes: '100vw',
+          fetchpriority: fetch_priority,
+          data-testid: 'rocks-hero-image'
+      }}
+    {%- elsif has_video -%}
+      {{
+        section.settings.background_video
+        | video_tag:
+          poster: nil,
+          autoplay: true,
+          loop: true,
+          controls: false,
+          muted: true,
+          class: 'rocks-hero__media-item',
+          data-testid: 'rocks-hero-video'
+      }}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Layer 2: optional tint overlay {%- endcomment -%}
+  {%- if section.settings.toggle_overlay -%}
+    {% render 'overlay', settings: section.settings, layer: 'var(--layer-flat)' %}
+  {%- endif -%}
+
+  {%- comment -%} Layer 3: the rocks frame image, sits on top of the media {%- endcomment -%}
+  {%- if section.settings.frame_image != blank -%}
+    <div class="rocks-hero__frame" data-testid="rocks-hero-frame">
+      {{
+        section.settings.frame_image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.frame_image.width,
+          widths: '832, 1200, 1600, 1920, 2560, 3840',
+          height: section.settings.frame_image.height,
+          alt: '',
+          class: 'rocks-hero__frame-img',
+          sizes: '100vw',
+          fetchpriority: fetch_priority
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Layer 4: centered logo, white + subtle pulse {%- endcomment -%}
+  <div
+    class="
+      rocks-hero__logo
+      {% if section.settings.logo_pulse %}rocks-hero__logo--pulse{% endif %}
+      {% if section.settings.logo_white %}rocks-hero__logo--white{% endif %}
+    "
+    data-testid="rocks-hero-logo"
+  >
+    {%- if section.settings.logo != blank -%}
+      {{
+        section.settings.logo
+        | image_url: width: 1200
+        | image_tag:
+          width: section.settings.logo.width,
+          widths: '120, 240, 352, 480, 832, 1200',
+          height: section.settings.logo.height,
+          alt: shop.name,
+          class: 'rocks-hero__logo-img',
+          sizes: 'var(--rocks-logo-width)'
+      }}
+    {%- else -%}
+      {{ 'white-logo.svg' | inline_asset_content }}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .rocks-hero {
+    position: relative;
+    min-height: var(--rocks-hero-min-height);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    /* Solid black so an empty media slot reads as "video goes here" */
+    background-color: #000;
+  }
+
+  .rocks-hero[data-shopify-visual-preview] {
+    min-height: 600px;
+  }
+
+  .rocks-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-base, 0);
+  }
+
+  .rocks-hero__media-item,
+  .rocks-hero__media img,
+  .rocks-hero__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  .rocks-hero__frame {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-raised, 2);
+    pointer-events: none;
+  }
+
+  .rocks-hero__frame-img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--rocks-frame-fit, cover);
+    object-position: center center;
+    display: block;
+  }
+
+  .rocks-hero__logo {
+    position: relative;
+    z-index: var(--layer-heightened, 4);
+    width: var(--rocks-logo-width, 200px);
+    max-width: 80vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .rocks-hero__logo img,
+  .rocks-hero__logo svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Force any logo (raster or svg) to render white */
+  .rocks-hero__logo--white img,
+  .rocks-hero__logo--white svg {
+    filter: brightness(0) invert(1);
+  }
+
+  .rocks-hero__logo--white svg path {
+    fill: #fff;
+  }
+
+  @media screen and (max-width: 749px) {
+    .rocks-hero__logo {
+      width: var(--rocks-logo-width-mobile, 140px);
+    }
+  }
+
+  /* Subtle pulse. Disabled when the visitor prefers reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .rocks-hero__logo--pulse {
+      animation: rocks-logo-pulse var(--rocks-pulse-duration, 3s) ease-in-out infinite;
+    }
+  }
+
+  @keyframes rocks-logo-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    50% {
+      transform: scale(var(--rocks-pulse-scale, 1.035));
+      opacity: var(--rocks-pulse-min-opacity, 0.9);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Rocks hero",
+  "tag": "section",
+  "class": "rocks-hero-wrapper section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background media"
+    },
+    {
+      "type": "paragraph",
+      "content": "Image or video sitting behind the frame. Leave empty for a solid black backdrop (a video can be dropped in later)."
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Frame"
+    },
+    {
+      "type": "paragraph",
+      "content": "The frame image sits on top of the background media. Use a PNG with a transparent center (your rocks frame)."
+    },
+    {
+      "type": "image_picker",
+      "id": "frame_image",
+      "label": "Frame image"
+    },
+    {
+      "type": "select",
+      "id": "frame_fit",
+      "label": "Frame fit",
+      "options": [
+        { "value": "cover", "label": "Cover (fill, may crop)" },
+        { "value": "fill", "label": "Stretch to edges" },
+        { "value": "contain", "label": "Contain (no crop)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "Centered in the section. Leave empty to use the bundled white logo."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_white",
+      "label": "Force logo white",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width (desktop)",
+      "min": 60,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Logo width (mobile)",
+      "min": 40,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "header",
+      "content": "Pulse"
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_pulse",
+      "label": "Pulse the logo",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "pulse_amount",
+      "label": "Pulse size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "‰",
+      "default": 35,
+      "info": "How much the logo grows at the peak of the pulse. Kept subtle by default.",
+      "visible_if": "{{ section.settings.logo_pulse }}"
+    },
+    {
+      "type": "range",
+      "id": "pulse_opacity",
+      "label": "Pulse dimming",
+      "min": 50,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 90,
+      "info": "Lowest opacity reached during the pulse.",
+      "visible_if": "{{ section.settings.logo_pulse }}"
+    },
+    {
+      "type": "range",
+      "id": "pulse_speed",
+      "label": "Pulse speed",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "default": 3,
+      "info": "Seconds per pulse cycle.",
+      "visible_if": "{{ section.settings.logo_pulse }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full-screen", "label": "Full screen" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "full-screen"
+    },
+    {
+      "type": "range",
+      "id": "section_height_custom",
+      "label": "Custom height",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ section.settings.section_height == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Tint media",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Tint color",
+      "alpha": true,
+      "default": "#00000040",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Tint style",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "gradient", "label": "Gradient" }
+      ],
+      "default": "solid",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        { "value": "to top", "label": "Up" },
+        { "value": "to bottom", "label": "Down" }
+      ],
+      "default": "to top",
+      "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rocks hero",
+      "category": "Banners"
+    }
+  ]
+}
+{% endschema %}
