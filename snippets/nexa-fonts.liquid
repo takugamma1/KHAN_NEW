@@ -1,26 +1,38 @@
 {%- comment -%}
-  Registers the Nexa custom font family (Cyrillic + Latin).
-  Two weights are available: 900 (Heavy) and 100 (ExtraLight).
-  Use in CSS with: font-family: 'Nexa', sans-serif; font-weight: 900; (or 100)
+  Registers the Nexa custom font (Cyrillic + Latin) and makes it the
+  store-wide font family.
+
+  Two real weights ship: 100 (ExtraLight) and 900 (Heavy). They are mapped
+  across the weight range so normal text uses ExtraLight and bold/headings
+  use Heavy:
+    font-weight 100-400  -> ExtraLight
+    font-weight 500-900  -> Heavy
 {%- endcomment -%}
 {% style %}
   @font-face {
     font-family: 'Nexa';
-    src: url('{{ 'nexa-heavy.woff2' | asset_url }}') format('woff2');
-    font-weight: 900;
+    src: url('{{ 'nexa-extralight.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 400;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
     font-family: 'Nexa';
-    src: url('{{ 'nexa-extralight.woff2' | asset_url }}') format('woff2');
-    font-weight: 100;
+    src: url('{{ 'nexa-heavy.woff2' | asset_url }}') format('woff2');
+    font-weight: 500 900;
     font-style: normal;
     font-display: swap;
   }
 
   :root {
-    --font-nexa: 'Nexa', var(--font-body--family, sans-serif);
+    --font-nexa: 'Nexa', sans-serif;
+    /* Make the whole store use Nexa. !important wins regardless of where
+       the theme's own font variables are declared. */
+    --font-body--family: 'Nexa', sans-serif !important;
+    --font-heading--family: 'Nexa', sans-serif !important;
+    --font-paragraph--family: 'Nexa', sans-serif !important;
+    --font-subheading--family: 'Nexa', sans-serif !important;
+    --font-accent--family: 'Nexa', sans-serif !important;
   }
 {% endstyle %}
