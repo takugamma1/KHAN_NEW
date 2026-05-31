@@ -31,6 +31,29 @@
         "gradient_direction": "to top"
       }
     },
+    "video_banner_Qp7mLx": {
+      "type": "video-banner",
+      "settings": {
+        "autoplay": true,
+        "loop": true,
+        "show_controls": false,
+        "offset_top": 0,
+        "offset_bottom": 0,
+        "bring_to_front": true,
+        "custom_mobile_offset": false,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "section_height": "large",
+        "section_height_custom": 60,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "color_scheme": "scheme-1",
+        "toggle_overlay": false,
+        "overlay_color": "#00000040",
+        "overlay_style": "solid",
+        "gradient_direction": "to top"
+      }
+    },
     "hero_bpj7B9": {
       "type": "hero",
       "name": "t:names.hero",
@@ -69,6 +92,7 @@
   },
   "order": [
     "rocks_hero_Ax9Kp2",
+    "video_banner_Qp7mLx",
     "hero_bpj7B9"
   ]
 }
