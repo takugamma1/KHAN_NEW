@@ -32,6 +32,12 @@
     --rocks-pulse-duration: {{ section.settings.pulse_speed }}s;
     --rocks-pulse-scale: {{ section.settings.pulse_amount | divided_by: 1000.0 | plus: 1 }};
     --rocks-pulse-min-opacity: {{ section.settings.pulse_opacity | divided_by: 100.0 }};
+    --rocks-accent: {{ section.settings.accent_color }};
+    --rocks-heading-size: {{ section.settings.heading_size }}px;
+    --rocks-text-size: {{ section.settings.text_size }}px;
+    --rocks-ast-size: {{ section.settings.asterisk_size }}px;
+    --rocks-ast-gap: {{ section.settings.asterisk_gap }}px;
+    --rocks-ast-inset: {{ section.settings.asterisk_inset }}px;
   "
   {% if request.visual_preview_mode %}
     data-shopify-visual-preview
@@ -117,6 +123,34 @@
       {{ 'white-logo.svg' | inline_asset_content }}
     {%- endif -%}
   </div>
+  {%- endif -%}
+
+  {%- comment -%} Layer 5: heading + paragraph overlay {%- endcomment -%}
+  {%- if section.settings.heading != blank or section.settings.text != blank -%}
+    <div
+      class="
+        rocks-hero__content
+        rocks-hero__content--{{ section.settings.content_position }}
+        {% if section.settings.use_nexa %}rocks-hero__content--nexa{% endif %}
+        {% if section.settings.enable_shadow %}rocks-hero__content--shadow{% endif %}
+      "
+    >
+      {%- if section.settings.heading != blank -%}
+        <div class="rocks-hero__heading">{{ section.settings.heading }}</div>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rocks-hero__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Layer 6: asterisks, bottom-right {%- endcomment -%}
+  {%- if section.settings.show_asterisks -%}
+    <div class="rocks-hero__asterisks">
+      {%- for i in (1..section.settings.asterisk_count) -%}
+        <span class="rocks-hero__asterisk">{{ 'asterisk.svg' | inline_asset_content }}</span>
+      {%- endfor -%}
+    </div>
   {%- endif -%}
 </div>
 
@@ -218,6 +252,138 @@
     50% {
       transform: scale(var(--rocks-pulse-scale, 1.035));
       opacity: var(--rocks-pulse-min-opacity, 0.9);
+    }
+  }
+
+  /* --- Content overlay: heading + paragraph --- */
+  .rocks-hero__content {
+    position: absolute;
+    z-index: var(--layer-heightened, 4);
+    max-width: min(92%, 780px);
+    padding: clamp(20px, 5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    text-transform: uppercase;
+  }
+
+  .rocks-hero__content--nexa {
+    font-family: 'Nexa', var(--font-body--family, sans-serif);
+  }
+
+  .rocks-hero__content a {
+    pointer-events: auto;
+  }
+
+  .rocks-hero__content--top-left {
+    inset: 0 auto auto 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .rocks-hero__content--top-right {
+    inset: 0 0 auto auto;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .rocks-hero__content--center-left {
+    inset: 50% auto auto 0;
+    transform: translateY(-50%);
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .rocks-hero__content--center {
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    text-align: center;
+  }
+
+  .rocks-hero__content--bottom-left {
+    inset: auto auto 0 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .rocks-hero__content--bottom-right {
+    inset: auto 0 0 auto;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .rocks-hero__heading {
+    margin: 0;
+    font-weight: 900;
+    font-size: var(--rocks-heading-size, 80px);
+    line-height: 0.95;
+    color: #fff;
+  }
+
+  .rocks-hero__text {
+    margin: 0.6em 0 0;
+    font-weight: 100;
+    font-size: var(--rocks-text-size, 20px);
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    color: #fff;
+  }
+
+  /* Bold words in the rich-text fields render in the red accent */
+  .rocks-hero__heading :is(strong, b),
+  .rocks-hero__text :is(strong, b) {
+    color: var(--rocks-accent, #d8232a);
+    font-weight: inherit;
+  }
+
+  .rocks-hero__heading p,
+  .rocks-hero__text p {
+    margin: 0;
+  }
+
+  .rocks-hero__content--shadow .rocks-hero__heading,
+  .rocks-hero__content--shadow .rocks-hero__text {
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  /* --- Asterisks, bottom-right --- */
+  .rocks-hero__asterisks {
+    position: absolute;
+    z-index: var(--layer-heightened, 4);
+    inset: auto var(--rocks-ast-inset, 32px) var(--rocks-ast-inset, 32px) auto;
+    display: flex;
+    align-items: center;
+    gap: var(--rocks-ast-gap, 16px);
+    color: var(--rocks-accent, #d8232a);
+    pointer-events: none;
+  }
+
+  .rocks-hero__asterisk {
+    display: block;
+    width: var(--rocks-ast-size, 44px);
+    height: var(--rocks-ast-size, 44px);
+    flex: 0 0 auto;
+  }
+
+  .rocks-hero__asterisk svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @media screen and (max-width: 749px) {
+    .rocks-hero__heading {
+      font-size: calc(var(--rocks-heading-size, 80px) * 0.5);
+    }
+
+    .rocks-hero__text {
+      font-size: calc(var(--rocks-text-size, 20px) * 0.85);
+    }
+
+    .rocks-hero__asterisk {
+      width: calc(var(--rocks-ast-size, 44px) * 0.7);
+      height: calc(var(--rocks-ast-size, 44px) * 0.7);
     }
   }
 {% endstylesheet %}
@@ -375,6 +541,125 @@
       "default": 3,
       "info": "Seconds per pulse cycle.",
       "visible_if": "{{ section.settings.logo_pulse }}"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "paragraph",
+      "content": "Bold text becomes the red accent. All text shows in capitals. Uses the Nexa font."
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Paragraph"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Position",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "center-left", "label": "Center left" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "center-left"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (red) color",
+      "default": "#d8232a"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_nexa",
+      "label": "Use Nexa font",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shadow",
+      "label": "Text shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 24,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Paragraph size",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Asterisks"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_asterisks",
+      "label": "Show asterisks",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "asterisk_count",
+      "label": "Number of asterisks",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "asterisk_size",
+      "label": "Asterisk size",
+      "min": 16,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "asterisk_gap",
+      "label": "Gap between asterisks",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "asterisk_inset",
+      "label": "Distance from corner",
+      "min": 0,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "default": 32
     },
     {
       "type": "header",

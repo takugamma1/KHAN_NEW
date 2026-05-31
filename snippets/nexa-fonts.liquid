@@ -1,0 +1,26 @@
+{%- comment -%}
+  Registers the Nexa custom font family (Cyrillic + Latin).
+  Two weights are available: 900 (Heavy) and 100 (ExtraLight).
+  Use in CSS with: font-family: 'Nexa', sans-serif; font-weight: 900; (or 100)
+{%- endcomment -%}
+{% style %}
+  @font-face {
+    font-family: 'Nexa';
+    src: url('{{ 'nexa-heavy.woff2' | asset_url }}') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Nexa';
+    src: url('{{ 'nexa-extralight.woff2' | asset_url }}') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --font-nexa: 'Nexa', var(--font-body--family, sans-serif);
+  }
+{% endstyle %}
