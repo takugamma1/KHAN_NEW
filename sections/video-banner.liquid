@@ -25,10 +25,10 @@
     {% else %}
       --video-banner-min-height: var(--section-height-{{ section.settings.section_height }});
     {% endif %}
-    --video-offset-top: {{ section.settings.offset_top }}px;
-    --video-offset-bottom: {{ section.settings.offset_bottom }}px;
-    --video-offset-top-mobile: {{ section.settings.offset_top_mobile }}px;
-    --video-offset-bottom-mobile: {{ section.settings.offset_bottom_mobile }}px;
+    --video-overlap-above: {{ section.settings.overlap_above }}px;
+    --video-overlap-below: {{ section.settings.overlap_below }}px;
+    --video-overlap-above-mobile: {{ section.settings.overlap_above_mobile }}px;
+    --video-overlap-below-mobile: {{ section.settings.overlap_below_mobile }}px;
     --video-banner-align-x: {{ section.settings.horizontal_alignment }};
     --video-banner-align-y: {{ section.settings.vertical_alignment }};
   "
@@ -90,10 +90,10 @@
     justify-content: var(--video-banner-align-x, center);
     background-color: #000;
 
-    /* Negative pulls the section up into the one above (connect seam),
-       positive pushes it down. */
-    margin-block-start: var(--video-offset-top, 0px);
-    margin-block-end: var(--video-offset-bottom, 0px);
+    /* Overlap pulls this section up over the one above (and pulls the next
+       section up into this one) so the seam disappears. */
+    margin-block-start: calc(-1 * var(--video-overlap-above, 0px));
+    margin-block-end: calc(-1 * var(--video-overlap-below, 0px));
   }
 
   /* Sit on top of neighbouring sections when offsets cause overlap. */
@@ -139,8 +139,8 @@
 
   @media screen and (max-width: 749px) {
     .video-banner--custom-mobile-offset {
-      margin-block-start: var(--video-offset-top-mobile, 0px);
-      margin-block-end: var(--video-offset-bottom-mobile, 0px);
+      margin-block-start: calc(-1 * var(--video-overlap-above-mobile, 0px));
+      margin-block-end: calc(-1 * var(--video-overlap-below-mobile, 0px));
     }
   }
 {% endstylesheet %}
@@ -197,28 +197,33 @@
     },
     {
       "type": "header",
-      "content": "Position / offset",
-      "info": "Use negative values to pull the section higher (overlap the section above and connect the seam). Positive values push it lower."
+      "content": "Position"
+    },
+    {
+      "type": "paragraph",
+      "content": "Overlap pulls this section up so it connects with the section above (or pulls the next section up into this one), removing the seam."
     },
     {
       "type": "range",
-      "id": "offset_top",
-      "label": "Top offset",
-      "min": -600,
+      "id": "overlap_above",
+      "label": "Overlap section above",
+      "min": 0,
       "max": 600,
       "step": 2,
       "unit": "px",
-      "default": 0
+      "default": 0,
+      "info": "How far to pull this section up over the one above."
     },
     {
       "type": "range",
-      "id": "offset_bottom",
-      "label": "Bottom offset",
-      "min": -600,
+      "id": "overlap_below",
+      "label": "Overlap section below",
+      "min": 0,
       "max": 600,
       "step": 2,
       "unit": "px",
-      "default": 0
+      "default": 0,
+      "info": "How far to pull the next section up into this one."
     },
     {
       "type": "checkbox",
@@ -229,14 +234,14 @@
     {
       "type": "checkbox",
       "id": "custom_mobile_offset",
-      "label": "Use different offsets on mobile",
+      "label": "Use different overlap on mobile",
       "default": false
     },
     {
       "type": "range",
-      "id": "offset_top_mobile",
-      "label": "Top offset (mobile)",
-      "min": -600,
+      "id": "overlap_above_mobile",
+      "label": "Overlap above (mobile)",
+      "min": 0,
       "max": 600,
       "step": 2,
       "unit": "px",
@@ -245,9 +250,9 @@
     },
     {
       "type": "range",
-      "id": "offset_bottom_mobile",
-      "label": "Bottom offset (mobile)",
-      "min": -600,
+      "id": "overlap_below_mobile",
+      "label": "Overlap below (mobile)",
+      "min": 0,
       "max": 600,
       "step": 2,
       "unit": "px",
