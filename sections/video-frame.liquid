@@ -1,0 +1,279 @@
+{% liquid
+  assign has_video = false
+  if section.settings.background_video != blank
+    assign has_video = true
+  endif
+%}
+
+<div
+  id="VideoFrame-{{ section.id }}"
+  class="video-frame color-{{ section.settings.color_scheme }}{% if section.settings.bring_to_front %} video-frame--front{% endif %}"
+  style="
+    {% if section.settings.section_height == 'custom' %}
+      --video-frame-min-height: {{ section.settings.section_height_custom }}svh;
+    {% elsif section.settings.section_height == 'full-screen' %}
+      --video-frame-min-height: 100svh;
+    {% else %}
+      --video-frame-min-height: var(--section-height-{{ section.settings.section_height }});
+    {% endif %}
+    --video-frame-overlap-above: {{ section.settings.overlap_above }}px;
+    --video-frame-image-width: {{ section.settings.image_width }}%;
+    --video-frame-image-align: {{ section.settings.image_align }};
+  "
+  {% if request.visual_preview_mode %}
+    data-shopify-visual-preview
+  {% endif %}
+>
+  {%- comment -%} Background video (autoplay, muted, loop). Black when empty. {%- endcomment -%}
+  <div class="video-frame__media">
+    {%- if has_video -%}
+      {{
+        section.settings.background_video
+        | video_tag:
+          poster: nil,
+          autoplay: true,
+          loop: true,
+          controls: false,
+          muted: true,
+          class: 'video-frame__media-item'
+      }}
+    {%- elsif request.design_mode -%}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-frame__media-item' }}
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.toggle_overlay -%}
+    {% render 'overlay', settings: section.settings, layer: 'var(--layer-flat)' %}
+  {%- endif -%}
+
+  {%- comment -%} Top image (the rock frame) sitting over the video, anchored to the top. {%- endcomment -%}
+  {%- if section.settings.top_image != blank -%}
+    <div class="video-frame__image">
+      {{
+        section.settings.top_image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.top_image.width,
+          widths: '832, 1200, 1600, 1920, 2560, 3840',
+          height: section.settings.top_image.height,
+          alt: section.settings.top_image.alt,
+          class: 'video-frame__image-item',
+          sizes: '100vw'
+      }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .video-frame {
+    position: relative;
+    min-height: var(--video-frame-min-height);
+    overflow: hidden;
+    background-color: #000;
+    /* Pull the section up so the rock frame connects with the section above. */
+    margin-block-start: calc(-1 * var(--video-frame-overlap-above, 0px));
+  }
+
+  .video-frame--front {
+    z-index: var(--layer-raised, 2);
+  }
+
+  .video-frame[data-shopify-visual-preview] {
+    min-height: 600px;
+  }
+
+  .video-frame__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-base, 0);
+  }
+
+  .video-frame__media-item,
+  .video-frame__media img,
+  .video-frame__media svg,
+  .video-frame__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  /* Top image: full-bleed strip anchored to the very top, image keeps its ratio. */
+  .video-frame__image {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--layer-flat, 1);
+    display: flex;
+    justify-content: var(--video-frame-image-align, center);
+    pointer-events: none;
+  }
+
+  .video-frame__image-item {
+    width: var(--video-frame-image-width, 100%);
+    height: auto;
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Video frame",
+  "tag": "section",
+  "class": "video-frame-wrapper section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background video"
+    },
+    {
+      "type": "paragraph",
+      "content": "Plays full screen behind the image, muted and looping. Leave empty for a solid black background."
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video"
+    },
+    {
+      "type": "header",
+      "content": "Top image"
+    },
+    {
+      "type": "paragraph",
+      "content": "Sits on top of the video, anchored to the top edge (your rock frame). Use a PNG with a transparent bottom so it connects with the section above."
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "image_align",
+      "label": "Image alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Position"
+    },
+    {
+      "type": "range",
+      "id": "overlap_above",
+      "label": "Overlap section above",
+      "min": 0,
+      "max": 400,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Pulls this section up so the frame connects with the section above."
+    },
+    {
+      "type": "checkbox",
+      "id": "bring_to_front",
+      "label": "Bring to front when overlapping",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full-screen", "label": "Full screen" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "full-screen"
+    },
+    {
+      "type": "range",
+      "id": "section_height_custom",
+      "label": "Custom height",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ section.settings.section_height == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Tint video",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Tint color",
+      "alpha": true,
+      "default": "#00000040",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Tint style",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "gradient", "label": "Gradient" }
+      ],
+      "default": "solid",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        { "value": "to top", "label": "Up" },
+        { "value": "to bottom", "label": "Down" }
+      ],
+      "default": "to top",
+      "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video frame",
+      "category": "t:categories.banners"
+    }
+  ]
+}
+{% endschema %}
