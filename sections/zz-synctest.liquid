@@ -1,38 +1,10 @@
-<div>{{ section.settings.heading }}{{ section.settings.text }}</div>
+<div>{{ section.settings.heading }}</div>
 
 {% schema %}
 {
   "name": "ZZ Sync Test",
   "settings": [
-    { "type": "header", "content": "Content" },
-    { "type": "paragraph", "content": "Bold text becomes the red accent." },
-    { "type": "richtext", "id": "heading", "label": "Heading" },
-    { "type": "richtext", "id": "text", "label": "Paragraph" },
-    {
-      "type": "select",
-      "id": "content_position",
-      "label": "Position",
-      "options": [
-        { "value": "top-left", "label": "Top left" },
-        { "value": "top-right", "label": "Top right" },
-        { "value": "center-left", "label": "Center left" },
-        { "value": "center", "label": "Center" },
-        { "value": "bottom-left", "label": "Bottom left" },
-        { "value": "bottom-right", "label": "Bottom right" }
-      ],
-      "default": "center-left"
-    },
-    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#d8232a" },
-    { "type": "checkbox", "id": "use_nexa", "label": "Use Nexa font", "default": true },
-    { "type": "checkbox", "id": "enable_shadow", "label": "Text shadow", "default": true },
-    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 160, "step": 2, "unit": "px", "default": 80 },
-    { "type": "range", "id": "text_size", "label": "Paragraph size", "min": 12, "max": 48, "step": 1, "unit": "px", "default": 20 },
-    { "type": "header", "content": "Asterisks" },
-    { "type": "checkbox", "id": "show_asterisks", "label": "Show asterisks", "default": true },
-    { "type": "range", "id": "asterisk_count", "label": "Number of asterisks", "min": 1, "max": 8, "step": 1, "default": 4 },
-    { "type": "range", "id": "asterisk_size", "label": "Asterisk size", "min": 16, "max": 120, "step": 2, "unit": "px", "default": 44 },
-    { "type": "range", "id": "asterisk_gap", "label": "Gap", "min": 0, "max": 60, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "asterisk_inset", "label": "Distance from corner", "min": 0, "max": 120, "step": 1, "unit": "px", "default": 32 }
+    { "type": "richtext", "id": "heading", "label": "Heading" }
   ]
 }
 {% endschema %}
