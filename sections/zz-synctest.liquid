@@ -1,10 +1,11 @@
-<div>{{ section.settings.heading }}</div>
+<div>{{ section.settings.heading }}{{ section.settings.text }}</div>
 
 {% schema %}
 {
   "name": "ZZ Sync Test",
   "settings": [
-    { "type": "richtext", "id": "heading", "label": "Heading" }
+    { "type": "richtext", "id": "heading", "label": "Heading" },
+    { "type": "richtext", "id": "text", "label": "Paragraph" }
   ]
 }
 {% endschema %}
