@@ -17,7 +17,7 @@
 
 <div
   id="RocksHero-{{ section.id }}"
-  class="rocks-hero color-{{ section.settings.color_scheme }}"
+  class="rocks-hero color-{{ section.settings.color_scheme }}{% if section.settings.text_grain %} rocks-hero--grain{% endif %}"
   style="
     {% if section.settings.section_height == 'custom' %}
       --rocks-hero-min-height: {{ section.settings.section_height_custom }}svh;
@@ -38,6 +38,7 @@
     --rocks-ast-size: {{ section.settings.asterisk_size }}px;
     --rocks-ast-gap: {{ section.settings.asterisk_gap }}px;
     --rocks-ast-inset: {{ section.settings.asterisk_inset }}px;
+    --rocks-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   {% if request.visual_preview_mode %}
     data-shopify-visual-preview
@@ -330,10 +331,11 @@
 
   .rocks-hero__text {
     margin: 0.6em 0 0;
-    font-weight: 100;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-weight: 400;
     font-size: var(--rocks-text-size, 20px);
-    line-height: 1.3;
-    letter-spacing: 0.04em;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
     color: #fff;
   }
 
@@ -352,6 +354,16 @@
   .rocks-hero__content--shadow .rocks-hero__heading,
   .rocks-hero__content--shadow .rocks-hero__text {
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Grain on the content only — same treatment as the Our Story section */
+  .rocks-hero--grain :is(.rocks-hero__heading, .rocks-hero__text, .rocks-hero__asterisk) {
+    -webkit-mask-image: var(--rocks-grain);
+    mask-image: var(--rocks-grain);
+    -webkit-mask-size: 170px 170px;
+    mask-size: 170px 170px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
   }
 
   /* --- Asterisks, bottom-right --- */
@@ -590,6 +602,12 @@
       "type": "checkbox",
       "id": "enable_shadow",
       "label": "Text shadow",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "text_grain",
+      "label": "Grain on text & asterisks",
       "default": true
     },
     {
