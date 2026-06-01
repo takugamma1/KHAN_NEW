@@ -180,14 +180,15 @@
   .khan-story__inner {
     position: relative;
     z-index: 2;
-    max-width: var(--ks-maxw, 1500px);
+    max-width: min(var(--ks-maxw, 1500px), 100%);
     margin-inline: auto;
   }
 
   .khan-story__grid {
     display: grid;
-    /* minmax(0, …) stops the big headline from blowing the tracks out past the viewport */
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+    /* Right column gets a fixed, readable width; left takes the rest and the
+       headline shrinks/wraps inside it. Deterministic — never collapses. */
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 30%, 440px);
     gap: var(--ks-gap, 80px);
     align-items: start;
   }
