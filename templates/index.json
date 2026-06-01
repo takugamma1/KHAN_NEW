@@ -47,7 +47,14 @@
         "toggle_overlay": false,
         "overlay_color": "#00000040",
         "overlay_style": "solid",
-        "gradient_direction": "to top"
+        "gradient_direction": "to top",
+        "usp_align": "center",
+        "usp_bottom": 48,
+        "usp_card_width": 230,
+        "usp_icon_size": 64,
+        "usp_title_size": 18,
+        "usp_text_size": 14,
+        "usp_divider_color": "#ffffff47"
       }
     },
     "rocks_hero_6ig48b": {
@@ -90,7 +97,14 @@
         "toggle_overlay": false,
         "overlay_color": "#00000040",
         "overlay_style": "solid",
-        "gradient_direction": "to top"
+        "gradient_direction": "to top",
+        "usp_align": "center",
+        "usp_bottom": 48,
+        "usp_card_width": 218,
+        "usp_icon_size": 64,
+        "usp_title_size": 18,
+        "usp_text_size": 14,
+        "usp_divider_color": "#000000"
       }
     },
     "khan_our_story_9deQRY": {
