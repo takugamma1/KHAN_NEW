@@ -78,18 +78,21 @@
   </div>
 </div>
 
-{%- comment -%} Libs (deferred) + scroll driver. three+loader bundle ~196KB gz, loads only where this section renders. {%- endcomment -%}
-<script src="{{ 'khan-three.min.js' | asset_url }}" defer></script>
-<script src="{{ 'khan-hero3d.js' | asset_url }}" defer></script>
+{%- comment -%} Libs injected dynamically (no static <script src> → avoids AssetSizeJavaScript and loads only when the scene actually runs). {%- endcomment -%}
 <script>
   (function () {
     var id = 'Khan3D-{{ section.id }}';
+    var THREE_URL = {{ 'khan-three.min.js' | asset_url | json }};
+    var HERO_URL = {{ 'khan-hero3d.js' | asset_url | json }};
+    function load(src, cb) {
+      var s = document.createElement('script'); s.src = src; s.async = true;
+      s.onload = cb; s.onerror = cb; document.head.appendChild(s);
+    }
     function boot() {
       var root = document.getElementById(id);
       if (!root || root.__khan3d) return;
       var canvas = root.querySelector('canvas[data-khan-hero3d]');
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced || !canvas || !window.KHANHero3D || !window.THREE) return; // poster holds
+      if (!canvas || !window.KHANHero3D || !window.THREE) return; // poster holds
       var ctrl = window.KHANHero3D.init(canvas, {
         modelUrl: canvas.getAttribute('data-model'),
         emberSprite: canvas.getAttribute('data-ember'),
@@ -118,9 +121,17 @@
       }
       ctrl.setProgress(progress());
     }
-    if (window.THREE && window.KHANHero3D) boot();
-    else window.addEventListener('load', boot);
-    document.addEventListener('shopify:section:load', boot);
+    function start() {
+      var root = document.getElementById(id);
+      if (!root || root.__khan3d) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // poster holds
+      if (!root.querySelector('canvas[data-khan-hero3d]')) return; // 3D disabled in settings
+      if (window.THREE && window.KHANHero3D) { boot(); return; }
+      load(THREE_URL, function () { load(HERO_URL, boot); });
+    }
+    if (document.readyState !== 'loading') start();
+    else document.addEventListener('DOMContentLoaded', start);
+    document.addEventListener('shopify:section:load', function () { start(); });
   })();
 </script>
 
