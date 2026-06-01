@@ -1,0 +1,465 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanStory-{{ section.id }}"
+  class="
+    khan-story color-{{ s.color_scheme }}
+    {% if s.text_grain %}khan-story--grain{% endif %}
+  "
+  style="
+    --ks-bg: {{ s.bg_color }};
+    --ks-heading-color: {{ s.heading_color }};
+    --ks-accent: {{ s.accent_color }};
+    --ks-text-color: {{ s.text_color }};
+    --ks-eyebrow-color: {{ s.eyebrow_color }};
+    --ks-feat-title-color: {{ s.feature_title_color }};
+    --ks-deco-color: {{ s.deco_color }};
+    --ks-heading-size: {{ s.heading_size }}px;
+    --ks-eyebrow-size: {{ s.eyebrow_size }}px;
+    --ks-body-size: {{ s.body_size }}px;
+    --ks-feat-title-size: {{ s.feature_title_size }}px;
+    --ks-feat-text-size: {{ s.feature_text_size }}px;
+    --ks-icon-size: {{ s.icon_size }}px;
+    --ks-gap: {{ s.column_gap }}px;
+    --ks-maxw: {{ s.max_width }}px;
+    --ks-pt: {{ s.padding_top }}px;
+    --ks-pb: {{ s.padding_bottom }}px;
+    --ks-pl: {{ s.padding_inline }}px;
+    --ks-pr: {{ s.padding_inline }}px;
+    --ks-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+>
+  {%- if s.show_particles -%}
+    <canvas
+      class="khan-story__particles"
+      data-count="{{ s.particle_count }}"
+      data-size="{{ s.particle_size }}"
+      data-c1="{{ s.particle_color | default: '#bf1616' }}"
+      data-c2="{{ s.particle_color_2 | default: '#111111' }}"
+      aria-hidden="true"
+    ></canvas>
+  {%- endif -%}
+
+  {%- comment -%} Edge/side decorations (kept off the very top & bottom so the section still flows into its neighbours). {%- endcomment -%}
+  {%- if s.show_side_line -%}<span class="khan-story__sideline" aria-hidden="true"></span>{%- endif -%}
+  {%- if s.show_top_asterisk -%}
+    <img class="khan-story__deco-asterisk" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+  {%- endif -%}
+  {%- if s.show_plus_marks -%}
+    <span class="khan-story__plus khan-story__plus--1" aria-hidden="true">+</span>
+    <span class="khan-story__plus khan-story__plus--2" aria-hidden="true">+</span>
+  {%- endif -%}
+  {%- if s.show_brackets -%}
+    <span class="khan-story__bracket khan-story__bracket--bl" aria-hidden="true"></span>
+    <span class="khan-story__bracket khan-story__bracket--br" aria-hidden="true"></span>
+  {%- endif -%}
+
+  <div class="khan-story__inner">
+    <div class="khan-story__grid">
+      <div class="khan-story__left">
+        {%- if s.show_eyebrow and s.eyebrow != blank -%}
+          <p class="khan-story__eyebrow"><span class="khan-story__flag" aria-hidden="true"></span>{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <div class="khan-story__heading">{{ s.heading }}</div>
+        {%- endif -%}
+        {%- if s.body != blank -%}
+          <div class="khan-story__body">{{ s.body }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="khan-story__right">
+        {%- for block in section.blocks -%}
+          <div class="khan-story__feature" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank -%}
+              <img
+                class="khan-story__feature-icon"
+                src="{{ block.settings.icon | image_url: width: 160 }}"
+                alt=""
+                width="80"
+                height="80"
+                loading="lazy"
+              >
+            {%- else -%}
+              <span class="khan-story__feature-icon khan-story__feature-icon--placeholder" aria-hidden="true"></span>
+            {%- endif -%}
+            <div class="khan-story__feature-body">
+              {%- if block.settings.title != blank -%}
+                <h3 class="khan-story__feature-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="khan-story__feature-text">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('KhanStory-{{ section.id }}');
+    if (!root) return;
+    var c = root.querySelector('canvas.khan-story__particles');
+    if (!c || !c.getContext) return;
+    var ctx = c.getContext('2d');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var DENS = parseInt(c.getAttribute('data-count') || '120', 10);
+    var SZ = parseFloat(c.getAttribute('data-size') || '2.5');
+    var c1 = c.getAttribute('data-c1') || '#bf1616';
+    var c2 = c.getAttribute('data-c2') || '#111111';
+    var w = 1, h = 1, dpr = 1, parts = [], raf = 0;
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = c.clientWidth || 1; h = c.clientHeight || 1;
+      c.width = w * dpr; c.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function make() {
+      parts = [];
+      for (var i = 0; i < DENS; i++) {
+        parts.push({
+          x: Math.random(), y: Math.random(),
+          r: Math.random() * SZ + 0.3,
+          col: Math.random() < 0.62 ? c1 : c2,
+          o: Math.random() * 0.5 + 0.2,
+          vy: Math.random() * 0.00055 + 0.0001,
+          ph: Math.random() * 6.283
+        });
+      }
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        var x = p.x * w + Math.sin(t * 0.0002 + p.ph) * 6;
+        var y = p.y * h;
+        if (!reduced) { y = ((p.y - (t * p.vy)) % 1 + 1) % 1 * h; }
+        ctx.globalAlpha = p.o; ctx.fillStyle = p.col;
+        ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (!reduced) raf = window.requestAnimationFrame(draw);
+    }
+    resize(); make();
+    if (reduced) draw(0); else raf = window.requestAnimationFrame(draw);
+    window.addEventListener('resize', function () { resize(); make(); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { if (!reduced && !raf) raf = window.requestAnimationFrame(draw); }
+          else { window.cancelAnimationFrame(raf); raf = 0; }
+        });
+      }, { threshold: 0 }).observe(root);
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  .khan-story {
+    position: relative;
+    background-color: var(--ks-bg, #f4f1ea);
+    padding-block: var(--ks-pt, 96px) var(--ks-pb, 96px);
+    padding-inline: var(--ks-pl, 56px);
+    overflow: hidden;
+  }
+
+  .khan-story__particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .khan-story__inner {
+    position: relative;
+    z-index: 2;
+    max-width: var(--ks-maxw, 1500px);
+    margin-inline: auto;
+  }
+
+  .khan-story__grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: var(--ks-gap, 80px);
+    align-items: start;
+  }
+
+  /* ---------- left ---------- */
+  .khan-story__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ks-eyebrow-size, 13px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ks-eyebrow-color, #bf1616);
+  }
+
+  .khan-story__flag {
+    display: inline-block;
+    width: 26px;
+    height: 12px;
+    background: var(--ks-accent, #bf1616);
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+  }
+
+  .khan-story__heading {
+    margin: 0 0 26px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: var(--ks-heading-size, 92px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--ks-heading-color, #111);
+  }
+
+  .khan-story__heading p { margin: 0; }
+
+  .khan-story__heading :is(strong, b) {
+    color: var(--ks-accent, #bf1616);
+    font-weight: inherit;
+  }
+
+  .khan-story__body {
+    max-width: 46ch;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ks-body-size, 16px);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--ks-text-color, #1a1a1a);
+  }
+
+  .khan-story__body p { margin: 0 0 1.4em; }
+  .khan-story__body p:last-child { margin-bottom: 0; }
+  .khan-story__body :is(strong, b) { color: var(--ks-accent, #bf1616); font-weight: inherit; }
+
+  /* ---------- right (features) ---------- */
+  .khan-story__right {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding-top: 8px;
+  }
+
+  .khan-story__feature {
+    display: grid;
+    grid-template-columns: var(--ks-icon-size, 56px) 1px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .khan-story__feature::before {
+    content: "";
+    grid-column: 2;
+    align-self: stretch;
+    background: rgb(0 0 0 / 0.18);
+  }
+
+  .khan-story__feature-icon {
+    width: var(--ks-icon-size, 56px);
+    height: var(--ks-icon-size, 56px);
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .khan-story__feature-icon--placeholder {
+    border: 1px dashed rgb(0 0 0 / 0.3);
+    border-radius: 4px;
+  }
+
+  .khan-story__feature-title {
+    margin: 2px 0 6px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: var(--ks-feat-title-size, 18px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ks-feat-title-color, #bf1616);
+  }
+
+  .khan-story__feature-text {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ks-feat-text-size, 14px);
+    line-height: 1.55;
+    color: var(--ks-text-color, #1a1a1a);
+  }
+
+  .khan-story__feature-text p { margin: 0; }
+
+  /* ---------- grain: applied ONLY to content (text + icons), never the background ---------- */
+  .khan-story--grain :is(
+    .khan-story__eyebrow,
+    .khan-story__heading,
+    .khan-story__body,
+    .khan-story__feature-title,
+    .khan-story__feature-text,
+    .khan-story__feature-icon
+  ) {
+    -webkit-mask-image: var(--ks-grain);
+    mask-image: var(--ks-grain);
+    -webkit-mask-size: 170px 170px;
+    mask-size: 170px 170px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+  }
+
+  /* ---------- decorations ---------- */
+  .khan-story__sideline {
+    position: absolute;
+    left: 26px;
+    top: 22%;
+    bottom: 22%;
+    width: 1px;
+    border-left: 1px dashed var(--ks-deco-color, #c9433a);
+    z-index: 1;
+  }
+
+  .khan-story__deco-asterisk {
+    position: absolute;
+    left: 40px;
+    top: 70px;
+    width: 22px;
+    height: auto;
+    opacity: 0.9;
+    z-index: 1;
+  }
+
+  .khan-story__plus {
+    position: absolute;
+    right: 40px;
+    font-family: ui-monospace, monospace;
+    font-size: 20px;
+    color: var(--ks-deco-color, #c9433a);
+    z-index: 1;
+  }
+  .khan-story__plus--1 { top: 44%; }
+  .khan-story__plus--2 { top: 56%; right: 70px; }
+
+  .khan-story__bracket {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    z-index: 1;
+    border: 2px solid rgb(0 0 0 / 0.55);
+  }
+  .khan-story__bracket--bl { left: 26px; bottom: 26px; border-top: 0; border-right: 0; }
+  .khan-story__bracket--br { right: 26px; bottom: 26px; border-top: 0; border-left: 0; }
+
+  /* ---------- responsive ---------- */
+  @media screen and (max-width: 990px) {
+    .khan-story__grid { grid-template-columns: 1fr; gap: 48px; }
+    .khan-story__heading { font-size: calc(var(--ks-heading-size, 92px) * 0.62); }
+  }
+
+  @media screen and (max-width: 749px) {
+    .khan-story { padding-inline: 22px; }
+    .khan-story__heading { font-size: calc(var(--ks-heading-size, 92px) * 0.46); }
+    .khan-story__deco-asterisk, .khan-story__sideline, .khan-story__plus { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .khan-story__particles { opacity: 0.8; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Our story",
+  "tag": "section",
+  "class": "khan-story-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Eyebrow" },
+    { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Our story" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow color", "default": "#bf1616" },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 10, "max": 22, "step": 1, "unit": "px", "default": 13 },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "paragraph", "content": "Bold words become the accent (red)." },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Forged<br/>by <strong>discipline.</strong></p>" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 160, "step": 2, "unit": "px", "default": 92 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#bf1616" },
+
+    { "type": "header", "content": "Body" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Khan supplements was born from a simple truth: <strong>results are earned, never given.</strong></p><p>We created formulations that support the relentless pursuit of more — more focus, more energy, more performance. Every ingredient, every dose, every detail is chosen with purpose and proven by science.</p><p><strong>This isn't just supplementation. It's a standard.</strong></p>" },
+    { "type": "range", "id": "body_size", "label": "Body size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 16 },
+    { "type": "color", "id": "text_color", "label": "Body / description color", "default": "#1a1a1a" },
+
+    { "type": "header", "content": "Features (right column)" },
+    { "type": "paragraph", "content": "Add, remove and reorder Feature blocks below." },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "feature_title_size", "label": "Feature title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 18 },
+    { "type": "color", "id": "feature_title_color", "label": "Feature title color", "default": "#bf1616" },
+    { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 11, "max": 24, "step": 1, "unit": "px", "default": 14 },
+
+    { "type": "header", "content": "Particles" },
+    { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": true },
+    { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 120, "info": "Kept light on purpose." },
+    { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 3 },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#bf1616" },
+    { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#111111" },
+
+    { "type": "header", "content": "Grain" },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text & icons", "default": true, "info": "Applies a subtle grain to the content only, not the background." },
+
+    { "type": "header", "content": "Decoration" },
+    { "type": "checkbox", "id": "show_top_asterisk", "label": "Show asterisk mark", "default": true },
+    { "type": "checkbox", "id": "show_side_line", "label": "Show dashed side line", "default": true },
+    { "type": "checkbox", "id": "show_plus_marks", "label": "Show plus marks", "default": true },
+    { "type": "checkbox", "id": "show_brackets", "label": "Show corner brackets", "default": true },
+    { "type": "color", "id": "deco_color", "label": "Decoration color", "default": "#c9433a" },
+
+    { "type": "header", "content": "Background" },
+    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#f4f1ea" },
+
+    { "type": "header", "content": "Layout & spacing" },
+    { "type": "range", "id": "max_width", "label": "Content max width", "min": 1000, "max": 1800, "step": 20, "unit": "px", "default": 1500 },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_inline", "label": "Padding left & right", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Science first" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Backed by research. Built on evidence. No trends. Just results.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Our story",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "Science first", "text": "<p>Backed by research. Built on evidence. No trends. Just results.</p>" } },
+        { "type": "feature", "settings": { "title": "No compromises", "text": "<p>No fillers. No shortcuts. Only what earns a place in the formula.</p>" } },
+        { "type": "feature", "settings": { "title": "Built for performance", "text": "<p>Formulated for those who demand more from their mind and body.</p>" } },
+        { "type": "feature", "settings": { "title": "Relentless by nature", "text": "<p>We don't do average. We fuel the relentless.</p>" } },
+        { "type": "feature", "settings": { "title": "Every dose matters", "text": "<p>Optimal dosages. Transparent labels. Because trust is earned.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
