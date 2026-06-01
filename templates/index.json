@@ -83,44 +83,38 @@
         "gradient_direction": "to top"
       }
     },
-    "hero_8getMa": {
-      "type": "hero",
-      "name": "t:names.hero",
+    "khan_rocks_3d_tLgjjp": {
+      "type": "khan-rocks-3d",
+      "name": "Rocks 3D hero",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": true,
-        "overlay_color": "#fbfbfb",
+        "enable_3d": true,
+        "rocks_model": "khan-rocks.glb",
+        "scroll_length": 260,
+        "particle_count": 6000,
+        "heading": "",
+        "text": "",
+        "content_position": "center-left",
+        "accent_color": "#d8232a",
+        "use_nexa": true,
+        "enable_shadow": true,
+        "heading_size": 80,
+        "text_size": 20,
+        "show_asterisks": true,
+        "asterisk_count": 4,
+        "asterisk_size": 44,
+        "asterisk_gap": 16,
+        "asterisk_inset": 32,
+        "color_scheme": "",
+        "toggle_overlay": false,
+        "overlay_color": "#00000040",
         "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "gradient_direction": "to top"
       }
     }
   },
   "order": [
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
-    "hero_8getMa"
+    "khan_rocks_3d_tLgjjp"
   ]
 }
