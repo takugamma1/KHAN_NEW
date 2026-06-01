@@ -109,30 +109,12 @@
             "title": "Built for performance",
             "text": "<p>Formulated for those who demand more from their mind and body.</p>"
           }
-        },
-        "feature_JGNrAX": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Relentless by nature",
-            "text": "<p>We don't do average. We fuel the relentless.</p>"
-          }
-        },
-        "feature_GFeDYX": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Every dose matters",
-            "text": "<p>Optimal dosages. Transparent labels. Because trust is earned.</p>"
-          }
         }
       },
       "block_order": [
         "feature_ME8aAQ",
         "feature_WDfpBG",
-        "feature_88FMQn",
-        "feature_JGNrAX",
-        "feature_GFeDYX"
+        "feature_88FMQn"
       ],
       "name": "Our story",
       "settings": {
