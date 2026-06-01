@@ -39,6 +39,10 @@
     --rocks-ast-gap: {{ section.settings.asterisk_gap }}px;
     --rocks-ast-inset: {{ section.settings.asterisk_inset }}px;
     --rocks-grain: url('{{ 'khan-grain.png' | asset_url }}');
+    --rocks-sh-x: {{ section.settings.shadow_x }}px;
+    --rocks-sh-y: {{ section.settings.shadow_y }}px;
+    --rocks-sh-blur: {{ section.settings.shadow_blur }}px;
+    --rocks-sh-color: {{ section.settings.shadow_color }};
   "
   {% if request.visual_preview_mode %}
     data-shopify-visual-preview
@@ -353,7 +357,12 @@
 
   .rocks-hero__content--shadow .rocks-hero__heading,
   .rocks-hero__content--shadow .rocks-hero__text {
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.7);
+    /* directional drop (configurable) + tight edge + soft ambient halo
+       so the text stays legible over a busy background */
+    text-shadow:
+      var(--rocks-sh-x, 3px) var(--rocks-sh-y, 6px) var(--rocks-sh-blur, 8px) var(--rocks-sh-color, rgba(0, 0, 0, 0.55)),
+      0 1px 2px rgba(0, 0, 0, 0.65),
+      0 0 22px rgba(0, 0, 0, 0.32);
   }
 
   /* Grain on the content only — same treatment as the Our Story section */
@@ -609,6 +618,47 @@
       "id": "text_grain",
       "label": "Grain on text & asterisks",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "shadow_x",
+      "label": "Shadow offset X",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 3,
+      "visible_if": "{{ section.settings.enable_shadow }}"
+    },
+    {
+      "type": "range",
+      "id": "shadow_y",
+      "label": "Shadow offset Y",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "visible_if": "{{ section.settings.enable_shadow }}"
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "label": "Shadow blur",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.enable_shadow }}"
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "alpha": true,
+      "default": "#0000008c",
+      "visible_if": "{{ section.settings.enable_shadow }}"
     },
     {
       "type": "range",
