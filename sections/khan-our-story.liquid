@@ -186,7 +186,8 @@
 
   .khan-story__grid {
     display: grid;
-    grid-template-columns: 1.25fr 0.85fr;
+    /* minmax(0, …) stops the big headline from blowing the tracks out past the viewport */
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
     gap: var(--ks-gap, 80px);
     align-items: start;
   }
@@ -216,10 +217,11 @@
     margin: 0 0 26px;
     font-family: 'Nexa', var(--font-heading--family, sans-serif);
     font-weight: 900;
-    font-size: var(--ks-heading-size, 92px);
+    font-size: min(var(--ks-heading-size, 92px), 9vw);
     line-height: 0.9;
     letter-spacing: -0.01em;
     text-transform: uppercase;
+    overflow-wrap: break-word;
     color: var(--ks-heading-color, #111);
   }
 
@@ -254,9 +256,13 @@
 
   .khan-story__feature {
     display: grid;
-    grid-template-columns: var(--ks-icon-size, 56px) 1px 1fr;
+    grid-template-columns: var(--ks-icon-size, 56px) 1px minmax(0, 1fr);
     gap: 20px;
     align-items: start;
+  }
+
+  .khan-story__feature-body {
+    min-width: 0;
   }
 
   .khan-story__feature::before {
@@ -286,6 +292,7 @@
     font-size: var(--ks-feat-title-size, 18px);
     letter-spacing: 0.06em;
     text-transform: uppercase;
+    overflow-wrap: break-word;
     color: var(--ks-feat-title-color, #bf1616);
   }
 
@@ -366,7 +373,10 @@
   @media screen and (max-width: 749px) {
     .khan-story { padding-inline: 22px; }
     .khan-story__heading { font-size: calc(var(--ks-heading-size, 92px) * 0.46); }
-    .khan-story__deco-asterisk, .khan-story__sideline, .khan-story__plus { display: none; }
+    .khan-story__deco-asterisk, .khan-story__sideline, .khan-story__plus, .khan-story__bracket { display: none; }
+    /* hide the icon "swatches" on mobile -> features become clean text rows */
+    .khan-story__feature { grid-template-columns: 1fr; }
+    .khan-story__feature-icon, .khan-story__feature::before { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
