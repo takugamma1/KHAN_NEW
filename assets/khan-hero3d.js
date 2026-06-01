@@ -129,10 +129,12 @@
     var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
     camera.position.set(0, 0, 9);
 
-    scene.add(new THREE.AmbientLight(0x3a3438, 0.65));
-    var key = new THREE.DirectionalLight(0xfff1e6, 1.15); key.position.set(3.5, 5, 4); scene.add(key);
-    var rim = new THREE.DirectionalLight(0xff2a22, 0.9); rim.position.set(-4.5, -1, -3); scene.add(rim);
-    var emberLight = new THREE.PointLight(0xff4a2a, 0.8, 26); emberLight.position.set(0, -2.2, 2.5); scene.add(emberLight);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    scene.add(new THREE.HemisphereLight(0x9aa0b0, 0x140a08, 0.7));
+    var key = new THREE.DirectionalLight(0xfff1e6, 1.6); key.position.set(3.5, 5, 4); scene.add(key);
+    var fillFront = new THREE.DirectionalLight(0xffffff, 0.6); fillFront.position.set(0, 1, 8); scene.add(fillFront);
+    var rim = new THREE.DirectionalLight(0xff3a2a, 1.0); rim.position.set(-4.5, -1, -3); scene.add(rim);
+    var emberLight = new THREE.PointLight(0xff4a2a, 1.0, 30); emberLight.position.set(0, -2.2, 2.5); scene.add(emberLight);
 
     var rocksGroup = new THREE.Group(); scene.add(rocksGroup);
     var rocks = [];
@@ -147,12 +149,38 @@
     var progress = 0, loaded = false, running = false, rafId = 0;
 
     var loader = new window.GLTFLoader();
+    var rockMat = new THREE.MeshStandardMaterial({ color: 0x7d726a, roughness: 0.82, metalness: 0.06, emissive: 0x170c09, emissiveIntensity: 0.55 });
+
     loader.load(opts.modelUrl, function (gltf) {
       var meshes = [];
-      gltf.scene.traverse(function (o) { if (o.isMesh && o.geometry) meshes.push(o); });
-      var mat = new THREE.MeshStandardMaterial({ color: 0x14100e, roughness: 0.96, metalness: 0.02 });
+      // A merged GLB can place each model in its OWN scene; gltf.scene is only the default
+      // (a single rock). Collect meshes across every scene so all 8 appear.
+      var roots = (gltf.scenes && gltf.scenes.length) ? gltf.scenes : [gltf.scene];
+      roots.forEach(function (sc) { if (sc) sc.traverse(function (o) { if (o.isMesh && o.geometry) meshes.push(o); }); });
+      buildRocks(meshes);
+    }, undefined, function (err) {
+      if (window.console) console.warn('[KHANHero3D] model load failed; using fallback rocks', err);
+      buildRocks([]);
+    });
+
+    function buildRocks(meshes) {
+      // Never leave the scene empty: synthesize rough rocks if the model gave us nothing.
+      if (!meshes || meshes.length === 0) {
+        meshes = [];
+        for (var k = 0; k < 8; k++) {
+          var fg = new THREE.IcosahedronGeometry(0.7, 1), fp = fg.attributes.position;
+          for (var fv = 0; fv < fp.count; fv++) {
+            var nn = 0.75 + Math.random() * 0.55;
+            fp.setXYZ(fv, fp.getX(fv) * nn, fp.getY(fv) * nn * 0.8, fp.getZ(fv) * nn);
+          }
+          fg.computeVertexNormals();
+          meshes.push(new THREE.Mesh(fg, rockMat));
+        }
+      }
       meshes.slice(0, 8).forEach(function (m, i) {
-        m.material = mat;
+        m.material = rockMat;
+        m.position.set(0, 0, 0);
+        if (m.quaternion) m.quaternion.identity();
         m.geometry.computeBoundingBox();
         var bb = m.geometry.boundingBox, c = new THREE.Vector3(), size = new THREE.Vector3();
         bb.getCenter(c); bb.getSize(size);
@@ -183,7 +211,7 @@
       resize();
       if (reduced) { renderFrame(true); } else { play(); }
       if (typeof opts.onLoad === 'function') opts.onLoad();
-    }, undefined, function (err) { if (window.console) console.warn('[KHANHero3D] model load failed', err); });
+    }
 
     function resize() {
       var w = canvas.clientWidth || canvas.parentElement.clientWidth || 1;
