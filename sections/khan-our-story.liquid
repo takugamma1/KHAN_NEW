@@ -256,29 +256,25 @@
   }
 
   .khan-story__feature {
-    display: grid;
-    grid-template-columns: var(--ks-icon-size, 56px) 1px minmax(0, 1fr);
-    gap: 20px;
-    align-items: start;
-  }
-
-  .khan-story__feature-body {
-    min-width: 0;
-  }
-
-  .khan-story__feature::before {
-    content: "";
-    grid-column: 2;
-    align-self: stretch;
-    background: rgb(0 0 0 / 0.18);
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
   }
 
   .khan-story__feature-icon {
+    flex: 0 0 var(--ks-icon-size, 56px);
     width: var(--ks-icon-size, 56px);
     height: var(--ks-icon-size, 56px);
     object-fit: contain;
     object-position: center;
     display: block;
+  }
+
+  .khan-story__feature-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    border-left: 1px solid rgb(0 0 0 / 0.18);
+    padding-left: 18px;
   }
 
   .khan-story__feature-icon--placeholder {
@@ -376,8 +372,8 @@
     .khan-story__heading { font-size: calc(var(--ks-heading-size, 92px) * 0.46); }
     .khan-story__deco-asterisk, .khan-story__sideline, .khan-story__plus, .khan-story__bracket { display: none; }
     /* hide the icon "swatches" on mobile -> features become clean text rows */
-    .khan-story__feature { grid-template-columns: 1fr; }
-    .khan-story__feature-icon, .khan-story__feature::before { display: none; }
+    .khan-story__feature-icon { display: none; }
+    .khan-story__feature-body { border-left: 0; padding-left: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
