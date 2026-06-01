@@ -105,6 +105,8 @@
         "asterisk_size": 44,
         "asterisk_gap": 16,
         "asterisk_inset": 32,
+        "bg_type": "color",
+        "bg_color": "#fcfcfc",
         "color_scheme": "",
         "toggle_overlay": false,
         "overlay_color": "#00000040",
