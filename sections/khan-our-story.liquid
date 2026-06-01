@@ -23,6 +23,7 @@
     --ks-feat-text-size: {{ s.feature_text_size }}px;
     --ks-icon-size: {{ s.icon_size }}px;
     --ks-gap: {{ s.column_gap }}px;
+    --ks-feature-gap: {{ s.feature_gap }}px;
     --ks-maxw: {{ s.max_width }}px;
     --ks-pt: {{ s.padding_top }}px;
     --ks-pb: {{ s.padding_bottom }}px;
@@ -190,7 +191,8 @@
        headline shrinks/wraps inside it. Deterministic — never collapses. */
     grid-template-columns: minmax(0, 1fr) clamp(280px, 30%, 440px);
     gap: var(--ks-gap, 80px);
-    align-items: start;
+    /* vertically centre the USP column against the taller left block */
+    align-items: center;
   }
 
   /* ---------- left ---------- */
@@ -251,13 +253,12 @@
   .khan-story__right {
     display: flex;
     flex-direction: column;
-    gap: 26px;
-    padding-top: 8px;
+    gap: var(--ks-feature-gap, 30px);
   }
 
   .khan-story__feature {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 18px;
   }
 
@@ -412,6 +413,7 @@
     { "type": "range", "id": "feature_title_size", "label": "Feature title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 18 },
     { "type": "color", "id": "feature_title_color", "label": "Feature title color", "default": "#bf1616" },
     { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 11, "max": 24, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "feature_gap", "label": "Space between features", "min": 8, "max": 80, "step": 2, "unit": "px", "default": 30 },
 
     { "type": "header", "content": "Particles" },
     { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": true },
