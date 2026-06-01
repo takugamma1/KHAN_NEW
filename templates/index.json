@@ -89,7 +89,7 @@
         "feature_ME8aAQ": {
           "type": "feature",
           "settings": {
-            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.svg",
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Science first",
             "text": "<p>Backed by research. Built on evidence. No trends. Just results.</p>"
           }
@@ -97,6 +97,7 @@
         "feature_WDfpBG": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "No compromises",
             "text": "<p>No fillers. No shortcuts. Only what earns a place in the formula.</p>"
           }
@@ -104,6 +105,7 @@
         "feature_88FMQn": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Built for performance",
             "text": "<p>Formulated for those who demand more from their mind and body.</p>"
           }
@@ -111,6 +113,7 @@
         "feature_JGNrAX": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Relentless by nature",
             "text": "<p>We don't do average. We fuel the relentless.</p>"
           }
@@ -118,6 +121,7 @@
         "feature_GFeDYX": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Every dose matters",
             "text": "<p>Optimal dosages. Transparent labels. Because trust is earned.</p>"
           }
@@ -158,7 +162,7 @@
         "show_plus_marks": true,
         "show_brackets": true,
         "deco_color": "#c9433a",
-        "bg_color": "#f7f9fd",
+        "bg_color": "#fcfcfc",
         "max_width": 1500,
         "column_gap": 80,
         "padding_top": 96,
