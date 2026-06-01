@@ -63,7 +63,7 @@
         "pulse_speed": 3,
         "heading": "<p>Неотъпканата<br/>Пътека</p>",
         "text": "<h6>asdasdasdassadasdsdadasdsaasdasdasdsddsadas<br/>adsaadasdasasdasdssadasdadasasdasd<br/>dsadasdasdasdasdasdasd<br/>dsadasdasddadsasasdasdasdasdas<br/>dsadasdasddaasdasdaasdasadasdasdasd<br/>sadasadadasdasdad<br/>asdasdadsada</h6>",
-        "content_position": "top-left",
+        "content_position": "top-right",
         "accent_color": "#bf1616",
         "use_nexa": true,
         "enable_shadow": true,
@@ -76,37 +76,6 @@
         "asterisk_inset": 42,
         "section_height": "full-screen",
         "section_height_custom": 100,
-        "color_scheme": "",
-        "toggle_overlay": false,
-        "overlay_color": "#00000040",
-        "overlay_style": "solid",
-        "gradient_direction": "to top"
-      }
-    },
-    "khan_rocks_3d_tLgjjp": {
-      "type": "khan-rocks-3d",
-      "name": "Rocks 3D hero",
-      "settings": {
-        "enable_3d": true,
-        "rocks_model": "khan-rocks.glb",
-        "scroll_length": 260,
-        "particle_count": 6000,
-        "poster": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.svg",
-        "heading": "<p>сдсадасд</p>",
-        "text": "<p>дасдасдасадас</p>",
-        "content_position": "center-left",
-        "accent_color": "#d8232a",
-        "use_nexa": true,
-        "enable_shadow": true,
-        "heading_size": 80,
-        "text_size": 20,
-        "show_asterisks": true,
-        "asterisk_count": 4,
-        "asterisk_size": 44,
-        "asterisk_gap": 16,
-        "asterisk_inset": 32,
-        "bg_type": "color",
-        "bg_color": "#fcfcfc",
         "color_scheme": "",
         "toggle_overlay": false,
         "overlay_color": "#00000040",
@@ -224,7 +193,6 @@
   "order": [
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
-    "khan_rocks_3d_tLgjjp",
     "hero_gQxPHe"
   ]
 }
