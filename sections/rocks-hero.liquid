@@ -43,6 +43,13 @@
     --rocks-sh-y: {{ section.settings.shadow_y }}px;
     --rocks-sh-blur: {{ section.settings.shadow_blur }}px;
     --rocks-sh-color: {{ section.settings.shadow_color }};
+    --usp-justify: {{ section.settings.usp_align }};
+    --usp-bottom: {{ section.settings.usp_bottom }}px;
+    --usp-icon: {{ section.settings.usp_icon_size }}px;
+    --usp-title-size: {{ section.settings.usp_title_size }}px;
+    --usp-text-size: {{ section.settings.usp_text_size }}px;
+    --usp-divider: {{ section.settings.usp_divider_color }};
+    --usp-card-width: {{ section.settings.usp_card_width }}px;
   "
   {% if request.visual_preview_mode %}
     data-shopify-visual-preview
@@ -161,6 +168,22 @@
           width="258"
           height="320"
         >
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Layer 7: USP row — editable blocks, horizontal cards + vertical dividers {%- endcomment -%}
+  {%- if section.blocks.size > 0 -%}
+    <div class="rocks-hero__usps">
+      {%- for block in section.blocks -%}
+        <div class="rocks-hero__usp" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != blank -%}
+            <img class="rocks-hero__usp-icon" src="{{ block.settings.icon | image_url: width: 200 }}" alt="" width="96" height="96" loading="lazy">
+          {%- endif -%}
+          <span class="rocks-hero__usp-dash" aria-hidden="true"></span>
+          {%- if block.settings.title != blank -%}<h3 class="rocks-hero__usp-title">{{ block.settings.title }}</h3>{%- endif -%}
+          {%- if block.settings.text != blank -%}<div class="rocks-hero__usp-text">{{ block.settings.text }}</div>{%- endif -%}
+        </div>
       {%- endfor -%}
     </div>
   {%- endif -%}
@@ -366,7 +389,7 @@
   }
 
   /* Grain on the content only — same treatment as the Our Story section */
-  .rocks-hero--grain :is(.rocks-hero__heading, .rocks-hero__text, .rocks-hero__asterisk) {
+  .rocks-hero--grain :is(.rocks-hero__heading, .rocks-hero__text, .rocks-hero__asterisk, .rocks-hero__usp-title, .rocks-hero__usp-text, .rocks-hero__usp-icon) {
     -webkit-mask-image: var(--rocks-grain);
     mask-image: var(--rocks-grain);
     -webkit-mask-size: 170px 170px;
@@ -406,6 +429,84 @@
     .rocks-hero__asterisk {
       width: calc(var(--rocks-ast-size, 44px) * 0.7);
     }
+  }
+  /* --- USP row (editable blocks): horizontal cards + vertical dividers --- */
+  .rocks-hero__usps {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--usp-bottom, 48px);
+    z-index: var(--layer-heightened, 4);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: var(--usp-justify, center);
+    align-items: stretch;
+    padding-inline: clamp(20px, 5vw, 64px);
+    pointer-events: none;
+  }
+
+  .rocks-hero__usp {
+    flex: 0 1 var(--usp-card-width, 230px);
+    max-width: var(--usp-card-width, 230px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 28px;
+    border-left: 1px solid var(--usp-divider, rgb(255 255 255 / 0.28));
+  }
+
+  .rocks-hero__usps > .rocks-hero__usp:first-child {
+    border-left: 0;
+  }
+
+  .rocks-hero__usp-icon {
+    width: var(--usp-icon, 64px);
+    height: var(--usp-icon, 64px);
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .rocks-hero__usp-dash {
+    width: 26px;
+    height: 3px;
+    margin-bottom: 14px;
+    background: var(--rocks-accent, #d8232a);
+    display: block;
+  }
+
+  .rocks-hero__usp-title {
+    margin: 0 0 8px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: var(--usp-title-size, 18px);
+    line-height: 1.05;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--rocks-accent, #d8232a);
+  }
+
+  .rocks-hero__usp-text {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--usp-text-size, 14px);
+    line-height: 1.5;
+    color: #fff;
+  }
+
+  .rocks-hero__usp-text p { margin: 0; }
+
+  @media screen and (max-width: 749px) {
+    .rocks-hero__usp {
+      flex: 1 1 45%;
+      max-width: 50%;
+      padding: 0 10px;
+      margin-bottom: 14px;
+    }
+    .rocks-hero__usps > .rocks-hero__usp:nth-child(odd) { border-left: 0; }
+    .rocks-hero__usp-title { font-size: calc(var(--usp-title-size, 18px) * 0.85); }
   }
 {% endstylesheet %}
 
@@ -802,8 +903,96 @@
       ],
       "default": "to top",
       "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"
+    },
+    {
+      "type": "header",
+      "content": "USPs (bottom row)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add USP blocks below. Each shows an icon, a dash, a title and a description, separated by vertical lines."
+    },
+    {
+      "type": "select",
+      "id": "usp_align",
+      "label": "Row alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "usp_bottom",
+      "label": "Distance from bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "usp_card_width",
+      "label": "Card width",
+      "min": 140,
+      "max": 320,
+      "step": 4,
+      "unit": "px",
+      "default": 230
+    },
+    {
+      "type": "range",
+      "id": "usp_icon_size",
+      "label": "USP icon size",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "usp_title_size",
+      "label": "USP title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "usp_text_size",
+      "label": "USP text size",
+      "min": 11,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "usp_divider_color",
+      "label": "Divider line color",
+      "alpha": true,
+      "default": "#ffffff47"
     }
   ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Science backed" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Research. Evidence. Real results.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "presets": [
     {
       "name": "Rocks hero",
