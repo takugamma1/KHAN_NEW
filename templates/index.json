@@ -83,116 +83,94 @@
         "gradient_direction": "to top"
       }
     },
-    "hero_gQxPHe": {
-      "type": "hero",
+    "khan_our_story_9deQRY": {
+      "type": "khan-our-story",
       "blocks": {
-        "text_4LHNpN": {
-          "type": "text",
+        "feature_ME8aAQ": {
+          "type": "feature",
           "settings": {
-            "text": "<h2>New arrivals</h2>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "left",
-            "type_preset": "h1",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.svg",
+            "title": "Science first",
+            "text": "<p>Backed by research. Built on evidence. No trends. Just results.</p>"
+          }
         },
-        "text_jKVUzC": {
-          "type": "text",
+        "feature_WDfpBG": {
+          "type": "feature",
           "settings": {
-            "text": "<p>Made with care and unconditionally loved by our customers.</p>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 32,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "No compromises",
+            "text": "<p>No fillers. No shortcuts. Only what earns a place in the formula.</p>"
+          }
         },
-        "button_44aBfT": {
-          "type": "button",
-          "name": "t:names.button",
+        "feature_88FMQn": {
+          "type": "feature",
           "settings": {
-            "label": "Shop now",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "title": "Built for performance",
+            "text": "<p>Formulated for those who demand more from their mind and body.</p>"
+          }
+        },
+        "feature_JGNrAX": {
+          "type": "feature",
+          "settings": {
+            "title": "Relentless by nature",
+            "text": "<p>We don't do average. We fuel the relentless.</p>"
+          }
+        },
+        "feature_GFeDYX": {
+          "type": "feature",
+          "settings": {
+            "title": "Every dose matters",
+            "text": "<p>Optimal dosages. Transparent labels. Because trust is earned.</p>"
+          }
         }
       },
       "block_order": [
-        "text_4LHNpN",
-        "text_jKVUzC",
-        "button_44aBfT"
+        "feature_ME8aAQ",
+        "feature_WDfpBG",
+        "feature_88FMQn",
+        "feature_JGNrAX",
+        "feature_GFeDYX"
       ],
-      "name": "t:names.hero",
+      "name": "Our story",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": true,
-        "overlay_color": "#00000026",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "show_eyebrow": true,
+        "eyebrow": "Our story",
+        "eyebrow_color": "#bf1616",
+        "eyebrow_size": 13,
+        "heading": "<p>Forged<br/>by <strong>discipline.</strong></p>",
+        "heading_size": 92,
+        "heading_color": "#111111",
+        "accent_color": "#bf1616",
+        "body": "<p>Khan supplements was born from a simple truth: <strong>results are earned, never given.</strong></p><p>We created formulations that support the relentless pursuit of more — more focus, more energy, more performance. Every ingredient, every dose, every detail is chosen with purpose and proven by science.</p><p><strong>This isn't just supplementation. It's a standard.</strong></p>",
+        "body_size": 16,
+        "text_color": "#1a1a1a",
+        "icon_size": 56,
+        "feature_title_size": 18,
+        "feature_title_color": "#bf1616",
+        "feature_text_size": 14,
+        "show_particles": true,
+        "particle_count": 120,
+        "particle_size": 3,
+        "particle_color": "#bf1616",
+        "particle_color_2": "#111111",
+        "text_grain": true,
+        "show_top_asterisk": true,
+        "show_side_line": true,
+        "show_plus_marks": true,
+        "show_brackets": true,
+        "deco_color": "#c9433a",
+        "bg_color": "#f7f9fd",
+        "max_width": 1500,
+        "column_gap": 80,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "padding_inline": 56,
+        "color_scheme": ""
       }
     }
   },
   "order": [
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
-    "hero_gQxPHe"
+    "khan_our_story_9deQRY"
   ]
 }
