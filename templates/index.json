@@ -75,7 +75,7 @@
         "pulse_speed": 3,
         "heading": "<p>НАШИЯТ<br/><strong>БРАНД</strong></p>",
         "text": "<h6>asdasdasdassadasdsdadasdsaasdasdasdsddsadas<br/>adsaadasdasasdasdssadasdadasasdasd<br/>dsadasdasdasdasdasdasd<br/>dsadasdasddadsasasdasdasdasdas<br/>dsadasdasddaasdasdaasdasadasdasdasd<br/>sadasadadasdasdad<br/>asdasdadsada</h6>",
-        "content_position": "bottom-left",
+        "content_position": "center-left",
         "accent_color": "#bf1616",
         "use_nexa": true,
         "enable_shadow": true,
