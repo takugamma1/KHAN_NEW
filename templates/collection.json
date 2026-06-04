@@ -161,7 +161,7 @@
           "type": "product",
           "settings": {
             "product": "тениска-тест",
-            "label": "Performance tee",
+            "label": "(ИМЕ НА ТЕНИСКА)",
             "button_label": "Shop now",
             "button_link": ""
           }
@@ -170,7 +170,7 @@
           "type": "product",
           "settings": {
             "product": "тениска-без-ръкав",
-            "label": "Sleeveless tank",
+            "label": "(ИМЕ НА БЕЗРЪКАВ)",
             "button_label": "Shop now",
             "button_link": ""
           }
@@ -179,7 +179,7 @@
           "type": "product",
           "settings": {
             "product": "сет",
-            "label": "Essential set",
+            "label": "(ИМЕ НА СЕТ)",
             "button_label": "Shop now",
             "button_link": ""
           }
