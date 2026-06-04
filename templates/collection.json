@@ -163,7 +163,7 @@
             "product": "тениска-тест",
             "label": "(ИМЕ НА ТЕНИСКА)",
             "button_label": "Shop now",
-            "button_link": "",
+            "button_link": "shopify://collections/frontpage",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -174,7 +174,7 @@
             "product": "тениска-без-ръкав",
             "label": "(ИМЕ НА БЕЗРЪКАВ)",
             "button_label": "Shop now",
-            "button_link": "",
+            "button_link": "shopify://collections/frontpage",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -185,7 +185,7 @@
             "product": "сет",
             "label": "(ИМЕ НА СЕТ)",
             "button_label": "Shop now",
-            "button_link": "",
+            "button_link": "shopify://collections/frontpage",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
