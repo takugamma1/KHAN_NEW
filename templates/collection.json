@@ -160,7 +160,7 @@
         "product_Nx6k4d": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "тениска-тест",
             "label": "Performance tee",
             "button_label": "Shop now",
             "button_link": ""
@@ -169,7 +169,7 @@
         "product_3Rr7gz": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "тениска-без-ръкав",
             "label": "Sleeveless tank",
             "button_label": "Shop now",
             "button_link": ""
@@ -178,7 +178,7 @@
         "product_AHzttH": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "сет",
             "label": "Essential set",
             "button_label": "Shop now",
             "button_link": ""
@@ -200,8 +200,8 @@
         "accent_color": "#111111",
         "text_color": "#1a1a1a",
         "anim_style": "wipe",
-        "anim_duration": 700,
-        "anim_stagger": 120,
+        "anim_duration": 1500,
+        "anim_stagger": 400,
         "text_grain": true,
         "frame_color": "#00000029",
         "bg_color": "#ffffff",
