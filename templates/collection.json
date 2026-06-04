@@ -219,11 +219,97 @@
         "padding_bottom": 96,
         "color_scheme": ""
       }
+    },
+    "khan_materials_hjGCLC": {
+      "type": "khan-materials",
+      "blocks": {
+        "feature_rJTNzp": {
+          "type": "feature",
+          "settings": {
+            "title": "Reactive dye",
+            "text": "<p>High quality reactive dyeing process for long lasting color that won't fade.</p>"
+          }
+        },
+        "feature_NbApQB": {
+          "type": "feature",
+          "settings": {
+            "title": "Pre-shrunk",
+            "text": "<p>Fabric pre-shrunk to minimize shrinkage and maintain the perfect fit after wash.</p>"
+          }
+        },
+        "detail_w69jei": {
+          "type": "detail",
+          "settings": {
+            "video": "shopify://files/videos/6279035-uhd_2160_4096_25fps.mp4",
+            "title": "Woven label",
+            "text": "<p>Premium woven label for an authentic finish.</p>"
+          }
+        },
+        "detail_JKmm4R": {
+          "type": "detail",
+          "settings": {
+            "title": "YKK zippers",
+            "text": "<p>Top quality YKK zippers for smooth operation and durability.</p>"
+          }
+        },
+        "detail_VwV6NF": {
+          "type": "detail",
+          "settings": {
+            "title": "Premium prints",
+            "text": "<p>High density prints that withstand time, wash after wash.</p>"
+          }
+        },
+        "detail_xJdGLQ": {
+          "type": "detail",
+          "settings": {
+            "title": "Brushed fleece",
+            "text": "<p>Soft inner fleece for extra warmth and all day comfort.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_rJTNzp",
+        "feature_NbApQB",
+        "detail_w69jei",
+        "detail_JKmm4R",
+        "detail_VwV6NF",
+        "detail_xJdGLQ"
+      ],
+      "name": "Materials & craft",
+      "settings": {
+        "eyebrow": "Materials & craft",
+        "heading": "<p>Built different.<br/><strong>Made to last.</strong></p>",
+        "heading_size": 64,
+        "body": "<p>Carefully selected materials. Premium quality. Maximum durability. Comfort that performs.</p>",
+        "featured_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+        "stat_label": "Fabric weight",
+        "stat_value": "320",
+        "stat_unit": "GSM",
+        "stat_size": 110,
+        "stat_caption": "Thick. Durable. Comfortable.",
+        "colors_label": "Available colors",
+        "color_1": "#111111",
+        "color_2": "#3a3a3a",
+        "color_3": "#e9e9e9",
+        "color_4": "",
+        "detail_text": "Details matter. Quality stays.",
+        "text_grain": true,
+        "heading_color": "#111111",
+        "accent_color": "#bf1616",
+        "text_color": "#1a1a1a",
+        "frame_color": "#00000029",
+        "bg_color": "#ffffff",
+        "max_width": 1760,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
     "scroll_sequence_EY7mAR",
-    "khan_collection_zDwJ3p"
+    "khan_collection_zDwJ3p",
+    "khan_materials_hjGCLC"
   ]
 }
