@@ -177,11 +177,26 @@
         "padding_inline": 56,
         "color_scheme": ""
       }
+    },
+    "scroll_sequence_wkLHWe": {
+      "type": "scroll-sequence",
+      "name": "Scroll sequence",
+      "settings": {
+        "frame_prefix": "seq-",
+        "frame_count": "144",
+        "frame_digits": "4",
+        "frame_extension": "webp",
+        "scroll_distance": 6000,
+        "fit": "cover",
+        "bg_color": "#ffffff",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
-    "khan_our_story_9deQRY"
+    "khan_our_story_9deQRY",
+    "scroll_sequence_wkLHWe"
   ]
 }
