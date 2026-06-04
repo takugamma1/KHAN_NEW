@@ -11,6 +11,7 @@
   "sections": {
     "rocks_hero_Ax9Kp2": {
       "type": "rocks-hero",
+      "disabled": true,
       "settings": {
         "media_type": "image",
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
@@ -59,6 +60,7 @@
     },
     "rocks_hero_6ig48b": {
       "type": "rocks-hero",
+      "disabled": true,
       "name": "Rocks hero",
       "settings": {
         "media_type": "video",
@@ -140,6 +142,7 @@
         "feature_WDfpBG",
         "feature_88FMQn"
       ],
+      "disabled": true,
       "name": "Our story",
       "settings": {
         "show_eyebrow": true,
