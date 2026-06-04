@@ -1,0 +1,347 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanColl-{{ section.id }}"
+  class="
+    khan-coll color-{{ s.color_scheme }}
+    khan-coll--anim-{{ s.anim_style }}
+    {% if s.text_grain %}khan-coll--grain{% endif %}
+  "
+  style="
+    --coll-bg: {{ s.bg_color }};
+    --coll-heading: {{ s.heading_color }};
+    --coll-heading-accent: {{ s.accent_color }};
+    --coll-text: {{ s.text_color }};
+    --coll-frame: {{ s.frame_color }};
+    --coll-heading-size: {{ s.heading_size }}px;
+    --coll-sub-size: {{ s.subheading_size }}px;
+    --coll-maxw: {{ s.max_width }}px;
+    --coll-gap: {{ s.column_gap }}px;
+    --coll-pt: {{ s.padding_top }}px;
+    --coll-pb: {{ s.padding_bottom }}px;
+    --coll-dur: {{ s.anim_duration }}ms;
+    --coll-stagger: {{ s.anim_stagger }}ms;
+    --coll-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+  data-khan-coll
+>
+  <div class="khan-coll__inner">
+    <header class="khan-coll__head">
+      {%- if s.heading != blank -%}<div class="khan-coll__heading">{{ s.heading }}</div>{%- endif -%}
+      {%- if s.subheading != blank -%}
+        <p class="khan-coll__sub"><span class="khan-coll__plus">+</span>{{ s.subheading }}<span class="khan-coll__plus">+</span></p>
+      {%- endif -%}
+    </header>
+
+    <div class="khan-coll__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign img = block.settings.image
+          if img == blank and p != blank
+            assign img = p.featured_image
+          endif
+          assign label = block.settings.label
+          if label == blank and p != blank
+            assign label = p.title
+          endif
+          assign url = block.settings.button_link
+          if url == blank and p != blank
+            assign url = p.url
+          endif
+        -%}
+        <article class="khan-coll__card" style="--card-i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+          <span class="khan-coll__corner khan-coll__corner--tl" aria-hidden="true"></span>
+          <span class="khan-coll__corner khan-coll__corner--br" aria-hidden="true"></span>
+
+          <div class="khan-coll__card-top">
+            <img class="khan-coll__card-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+            <span class="khan-coll__card-label">{{ label | default: 'Product' }}</span>
+            <span class="khan-coll__card-target" aria-hidden="true"></span>
+          </div>
+
+          <div class="khan-coll__card-media">
+            {%- if img != blank -%}
+              {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1200', class: 'khan-coll__card-img', alt: label }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'khan-coll__card-img khan-coll__card-img--placeholder' }}
+            {%- endif -%}
+          </div>
+
+          {%- if url != blank or block.settings.button_label != blank -%}
+            <a class="khan-coll__btn" {% if url != blank %}href="{{ url }}"{% endif %}>
+              <span>{{ block.settings.button_label | default: 'Shop now' }}</span>
+              <span class="khan-coll__btn-plus" aria-hidden="true">+</span>
+            </a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('KhanColl-{{ section.id }}');
+    if (!root) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { root.classList.add('khan-coll--in'); return; }
+    if (!('IntersectionObserver' in window)) { root.classList.add('khan-coll--in'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { root.classList.add('khan-coll--in'); io.disconnect(); }
+      });
+    }, { threshold: 0.2 });
+    io.observe(root);
+    document.addEventListener('shopify:section:select', function (e) {
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') root.classList.add('khan-coll--in');
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .khan-coll {
+    position: relative;
+    background: var(--coll-bg, #f4f1ea);
+    padding-block: var(--coll-pt, 96px) var(--coll-pb, 96px);
+    padding-inline: clamp(20px, 5vw, 64px);
+    overflow: hidden;
+  }
+
+  .khan-coll__inner {
+    max-width: min(var(--coll-maxw, 1700px), 100%);
+    margin-inline: auto;
+  }
+
+  /* ---- header ---- */
+  .khan-coll__head {
+    text-align: center;
+    margin-bottom: clamp(32px, 5vw, 64px);
+  }
+
+  .khan-coll__heading {
+    margin: 0;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: min(var(--coll-heading-size, 72px), 12vw);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--coll-heading, #bf1616);
+  }
+  .khan-coll__heading p { margin: 0; }
+  .khan-coll__heading :is(strong, b) { color: var(--coll-heading-accent, #111); font-weight: inherit; }
+
+  .khan-coll__sub {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    margin: 14px 0 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--coll-sub-size, 13px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--coll-text, #1a1a1a);
+  }
+  .khan-coll__plus { color: var(--coll-heading-accent, #bf1616); }
+
+  /* ---- grid ---- */
+  .khan-coll__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--coll-gap, 28px);
+  }
+
+  /* ---- card ---- */
+  .khan-coll__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(18px, 2vw, 28px);
+    border: 1.5px solid var(--coll-frame, rgb(0 0 0 / 0.16));
+    background: transparent;
+  }
+
+  .khan-coll__corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--coll-heading-accent, #bf1616);
+    opacity: 0.65;
+  }
+  .khan-coll__corner--tl { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+  .khan-coll__corner--br { right: -2px; bottom: -2px; border-left: 0; border-top: 0; }
+
+  .khan-coll__card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .khan-coll__card-mark { width: 22px; height: 22px; object-fit: contain; flex: 0 0 auto; }
+  .khan-coll__card-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--coll-text, #1a1a1a);
+  }
+  .khan-coll__card-target {
+    flex: 0 0 auto;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--coll-text, #1a1a1a);
+    position: relative;
+    opacity: 0.6;
+  }
+  .khan-coll__card-target::before,
+  .khan-coll__card-target::after {
+    content: ""; position: absolute; background: var(--coll-text, #1a1a1a);
+  }
+  .khan-coll__card-target::before { left: 50%; top: -4px; bottom: -4px; width: 1.5px; transform: translateX(-50%); }
+  .khan-coll__card-target::after { top: 50%; left: -4px; right: -4px; height: 1.5px; transform: translateY(-50%); }
+
+  .khan-coll__card-media {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1.15;
+    margin: 8px 0 18px;
+  }
+  .khan-coll__card-img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
+
+  .khan-coll__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: background 0.2s ease;
+  }
+  .khan-coll__btn:hover { background: #000; }
+  .khan-coll__btn-plus { color: var(--coll-heading-accent, #bf1616); }
+
+  /* ---- grain on content (not the background) ---- */
+  .khan-coll--grain :is(.khan-coll__heading, .khan-coll__sub, .khan-coll__card-label, .khan-coll__card-mark) {
+    -webkit-mask-image: var(--coll-grain);
+    mask-image: var(--coll-grain);
+    -webkit-mask-size: 170px 170px;
+    mask-size: 170px 170px;
+  }
+
+  /* ---- reveal animation (scroll-triggered, staggered) ---- */
+  .khan-coll__card {
+    opacity: 0;
+    transition:
+      opacity var(--coll-dur, 700ms) cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform var(--coll-dur, 700ms) cubic-bezier(0.2, 0.7, 0.2, 1),
+      clip-path var(--coll-dur, 700ms) cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: calc(var(--card-i, 0) * var(--coll-stagger, 120ms));
+    will-change: opacity, transform, clip-path;
+  }
+  .khan-coll--anim-wipe .khan-coll__card { transform: translateY(22px); clip-path: inset(0 0 100% 0); }
+  .khan-coll--anim-rise .khan-coll__card { transform: translateY(36px); }
+  .khan-coll--anim-scale .khan-coll__card { transform: scale(0.92); }
+
+  .khan-coll--in .khan-coll__card {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* ---- responsive ---- */
+  @media screen and (max-width: 990px) {
+    .khan-coll__grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .khan-coll__card { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": "section",
+  "class": "khan-coll-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "paragraph", "content": "Bold text uses the accent color (the period in COLLECTION.)." },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Collection<strong>.</strong></p>" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Built different. Made to last." },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 120, "step": 2, "unit": "px", "default": 72 },
+    { "type": "range", "id": "subheading_size", "label": "Subheading size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 13 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#bf1616" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1a1a1a" },
+
+    { "type": "header", "content": "Appearance animation" },
+    { "type": "paragraph", "content": "Cards reveal as the section scrolls into view, staggered one after another." },
+    {
+      "type": "select",
+      "id": "anim_style",
+      "label": "Reveal style",
+      "options": [
+        { "value": "wipe", "label": "Wipe up + rise (recommended)" },
+        { "value": "rise", "label": "Rise + fade" },
+        { "value": "scale", "label": "Scale in" }
+      ],
+      "default": "wipe"
+    },
+    { "type": "range", "id": "anim_duration", "label": "Duration", "min": 200, "max": 1500, "step": 50, "unit": "ms", "default": 700 },
+    { "type": "range", "id": "anim_stagger", "label": "Stagger between cards", "min": 0, "max": 400, "step": 20, "unit": "ms", "default": 120 },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "paragraph", "content": "Add a Product block per card (up to 3 across; more wrap)." },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
+    { "type": "color", "id": "frame_color", "label": "Card frame color", "default": "#00000029" },
+
+    { "type": "header", "content": "Background & spacing" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1000, "max": 1900, "step": 20, "unit": "px", "default": 1700 },
+    { "type": "range", "id": "column_gap", "label": "Gap between cards", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "label", "label": "Label override" },
+        { "type": "image_picker", "id": "image", "label": "Image override" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
+        { "type": "url", "id": "button_link", "label": "Button link override" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Collection grid",
+      "category": "t:categories.products",
+      "blocks": [
+        { "type": "product", "settings": { "label": "Performance tee" } },
+        { "type": "product", "settings": { "label": "Sleeveless tank" } },
+        { "type": "product", "settings": { "label": "Essential set" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
