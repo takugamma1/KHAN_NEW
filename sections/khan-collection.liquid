@@ -14,6 +14,11 @@
     --coll-heading: {{ s.heading_color }};
     --coll-heading-accent: {{ s.accent_color }};
     --coll-text: {{ s.text_color }};
+    --coll-card-bg: {{ s.card_bg }};
+    --coll-card-border-w: {{ s.card_border_width }}px;
+    --coll-label: {{ s.label_color }};
+    --coll-btn-bg: {{ s.button_bg }};
+    --coll-btn-text: {{ s.button_text }};
     --coll-frame: {{ s.frame_color }};
     --coll-heading-size: {{ s.heading_size }}px;
     --coll-sub-size: {{ s.subheading_size }}px;
@@ -159,7 +164,7 @@
     font-size: var(--coll-sub-size, 13px);
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--coll-text, #1a1a1a);
+    color: var(--coll-label, #1a1a1a);
   }
   .khan-coll__plus { color: var(--coll-heading-accent, #bf1616); }
 
@@ -176,8 +181,8 @@
     display: flex;
     flex-direction: column;
     padding: clamp(18px, 2vw, 28px);
-    border: 1.5px solid var(--coll-frame, rgb(0 0 0 / 0.16));
-    background: transparent;
+    border: var(--coll-card-border-w, 1px) solid var(--coll-frame, rgb(0 0 0 / 0.16));
+    background: var(--coll-card-bg, transparent);
   }
 
   .khan-coll__corner {
@@ -204,19 +209,19 @@
     font-size: 13px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--coll-text, #1a1a1a);
+    color: var(--coll-label, #1a1a1a);
   }
   .khan-coll__card-target {
     flex: 0 0 auto;
     width: 16px; height: 16px;
     border-radius: 50%;
-    border: 1.5px solid var(--coll-text, #1a1a1a);
+    border: 1.5px solid var(--coll-label, #1a1a1a);
     position: relative;
     opacity: 0.6;
   }
   .khan-coll__card-target::before,
   .khan-coll__card-target::after {
-    content: ""; position: absolute; background: var(--coll-text, #1a1a1a);
+    content: ""; position: absolute; background: var(--coll-label, #1a1a1a);
   }
   .khan-coll__card-target::before { left: 50%; top: -4px; bottom: -4px; width: 1.5px; transform: translateX(-50%); }
   .khan-coll__card-target::after { top: 50%; left: -4px; right: -4px; height: 1.5px; transform: translateY(-50%); }
@@ -237,8 +242,8 @@
     align-items: center;
     justify-content: center;
     padding: 16px 40px;
-    background: #111;
-    color: #fff;
+    background: var(--coll-btn-bg, #111);
+    color: var(--coll-btn-text, #fff);
     text-decoration: none;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 14px;
@@ -354,7 +359,12 @@
     { "type": "header", "content": "Cards" },
     { "type": "paragraph", "content": "Add a Product block per card (up to 3 across; more wrap)." },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
-    { "type": "color", "id": "frame_color", "label": "Card frame color", "default": "#00000029" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "alpha": true, "default": "#00000000" },
+    { "type": "color", "id": "frame_color", "label": "Card border color", "default": "#00000029" },
+    { "type": "range", "id": "card_border_width", "label": "Card border width", "min": 0, "max": 6, "step": 1, "unit": "px", "default": 1 },
+    { "type": "color", "id": "label_color", "label": "Product title color", "default": "#1a1a1a" },
+    { "type": "color", "id": "button_bg", "label": "Button background", "default": "#111111" },
+    { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
     { "type": "checkbox", "id": "show_swatches", "label": "Show variant bubbles (showcase)", "default": true },
     { "type": "range", "id": "swatch_size", "label": "Bubble size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 30 },
 
