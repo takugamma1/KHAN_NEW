@@ -388,11 +388,78 @@
         "padding_bottom": 44,
         "color_scheme": ""
       }
+    },
+    "khan_collection_t4cqrJ": {
+      "type": "khan-collection",
+      "blocks": {
+        "product_eTyXta": {
+          "type": "product",
+          "settings": {
+            "product": "тениска-тест",
+            "label": "ТЕНИСКА ИМЕ",
+            "button_label": "Shop now",
+            "button_link": "",
+            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
+            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+          }
+        },
+        "product_6ap6bA": {
+          "type": "product",
+          "settings": {
+            "product": "тениска-без-ръкав",
+            "label": "ТЕНИСКА БЕЗ РЪКАВИ ИМЕ",
+            "button_label": "Shop now",
+            "button_link": "",
+            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
+            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+          }
+        },
+        "product_9pq9M6": {
+          "type": "product",
+          "settings": {
+            "product": "сет",
+            "label": "СЕТ ИМЕ",
+            "button_label": "Shop now",
+            "button_link": "",
+            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
+            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+          }
+        }
+      },
+      "block_order": [
+        "product_eTyXta",
+        "product_6ap6bA",
+        "product_9pq9M6"
+      ],
+      "name": "Collection grid",
+      "settings": {
+        "heading": "<p><strong>OUR</strong> Collection.</p>",
+        "subheading": "Built different. Made to last.",
+        "heading_size": 72,
+        "subheading_size": 13,
+        "heading_color": "#bf1616",
+        "accent_color": "#ffffff",
+        "text_color": "#1a1a1a",
+        "anim_style": "wipe",
+        "anim_duration": 1100,
+        "anim_stagger": 180,
+        "text_grain": true,
+        "frame_color": "#ffffff",
+        "show_swatches": true,
+        "swatch_size": 30,
+        "bg_color": "#0a0a0a",
+        "max_width": 1700,
+        "column_gap": 28,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
     "khan_product_Pccd6t",
-    "khan_engineered_3R4Qkt"
+    "khan_engineered_3R4Qkt",
+    "khan_collection_t4cqrJ"
   ]
 }
