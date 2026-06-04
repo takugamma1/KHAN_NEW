@@ -326,6 +326,7 @@
         "feature_ndGmqQ": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Premium fabric",
             "text": "<p>High performance material with a smooth feel and exceptional durability.</p>"
           }
@@ -333,6 +334,7 @@
         "feature_yfkiL9": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Moisture wicking",
             "text": "<p>Advanced moisture control keeps you dry and comfortable in any condition.</p>"
           }
@@ -340,6 +342,7 @@
         "feature_kAQWFF": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Built to move",
             "text": "<p>Ergonomic fit and flexible construction designed for maximum movement.</p>"
           }
@@ -347,6 +350,7 @@
         "feature_dNQqPD": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Made to last",
             "text": "<p>Reinforced stitching and high quality materials built for the long haul.</p>"
           }
