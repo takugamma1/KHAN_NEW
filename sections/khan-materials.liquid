@@ -108,20 +108,6 @@
           </div>
         {%- endif -%}
 
-        {%- if s.detail_video != blank or s.detail_poster != blank or s.detail_text != blank -%}
-          <div class="khan-mat__detailbox">
-            <div class="khan-mat__detailbox-media">
-              {%- if s.detail_video != blank -%}
-                {{ s.detail_video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-mat__media-el' }}
-              {%- elsif s.detail_poster != blank -%}
-                {{ s.detail_poster | image_url: width: 800 | image_tag: class: 'khan-mat__media-el', loading: 'lazy', alt: '' }}
-              {%- else -%}
-                <div class="khan-mat__media-el khan-mat__media-el--ph"></div>
-              {%- endif -%}
-            </div>
-            {%- if s.detail_text != blank -%}<p class="khan-mat__detailbox-text">{{ s.detail_text }}</p>{%- endif -%}
-          </div>
-        {%- endif -%}
       </div>
 
     </div>
@@ -174,7 +160,7 @@
 
   .khan-mat__rule { display: block; height: 2px; background: var(--mat-frame, rgb(0 0 0 / 0.25)); margin: 22px 0; max-width: 360px; }
 
-  .khan-mat__body { font-size: 14px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--mat-text, #1a1a1a); margin: 0 0 30px; }
+  .khan-mat__body { font-size: 12px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--mat-text, #1a1a1a); margin: 0 0 30px; }
   .khan-mat__body p { margin: 0 0 1em; }
 
   .khan-mat__features { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 22px; }
@@ -269,12 +255,6 @@
     { "type": "color", "id": "color_2", "label": "Color 2", "default": "#3a3a3a" },
     { "type": "color", "id": "color_3", "label": "Color 3", "default": "#e9e9e9" },
     { "type": "color", "id": "color_4", "label": "Color 4" },
-
-    { "type": "header", "content": "Details box (right)" },
-    { "type": "paragraph", "content": "Add a looped video; poster image is the fallback." },
-    { "type": "video", "id": "detail_video", "label": "Details video" },
-    { "type": "image_picker", "id": "detail_poster", "label": "Details poster / fallback image" },
-    { "type": "text", "id": "detail_text", "label": "Details caption", "default": "Details matter. Quality stays." },
 
     { "type": "header", "content": "Style" },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
