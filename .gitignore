@@ -1,3 +1,6 @@
 .DS_Store
 node_modules/
 *.log
+
+# scroll-sequence test frames (deployed via CLI, not tracked)
+assets/seq-*.webp
