@@ -434,7 +434,7 @@
       "name": "Collection grid",
       "settings": {
         "heading": "<p><strong>OUR</strong> Collection.</p>",
-        "subheading": "Built different. Made to last.",
+        "subheading": "",
         "heading_size": 72,
         "subheading_size": 13,
         "heading_color": "#bf1616",
@@ -447,7 +447,7 @@
         "card_bg": "#ffffff",
         "frame_color": "#d8232a",
         "card_border_width": 2,
-        "label_color": "#ffffff",
+        "label_color": "#111111",
         "button_bg": "#111111",
         "button_text": "#ffffff",
         "show_swatches": true,
