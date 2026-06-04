@@ -153,10 +153,69 @@
         "bg_color": "#ffffff",
         "color_scheme": ""
       }
+    },
+    "khan_collection_zDwJ3p": {
+      "type": "khan-collection",
+      "blocks": {
+        "product_Nx6k4d": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "label": "Performance tee",
+            "button_label": "Shop now",
+            "button_link": ""
+          }
+        },
+        "product_3Rr7gz": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "label": "Sleeveless tank",
+            "button_label": "Shop now",
+            "button_link": ""
+          }
+        },
+        "product_AHzttH": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "label": "Essential set",
+            "button_label": "Shop now",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_Nx6k4d",
+        "product_3Rr7gz",
+        "product_AHzttH"
+      ],
+      "name": "Collection grid",
+      "settings": {
+        "heading": "<p>КОЛЕКЦИЯ</p>",
+        "subheading": "Built different. Made to last.",
+        "heading_size": 72,
+        "subheading_size": 13,
+        "heading_color": "#bf1616",
+        "accent_color": "#111111",
+        "text_color": "#1a1a1a",
+        "anim_style": "wipe",
+        "anim_duration": 700,
+        "anim_stagger": 120,
+        "text_grain": true,
+        "frame_color": "#00000029",
+        "bg_color": "#ffffff",
+        "max_width": 1700,
+        "column_gap": 28,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
-    "scroll_sequence_EY7mAR"
+    "scroll_sequence_EY7mAR",
+    "khan_collection_zDwJ3p"
   ]
 }
