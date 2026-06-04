@@ -204,7 +204,7 @@
           "name": "t:names.button",
           "settings": {
             "label": "СТРАНИЦА КОЛЕКЦИЯ ТЕСТ",
-            "link": "shopify://collections/all",
+            "link": "shopify://collections/frontpage",
             "open_in_new_tab": false,
             "style_class": "button",
             "width": "fit-content",
