@@ -57,17 +57,24 @@
     var ctx = canvas.getContext('2d');
     var fit = (getComputedStyle(root).getPropertyValue('--ss-fit') || 'cover').trim() || 'cover';
 
-    var imgs = new Array(frames.length);
-    var loaded = 0, ready = false, cur = -1, ticking = false;
+    // Smooth scrub: ease a float frame toward the scroll target every rAF, so
+    // a coarse mouse wheel (big jumps) still animates THROUGH the frames instead
+    // of skipping. Reduced motion -> snap (still scrolls/scrubs, just no easing).
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var EASE = reduced ? 1 : 0.16;
 
-    function progressFrame() {
+    var imgs = new Array(frames.length);
+    var loaded = 0, ready = false, drawn = -1;
+    var target = 0, currentF = 0, rafId = 0, visible = true;
+
+    function targetFrame() {
       var total = root.offsetHeight - window.innerHeight;
       var top = root.getBoundingClientRect().top;
       var p = total > 0 ? Math.max(0, Math.min(1, -top / total)) : 0;
-      return Math.round(p * (frames.length - 1));
+      return p * (frames.length - 1);
     }
 
-    function draw(idx) {
+    function paint(idx) {
       var im = imgs[idx];
       if (!im || !im.naturalWidth) return;
       var cw = canvas.clientWidth, ch = canvas.clientHeight;
@@ -76,25 +83,32 @@
       var dw = iw * s, dh = ih * s;
       ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-      cur = idx;
+      drawn = idx;
     }
+
+    function tick() {
+      rafId = 0;
+      target = targetFrame();
+      var diff = target - currentF;
+      if (Math.abs(diff) < 0.01) {            // settled — stop the loop until next scroll
+        currentF = target;
+        if (Math.round(currentF) !== drawn) paint(Math.round(currentF));
+        return;
+      }
+      currentF += diff * EASE;
+      var idx = Math.round(currentF);
+      if (idx !== drawn) paint(idx);
+      if (visible) rafId = window.requestAnimationFrame(tick);
+    }
+
+    function kick() { if (ready && visible && !rafId) rafId = window.requestAnimationFrame(tick); }
 
     function size() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       var w = sticky.clientWidth || 1, h = sticky.clientHeight || 1;
       canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      draw(cur < 0 ? progressFrame() : cur);
-    }
-
-    function onScroll() {
-      if (!ready || ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(function () {
-        var f = progressFrame();
-        if (f !== cur) draw(f);
-        ticking = false;
-      });
+      paint(Math.round(currentF));
     }
 
     // Preload every frame before enabling the scrub.
@@ -107,8 +121,10 @@
           if (loaded >= frames.length) {
             ready = true;
             if (loader) loader.style.display = 'none';
+            currentF = target = targetFrame();
             size();
-            draw(progressFrame());
+            paint(Math.round(currentF));
+            kick();
           }
         };
         im.src = frames[idx];
@@ -116,11 +132,18 @@
       })(i);
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', size);
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', function () { size(); kick(); });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { visible = e.isIntersecting; if (visible) kick(); });
+      }, { threshold: 0 }).observe(root);
+    }
+
     size();
     document.addEventListener('shopify:section:load', function (e) {
-      if (e.target && e.target.querySelector && e.target.querySelector('#ScrollSeq-' + id)) { size(); }
+      if (e.target && e.target.querySelector && e.target.querySelector('#ScrollSeq-' + id)) { size(); kick(); }
     });
   })();
 </script>
@@ -164,11 +187,6 @@
     opacity: 0.85;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    /* Static: the scrubber still draws the first frame; no auto motion exists anyway. */
-    .scroll-seq { height: 100svh; }
-    .scroll-seq__sticky { position: relative; }
-  }
 {% endstylesheet %}
 
 {% schema %}
