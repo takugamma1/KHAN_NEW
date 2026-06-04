@@ -183,6 +183,7 @@
     },
     "scroll_sequence_wkLHWe": {
       "type": "scroll-sequence",
+      "disabled": true,
       "name": "Scroll sequence",
       "settings": {
         "frame_prefix": "seq-",
