@@ -1,0 +1,361 @@
+{% liquid
+  assign s = section.settings
+  assign p = product
+  if p == blank
+    assign p = s.product_fallback
+  endif
+  assign cur = p.selected_or_first_available_variant
+  assign media_count = p.media.size
+%}
+
+<div
+  id="KhanProduct-{{ section.id }}"
+  class="khan-product color-{{ s.color_scheme }}{% if s.text_grain %} khan-product--grain{% endif %}"
+  style="
+    --kp-bg: {{ s.bg_color }};
+    --kp-text: {{ s.text_color }};
+    --kp-accent: {{ s.accent_color }};
+    --kp-muted: {{ s.muted_color }};
+    --kp-title-size: {{ s.title_size }}px;
+    --kp-maxw: {{ s.max_width }}px;
+    --kp-pt: {{ s.padding_top }}px;
+    --kp-pb: {{ s.padding_bottom }}px;
+    --kp-bottom-h: {{ s.bottom_height }}px;
+    --kp-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+  data-khan-product
+>
+  {%- if s.show_deco -%}
+    <span class="khan-product__corner" aria-hidden="true">{{ s.corner_text }}</span>
+    <img class="khan-product__deco-ast" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+    <span class="khan-product__cross khan-product__cross--1" aria-hidden="true"></span>
+    <span class="khan-product__cross khan-product__cross--2" aria-hidden="true"></span>
+  {%- endif -%}
+
+  <div class="khan-product__inner">
+    {%- if p != blank -%}
+      <div class="khan-product__grid">
+
+        {%- comment -%} ===== gallery ===== {%- endcomment -%}
+        <div class="khan-product__thumbs">
+          {%- for media in p.media limit: 6 -%}
+            <button type="button" class="khan-product__thumb{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index }}" data-full="{{ media | image_url: width: 1600 }}" aria-label="View image {{ forloop.index }}">
+              {{ media | image_url: width: 220 | image_tag: loading: 'lazy', widths: '110, 220', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        <div class="khan-product__stage">
+          <span class="khan-product__ring" aria-hidden="true"></span>
+          <div class="khan-product__main">
+            {%- if p.featured_media != blank -%}
+              <img data-main-image src="{{ p.featured_media | image_url: width: 1600 }}" alt="{{ p.featured_media.alt | default: p.title }}" loading="eager">
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'khan-product__ph' }}
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} ===== info / buy ===== {%- endcomment -%}
+        <div class="khan-product__info">
+          <p class="khan-product__count"><span data-counter>01</span> / {% if media_count < 10 %}0{% endif %}{{ media_count | default: 1 }}</p>
+
+          <h1 class="khan-product__title">{{ p.title | default: 'Product title' }}</h1>
+          {%- if s.tagline != blank -%}<p class="khan-product__tagline">{{ s.tagline }}</p>{%- endif -%}
+          <span class="khan-product__rule" aria-hidden="true"></span>
+
+          {%- if s.description != blank -%}
+            <div class="khan-product__desc">{{ s.description }}</div>
+          {%- elsif p.description != blank -%}
+            <div class="khan-product__desc">{{ p.description }}</div>
+          {%- endif -%}
+
+          {%- if section.blocks.size > 0 -%}
+            <div class="khan-product__feats">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'feature' -%}
+                  <div class="khan-product__feat" {{ block.shopify_attributes }}>
+                    {%- if block.settings.icon != blank -%}
+                      <img class="khan-product__feat-icon" src="{{ block.settings.icon | image_url: width: 120 }}" alt="" width="40" height="40" loading="lazy">
+                    {%- endif -%}
+                    <span class="khan-product__feat-label">{{ block.settings.label }}</span>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', p, id: 'khan-pf', class: 'khan-product__form', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ cur.id }}" data-variant-input>
+
+            {%- if p.variants.size > 1 -%}
+              <p class="khan-product__size-label">Size</p>
+              <div class="khan-product__sizes" role="group" aria-label="Size">
+                {%- for v in p.variants -%}
+                  <button
+                    type="button"
+                    class="khan-product__size{% if v.id == cur.id %} is-selected{% endif %}{% unless v.available %} is-soldout{% endunless %}"
+                    data-variant="{{ v.id }}"
+                    data-price="{{ v.price | money }}"
+                    data-available="{{ v.available }}"
+                  >{{ v.title }}</button>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- if s.size_guide_link != blank -%}
+              <a class="khan-product__guide" href="{{ s.size_guide_link }}">Size guide</a>
+            {%- endif -%}
+
+            <p class="khan-product__price"><span data-price>{{ cur.price | money }}</span></p>
+
+            <button type="submit" name="add" class="khan-product__atc" data-atc {% unless cur.available %}disabled{% endunless %}>
+              <span data-atc-text>{% if cur.available %}Add to cart{% else %}Sold out{% endif %}</span><span class="khan-product__atc-plus" aria-hidden="true">+</span>
+            </button>
+            <button type="button" class="khan-product__buynow" data-buynow {% unless cur.available %}disabled{% endunless %}>
+              <span>Buy now</span><span aria-hidden="true">→</span>
+            </button>
+          {%- endform -%}
+        </div>
+      </div>
+    {%- else -%}
+      <p class="khan-product__empty">Add this section to a product page (or pick a fallback product in the section settings) to preview it.</p>
+    {%- endif -%}
+  </div>
+
+  {%- if s.bottom_image != blank -%}
+    <div class="khan-product__bottom" aria-hidden="true">
+      {{ s.bottom_image | image_url: width: 2600 | image_tag: class: 'khan-product__bottom-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600', sizes: '100vw', alt: '' }}
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('KhanProduct-{{ section.id }}');
+    if (!root) return;
+
+    // gallery
+    var main = root.querySelector('[data-main-image]');
+    var counter = root.querySelector('[data-counter]');
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    root.querySelectorAll('.khan-product__thumb').forEach(function (t) {
+      t.addEventListener('click', function () {
+        var full = t.getAttribute('data-full');
+        if (main && full) main.src = full;
+        root.querySelectorAll('.khan-product__thumb').forEach(function (x) { x.classList.remove('is-active'); });
+        t.classList.add('is-active');
+        if (counter) counter.textContent = pad(parseInt(t.getAttribute('data-i'), 10));
+      });
+    });
+
+    // variants
+    var input = root.querySelector('[data-variant-input]');
+    var priceEl = root.querySelector('[data-price]');
+    var atc = root.querySelector('[data-atc]');
+    var atcText = root.querySelector('[data-atc-text]');
+    var buynow = root.querySelector('[data-buynow]');
+    root.querySelectorAll('.khan-product__size').forEach(function (b) {
+      b.addEventListener('click', function () {
+        root.querySelectorAll('.khan-product__size').forEach(function (x) { x.classList.remove('is-selected'); });
+        b.classList.add('is-selected');
+        if (input) input.value = b.getAttribute('data-variant');
+        if (priceEl) priceEl.textContent = b.getAttribute('data-price');
+        var avail = b.getAttribute('data-available') === 'true';
+        if (atc) { atc.disabled = !avail; if (atcText) atcText.textContent = avail ? 'Add to cart' : 'Sold out'; }
+        if (buynow) buynow.disabled = !avail;
+      });
+    });
+
+    // buy now -> add then go to checkout
+    if (buynow && input) {
+      buynow.addEventListener('click', function () {
+        buynow.disabled = true;
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: input.value, quantity: 1 })
+        }).then(function () { window.location.href = '/checkout'; })
+          .catch(function () { buynow.disabled = false; });
+      });
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  .khan-product {
+    position: relative;
+    background: var(--kp-bg, #f4f1ea);
+    padding-block: var(--kp-pt, 56px) var(--kp-pb, 200px);
+    padding-inline: clamp(20px, 4vw, 64px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .khan-product__inner { position: relative; z-index: 2; max-width: min(var(--kp-maxw, 1820px), 100%); margin-inline: auto; }
+
+  .khan-product__grid {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1.25fr) minmax(0, 0.85fr);
+    gap: clamp(24px, 3vw, 56px);
+    align-items: center;
+  }
+
+  /* mono helper */
+  .khan-product__count, .khan-product__tagline, .khan-product__desc, .khan-product__feat-label,
+  .khan-product__size-label, .khan-product__size, .khan-product__guide, .khan-product__price,
+  .khan-product__atc, .khan-product__buynow, .khan-product__corner {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  /* ---- thumbs ---- */
+  .khan-product__thumbs { display: flex; flex-direction: column; gap: 14px; }
+  .khan-product__thumb { padding: 0; border: 1px solid rgb(0 0 0 / 0.14); background: #fff; cursor: pointer; aspect-ratio: 1; overflow: hidden; }
+  .khan-product__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .khan-product__thumb.is-active { border-color: var(--kp-accent, #d8232a); }
+
+  /* ---- stage ---- */
+  .khan-product__stage { position: relative; display: flex; align-items: center; justify-content: center; }
+  .khan-product__ring {
+    position: absolute; width: min(86%, 620px); aspect-ratio: 1; border-radius: 50%;
+    border: 1px dashed rgb(0 0 0 / 0.22); pointer-events: none;
+  }
+  .khan-product__ring::after {
+    content: ""; position: absolute; inset: 8%; border-radius: 50%; border: 1px solid rgb(216 35 42 / 0.18);
+  }
+  .khan-product__main { position: relative; z-index: 1; width: 100%; }
+  .khan-product__main img, .khan-product__ph { width: 100%; height: auto; display: block; object-fit: contain; max-height: 78svh; }
+
+  /* ---- info ---- */
+  .khan-product__count { margin: 0 0 18px; font-size: 14px; letter-spacing: 0.2em; color: var(--kp-accent, #d8232a); }
+  .khan-product__title {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--kp-title-size, 64px), 7vw); line-height: 0.92; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--kp-text, #111);
+  }
+  .khan-product__tagline { margin: 12px 0 0; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kp-accent, #d8232a); }
+  .khan-product__rule { display: block; height: 1px; background: rgb(0 0 0 / 0.2); margin: 22px 0; }
+  .khan-product__desc { font-size: 14px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--kp-text, #1a1a1a); }
+  .khan-product__desc p { margin: 0 0 0.4em; }
+
+  .khan-product__feats { display: flex; flex-wrap: wrap; gap: 18px 28px; margin: 28px 0; }
+  .khan-product__feat { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .khan-product__feat-icon { width: 40px; height: 40px; object-fit: contain; }
+  .khan-product__feat-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kp-muted, #555); max-width: 90px; }
+
+  /* ---- size + buy ---- */
+  .khan-product__size-label { margin: 8px 0 12px; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--kp-muted, #555); }
+  .khan-product__sizes { display: flex; border: 1px solid rgb(0 0 0 / 0.16); width: fit-content; max-width: 100%; flex-wrap: wrap; }
+  .khan-product__size { min-width: 56px; padding: 13px 14px; background: transparent; border: 0; border-right: 1px solid rgb(0 0 0 / 0.16); cursor: pointer; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--kp-text, #111); }
+  .khan-product__size:last-child { border-right: 0; }
+  .khan-product__size.is-selected { background: #111; color: #fff; }
+  .khan-product__size.is-soldout { opacity: 0.4; text-decoration: line-through; }
+
+  .khan-product__guide { display: inline-block; margin: 16px 0 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-text, #111); }
+  .khan-product__price { margin: 18px 0 14px; font-size: 18px; letter-spacing: 0.06em; color: var(--kp-text, #111); }
+
+  .khan-product__atc, .khan-product__buynow {
+    position: relative; display: flex; align-items: center; justify-content: center; width: 100%;
+    padding: 18px; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+  }
+  .khan-product__atc { background: #111; color: #fff; border: 0; }
+  .khan-product__atc:hover { background: #000; }
+  .khan-product__atc-plus { position: absolute; right: 18px; color: var(--kp-accent, #d8232a); }
+  .khan-product__buynow { margin-top: 12px; background: transparent; color: var(--kp-text, #111); border: 1px solid rgb(0 0 0 / 0.3); gap: 14px; }
+  .khan-product__buynow:hover { border-color: #111; }
+  .khan-product__atc[disabled], .khan-product__buynow[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+  /* ---- bottom overlay image (bleeds up over the section's lower edge) ---- */
+  .khan-product__bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; line-height: 0; }
+  .khan-product__bottom-img { display: block; width: 100%; height: var(--kp-bottom-h, 220px); object-fit: cover; object-position: top center; }
+
+  /* ---- decorations ---- */
+  .khan-product__corner { position: absolute; left: 28px; bottom: calc(var(--kp-bottom-h, 220px) + 16px); z-index: 2; font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #888); white-space: pre-line; }
+  .khan-product__deco-ast { position: absolute; right: 4%; top: 26%; width: 22px; height: 22px; object-fit: contain; z-index: 2; }
+  .khan-product__cross { position: absolute; z-index: 1; width: 16px; height: 16px; }
+  .khan-product__cross::before, .khan-product__cross::after { content: ""; position: absolute; background: var(--kp-accent, #d8232a); opacity: 0.6; }
+  .khan-product__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+  .khan-product__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+  .khan-product__cross--1 { left: 6%; top: 10%; }
+  .khan-product__cross--2 { right: 30%; bottom: calc(var(--kp-bottom-h, 220px) + 8%); }
+
+  /* ---- grain ---- */
+  .khan-product--grain :is(.khan-product__title, .khan-product__tagline, .khan-product__desc, .khan-product__count, .khan-product__feat-label, .khan-product__feat-icon) {
+    -webkit-mask-image: var(--kp-grain); mask-image: var(--kp-grain);
+    -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
+  }
+
+  /* ---- responsive ---- */
+  @media screen and (max-width: 1100px) {
+    .khan-product__grid { grid-template-columns: 80px minmax(0, 1fr); }
+    .khan-product__info { grid-column: 1 / -1; }
+  }
+  @media screen and (max-width: 749px) {
+    .khan-product { padding-bottom: 140px; }
+    .khan-product__grid { grid-template-columns: 1fr; }
+    .khan-product__thumbs { flex-direction: row; order: 2; }
+    .khan-product__corner, .khan-product__deco-ast { display: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product hero",
+  "tag": "section",
+  "class": "khan-product-wrapper section-wrapper",
+  "settings": [
+    { "type": "header", "content": "Product" },
+    { "type": "paragraph", "content": "Uses the current product on a product page. On other pages, pick a fallback to preview." },
+    { "type": "product", "id": "product_fallback", "label": "Fallback product (preview)" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last." },
+    { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
+    { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
+
+    { "type": "header", "content": "Bottom overlay image" },
+    { "type": "paragraph", "content": "Bleeds up over the lower edge so the section blends into the next instead of a hard cut." },
+    { "type": "image_picker", "id": "bottom_image", "label": "Image" },
+    { "type": "range", "id": "bottom_height", "label": "Overlay height", "min": 60, "max": 460, "step": 10, "unit": "px", "default": 220 },
+
+    { "type": "header", "content": "Decoration" },
+    { "type": "checkbox", "id": "show_deco", "label": "Show ring, crosshairs & corner text", "default": true },
+    { "type": "textarea", "id": "corner_text", "label": "Corner text", "default": "K // 26\nApparel div.\nBuilt for now." },
+
+    { "type": "header", "content": "Style" },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Muted color", "default": "#666666" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#d8232a" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 32, "max": 110, "step": 2, "unit": "px", "default": 64 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1200, "max": 1900, "step": 20, "unit": "px", "default": 1820 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 400, "step": 10, "unit": "px", "default": 200 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature icon",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Performance fit" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "enabled_on": { "templates": ["product"] },
+  "presets": [
+    {
+      "name": "Product hero",
+      "category": "t:categories.products",
+      "blocks": [
+        { "type": "feature", "settings": { "label": "Performance fit" } },
+        { "type": "feature", "settings": { "label": "Moisture wicking" } },
+        { "type": "feature", "settings": { "label": "Durable fabric" } },
+        { "type": "feature", "settings": { "label": "Built to endure" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
