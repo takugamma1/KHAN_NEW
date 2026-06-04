@@ -291,19 +291,12 @@
           "settings": {
             "label": "Durable fabric"
           }
-        },
-        "feature_XVQm3E": {
-          "type": "feature",
-          "settings": {
-            "label": "Built to endure"
-          }
         }
       },
       "block_order": [
         "feature_wGRFjH",
         "feature_xrbd3V",
-        "feature_KnzmmV",
-        "feature_XVQm3E"
+        "feature_KnzmmV"
       ],
       "name": "Product hero",
       "settings": {
