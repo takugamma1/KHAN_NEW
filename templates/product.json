@@ -364,7 +364,7 @@
         "line_color": "#d8232a",
         "glass": true,
         "bg_color": "#0a0a0acc",
-        "glass_blur": 30,
+        "glass_blur": 0,
         "heading": "<p>Engineered<br/><strong>differently.</strong></p>",
         "heading_size": 40,
         "body": "<p>Every detail is intentional. From the fabric we choose to the way it's built — this is performance without compromise.</p>",
