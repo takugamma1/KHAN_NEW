@@ -44,11 +44,11 @@
       "name": "Photo footer",
       "settings": {
         "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_4_2026_04_43_22_PM.png",
-        "overlay_opacity": 55,
+        "overlay_opacity": 50,
         "min_height": 560,
         "logo_width": 200,
         "tagline": "Built different. Made to last.",
-        "show_newsletter": true,
+        "show_newsletter": false,
         "news_heading": "Join the Khan society",
         "news_text": "Exclusive drops. Early access. No noise. Just Khan.",
         "news_placeholder": "Your email",
