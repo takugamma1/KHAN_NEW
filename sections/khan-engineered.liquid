@@ -1,0 +1,239 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanEng-{{ section.id }}"
+  class="khan-eng color-{{ s.color_scheme }}{% if s.glass %} khan-eng--glass{% endif %}{% if s.text_grain %} khan-eng--grain{% endif %}"
+  style="
+    --eng-line-w: {{ s.line_width }}px;
+    --eng-line-c: {{ s.line_color }};
+    --eng-bg: {{ s.bg_color }};
+    --eng-blur: {{ s.glass_blur }}px;
+    --eng-heading: {{ s.heading_color }};
+    --eng-accent: {{ s.accent_color }};
+    --eng-text: {{ s.text_color }};
+    --eng-muted: {{ s.muted_color }};
+    --eng-divider: {{ s.divider_color }};
+    --eng-heading-size: {{ s.heading_size }}px;
+    --eng-body-size: {{ s.body_size }}px;
+    --eng-feat-title-size: {{ s.feat_title_size }}px;
+    --eng-feat-text-size: {{ s.feat_text_size }}px;
+    --eng-icon-size: {{ s.icon_size }}px;
+    --eng-maxw: {{ s.max_width }}px;
+    --eng-pt: {{ s.padding_top }}px;
+    --eng-pb: {{ s.padding_bottom }}px;
+    --eng-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+  data-khan-eng
+>
+  <div class="khan-eng__inner">
+    <div class="khan-eng__grid">
+
+      <div class="khan-eng__intro">
+        {%- if s.heading != blank -%}
+          <div class="khan-eng__heading-row">
+            <div class="khan-eng__heading">{{ s.heading }}</div>
+            <img class="khan-eng__ast" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+          </div>
+        {%- endif -%}
+        <span class="khan-eng__rule" aria-hidden="true"></span>
+        {%- if s.body != blank -%}<div class="khan-eng__body">{{ s.body }}</div>{%- endif -%}
+      </div>
+
+      <div class="khan-eng__feats">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'feature' -%}
+            <div class="khan-eng__feat" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != blank -%}
+                <img class="khan-eng__feat-icon" src="{{ block.settings.icon | image_url: width: 160 }}" alt="" width="48" height="48" loading="lazy">
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}<h3 class="khan-eng__feat-title">{{ block.settings.title }}</h3>{%- endif -%}
+              {%- if block.settings.text != blank -%}<div class="khan-eng__feat-text">{{ block.settings.text }}</div>{%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if s.media_video != blank or s.media_image != blank -%}
+        <div class="khan-eng__media">
+          {%- if s.media_video != blank -%}
+            {{ s.media_video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-eng__media-el' }}
+          {%- else -%}
+            {{ s.media_image | image_url: width: 1200 | image_tag: class: 'khan-eng__media-el', loading: 'lazy', widths: '400, 600, 800, 1200', alt: '' }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-eng {
+    position: relative;
+    border-top: var(--eng-line-w, 2px) solid var(--eng-line-c, #d8232a);
+    background: var(--eng-bg, #0a0a0a);
+    padding-block: var(--eng-pt, 44px) var(--eng-pb, 44px);
+    padding-inline: clamp(20px, 4vw, 56px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* glass: frost what's behind + a faint sheen + grain texture */
+  .khan-eng--glass {
+    -webkit-backdrop-filter: blur(var(--eng-blur, 12px));
+    backdrop-filter: blur(var(--eng-blur, 12px));
+  }
+  .khan-eng--glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.06) 0%, rgb(255 255 255 / 0) 22%),
+      radial-gradient(120% 140% at 12% 0%, rgb(255 255 255 / 0.05) 0%, rgb(255 255 255 / 0) 45%);
+  }
+  .khan-eng--glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: var(--eng-grain);
+    background-size: 200px 200px;
+    mix-blend-mode: overlay;
+  }
+
+  .khan-eng__inner { position: relative; z-index: 1; max-width: min(var(--eng-maxw, 1760px), 100%); margin-inline: auto; }
+
+  .khan-eng__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 2.3fr) minmax(0, 0.85fr);
+    gap: clamp(24px, 3vw, 52px);
+    align-items: center;
+  }
+
+  /* mono helper */
+  .khan-eng__body, .khan-eng__feat-title, .khan-eng__feat-text { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+
+  /* ---- intro ---- */
+  .khan-eng__heading-row { display: flex; align-items: flex-start; gap: 12px; }
+  .khan-eng__heading {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--eng-heading-size, 40px), 8vw); line-height: 0.95; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--eng-heading, #f3f3f3);
+  }
+  .khan-eng__heading p { margin: 0; }
+  .khan-eng__heading :is(strong, b) { color: var(--eng-accent, #d8232a); font-weight: inherit; }
+  .khan-eng__ast { width: 16px; height: 16px; object-fit: contain; margin-top: 6px; flex: 0 0 auto; }
+  .khan-eng__rule { display: block; height: 1px; background: var(--eng-divider, rgb(255 255 255 / 0.2)); margin: 18px 0; max-width: 280px; }
+  .khan-eng__body { font-size: var(--eng-body-size, 13px); line-height: 1.7; letter-spacing: 0.02em; color: var(--eng-muted, #b9b9b9); }
+  .khan-eng__body p { margin: 0; }
+
+  /* ---- features ---- */
+  .khan-eng__feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+  .khan-eng__feat { padding: 0 clamp(16px, 1.6vw, 28px); border-left: 1px solid var(--eng-divider, rgb(255 255 255 / 0.18)); }
+  .khan-eng__feat-icon { width: var(--eng-icon-size, 40px); height: var(--eng-icon-size, 40px); object-fit: contain; display: block; margin-bottom: 16px; }
+  .khan-eng__feat-title { margin: 0 0 10px; font-weight: 700; font-size: var(--eng-feat-title-size, 14px); letter-spacing: 0.1em; text-transform: uppercase; color: var(--eng-accent, #d8232a); }
+  .khan-eng__feat-text { font-size: var(--eng-feat-text-size, 12px); line-height: 1.6; color: var(--eng-muted, #b9b9b9); }
+  .khan-eng__feat-text p { margin: 0; }
+
+  /* ---- media ---- */
+  .khan-eng__media { aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
+  .khan-eng__media-el { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+
+  /* ---- grain on text ---- */
+  .khan-eng--grain :is(.khan-eng__heading, .khan-eng__body, .khan-eng__feat-title, .khan-eng__feat-text, .khan-eng__feat-icon) {
+    -webkit-mask-image: var(--eng-grain); mask-image: var(--eng-grain);
+    -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
+  }
+
+  /* ---- responsive ---- */
+  @media screen and (max-width: 1100px) {
+    .khan-eng__grid { grid-template-columns: 1fr; }
+    .khan-eng__feats { grid-template-columns: repeat(2, 1fr); gap: 24px 0; }
+    .khan-eng__media { aspect-ratio: 21 / 9; }
+  }
+  @media screen and (max-width: 560px) {
+    .khan-eng__feats { grid-template-columns: 1fr; }
+    .khan-eng__feat { border-left: 0; padding: 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Engineered bar",
+  "tag": "section",
+  "class": "khan-eng-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "header", "content": "Top divider line" },
+    { "type": "range", "id": "line_width", "label": "Line thickness", "min": 0, "max": 20, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "line_color", "label": "Line color", "default": "#d8232a" },
+
+    { "type": "header", "content": "Glass background" },
+    { "type": "checkbox", "id": "glass", "label": "Glass texture", "default": true },
+    { "type": "color", "id": "bg_color", "label": "Background", "alpha": true, "default": "#0a0a0acc" },
+    { "type": "range", "id": "glass_blur", "label": "Glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 12 },
+
+    { "type": "header", "content": "Heading & body" },
+    { "type": "paragraph", "content": "Bold text uses the accent color." },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Engineered<br/><strong>differently.</strong></p>" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 72, "step": 2, "unit": "px", "default": 40 },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Every detail is intentional. From the fabric we choose to the way it's built — this is performance without compromise.</p>" },
+    { "type": "range", "id": "body_size", "label": "Body size", "min": 9, "max": 20, "step": 1, "unit": "px", "default": 13 },
+
+    { "type": "header", "content": "Right media" },
+    { "type": "paragraph", "content": "Looped autoplay video (muted); image is the fallback." },
+    { "type": "video", "id": "media_video", "label": "Video" },
+    { "type": "image_picker", "id": "media_image", "label": "Image (fallback)" },
+
+    { "type": "header", "content": "Features" },
+    { "type": "paragraph", "content": "Add Feature blocks (icon + title + text), shown as columns split by lines." },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 72, "step": 2, "unit": "px", "default": 40 },
+    { "type": "range", "id": "feat_title_size", "label": "Feature title size", "min": 11, "max": 22, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "feat_text_size", "label": "Feature text size", "min": 9, "max": 18, "step": 1, "unit": "px", "default": 12 },
+
+    { "type": "header", "content": "Style" },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#f3f3f3" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#d8232a" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#e6e6e6" },
+    { "type": "color", "id": "muted_color", "label": "Muted text color", "default": "#b9b9b9" },
+    { "type": "color", "id": "divider_color", "label": "Divider line color", "default": "#ffffff2e" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1760 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 44 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 44 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Premium fabric" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>High performance material with a smooth feel and exceptional durability.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Engineered bar",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "Premium fabric", "text": "<p>High performance material with a smooth feel and exceptional durability.</p>" } },
+        { "type": "feature", "settings": { "title": "Moisture wicking", "text": "<p>Advanced moisture control keeps you dry and comfortable in any condition.</p>" } },
+        { "type": "feature", "settings": { "title": "Built to move", "text": "<p>Ergonomic fit and flexible construction designed for maximum movement.</p>" } },
+        { "type": "feature", "settings": { "title": "Made to last", "text": "<p>Reinforced stitching and high quality materials built for the long haul.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
