@@ -256,6 +256,7 @@
         "detail_VwV6NF": {
           "type": "detail",
           "settings": {
+            "poster": "shopify://shop_images/att.I40-ZEmdG9TyFwqVLajvAEXkxTb6Mf3jIUqrtXaiFXw.jpg",
             "title": "Premium prints",
             "text": "<p>High density prints that withstand time, wash after wash.</p>"
           }
@@ -263,6 +264,7 @@
         "detail_xJdGLQ": {
           "type": "detail",
           "settings": {
+            "poster": "shopify://shop_images/Screenshot_2026-06-04_at_16.22.53.png",
             "title": "Brushed fleece",
             "text": "<p>Soft inner fleece for extra warmth and all day comfort.</p>"
           }
