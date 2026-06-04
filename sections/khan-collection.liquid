@@ -23,6 +23,7 @@
     --coll-pb: {{ s.padding_bottom }}px;
     --coll-dur: {{ s.anim_duration }}ms;
     --coll-stagger: {{ s.anim_stagger }}ms;
+    --coll-swatch: {{ s.swatch_size }}px;
     --coll-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   data-khan-coll
@@ -69,6 +70,22 @@
               {{ 'product-1' | placeholder_svg_tag: 'khan-coll__card-img khan-coll__card-img--placeholder' }}
             {%- endif -%}
           </div>
+
+          {%- if section.settings.show_swatches -%}
+            {%- assign has_bubbles = false -%}
+            {%- if block.settings.bubble_1 != blank or block.settings.bubble_2 != blank or block.settings.bubble_3 != blank or block.settings.bubble_4 != blank or block.settings.bubble_5 != blank -%}
+              {%- assign has_bubbles = true -%}
+            {%- endif -%}
+            {%- if has_bubbles -%}
+              <div class="khan-coll__swatches" aria-hidden="true">
+                {%- if block.settings.bubble_1 != blank -%}<span class="khan-coll__swatch">{{ block.settings.bubble_1 | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}</span>{%- endif -%}
+                {%- if block.settings.bubble_2 != blank -%}<span class="khan-coll__swatch">{{ block.settings.bubble_2 | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}</span>{%- endif -%}
+                {%- if block.settings.bubble_3 != blank -%}<span class="khan-coll__swatch">{{ block.settings.bubble_3 | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}</span>{%- endif -%}
+                {%- if block.settings.bubble_4 != blank -%}<span class="khan-coll__swatch">{{ block.settings.bubble_4 | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}</span>{%- endif -%}
+                {%- if block.settings.bubble_5 != blank -%}<span class="khan-coll__swatch">{{ block.settings.bubble_5 | image_url: width: 120 | image_tag: alt: '', loading: 'lazy' }}</span>{%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
 
           {%- if url != blank or block.settings.button_label != blank -%}
             <a class="khan-coll__btn" {% if url != blank %}href="{{ url }}"{% endif %}>
@@ -239,6 +256,30 @@
     color: var(--coll-heading-accent, #bf1616);
   }
 
+  /* ---- variant bubbles (showcase only) ---- */
+  .khan-coll__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 18px;
+  }
+  .khan-coll__swatch {
+    flex: 0 0 auto;
+    width: var(--coll-swatch, 30px);
+    height: var(--coll-swatch, 30px);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--coll-frame, rgb(0 0 0 / 0.22));
+    background: #fff;
+  }
+  .khan-coll__swatch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   /* ---- grain on content (not the background) ---- */
   .khan-coll--grain :is(.khan-coll__heading, .khan-coll__sub, .khan-coll__card-label, .khan-coll__card-mark) {
     -webkit-mask-image: var(--coll-grain);
@@ -314,6 +355,8 @@
     { "type": "paragraph", "content": "Add a Product block per card (up to 3 across; more wrap)." },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
     { "type": "color", "id": "frame_color", "label": "Card frame color", "default": "#00000029" },
+    { "type": "checkbox", "id": "show_swatches", "label": "Show variant bubbles (showcase)", "default": true },
+    { "type": "range", "id": "swatch_size", "label": "Bubble size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 30 },
 
     { "type": "header", "content": "Background & spacing" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
@@ -334,7 +377,13 @@
         { "type": "text", "id": "label", "label": "Label override" },
         { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
-        { "type": "url", "id": "button_link", "label": "Button link override" }
+        { "type": "url", "id": "button_link", "label": "Button link override" },
+        { "type": "header", "content": "Variant bubbles (showcase)" },
+        { "type": "image_picker", "id": "bubble_1", "label": "Bubble 1" },
+        { "type": "image_picker", "id": "bubble_2", "label": "Bubble 2" },
+        { "type": "image_picker", "id": "bubble_3", "label": "Bubble 3" },
+        { "type": "image_picker", "id": "bubble_4", "label": "Bubble 4" },
+        { "type": "image_picker", "id": "bubble_5", "label": "Bubble 5" }
       ]
     }
   ],
