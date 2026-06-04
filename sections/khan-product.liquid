@@ -266,7 +266,7 @@
 
   /* ---- bottom overlay image (bleeds up over the section's lower edge) ---- */
   .khan-product__bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; line-height: 0; }
-  .khan-product__bottom-img { display: block; width: 100%; height: var(--kp-bottom-h, 220px); object-fit: cover; object-position: top center; }
+  .khan-product__bottom-img { display: block; width: 100%; height: auto; max-height: var(--kp-bottom-h, 360px); object-fit: cover; object-position: bottom center; }
 
   /* ---- decorations ---- */
   .khan-product__corner { position: absolute; left: 28px; bottom: calc(var(--kp-bottom-h, 220px) + 16px); z-index: 2; font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #888); white-space: pre-line; }
@@ -313,7 +313,7 @@
     { "type": "header", "content": "Bottom overlay image" },
     { "type": "paragraph", "content": "Bleeds up over the lower edge so the section blends into the next instead of a hard cut." },
     { "type": "image_picker", "id": "bottom_image", "label": "Image" },
-    { "type": "range", "id": "bottom_height", "label": "Overlay height", "min": 60, "max": 460, "step": 10, "unit": "px", "default": 220 },
+    { "type": "range", "id": "bottom_height", "label": "Overlay max height", "min": 60, "max": 700, "step": 10, "unit": "px", "default": 360 },
 
     { "type": "header", "content": "Decoration" },
     { "type": "checkbox", "id": "show_deco", "label": "Show ring, crosshairs & corner text", "default": true },
