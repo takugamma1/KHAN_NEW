@@ -11,6 +11,64 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
+    "khan_footer_XYejMx": {
+      "type": "khan-footer",
+      "blocks": {
+        "menu_nzXrCK": {
+          "type": "menu",
+          "settings": {
+            "heading": "Navigate",
+            "menu": "main-menu"
+          }
+        },
+        "menu_ePKEGn": {
+          "type": "menu",
+          "settings": {
+            "heading": "Info",
+            "menu": "footer"
+          }
+        },
+        "menu_kDzbPH": {
+          "type": "menu",
+          "settings": {
+            "heading": "Connect",
+            "menu": "customer-account-main-menu"
+          }
+        }
+      },
+      "block_order": [
+        "menu_nzXrCK",
+        "menu_ePKEGn",
+        "menu_kDzbPH"
+      ],
+      "name": "Photo footer",
+      "settings": {
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_4_2026_04_43_22_PM.png",
+        "overlay_opacity": 55,
+        "min_height": 560,
+        "logo_width": 200,
+        "tagline": "Built different. Made to last.",
+        "show_newsletter": true,
+        "news_heading": "Join the Khan society",
+        "news_text": "Exclusive drops. Early access. No noise. Just Khan.",
+        "news_placeholder": "Your email",
+        "news_success": "You're in.",
+        "copyright": "© 2026 Khan Apparel. All rights reserved.",
+        "tagline2": "Born from past. Built for now.",
+        "show_deco": true,
+        "coordinates": "42.6977° N  23.3219° E",
+        "text_grain": true,
+        "bg_color": "#0a0a0a",
+        "text_color": "#f2f2f2",
+        "muted_color": "#9a9a9a",
+        "accent_color": "#d8232a",
+        "heading_size": 14,
+        "link_size": 14,
+        "padding_top": 64,
+        "padding_bottom": 40,
+        "color_scheme": ""
+      }
+    },
     "footer_m9NzUG": {
       "type": "footer",
       "blocks": {
@@ -207,6 +265,7 @@
     }
   },
   "order": [
+    "khan_footer_XYejMx",
     "footer_m9NzUG",
     "footer_utilities_jLGE8U"
   ]
