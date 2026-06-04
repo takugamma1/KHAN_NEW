@@ -281,8 +281,8 @@
       "name": "Materials & craft",
       "settings": {
         "eyebrow": "Materials & craft",
-        "heading": "<p>Built different.<br/><strong>Made to last.</strong></p>",
-        "heading_size": 64,
+        "heading": "<p>Built different<br/><strong>Made to last.</strong></p>",
+        "heading_size": 56,
         "body": "<p>Carefully selected materials. Premium quality. Maximum durability. Comfort that performs.</p>",
         "featured_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
         "stat_label": "Fabric weight",
@@ -295,7 +295,6 @@
         "color_2": "#8b1616",
         "color_3": "#f5f5f5",
         "color_4": "",
-        "detail_text": "Details matter. Quality stays.",
         "text_grain": true,
         "heading_color": "#111111",
         "accent_color": "#bf1616",
