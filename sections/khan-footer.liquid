@@ -2,6 +2,7 @@
   assign s = section.settings
 %}
 
+{%- unless section.settings.hide_on_home and request.page_type == 'index' -%}
 <div
   id="KhanFooter-{{ section.id }}"
   class="khan-footer color-{{ s.color_scheme }}{% if s.text_grain %} khan-footer--grain{% endif %}"
@@ -92,6 +93,7 @@
     </div>
   </div>
 </div>
+{%- endunless -%}
 
 {% stylesheet %}
   .khan-footer {
@@ -205,6 +207,8 @@
   "class": "khan-footer-wrapper section-wrapper",
   "disabled_on": { "groups": ["header"] },
   "settings": [
+    { "type": "header", "content": "Visibility" },
+    { "type": "checkbox", "id": "hide_on_home", "label": "Hide on the home page", "default": true },
     { "type": "header", "content": "Background image (full-bleed)" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image" },
     { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
