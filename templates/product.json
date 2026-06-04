@@ -363,7 +363,7 @@
         "line_width": 2,
         "line_color": "#d8232a",
         "glass": true,
-        "bg_color": "#0a0a0acc",
+        "bg_color": "#0a0a0a",
         "glass_blur": 0,
         "heading": "<p>Engineered<br/><strong>differently.</strong></p>",
         "heading_size": 40,
