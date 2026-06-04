@@ -447,7 +447,7 @@
         "card_bg": "#ffffff",
         "frame_color": "#d8232a",
         "card_border_width": 2,
-        "label_color": "#1a1a1a",
+        "label_color": "#ffffff",
         "button_bg": "#111111",
         "button_text": "#ffffff",
         "show_swatches": true,
