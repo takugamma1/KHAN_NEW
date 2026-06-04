@@ -305,7 +305,7 @@
         "description": "",
         "size_guide_link": "",
         "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
-        "bottom_height": 700,
+        "bottom_height": 500,
         "show_deco": true,
         "corner_text": "K // 26\nApparel div.\nBuilt for now.",
         "text_grain": true,
@@ -320,44 +320,74 @@
         "color_scheme": ""
       }
     },
-    "hero_ez3qJh": {
-      "type": "hero",
-      "name": "t:names.hero",
+    "khan_engineered_3R4Qkt": {
+      "type": "khan-engineered",
+      "blocks": {
+        "feature_ndGmqQ": {
+          "type": "feature",
+          "settings": {
+            "title": "Premium fabric",
+            "text": "<p>High performance material with a smooth feel and exceptional durability.</p>"
+          }
+        },
+        "feature_yfkiL9": {
+          "type": "feature",
+          "settings": {
+            "title": "Moisture wicking",
+            "text": "<p>Advanced moisture control keeps you dry and comfortable in any condition.</p>"
+          }
+        },
+        "feature_kAQWFF": {
+          "type": "feature",
+          "settings": {
+            "title": "Built to move",
+            "text": "<p>Ergonomic fit and flexible construction designed for maximum movement.</p>"
+          }
+        },
+        "feature_dNQqPD": {
+          "type": "feature",
+          "settings": {
+            "title": "Made to last",
+            "text": "<p>Reinforced stitching and high quality materials built for the long haul.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_ndGmqQ",
+        "feature_yfkiL9",
+        "feature_kAQWFF",
+        "feature_dNQqPD"
+      ],
+      "name": "Engineered bar",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": true,
-        "overlay_color": "#040404",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "line_width": 2,
+        "line_color": "#d8232a",
+        "glass": true,
+        "bg_color": "#0a0a0acc",
+        "glass_blur": 30,
+        "heading": "<p>Engineered<br/><strong>differently.</strong></p>",
+        "heading_size": 40,
+        "body": "<p>Every detail is intentional. From the fabric we choose to the way it's built — this is performance without compromise.</p>",
+        "body_size": 13,
+        "icon_size": 40,
+        "feat_title_size": 14,
+        "feat_text_size": 12,
+        "text_grain": true,
+        "heading_color": "#f3f3f3",
+        "accent_color": "#d8232a",
+        "text_color": "#e6e6e6",
+        "muted_color": "#b9b9b9",
+        "divider_color": "#ffffff2e",
+        "max_width": 1760,
+        "padding_top": 44,
+        "padding_bottom": 44,
+        "color_scheme": ""
       }
     }
   },
   "order": [
     "main",
     "khan_product_Pccd6t",
-    "hero_ez3qJh"
+    "khan_engineered_3R4Qkt"
   ]
 }
