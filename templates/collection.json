@@ -203,10 +203,10 @@
         "anim_duration": 1500,
         "anim_stagger": 400,
         "text_grain": true,
-        "frame_color": "#00000029",
+        "frame_color": "#62000029",
         "bg_color": "#ffffff",
-        "max_width": 1700,
-        "column_gap": 28,
+        "max_width": 1900,
+        "column_gap": 12,
         "padding_top": 96,
         "padding_bottom": 96,
         "color_scheme": ""
