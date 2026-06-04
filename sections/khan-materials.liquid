@@ -1,0 +1,330 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanMat-{{ section.id }}"
+  class="khan-mat color-{{ s.color_scheme }}{% if s.text_grain %} khan-mat--grain{% endif %}"
+  style="
+    --mat-bg: {{ s.bg_color }};
+    --mat-heading: {{ s.heading_color }};
+    --mat-accent: {{ s.accent_color }};
+    --mat-text: {{ s.text_color }};
+    --mat-frame: {{ s.frame_color }};
+    --mat-heading-size: {{ s.heading_size }}px;
+    --mat-stat-size: {{ s.stat_size }}px;
+    --mat-maxw: {{ s.max_width }}px;
+    --mat-pt: {{ s.padding_top }}px;
+    --mat-pb: {{ s.padding_bottom }}px;
+    --mat-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+  data-khan-mat
+>
+  <div class="khan-mat__inner">
+    <div class="khan-mat__grid">
+
+      {%- comment -%} ===== LEFT: copy + features ===== {%- endcomment -%}
+      <div class="khan-mat__left">
+        {%- if s.eyebrow != blank -%}
+          <p class="khan-mat__eyebrow"><span class="khan-mat__flag" aria-hidden="true"></span>{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}<div class="khan-mat__heading">{{ s.heading }}</div>{%- endif -%}
+        <span class="khan-mat__rule" aria-hidden="true"></span>
+        {%- if s.body != blank -%}<div class="khan-mat__body">{{ s.body }}</div>{%- endif -%}
+
+        <div class="khan-mat__features">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature' -%}
+              <div class="khan-mat__feature" {{ block.shopify_attributes }}>
+                <img class="khan-mat__feature-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+                <div class="khan-mat__feature-body">
+                  {%- if block.settings.title != blank -%}<h3 class="khan-mat__feature-title">{{ block.settings.title }}</h3>{%- endif -%}
+                  {%- if block.settings.text != blank -%}<div class="khan-mat__feature-text">{{ block.settings.text }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} ===== CENTER: featured video + detail tiles ===== {%- endcomment -%}
+      <div class="khan-mat__center">
+        <div class="khan-mat__feature-media">
+          {%- if s.featured_video != blank -%}
+            {{ s.featured_video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-mat__media-el' }}
+          {%- elsif s.featured_poster != blank -%}
+            {{ s.featured_poster | image_url: width: 2000 | image_tag: class: 'khan-mat__media-el', loading: 'lazy', alt: '' }}
+          {%- else -%}
+            <div class="khan-mat__media-el khan-mat__media-el--ph"></div>
+          {%- endif -%}
+          <span class="khan-mat__cross khan-mat__cross--tl" aria-hidden="true"></span>
+          <span class="khan-mat__cross khan-mat__cross--bl" aria-hidden="true"></span>
+          <span class="khan-mat__cross khan-mat__cross--br" aria-hidden="true"></span>
+        </div>
+
+        <div class="khan-mat__details">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'detail' -%}
+              <figure class="khan-mat__detail" {{ block.shopify_attributes }}>
+                <div class="khan-mat__detail-media">
+                  {%- if block.settings.video != blank -%}
+                    {{ block.settings.video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-mat__media-el' }}
+                  {%- elsif block.settings.poster != blank -%}
+                    {{ block.settings.poster | image_url: width: 800 | image_tag: class: 'khan-mat__media-el', loading: 'lazy', alt: '' }}
+                  {%- else -%}
+                    <div class="khan-mat__media-el khan-mat__media-el--ph"></div>
+                  {%- endif -%}
+                </div>
+                <figcaption class="khan-mat__detail-cap">
+                  {%- if block.settings.title != blank -%}<span class="khan-mat__detail-title">{{ block.settings.title }}</span>{%- endif -%}
+                  {%- if block.settings.text != blank -%}<span class="khan-mat__detail-text">{{ block.settings.text }}</span>{%- endif -%}
+                </figcaption>
+              </figure>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} ===== RIGHT: fabric weight, colors, details ===== {%- endcomment -%}
+      <div class="khan-mat__right">
+        {%- if s.stat_label != blank or s.stat_value != blank -%}
+          <div class="khan-mat__stat">
+            {%- if s.stat_label != blank -%}<p class="khan-mat__stat-label">{{ s.stat_label }}</p>{%- endif -%}
+            <p class="khan-mat__stat-value">{{ s.stat_value }}<span class="khan-mat__stat-unit">{{ s.stat_unit }}</span></p>
+            {%- if s.stat_caption != blank -%}<p class="khan-mat__stat-cap">{{ s.stat_caption }}</p>{%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if s.colors_label != blank -%}
+          <div class="khan-mat__colors">
+            <p class="khan-mat__stat-label">{{ s.colors_label }}</p>
+            <div class="khan-mat__swatches">
+              {%- if s.color_1 != blank -%}<span class="khan-mat__color" style="background: {{ s.color_1 }};"></span>{%- endif -%}
+              {%- if s.color_2 != blank -%}<span class="khan-mat__color" style="background: {{ s.color_2 }};"></span>{%- endif -%}
+              {%- if s.color_3 != blank -%}<span class="khan-mat__color" style="background: {{ s.color_3 }};"></span>{%- endif -%}
+              {%- if s.color_4 != blank -%}<span class="khan-mat__color" style="background: {{ s.color_4 }};"></span>{%- endif -%}
+            </div>
+            <img class="khan-mat__colors-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+          </div>
+        {%- endif -%}
+
+        {%- if s.detail_video != blank or s.detail_poster != blank or s.detail_text != blank -%}
+          <div class="khan-mat__detailbox">
+            <div class="khan-mat__detailbox-media">
+              {%- if s.detail_video != blank -%}
+                {{ s.detail_video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-mat__media-el' }}
+              {%- elsif s.detail_poster != blank -%}
+                {{ s.detail_poster | image_url: width: 800 | image_tag: class: 'khan-mat__media-el', loading: 'lazy', alt: '' }}
+              {%- else -%}
+                <div class="khan-mat__media-el khan-mat__media-el--ph"></div>
+              {%- endif -%}
+            </div>
+            {%- if s.detail_text != blank -%}<p class="khan-mat__detailbox-text">{{ s.detail_text }}</p>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-mat {
+    position: relative;
+    background: var(--mat-bg, #f4f1ea);
+    padding-block: var(--mat-pt, 80px) var(--mat-pb, 80px);
+    padding-inline: clamp(20px, 4vw, 56px);
+    overflow: hidden;
+  }
+  .khan-mat__inner { max-width: min(var(--mat-maxw, 1760px), 100%); margin-inline: auto; }
+
+  .khan-mat__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.55fr) minmax(0, 0.5fr);
+    gap: clamp(28px, 3vw, 56px);
+    align-items: start;
+  }
+
+  /* mono helper */
+  .khan-mat__body,
+  .khan-mat__feature-text,
+  .khan-mat__detail-title,
+  .khan-mat__detail-text,
+  .khan-mat__stat-label,
+  .khan-mat__stat-cap,
+  .khan-mat__detailbox-text,
+  .khan-mat__eyebrow {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  /* ---- left ---- */
+  .khan-mat__eyebrow {
+    display: flex; align-items: center; gap: 10px; margin: 0 0 14px;
+    font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mat-accent, #bf1616);
+  }
+  .khan-mat__flag { display: inline-block; width: 26px; height: 12px; background: var(--mat-accent, #bf1616); clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%); }
+
+  .khan-mat__heading {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--mat-heading-size, 64px), 9vw); line-height: 0.92; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--mat-heading, #111); overflow-wrap: break-word;
+  }
+  .khan-mat__heading p { margin: 0; }
+  .khan-mat__heading :is(strong, b) { color: var(--mat-accent, #bf1616); font-weight: inherit; }
+
+  .khan-mat__rule { display: block; height: 2px; background: var(--mat-frame, rgb(0 0 0 / 0.25)); margin: 22px 0; max-width: 360px; }
+
+  .khan-mat__body { font-size: 14px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--mat-text, #1a1a1a); margin: 0 0 30px; }
+  .khan-mat__body p { margin: 0 0 1em; }
+
+  .khan-mat__features { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 22px; }
+  .khan-mat__feature { display: flex; gap: 14px; align-items: flex-start; }
+  .khan-mat__feature-mark { width: 26px; height: 26px; object-fit: contain; flex: 0 0 auto; margin-top: 2px; }
+  .khan-mat__feature-title { margin: 0 0 6px; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mat-accent, #bf1616); }
+  .khan-mat__feature-text { font-size: 12px; line-height: 1.55; color: var(--mat-text, #1a1a1a); text-transform: uppercase; }
+  .khan-mat__feature-text p { margin: 0; }
+
+  /* ---- media (shared) ---- */
+  .khan-mat__media-el { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .khan-mat__media-el--ph { background: radial-gradient(120% 120% at 50% 30%, #1c1c1e 0%, #000 70%); }
+
+  /* ---- center ---- */
+  .khan-mat__feature-media { position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: #000; border: 1px solid var(--mat-frame, rgb(0 0 0 / 0.18)); }
+  .khan-mat__cross { position: absolute; width: 16px; height: 16px; pointer-events: none; }
+  .khan-mat__cross::before, .khan-mat__cross::after { content: ""; position: absolute; background: var(--mat-accent, #bf1616); opacity: 0.8; }
+  .khan-mat__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+  .khan-mat__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+  .khan-mat__cross--tl { top: 14px; left: 14px; }
+  .khan-mat__cross--bl { bottom: 14px; left: 14px; }
+  .khan-mat__cross--br { bottom: 14px; right: 14px; }
+
+  .khan-mat__details { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .khan-mat__detail { margin: 0; }
+  .khan-mat__detail-media { aspect-ratio: 1 / 1; overflow: hidden; background: #000; border: 1px solid var(--mat-frame, rgb(0 0 0 / 0.18)); }
+  .khan-mat__detail-cap { display: block; margin-top: 12px; }
+  .khan-mat__detail-title { display: block; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--mat-heading, #111); margin-bottom: 5px; }
+  .khan-mat__detail-text { display: block; font-size: 11px; line-height: 1.5; text-transform: uppercase; color: var(--mat-text, #1a1a1a); }
+
+  /* ---- right ---- */
+  .khan-mat__right { display: flex; flex-direction: column; gap: 34px; }
+  .khan-mat__stat-label { margin: 0 0 10px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mat-accent, #bf1616); border-bottom: 1px solid var(--mat-frame, rgb(0 0 0 / 0.18)); padding-bottom: 8px; }
+  .khan-mat__stat-value { margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: min(var(--mat-stat-size, 110px), 16vw); line-height: 0.9; color: var(--mat-accent, #bf1616); }
+  .khan-mat__stat-unit { font-size: 0.28em; letter-spacing: 0.1em; margin-left: 4px; color: var(--mat-text, #1a1a1a); }
+  .khan-mat__stat-cap { margin: 10px 0 0; font-size: 12px; line-height: 1.5; text-transform: uppercase; color: var(--mat-text, #1a1a1a); }
+
+  .khan-mat__swatches { display: flex; gap: 12px; align-items: center; }
+  .khan-mat__color { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--mat-frame, rgb(0 0 0 / 0.25)); }
+  .khan-mat__colors-mark { width: 20px; height: 20px; object-fit: contain; margin-top: 16px; display: block; }
+
+  .khan-mat__detailbox-media { aspect-ratio: 1 / 1; overflow: hidden; background: #000; border: 1px solid var(--mat-frame, rgb(0 0 0 / 0.18)); }
+  .khan-mat__detailbox-text { margin: 12px 0 0; font-size: 12px; line-height: 1.5; text-transform: uppercase; color: var(--mat-text, #1a1a1a); }
+
+  /* ---- grain on text/marks only ---- */
+  .khan-mat--grain :is(.khan-mat__heading, .khan-mat__body, .khan-mat__eyebrow, .khan-mat__feature-title, .khan-mat__feature-text, .khan-mat__feature-mark, .khan-mat__detail-title, .khan-mat__detail-text, .khan-mat__stat-value, .khan-mat__stat-label, .khan-mat__stat-cap, .khan-mat__detailbox-text) {
+    -webkit-mask-image: var(--mat-grain); mask-image: var(--mat-grain);
+    -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
+  }
+
+  /* ---- responsive (desktop-first; graceful stack) ---- */
+  @media screen and (max-width: 1100px) {
+    .khan-mat__grid { grid-template-columns: 1fr; }
+    .khan-mat__features { max-width: 620px; }
+    .khan-mat__right { flex-direction: row; flex-wrap: wrap; gap: 28px 48px; }
+  }
+  @media screen and (max-width: 600px) {
+    .khan-mat__details { grid-template-columns: repeat(2, 1fr); }
+    .khan-mat__features { grid-template-columns: 1fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Materials & craft",
+  "tag": "section",
+  "class": "khan-mat-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Heading (left)" },
+    { "type": "paragraph", "content": "Bold text uses the accent color." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Materials & craft" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Built different.<br/><strong>Made to last.</strong></p>" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 120, "step": 2, "unit": "px", "default": 64 },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Carefully selected materials. Premium quality. Maximum durability. Comfort that performs.</p>" },
+
+    { "type": "header", "content": "Featured media (center, top)" },
+    { "type": "paragraph", "content": "Add a looped video (autoplay, muted). Poster image is the fallback." },
+    { "type": "video", "id": "featured_video", "label": "Featured video" },
+    { "type": "image_picker", "id": "featured_poster", "label": "Featured poster / fallback image" },
+
+    { "type": "header", "content": "Fabric weight (right)" },
+    { "type": "text", "id": "stat_label", "label": "Label", "default": "Fabric weight" },
+    { "type": "text", "id": "stat_value", "label": "Value", "default": "320" },
+    { "type": "text", "id": "stat_unit", "label": "Unit", "default": "GSM" },
+    { "type": "range", "id": "stat_size", "label": "Value size", "min": 40, "max": 160, "step": 2, "unit": "px", "default": 110 },
+    { "type": "text", "id": "stat_caption", "label": "Caption", "default": "Thick. Durable. Comfortable." },
+
+    { "type": "header", "content": "Available colors (right)" },
+    { "type": "text", "id": "colors_label", "label": "Label", "default": "Available colors" },
+    { "type": "color", "id": "color_1", "label": "Color 1", "default": "#111111" },
+    { "type": "color", "id": "color_2", "label": "Color 2", "default": "#3a3a3a" },
+    { "type": "color", "id": "color_3", "label": "Color 3", "default": "#e9e9e9" },
+    { "type": "color", "id": "color_4", "label": "Color 4" },
+
+    { "type": "header", "content": "Details box (right)" },
+    { "type": "paragraph", "content": "Add a looped video; poster image is the fallback." },
+    { "type": "video", "id": "detail_video", "label": "Details video" },
+    { "type": "image_picker", "id": "detail_poster", "label": "Details poster / fallback image" },
+    { "type": "text", "id": "detail_text", "label": "Details caption", "default": "Details matter. Quality stays." },
+
+    { "type": "header", "content": "Style" },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#bf1616" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1a1a1a" },
+    { "type": "color", "id": "frame_color", "label": "Frame / line color", "default": "#00000029" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1760 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature (left list)",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Premium cotton" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Heavyweight 320GSM combed cotton for maximum comfort and durability.</p>" }
+      ]
+    },
+    {
+      "type": "detail",
+      "name": "Detail tile (center)",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Looped video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster / fallback image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Woven label" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Premium woven label for an authentic finish.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Materials & craft",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "Premium cotton", "text": "<p>Heavyweight 320GSM combed cotton for maximum comfort and durability.</p>" } },
+        { "type": "feature", "settings": { "title": "Strengthened seams", "text": "<p>Double needle stitching at stress points for enhanced strength and longevity.</p>" } },
+        { "type": "feature", "settings": { "title": "Reactive dye", "text": "<p>High quality reactive dyeing process for long lasting color that won't fade.</p>" } },
+        { "type": "feature", "settings": { "title": "Pre-shrunk", "text": "<p>Fabric pre-shrunk to minimize shrinkage and maintain the perfect fit after wash.</p>" } },
+        { "type": "detail", "settings": { "title": "Woven label", "text": "<p>Premium woven label for an authentic finish.</p>" } },
+        { "type": "detail", "settings": { "title": "YKK zippers", "text": "<p>Top quality YKK zippers for smooth operation and durability.</p>" } },
+        { "type": "detail", "settings": { "title": "Premium prints", "text": "<p>High density prints that withstand time, wash after wash.</p>" } },
+        { "type": "detail", "settings": { "title": "Brushed fleece", "text": "<p>Soft inner fleece for extra warmth and all day comfort.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
