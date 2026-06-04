@@ -43,6 +43,7 @@
       ],
       "name": "Photo footer",
       "settings": {
+        "hide_on_home": true,
         "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_4_2026_04_43_22_PM.png",
         "overlay_opacity": 50,
         "min_height": 560,
