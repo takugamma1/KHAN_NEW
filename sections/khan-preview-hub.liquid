@@ -3,6 +3,7 @@
 %}
 
 {%- if s.hide_footer -%}<style>footer { display: none !important; }</style>{%- endif -%}
+{%- if s.hide_header -%}<style>#header-group, .khan-nav-wrapper { display: none !important; }</style>{%- endif -%}
 
 <div
   id="KhanHub-{{ section.id }}"
@@ -145,6 +146,7 @@
     { "type": "range", "id": "progress_height", "label": "Bar thickness", "min": 2, "max": 12, "step": 1, "unit": "px", "default": 4 },
 
     { "type": "header", "content": "Appearance" },
+    { "type": "checkbox", "id": "hide_header", "label": "Hide header / nav on this page", "default": true },
     { "type": "checkbox", "id": "hide_footer", "label": "Hide theme footer on this page", "default": true },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
   ],
