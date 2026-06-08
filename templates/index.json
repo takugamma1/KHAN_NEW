@@ -11,7 +11,6 @@
   "sections": {
     "rocks_hero_Ax9Kp2": {
       "type": "rocks-hero",
-      "disabled": true,
       "settings": {
         "media_type": "image",
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
@@ -60,7 +59,6 @@
     },
     "rocks_hero_6ig48b": {
       "type": "rocks-hero",
-      "disabled": true,
       "name": "Rocks hero",
       "settings": {
         "media_type": "video",
@@ -75,8 +73,8 @@
         "pulse_amount": 35,
         "pulse_opacity": 90,
         "pulse_speed": 3,
-        "heading": "<p>НАШИЯТ<br/><strong>БРАНД</strong></p>",
-        "text": "<h6>asdasdasdassadasdsdadasdsaasdasdasdsddsadas<br/>adsaadasdasasdasdssadasdadasasdasd<br/>dsadasdasdasdasdasdasd<br/>dsadasdasddadsasasdasdasdasdas<br/>dsadasdasddaasdasdaasdasadasdasdasd<br/>sadasadadasdasdad<br/>asdasdadsada</h6>",
+        "heading": "",
+        "text": "",
         "content_position": "center-left",
         "accent_color": "#bf1616",
         "use_nexa": true,
@@ -142,7 +140,6 @@
         "feature_WDfpBG",
         "feature_88FMQn"
       ],
-      "disabled": true,
       "name": "Our story",
       "settings": {
         "show_eyebrow": true,
