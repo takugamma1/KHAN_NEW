@@ -1,0 +1,255 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanAbout-{{ section.id }}"
+  class="khan-about color-{{ s.color_scheme }}{% if s.text_grain %} khan-about--grain{% endif %}"
+  style="
+    --ab-bg: {{ s.bg_color }};
+    --ab-heading: {{ s.heading_color }};
+    --ab-accent: {{ s.accent_color }};
+    --ab-text: {{ s.text_color }};
+    --ab-muted: {{ s.muted_color }};
+    --ab-divider: {{ s.divider_color }};
+    --ab-heading-size: {{ s.heading_size }}px;
+    --ab-body-size: {{ s.body_size }}px;
+    --ab-feat-title-size: {{ s.feat_title_size }}px;
+    --ab-feat-text-size: {{ s.feat_text_size }}px;
+    --ab-icon-size: {{ s.icon_size }}px;
+    --ab-band-size: {{ s.band_heading_size }}px;
+    --ab-band-minh: {{ s.band_min_height }}px;
+    --ab-maxw: {{ s.max_width }}px;
+    --ab-pt: {{ s.padding_top }}px;
+    --ab-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+  data-khan-about
+>
+  <div class="khan-about__inner">
+
+    {%- comment -%} top bar {%- endcomment -%}
+    <div class="khan-about__topbar">
+      <p class="khan-about__eyebrow"><span class="khan-about__num">{{ s.counter }}</span> / {{ s.eyebrow }}</p>
+      {%- if s.top_tagline != blank -%}
+        <p class="khan-about__topright"><span class="khan-about__cross" aria-hidden="true"></span>{{ s.top_tagline }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} story {%- endcomment -%}
+    <div class="khan-about__story">
+      <div class="khan-about__story-text">
+        {%- if s.heading != blank -%}<div class="khan-about__heading">{{ s.heading }}</div>{%- endif -%}
+        <img class="khan-about__ast" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+        {%- if s.body != blank -%}<div class="khan-about__body">{{ s.body }}</div>{%- endif -%}
+      </div>
+      <div class="khan-about__story-media">
+        {%- if s.story_image != blank -%}
+          {{ s.story_image | image_url: width: 1400 | image_tag: class: 'khan-about__story-img', loading: 'lazy', widths: '500, 800, 1100, 1400', sizes: '(min-width: 750px) 45vw, 92vw', alt: s.story_image.alt }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'khan-about__story-img' }}
+        {%- endif -%}
+        <span class="khan-about__cross khan-about__cross--tl" aria-hidden="true"></span>
+        <span class="khan-about__cross khan-about__cross--br" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    {%- comment -%} features {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="khan-about__feats">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'feature' -%}
+            <div class="khan-about__feat" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != blank -%}
+                <img class="khan-about__feat-icon" src="{{ block.settings.icon | image_url: width: 160 }}" alt="" width="48" height="48" loading="lazy">
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}<h3 class="khan-about__feat-title">{{ block.settings.title }}</h3>{%- endif -%}
+              {%- if block.settings.text != blank -%}<div class="khan-about__feat-text">{{ block.settings.text }}</div>{%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} bottom statement band (full-bleed) {%- endcomment -%}
+  {%- if s.band_image != blank or s.band_heading != blank -%}
+    <div class="khan-about__band">
+      <div class="khan-about__band-bg" aria-hidden="true">
+        {%- if s.band_image != blank -%}
+          {{ s.band_image | image_url: width: 2600 | image_tag: class: 'khan-about__band-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600', sizes: '100vw', alt: '' }}
+        {%- endif -%}
+        <span class="khan-about__band-overlay"></span>
+      </div>
+      <span class="khan-about__cross khan-about__cross--band1" aria-hidden="true"></span>
+      <span class="khan-about__cross khan-about__cross--band2" aria-hidden="true"></span>
+      <div class="khan-about__band-content">
+        {%- if s.band_heading != blank -%}<div class="khan-about__band-heading">{{ s.band_heading }}</div>{%- endif -%}
+        {%- if s.band_accent != blank -%}<p class="khan-about__band-accent">{{ s.band_accent }}</p>{%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .khan-about {
+    position: relative;
+    background: var(--ab-bg, #f4f1ea);
+    padding-top: var(--ab-pt, 40px);
+    overflow: hidden;
+  }
+  .khan-about__inner { max-width: min(var(--ab-maxw, 1200px), 100%); margin-inline: auto; padding-inline: clamp(18px, 4vw, 48px); }
+
+  /* mono helper */
+  .khan-about__eyebrow, .khan-about__topright, .khan-about__body, .khan-about__feat-title,
+  .khan-about__feat-text, .khan-about__band-accent { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+
+  /* ---- top bar ---- */
+  .khan-about__topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .khan-about__eyebrow { margin: 0; color: var(--ab-muted, #777); }
+  .khan-about__num { color: var(--ab-accent, #bf1616); }
+  .khan-about__topright { margin: 0; display: flex; align-items: center; gap: 10px; color: var(--ab-muted, #777); }
+
+  /* ---- story ---- */
+  .khan-about__story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start; margin-top: clamp(28px, 4vw, 56px); }
+  .khan-about__heading {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--ab-heading-size, 56px), 12vw); line-height: 0.95; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--ab-heading, #111);
+  }
+  .khan-about__heading p { margin: 0; }
+  .khan-about__heading :is(strong, b) { color: var(--ab-accent, #bf1616); font-weight: inherit; }
+  .khan-about__ast { width: 18px; height: 18px; object-fit: contain; display: block; margin: 20px 0; }
+  .khan-about__body { font-size: var(--ab-body-size, 12px); line-height: 1.8; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ab-text, #1a1a1a); }
+  .khan-about__body p { margin: 0 0 0.5em; }
+
+  .khan-about__story-media { position: relative; }
+  .khan-about__story-img { width: 100%; height: auto; display: block; aspect-ratio: 1 / 1.05; object-fit: cover; }
+
+  /* ---- features ---- */
+  .khan-about__feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: clamp(40px, 5vw, 72px); border-top: 1px solid var(--ab-divider, rgb(0 0 0 / 0.18)); padding-top: 32px; }
+  .khan-about__feat { padding: 0 clamp(14px, 1.6vw, 26px); border-left: 1px solid var(--ab-divider, rgb(0 0 0 / 0.14)); }
+  .khan-about__feat:first-child { border-left: 0; padding-left: 0; }
+  .khan-about__feat-icon { width: var(--ab-icon-size, 40px); height: var(--ab-icon-size, 40px); object-fit: contain; display: block; margin-bottom: 18px; }
+  .khan-about__feat-title { margin: 0 0 8px; font-weight: 700; font-size: var(--ab-feat-title-size, 13px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ab-accent, #bf1616); }
+  .khan-about__feat-text { font-size: var(--ab-feat-text-size, 11px); line-height: 1.6; text-transform: uppercase; color: var(--ab-muted, #666); }
+  .khan-about__feat-text p { margin: 0; }
+
+  /* ---- bottom band (full-bleed) ---- */
+  .khan-about__band { position: relative; margin-top: clamp(48px, 6vw, 80px); min-height: var(--ab-band-minh, 420px); display: flex; align-items: center; overflow: hidden; isolation: isolate; }
+  .khan-about__band-bg { position: absolute; inset: 0; z-index: 0; }
+  .khan-about__band-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .khan-about__band-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.45) 60%, rgb(0 0 0 / 0.2) 100%); }
+  .khan-about__band-content { position: relative; z-index: 1; max-width: min(var(--ab-maxw, 1200px), 100%); width: 100%; margin-inline: auto; padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 48px); }
+  .khan-about__band-heading {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--ab-band-size, 32px), 7vw); line-height: 1.05; letter-spacing: 0.01em;
+    text-transform: uppercase; color: #fff; max-width: 18ch;
+  }
+  .khan-about__band-heading p { margin: 0; }
+  .khan-about__band-heading :is(strong, b) { color: var(--ab-accent, #bf1616); font-weight: inherit; }
+  .khan-about__band-accent { margin: 18px 0 0; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ab-accent, #bf1616); }
+
+  /* ---- crosshairs ---- */
+  .khan-about__cross { width: 14px; height: 14px; position: relative; display: inline-block; flex: 0 0 auto; }
+  .khan-about__cross::before, .khan-about__cross::after { content: ""; position: absolute; background: currentColor; opacity: 0.55; }
+  .khan-about__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+  .khan-about__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+  .khan-about__story-media .khan-about__cross { position: absolute; color: var(--ab-accent, #bf1616); }
+  .khan-about__cross--tl { top: -7px; left: -7px; }
+  .khan-about__cross--br { bottom: -7px; right: -7px; }
+  .khan-about__cross--band1, .khan-about__cross--band2 { position: absolute; z-index: 1; color: #fff; }
+  .khan-about__cross--band1 { top: 22px; right: 26px; }
+  .khan-about__cross--band2 { bottom: 22px; left: 26px; }
+
+  /* ---- grain on text ---- */
+  .khan-about--grain :is(.khan-about__heading, .khan-about__body, .khan-about__feat-title, .khan-about__feat-text, .khan-about__band-heading, .khan-about__feat-icon) {
+    -webkit-mask-image: var(--ab-grain); mask-image: var(--ab-grain);
+    -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
+  }
+
+  /* ---- responsive ---- */
+  @media screen and (max-width: 900px) {
+    .khan-about__story { grid-template-columns: 1fr; }
+    .khan-about__feats { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
+    .khan-about__feat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  }
+  @media screen and (max-width: 520px) {
+    .khan-about__feats { grid-template-columns: 1fr; }
+    .khan-about__feat { border-left: 0; padding: 0; }
+    .khan-about__topright { display: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About page",
+  "tag": "section",
+  "class": "khan-about-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Top bar" },
+    { "type": "text", "id": "counter", "label": "Number", "default": "01" },
+    { "type": "text", "id": "eyebrow", "label": "Label", "default": "About us" },
+    { "type": "text", "id": "top_tagline", "label": "Top-right tagline", "default": "Built different. Made to last." },
+
+    { "type": "header", "content": "Story" },
+    { "type": "paragraph", "content": "Bold text uses the accent color." },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Our story.<br/><strong>Our purpose.</strong></p>" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 96, "step": 2, "unit": "px", "default": 56 },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Khan apparel was born from the belief that clothing is more than what you wear. It's a reflection of who you are, where you come from, and what you stand for. We don't follow trends. We create pieces that carry meaning, inspired by heritage and built for the now.</p>" },
+    { "type": "range", "id": "body_size", "label": "Body size", "min": 9, "max": 20, "step": 1, "unit": "px", "default": 12 },
+    { "type": "image_picker", "id": "story_image", "label": "Story image" },
+
+    { "type": "header", "content": "Features" },
+    { "type": "paragraph", "content": "Add Feature blocks (icon + title + text), shown as line-split columns." },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 72, "step": 2, "unit": "px", "default": 40 },
+    { "type": "range", "id": "feat_title_size", "label": "Feature title size", "min": 10, "max": 22, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "feat_text_size", "label": "Feature text size", "min": 9, "max": 18, "step": 1, "unit": "px", "default": 11 },
+
+    { "type": "header", "content": "Bottom statement band" },
+    { "type": "image_picker", "id": "band_image", "label": "Background image" },
+    { "type": "richtext", "id": "band_heading", "label": "Heading", "default": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>" },
+    { "type": "text", "id": "band_accent", "label": "Accent line", "default": "This is KHAN." },
+    { "type": "range", "id": "band_heading_size", "label": "Band heading size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "band_min_height", "label": "Band height", "min": 240, "max": 700, "step": 20, "unit": "px", "default": 420 },
+
+    { "type": "header", "content": "Style" },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#bf1616" },
+    { "type": "color", "id": "text_color", "label": "Body color", "default": "#1a1a1a" },
+    { "type": "color", "id": "muted_color", "label": "Muted color", "default": "#6a6a6a" },
+    { "type": "color", "id": "divider_color", "label": "Divider line color", "default": "#0000002e" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1000, "max": 1600, "step": 20, "unit": "px", "default": 1200 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Heritage" },
+        { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Rooted in history. Inspired by legacy. Designed for the now.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "About page",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "Heritage", "text": "<p>Rooted in history. Inspired by legacy. Designed for the now.</p>" } },
+        { "type": "feature", "settings": { "title": "Purpose", "text": "<p>Every piece has a reason. Nothing is random.</p>" } },
+        { "type": "feature", "settings": { "title": "Quality", "text": "<p>Built with premium materials. Made to last.</p>" } },
+        { "type": "feature", "settings": { "title": "Individuality", "text": "<p>For those who lead their own path. Not for everyone.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
