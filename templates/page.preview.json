@@ -87,7 +87,7 @@
         "footnote": "",
         "columns": 1,
         "max_width": 1200,
-        "bg_color": "#000000",
+        "bg_color": "#fafafa",
         "text_color": "#d8232a",
         "muted_color": "#d8232a",
         "accent_color": "#d8232a",
@@ -97,6 +97,7 @@
         "progress_track": "#2a2a2a",
         "progress_fill": "#d8232a",
         "progress_height": 4,
+        "hide_footer": true,
         "color_scheme": ""
       }
     }
