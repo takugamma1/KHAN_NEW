@@ -1,0 +1,276 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanLHero-{{ section.id }}"
+  class="khan-lhero khan-lhero--img-{{ s.image_position }} color-{{ s.color_scheme }}"
+  style="
+    --lh-bg: {{ s.bg_color }};
+    --lh-text: {{ s.text_color }};
+    --lh-accent: {{ s.accent_color }};
+    --lh-muted: {{ s.muted_color }};
+    --lh-btn-fill: {{ s.btn_fill }};
+    --lh-btn-fill-text: {{ s.btn_fill_text }};
+    --lh-btn-outline: {{ s.btn_outline }};
+    --lh-btn-outline-text: {{ s.btn_outline_text }};
+    --lh-icon: {{ s.icon_color }};
+    --lh-maxw: {{ s.max_width }}px;
+    --lh-pad-y: {{ s.padding_y }}px;
+    --lh-gap: {{ s.col_gap }}px;
+    --lh-minh: {{ s.min_height }}px;
+    --lh-heading: {{ s.heading_size }}px;
+    --lh-eyebrow: {{ s.eyebrow_size }}px;
+    --lh-desc: {{ s.desc_size }}px;
+    --lh-usp-label: {{ s.usp_label_size }}px;
+    --lh-icon-size: {{ s.icon_size }}px;
+    --lh-btn-h: {{ s.button_height }}px;
+    --lh-btn-size: {{ s.button_text_size }}px;
+  "
+>
+  <div class="khan-lhero__inner">
+
+    <div class="khan-lhero__media">
+      {%- if s.image != blank -%}
+        {{ s.image | image_url: width: 1600 | image_tag: class: 'khan-lhero__img', loading: 'eager', widths: '600, 900, 1200, 1600', sizes: '(max-width: 900px) 100vw, 50vw', alt: s.eyebrow | default: shop.name }}
+      {%- else -%}
+        <div class="khan-lhero__img khan-lhero__img--ph"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="khan-lhero__content">
+      {%- if s.eyebrow != blank -%}
+        <p class="khan-lhero__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}
+        <div class="khan-lhero__heading">{{ s.heading }}</div>
+      {%- endif -%}
+
+      {%- if s.show_divider -%}<span class="khan-lhero__rule" aria-hidden="true"></span>{%- endif -%}
+
+      {%- if s.description != blank -%}
+        <div class="khan-lhero__desc">{{ s.description }}</div>
+      {%- endif -%}
+
+      {%- if s.btn1_text != blank or s.btn2_text != blank -%}
+        <div class="khan-lhero__btns">
+          {%- if s.btn1_text != blank -%}
+            <a class="khan-lhero__btn khan-lhero__btn--fill" href="{{ s.btn1_link | default: '#' }}">
+              <span class="khan-lhero__btn-inner"><span class="khan-lhero__btn-label">{{ s.btn1_text }}</span></span>
+            </a>
+          {%- endif -%}
+          {%- if s.btn2_text != blank -%}
+            <a class="khan-lhero__btn khan-lhero__btn--outline" href="{{ s.btn2_link | default: '#' }}">
+              <span class="khan-lhero__btn-inner">
+                <span class="khan-lhero__btn-label">{{ s.btn2_text }}</span>
+                {%- if s.btn2_arrow -%}
+                  <svg class="khan-lhero__btn-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 6l7 6-7 6" stroke="currentColor" stroke-width="2"></path></svg>
+                {%- endif -%}
+              </span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="khan-lhero__usps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'usp' -%}
+              <div class="khan-lhero__usp" {{ block.shopify_attributes }}>
+                <span class="khan-lhero__usp-icon">
+                  {%- if block.settings.icon_image != blank -%}
+                    {{ block.settings.icon_image | image_url: width: 96 | image_tag: loading: 'lazy', alt: '' }}
+                  {%- else -%}
+                    {%- case block.settings.icon -%}
+                      {%- when 'star' -%}
+                        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" d="M16 2.667l2.667 9.333 10.666 4-10.666 4L16 29.333 13.333 20 2.667 16l10.666-4z"></path></svg>
+                      {%- when 'shield' -%}
+                        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" d="M16 2.667L28 6.667v8c0 6.666-5.333 13.333-12 15.333-6.667-2-12-8.667-12-15.333v-8z"></path></svg>
+                      {%- when 'x' -%}
+                        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-width="4.5" d="M6.667 6.667l18.666 18.666"></path><path stroke="currentColor" stroke-width="2.1" d="M25.333 6.667L6.667 25.333"></path></svg>
+                      {%- when 'diamond' -%}
+                        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" d="M16 2.667l9.333 16L16 30 6.667 18.667z"></path></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="16" y1="3" x2="16" y2="29"></line><line x1="3" y1="16" x2="29" y2="16"></line><line x1="7" y1="7" x2="25" y2="25"></line><line x1="25" y1="7" x2="7" y2="25"></line></g></svg>
+                    {%- endcase -%}
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.label != blank -%}<span class="khan-lhero__usp-label">{{ block.settings.label }}</span>{%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-lhero {
+    background: var(--lh-bg, #f1f1ee);
+    color: var(--lh-text, #141414);
+    padding: var(--lh-pad-y, 80px) clamp(20px, 5vw, 72px);
+  }
+  .khan-lhero__inner {
+    max-width: var(--lh-maxw, 1640px); margin-inline: auto;
+    display: flex; align-items: center; gap: var(--lh-gap, 64px);
+    min-height: var(--lh-minh, 760px);
+  }
+  .khan-lhero--img-right .khan-lhero__media { order: 2; }
+
+  .khan-lhero__media { flex: 1 1 0; min-width: 0; align-self: stretch; display: flex; align-items: center; }
+  .khan-lhero__img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-lhero__img--ph { aspect-ratio: 4 / 5; background: linear-gradient(135deg, #ddd, #bbb); }
+
+  .khan-lhero__content { flex: 1 1 0; min-width: 0; }
+
+  /* eyebrow */
+  .khan-lhero__eyebrow {
+    margin: 0 0 22px; display: flex; align-items: center; gap: 14px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--lh-eyebrow, 13px); letter-spacing: 0.22em; text-transform: uppercase; color: var(--lh-muted, #6b6b6b);
+  }
+  .khan-lhero__eyebrow::before {
+    content: ""; width: 30px; height: 9px; background: var(--lh-accent, #8e1316);
+    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  }
+
+  /* heading */
+  .khan-lhero__heading {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--lh-heading, 130px), 13vw); line-height: 0.9; letter-spacing: -0.015em;
+    text-transform: uppercase; color: var(--lh-text, #141414);
+  }
+  .khan-lhero__heading :where(p) { margin: 0; }
+  .khan-lhero__heading :where(strong) { color: var(--lh-accent, #8e1316); font-weight: 900; }
+
+  /* rule */
+  .khan-lhero__rule { display: block; height: 1px; background: rgb(0 0 0 / 0.18); margin: clamp(22px, 3vw, 38px) 0; position: relative; }
+  .khan-lhero__rule::before, .khan-lhero__rule::after { content: ""; position: absolute; top: -3px; width: 1px; height: 7px; background: rgb(0 0 0 / 0.3); }
+  .khan-lhero__rule::before { left: 0; }
+  .khan-lhero__rule::after { right: 0; }
+
+  /* description */
+  .khan-lhero__desc {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--lh-desc, 15px); line-height: 1.6; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lh-muted, #6b6b6b);
+  }
+  .khan-lhero__desc :where(p) { margin: 0 0 16px; }
+  .khan-lhero__desc :where(p):last-child { margin-bottom: 0; }
+  .khan-lhero__desc :where(strong) { color: var(--lh-text, #141414); }
+
+  /* buttons */
+  .khan-lhero__btns { display: flex; flex-wrap: wrap; gap: 16px; margin-top: clamp(26px, 3vw, 40px); }
+  .khan-lhero__btn { display: inline-block; text-decoration: none; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: transform 0.15s ease, filter 0.15s ease; }
+  .khan-lhero__btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  .khan-lhero__btn-inner { display: flex; align-items: center; justify-content: center; gap: 14px; height: var(--lh-btn-h, 50px); padding: 0 30px; }
+  .khan-lhero__btn-label { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: var(--lh-btn-size, 14px); letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+  .khan-lhero__btn-arrow { width: calc(var(--lh-btn-size, 14px) + 6px); height: calc(var(--lh-btn-size, 14px) + 6px); flex: 0 0 auto; }
+  .khan-lhero__btn--fill { background: var(--lh-btn-fill, #560B1E); }
+  .khan-lhero__btn--fill .khan-lhero__btn-inner { color: var(--lh-btn-fill-text, #fff); }
+  .khan-lhero__btn--outline { background: var(--lh-btn-outline, #141414); padding: 1.5px; }
+  .khan-lhero__btn--outline .khan-lhero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--lh-bg, #f1f1ee); color: var(--lh-btn-outline-text, #141414); }
+
+  /* usps */
+  .khan-lhero__usps { display: flex; align-items: stretch; margin-top: clamp(32px, 4vw, 52px); border-top: 1px solid rgb(0 0 0 / 0.14); padding-top: clamp(20px, 2.4vw, 30px); }
+  .khan-lhero__usp { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 4px clamp(8px, 1vw, 18px); border-left: 1px solid rgb(0 0 0 / 0.14); }
+  .khan-lhero__usp:first-child { border-left: 0; }
+  .khan-lhero__usp-icon { width: var(--lh-icon-size, 28px); height: var(--lh-icon-size, 28px); color: var(--lh-icon, #8e1316); display: inline-flex; align-items: center; justify-content: center; }
+  .khan-lhero__usp-icon svg { width: 100%; height: 100%; display: block; }
+  .khan-lhero__usp-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-lhero__usp-label { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: var(--lh-usp-label, 11px); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.3; color: var(--lh-text, #141414); }
+
+  /* responsive */
+  @media screen and (max-width: 900px) {
+    .khan-lhero__inner { flex-direction: column; align-items: stretch; gap: 40px; min-height: 0; }
+    .khan-lhero--img-right .khan-lhero__media { order: 0; }
+    .khan-lhero__media { max-height: 56vh; }
+    .khan-lhero__heading { font-size: min(var(--lh-heading, 130px), 18vw); }
+  }
+  @media screen and (max-width: 600px) {
+    .khan-lhero__usps { flex-wrap: wrap; gap: 18px 0; border-top: 0; }
+    .khan-lhero__usp { flex: 0 0 33.333%; border-left: 0; }
+    .khan-lhero__btns { gap: 12px; }
+    .khan-lhero__btn-inner { padding: 0 22px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Launch hero",
+  "tag": "section",
+  "class": "khan-lhero-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "image_position", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+
+    { "type": "header", "content": "Eyebrow & heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Supplements · 01" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Pre-<br/><strong>workout.</strong></p>" },
+    { "type": "checkbox", "id": "show_divider", "label": "Show divider line", "default": true },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Forged for the work<br/>that comes before the work.</p><p>Six clinical-dose ingredients.<br/>No sweeteners. No filler.</p>" },
+
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "btn1_text", "label": "Primary button text", "default": "Reserve · 047 / 500" },
+    { "type": "url", "id": "btn1_link", "label": "Primary button link" },
+    { "type": "text", "id": "btn2_text", "label": "Outlined button text", "default": "Open the product" },
+    { "type": "url", "id": "btn2_link", "label": "Outlined button link" },
+    { "type": "checkbox", "id": "btn2_arrow", "label": "Show arrow on outlined button", "default": true },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f1f1ee" },
+    { "type": "color", "id": "text_color", "label": "Text / heading", "default": "#141414" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#8e1316" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" },
+    { "type": "color", "id": "icon_color", "label": "USP icon color", "default": "#8e1316" },
+    { "type": "color", "id": "btn_fill", "label": "Primary button fill", "default": "#560b1e" },
+    { "type": "color", "id": "btn_fill_text", "label": "Primary button text", "default": "#ffffff" },
+    { "type": "color", "id": "btn_outline", "label": "Outlined button border", "default": "#141414" },
+    { "type": "color", "id": "btn_outline_text", "label": "Outlined button text", "default": "#141414" },
+
+    { "type": "header", "content": "Sizes & spacing" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 130 },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 11, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "desc_size", "label": "Description size", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "usp_label_size", "label": "USP label size", "min": 9, "max": 16, "step": 1, "unit": "px", "default": 11 },
+    { "type": "range", "id": "icon_size", "label": "USP icon size", "min": 20, "max": 44, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "button_height", "label": "Button height", "min": 40, "max": 64, "step": 2, "unit": "px", "default": 50 },
+    { "type": "range", "id": "button_text_size", "label": "Button text size", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "col_gap", "label": "Column gap", "min": 20, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "min_height", "label": "Min height", "min": 520, "max": 1000, "step": 20, "unit": "px", "default": 760 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1640 },
+    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 80 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [ { "value": "asterisk", "label": "Asterisk" }, { "value": "star", "label": "Star" }, { "value": "shield", "label": "Shield" }, { "value": "x", "label": "X mark" }, { "value": "diamond", "label": "Diamond" } ], "default": "asterisk" },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon (optional)" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Benefit" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Launch hero",
+      "blocks": [
+        { "type": "usp", "settings": { "icon": "asterisk", "label": "Six clinical doses" } },
+        { "type": "usp", "settings": { "icon": "x", "label": "No filler" } },
+        { "type": "usp", "settings": { "icon": "diamond", "label": "No sweeteners" } },
+        { "type": "usp", "settings": { "icon": "star", "label": "Clean energy" } },
+        { "type": "usp", "settings": { "icon": "shield", "label": "Performance driven" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
