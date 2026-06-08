@@ -10,7 +10,8 @@
     --ih-accent: {{ s.accent_color }};
     --ih-muted: {{ s.muted_color }};
     --ih-bg: {{ s.bg_color }};
-    --ih-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
+    --ih-top: {{ s.top_overlay | divided_by: 100.0 }};
+    --ih-aster: url('{{ 'asterisk.png' | asset_url }}');
     --ih-minh: {{ s.min_height }}px;
     --ih-maxw: {{ s.max_width }}px;
     --ih-pad-y: {{ s.padding_y }}px;
@@ -55,14 +56,7 @@
                 {%- if block.settings.icon != blank -%}
                   {{ block.settings.icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
                 {%- else -%}
-                  <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                    <g stroke="currentColor" stroke-width="8" stroke-linecap="round">
-                      <line x1="50" y1="8" x2="50" y2="92"></line>
-                      <line x1="8" y1="50" x2="92" y2="50"></line>
-                      <line x1="20" y1="20" x2="80" y2="80"></line>
-                      <line x1="80" y1="20" x2="20" y2="80"></line>
-                    </g>
-                  </svg>
+                  <span class="khan-ihero__usp-asterisk" aria-hidden="true"></span>
                 {%- endif -%}
               </span>
               <div class="khan-ihero__usp-body">
@@ -93,9 +87,7 @@
   .khan-ihero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
   .khan-ihero__overlay {
     position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0.5) 72%, rgb(0 0 0 / 0.72) 100%),
-      rgb(0 0 0 / var(--ih-overlay, 0.25));
+    background: linear-gradient(to bottom, rgb(0 0 0 / var(--ih-top, 0.55)) 0%, rgb(0 0 0 / 0) 52%);
   }
 
   /* corners */
@@ -143,8 +135,13 @@
     color: var(--ih-accent, #d8232a);
     display: inline-flex; align-items: center; justify-content: center;
   }
-  .khan-ihero__usp-icon svg { width: 100%; height: 100%; display: block; }
   .khan-ihero__usp-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-ihero__usp-asterisk {
+    width: 100%; height: 100%;
+    background: currentColor;
+    -webkit-mask: var(--ih-aster) center / contain no-repeat;
+            mask: var(--ih-aster) center / contain no-repeat;
+  }
   .khan-ihero__usp-body { min-width: 0; }
   .khan-ihero__usp-title {
     margin: 0 0 4px;
@@ -178,7 +175,7 @@
   "settings": [
     { "type": "header", "content": "Background" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image" },
-    { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 25 },
+    { "type": "range", "id": "top_overlay", "label": "Top gradient", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 55 },
     { "type": "range", "id": "min_height", "label": "Height", "min": 480, "max": 1000, "step": 20, "unit": "px", "default": 820 },
 
     { "type": "header", "content": "Corner labels" },
