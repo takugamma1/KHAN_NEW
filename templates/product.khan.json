@@ -121,10 +121,6 @@
       "settings": {
         "eyebrow": "",
         "heading": "",
-        "skew": 28,
-        "media_height": 240,
-        "bar_width": 30,
-        "bar_gap": 14,
         "columns": 2,
         "col_gap": 72,
         "row_gap": 52,
