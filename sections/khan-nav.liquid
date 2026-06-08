@@ -1,0 +1,317 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanNav-{{ section.id }}"
+  class="khan-nav-outer{% if s.sticky %} khan-nav-outer--sticky{% endif %}"
+  data-khan-nav
+  style="
+    --nav-glass: {{ s.glass_tint }};
+    --nav-bubble: {{ s.bubble_tint }};
+    --nav-border: {{ s.border_color }};
+    --nav-text: {{ s.text_color }};
+    --nav-accent: {{ s.accent_color }};
+    --nav-blur: {{ s.blur }}px;
+    --nav-h: {{ s.pill_height }}px;
+    --nav-logo: {{ s.logo_size }}px;
+    --nav-maxw: {{ s.max_width }}px;
+    --nav-top: {{ s.top_offset }}px;
+    --nav-text-size: {{ s.text_size }}px;
+    --nav-gap: {{ s.menu_gap }}px;
+    --nav-pad: {{ s.side_padding }}px;
+  "
+>
+  <div class="khan-nav-inner">
+    <nav class="khan-nav__bar" aria-label="{{ s.menu.title | default: 'Primary' | escape }}">
+
+      {%- comment -%} Logo bubble (left) {%- endcomment -%}
+      <a class="khan-nav__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if s.logo != blank -%}
+          <img class="khan-nav__logo-img" src="{{ s.logo | image_url: width: 200 }}" alt="{{ shop.name | escape }}" width="{{ s.logo.width }}" height="{{ s.logo.height }}">
+        {%- else -%}
+          <svg class="khan-nav__star" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <g stroke="currentColor" stroke-width="7" stroke-linecap="round">
+              <line x1="50" y1="9" x2="50" y2="91"></line>
+              <line x1="9" y1="50" x2="91" y2="50"></line>
+              <line x1="21" y1="21" x2="79" y2="79"></line>
+              <line x1="79" y1="21" x2="21" y2="79"></line>
+            </g>
+          </svg>
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Inline menu (desktop only) {%- endcomment -%}
+      {%- if s.menu != blank -%}
+        <ul class="khan-nav__menu">
+          {%- for link in s.menu.links -%}
+            <li class="khan-nav__item">
+              <a class="khan-nav__link{% if link.active or link.child_active %} is-current{% endif %}" href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- comment -%} Burger bubble (mobile only) {%- endcomment -%}
+      <button
+        class="khan-nav__burger"
+        type="button"
+        data-khan-nav-toggle
+        aria-expanded="false"
+        aria-controls="KhanNavPanel-{{ section.id }}"
+        aria-label="Menu"
+      >
+        <span class="khan-nav__burger-line"></span>
+        <span class="khan-nav__burger-line"></span>
+        <span class="khan-nav__burger-line"></span>
+      </button>
+    </nav>
+
+    {%- comment -%} Mobile panel {%- endcomment -%}
+    <div class="khan-nav__panel" id="KhanNavPanel-{{ section.id }}" data-khan-nav-panel aria-hidden="true">
+      {%- if s.menu != blank -%}
+        <ul class="khan-nav__panel-list">
+          {%- for link in s.menu.links -%}
+            <li>
+              <a class="khan-nav__panel-link{% if link.active %} is-current{% endif %}" href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- if link.links != blank -%}
+                <ul class="khan-nav__panel-sub">
+                  {%- for child in link.links -%}
+                    <li><a class="khan-nav__panel-sublink" href="{{ child.url }}">{{ child.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-nav-outer {
+    position: relative;
+    z-index: 60;
+    width: 100%;
+    padding: var(--nav-top, 16px) clamp(14px, 4vw, 40px) 0;
+    pointer-events: none;
+  }
+  .khan-nav-outer--sticky { position: sticky; top: 0; }
+
+  .khan-nav-inner { max-width: var(--nav-maxw, 1280px); margin-inline: auto; }
+
+  /* ---- the glass pill ---- */
+  .khan-nav__bar {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(12px, 3vw, 28px);
+    height: var(--nav-h, 64px);
+    padding: 0 var(--nav-pad, 12px);
+    border-radius: 999px;
+    color: var(--nav-text, #f3f3f3);
+    background: var(--nav-glass, rgb(21 21 21 / 0.5));
+    border: 1px solid var(--nav-border, rgb(255 255 255 / 0.14));
+    -webkit-backdrop-filter: blur(var(--nav-blur, 18px)) saturate(1.4);
+            backdrop-filter: blur(var(--nav-blur, 18px)) saturate(1.4);
+    box-shadow:
+      0 18px 50px rgb(0 0 0 / 0.45),
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      inset 0 -1px 0 rgb(0 0 0 / 0.4);
+  }
+
+  /* ---- circular bubbles (logo + burger) ---- */
+  .khan-nav__logo,
+  .khan-nav__burger {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--nav-h, 64px) - 16px);
+    height: calc(var(--nav-h, 64px) - 16px);
+    border-radius: 50%;
+    background: var(--nav-bubble, rgb(255 255 255 / 0.08));
+    border: 1px solid var(--nav-border, rgb(255 255 255 / 0.14));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), inset 0 -2px 6px rgb(0 0 0 / 0.5);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .khan-nav__logo { color: var(--nav-text, #f3f3f3); text-decoration: none; }
+  .khan-nav__logo:hover { background: rgb(255 255 255 / 0.14); }
+  .khan-nav__star { width: var(--nav-logo, 26px); height: var(--nav-logo, 26px); display: block; }
+  .khan-nav__logo-img { width: var(--nav-logo, 26px); height: auto; display: block; object-fit: contain; }
+
+  /* ---- menu (desktop) ---- */
+  .khan-nav__menu {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; align-items: center; gap: var(--nav-gap, 34px);
+  }
+  .khan-nav__link {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: var(--nav-text-size, 13px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--nav-text, #f3f3f3);
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.92;
+    transition: color 0.18s ease, opacity 0.18s ease;
+  }
+  .khan-nav__link:hover,
+  .khan-nav__link.is-current { color: var(--nav-accent, #d8232a); opacity: 1; }
+
+  /* ---- burger ---- */
+  .khan-nav__burger { display: none; cursor: pointer; gap: 5px; flex-direction: column; }
+  .khan-nav__burger-line {
+    width: 20px; height: 2px; border-radius: 2px;
+    background: var(--nav-accent, #d8232a);
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(2) { opacity: 0; }
+  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---- mobile panel ---- */
+  .khan-nav__panel {
+    pointer-events: auto;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 26px;
+    background: var(--nav-glass, rgb(21 21 21 / 0.6));
+    border: 1px solid var(--nav-border, rgb(255 255 255 / 0.14));
+    -webkit-backdrop-filter: blur(var(--nav-blur, 18px)) saturate(1.4);
+            backdrop-filter: blur(var(--nav-blur, 18px)) saturate(1.4);
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.5);
+    visibility: hidden; opacity: 0; transform: translateY(-10px);
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+  }
+  .khan-nav-outer.is-open .khan-nav__panel {
+    visibility: visible; opacity: 1; transform: none;
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s;
+  }
+  .khan-nav__panel-list, .khan-nav__panel-sub { list-style: none; margin: 0; padding: 0; }
+  .khan-nav__panel-link {
+    display: block; padding: 13px 16px; border-radius: 16px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--nav-text, #f3f3f3); text-decoration: none;
+  }
+  .khan-nav__panel-link:hover, .khan-nav__panel-link.is-current { color: var(--nav-accent, #d8232a); background: rgb(255 255 255 / 0.05); }
+  .khan-nav__panel-sub { padding: 0 0 6px 16px; }
+  .khan-nav__panel-sublink {
+    display: block; padding: 9px 16px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--nav-text, #f3f3f3); opacity: 0.7; text-decoration: none;
+  }
+  .khan-nav__panel-sublink:hover { opacity: 1; color: var(--nav-accent, #d8232a); }
+
+  /* ---- responsive: burger under 990, inline menu above ---- */
+  @media screen and (max-width: 989px) {
+    .khan-nav__menu { display: none; }
+    .khan-nav__burger { display: inline-flex; }
+  }
+  @media screen and (min-width: 990px) {
+    .khan-nav__panel { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .khan-nav__panel, .khan-nav__burger-line, .khan-nav__logo { transition: none; }
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    function init(root) {
+      if (!root || root.__khanNavReady) return;
+      var toggle = root.querySelector('[data-khan-nav-toggle]');
+      var panel = root.querySelector('[data-khan-nav-panel]');
+      if (!toggle || !panel) return;
+      root.__khanNavReady = true;
+
+      function setOpen(open) {
+        root.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+      function onToggle(e) { e.preventDefault(); setOpen(!root.classList.contains('is-open')); }
+      function onKey(e) { if (e.key === 'Escape') setOpen(false); }
+      function onDocClick(e) { if (root.classList.contains('is-open') && !root.contains(e.target)) setOpen(false); }
+      function onPanelClick(e) { if (e.target.closest('a')) setOpen(false); }
+      function onResize() { if (window.innerWidth >= 990) setOpen(false); }
+
+      toggle.addEventListener('click', onToggle);
+      document.addEventListener('keydown', onKey);
+      document.addEventListener('click', onDocClick);
+      panel.addEventListener('click', onPanelClick);
+      window.addEventListener('resize', onResize);
+
+      root.__khanNavCleanup = function () {
+        toggle.removeEventListener('click', onToggle);
+        document.removeEventListener('keydown', onKey);
+        document.removeEventListener('click', onDocClick);
+        panel.removeEventListener('click', onPanelClick);
+        window.removeEventListener('resize', onResize);
+        root.__khanNavReady = false;
+        root.__khanNavCleanup = null;
+      };
+    }
+
+    function initAll(scope) {
+      var nodes = (scope || document).querySelectorAll('[data-khan-nav]');
+      for (var i = 0; i < nodes.length; i++) init(nodes[i]);
+    }
+
+    if (document.readyState !== 'loading') initAll();
+    else document.addEventListener('DOMContentLoaded', function () { initAll(); });
+
+    // Section Rendering API lifecycle (customizer + AJAX section swaps)
+    document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
+    document.addEventListener('shopify:section:unload', function (e) {
+      var root = e.target.querySelector('[data-khan-nav]');
+      if (root && root.__khanNavCleanup) root.__khanNavCleanup();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Bubble nav (glass)",
+  "tag": "section",
+  "class": "khan-nav-wrapper",
+  "settings": [
+    { "type": "header", "content": "Menu" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Edit items in Content → Menus." },
+    { "type": "image_picker", "id": "logo", "label": "Logo (optional)", "info": "Leave empty to use the asterisk mark." },
+
+    { "type": "header", "content": "Position" },
+    { "type": "checkbox", "id": "sticky", "label": "Stick to top on scroll", "default": true },
+    { "type": "range", "id": "top_offset", "label": "Offset from top", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 800, "max": 1600, "step": 20, "unit": "px", "default": 1280 },
+
+    { "type": "header", "content": "Size & spacing" },
+    { "type": "range", "id": "pill_height", "label": "Bar height", "min": 48, "max": 88, "step": 2, "unit": "px", "default": 64 },
+    { "type": "range", "id": "logo_size", "label": "Logo / mark size", "min": 16, "max": 44, "step": 2, "unit": "px", "default": 26 },
+    { "type": "range", "id": "text_size", "label": "Menu text size", "min": 11, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "menu_gap", "label": "Gap between items", "min": 12, "max": 64, "step": 2, "unit": "px", "default": 34 },
+    { "type": "range", "id": "side_padding", "label": "Inner side padding", "min": 6, "max": 28, "step": 2, "unit": "px", "default": 12 },
+
+    { "type": "header", "content": "Glass & colors" },
+    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 18 },
+    { "type": "color", "id": "glass_tint", "label": "Glass tint", "default": "#15151580" },
+    { "type": "color", "id": "bubble_tint", "label": "Bubble tint", "default": "#ffffff14" },
+    { "type": "color", "id": "border_color", "label": "Border / edge", "default": "#ffffff24" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "Bubble nav (glass)" }
+  ]
+}
+{% endschema %}
