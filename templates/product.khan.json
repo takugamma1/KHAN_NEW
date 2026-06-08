@@ -78,10 +78,72 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
+    },
+    "khan_ingredients_Hynnfd": {
+      "type": "khan-ingredients",
+      "blocks": {
+        "ingredient_EiB7RC": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Caffeine",
+            "text": "Clean energy and mental clarity\nto push harder, longer."
+          }
+        },
+        "ingredient_NRwaEM": {
+          "type": "ingredient",
+          "settings": {
+            "title": "L-Citrulline",
+            "text": "Boosts blood flow and nitric oxide\nfor enhanced pumps."
+          }
+        },
+        "ingredient_rRzgbR": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Beta-Alanine",
+            "text": "Helps delay muscle fatigue\nso you can train harder."
+          }
+        },
+        "ingredient_93GiHL": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Betaine Anhydrous",
+            "text": "Supports strength, power, and hydration\nfor max performance."
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_EiB7RC",
+        "ingredient_NRwaEM",
+        "ingredient_rRzgbR",
+        "ingredient_93GiHL"
+      ],
+      "name": "Ingredients",
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "skew": 28,
+        "media_height": 240,
+        "bar_width": 30,
+        "bar_gap": 14,
+        "columns": 2,
+        "col_gap": 72,
+        "row_gap": 52,
+        "max_width": 1500,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "title_size": 22,
+        "text_size": 13,
+        "bg_color": "#f3f2ef",
+        "title_color": "#bf1616",
+        "text_color": "#6f6f6f",
+        "bar_color": "#0e0e0e",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "hero_VDenzN",
-    "hero_6yAgPJ"
+    "hero_6yAgPJ",
+    "khan_ingredients_Hynnfd"
   ]
 }
