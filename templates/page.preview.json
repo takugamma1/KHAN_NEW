@@ -83,8 +83,8 @@
       ],
       "settings": {
         "title": "Khan hub",
-        "subtitle": "Select a page to review",
-        "footnote": "Work in progress — for review only.",
+        "subtitle": "Избере си страница да разгледаш",
+        "footnote": "",
         "columns": 1,
         "max_width": 1200,
         "bg_color": "#000000",
