@@ -1,0 +1,291 @@
+{% liquid
+  assign s = section.settings
+  if product != blank
+    assign tp = product
+  elsif s.product_fallback != blank
+    assign tp = s.product_fallback
+  endif
+  if tp != blank
+    assign v = tp.selected_or_first_available_variant
+  endif
+%}
+
+<div
+  id="KhanSCart-{{ section.id }}"
+  class="khan-scart khan-scart--{{ s.position }}"
+  data-khan-scart
+  style="
+    --scart-glass: {{ s.glass_tint }};
+    --scart-border: {{ s.border_color }};
+    --scart-text: {{ s.text_color }};
+    --scart-muted: {{ s.muted_color }};
+    --scart-accent: {{ s.accent_color }};
+    --scart-btn1: {{ s.button_top }};
+    --scart-btn2: {{ s.button_bottom }};
+    --scart-btn-text: {{ s.button_text }};
+    --scart-blur: {{ s.blur }}px;
+    --scart-h: {{ s.bar_height }}px;
+    --scart-radius: {{ s.radius }}px;
+    --scart-maxw: {{ s.max_width }}px;
+    --scart-edge: {{ s.bottom_offset }}px;
+    --scart-img: {{ s.img_size }}px;
+    --scart-title: {{ s.title_size }}px;
+    --scart-sub: {{ s.sub_size }}px;
+    --scart-price: {{ s.price_size }}px;
+    --scart-btn-size: {{ s.button_size }}px;
+  "
+>
+  <div class="khan-scart__inner">
+    <div class="khan-scart__bar">
+
+      {%- if s.image != blank -%}
+        <div class="khan-scart__media">
+          <img src="{{ s.image | image_url: width: 200 }}" alt="{{ tp.title | default: shop.name | escape }}" width="{{ s.image.width }}" height="{{ s.image.height }}" loading="lazy">
+        </div>
+      {%- endif -%}
+
+      <div class="khan-scart__info">
+        <p class="khan-scart__title">{{ s.title | default: tp.title | default: 'Product' }}</p>
+        {%- if s.servings != blank or s.weight != blank -%}
+          <p class="khan-scart__sub">
+            {%- if s.servings != blank -%}<span>{{ s.servings }}</span>{%- endif -%}
+            {%- if s.servings != blank and s.weight != blank -%}<span class="khan-scart__dot" aria-hidden="true">+</span>{%- endif -%}
+            {%- if s.weight != blank -%}<span>{{ s.weight }}</span>{%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      <span class="khan-scart__div" aria-hidden="true"></span>
+
+      <div class="khan-scart__price">
+        {%- if v != blank -%}
+          <span class="khan-scart__price-amt">{{ v.price | money }}</span>
+          {%- if s.show_currency -%}<span class="khan-scart__price-cur">{{ cart.currency.iso_code }}</span>{%- endif -%}
+        {%- else -%}
+          <span class="khan-scart__price-amt">—</span>
+        {%- endif -%}
+      </div>
+
+      <span class="khan-scart__div" aria-hidden="true"></span>
+
+      <form class="khan-scart__form" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+        {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
+        <input type="hidden" name="quantity" value="1">
+        <button class="khan-scart__btn" type="submit"{% if v == blank or v.available == false %} disabled{% endif %}>
+          <span class="khan-scart__btn-label">{% if v != blank and v.available == false %}{{ s.soldout_label }}{% else %}{{ s.button_label }}{% endif %}</span>
+          <span class="khan-scart__btn-plus" aria-hidden="true">+</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-scart {
+    position: fixed;
+    left: 0; right: 0;
+    z-index: 55;
+    padding-inline: clamp(12px, 3vw, 36px);
+    pointer-events: none;
+  }
+  .khan-scart--bottom { bottom: var(--scart-edge, 20px); }
+  .khan-scart--top { top: var(--scart-edge, 20px); }
+
+  .khan-scart__inner { max-width: var(--scart-maxw, 1100px); margin-inline: auto; }
+
+  .khan-scart__bar {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2vw, 28px);
+    min-height: var(--scart-h, 72px);
+    padding: 10px clamp(12px, 1.6vw, 18px) 10px 10px;
+    border-radius: var(--scart-radius, 40px);
+    color: var(--scart-text, #f3f3f3);
+    background: var(--scart-glass, rgb(13 13 13 / 0.8));
+    border: 1px solid var(--scart-border, rgb(255 255 255 / 0.12));
+    -webkit-backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
+            backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.1);
+  }
+
+  /* image */
+  .khan-scart__media {
+    flex: 0 0 auto;
+    width: var(--scart-img, 56px); height: var(--scart-img, 56px);
+    border-radius: 14px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: rgb(255 255 255 / 0.04);
+  }
+  .khan-scart__media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+  /* info */
+  .khan-scart__info { flex: 1 1 auto; min-width: 0; }
+  .khan-scart__title {
+    margin: 0;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: var(--scart-title, 20px); letter-spacing: 0.04em; line-height: 1.05;
+    text-transform: uppercase; color: var(--scart-text, #f3f3f3);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .khan-scart__sub {
+    margin: 6px 0 0; display: flex; align-items: center; gap: 8px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--scart-sub, 13px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--scart-muted, #9a9a9a);
+  }
+  .khan-scart__dot { color: var(--scart-accent, #d8232a); }
+
+  /* divider */
+  .khan-scart__div { flex: 0 0 1px; align-self: stretch; margin-block: 14px; background: var(--scart-border, rgb(255 255 255 / 0.16)); }
+
+  /* price */
+  .khan-scart__price { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
+  .khan-scart__price-amt {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: var(--scart-price, 22px); letter-spacing: 0.02em; color: var(--scart-text, #f3f3f3);
+  }
+  .khan-scart__price-cur {
+    margin-top: 4px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scart-accent, #d8232a);
+  }
+
+  /* button */
+  .khan-scart__form { flex: 0 0 auto; margin: 0; }
+  .khan-scart__btn {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center; gap: 18px;
+    min-width: clamp(180px, 22vw, 320px);
+    height: calc(var(--scart-h, 72px) - 20px);
+    padding: 0 26px;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--scart-btn-text, #fff);
+    background: linear-gradient(180deg, var(--scart-btn1, #9b1c1f), var(--scart-btn2, #4a1012));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 -2px 8px rgb(0 0 0 / 0.45), 0 8px 24px rgb(120 12 16 / 0.4);
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .khan-scart__btn:hover:not([disabled]) { transform: translateY(-1px); filter: brightness(1.08); }
+  .khan-scart__btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+  .khan-scart__btn-label {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: var(--scart-btn-size, 16px); letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .khan-scart__btn-plus { font-size: calc(var(--scart-btn-size, 16px) + 6px); line-height: 1; }
+  .khan-scart__form.is-added .khan-scart__btn { filter: brightness(1.18); }
+
+  /* responsive */
+  @media screen and (max-width: 749px) {
+    .khan-scart__bar { gap: 12px; padding: 8px 8px 8px 8px; border-radius: 28px; }
+    .khan-scart__div { display: none; }
+    .khan-scart__price { display: none; }
+    .khan-scart__btn { min-width: 0; gap: 10px; padding: 0 18px; }
+    .khan-scart__sub { font-size: 11px; gap: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .khan-scart__btn { transition: none; }
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    function init(root) {
+      if (!root || root.__khanSCartReady) return;
+      var form = root.querySelector('[data-khan-scart-form]');
+      if (!form) return;
+      root.__khanSCartReady = true;
+
+      function onSubmit(e) {
+        if (!window.fetch || !window.FormData) return; // let it submit natively
+        e.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn && btn.disabled) return;
+        if (btn) btn.disabled = true;
+        fetch(form.getAttribute('action') + '.js', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: new FormData(form)
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (res) {
+            if (btn) btn.disabled = false;
+            if (!res.ok) return;
+            form.classList.add('is-added');
+            setTimeout(function () { form.classList.remove('is-added'); }, 1600);
+            document.dispatchEvent(new CustomEvent('khan:cart:refresh'));
+          })
+          .catch(function () { if (btn) btn.disabled = false; form.submit(); });
+      }
+
+      form.addEventListener('submit', onSubmit);
+      root.__khanSCartCleanup = function () {
+        form.removeEventListener('submit', onSubmit);
+        root.__khanSCartReady = false;
+        root.__khanSCartCleanup = null;
+      };
+    }
+    function initAll(scope) {
+      var nodes = (scope || document).querySelectorAll('[data-khan-scart]');
+      for (var i = 0; i < nodes.length; i++) init(nodes[i]);
+    }
+    if (document.readyState !== 'loading') initAll();
+    else document.addEventListener('DOMContentLoaded', function () { initAll(); });
+    document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
+    document.addEventListener('shopify:section:unload', function (e) {
+      var root = e.target.querySelector('[data-khan-scart]');
+      if (root && root.__khanSCartCleanup) root.__khanSCartCleanup();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "tag": "section",
+  "class": "khan-scart-wrapper",
+  "settings": [
+    { "type": "header", "content": "Product" },
+    { "type": "product", "id": "product_fallback", "label": "Product", "info": "On a product page the current product is used automatically. Set this for preview or other pages." },
+    { "type": "image_picker", "id": "image", "label": "Image (upload)", "info": "Shown in the bar instead of the product photo." },
+
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the product title." },
+    { "type": "text", "id": "servings", "label": "Servings", "default": "30 servings" },
+    { "type": "text", "id": "weight", "label": "Weight", "default": "420g" },
+    { "type": "checkbox", "id": "show_currency", "label": "Show currency code (e.g. USD)", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "text", "id": "soldout_label", "label": "Sold-out label", "default": "Sold out" },
+
+    { "type": "header", "content": "Position & size" },
+    { "type": "select", "id": "position", "label": "Stick to", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
+    { "type": "range", "id": "bottom_offset", "label": "Edge offset", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 700, "max": 1500, "step": 20, "unit": "px", "default": 1100 },
+    { "type": "range", "id": "bar_height", "label": "Bar height", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
+    { "type": "range", "id": "radius", "label": "Corner radius", "min": 16, "max": 60, "step": 2, "unit": "px", "default": 40 },
+    { "type": "range", "id": "img_size", "label": "Image size", "min": 36, "max": 90, "step": 2, "unit": "px", "default": 56 },
+
+    { "type": "header", "content": "Text sizes" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 30, "step": 1, "unit": "px", "default": 20 },
+    { "type": "range", "id": "sub_size", "label": "Servings / weight size", "min": 9, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "price_size", "label": "Price size", "min": 14, "max": 34, "step": 1, "unit": "px", "default": 22 },
+    { "type": "range", "id": "button_size", "label": "Button text size", "min": 12, "max": 22, "step": 1, "unit": "px", "default": 16 },
+
+    { "type": "header", "content": "Glass & colors" },
+    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 18 },
+    { "type": "color", "id": "glass_tint", "label": "Glass tint", "default": "#0d0d0dcc" },
+    { "type": "color", "id": "border_color", "label": "Border / dividers", "default": "#ffffff1f" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#9a9a9a" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
+
+    { "type": "header", "content": "Button" },
+    { "type": "color", "id": "button_top", "label": "Button gradient top", "default": "#9b1c1f" },
+    { "type": "color", "id": "button_bottom", "label": "Button gradient bottom", "default": "#4a1012" },
+    { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" }
+  ],
+  "presets": [
+    { "name": "Sticky add to cart" }
+  ]
+}
+{% endschema %}
