@@ -139,11 +139,22 @@
         "bar_color": "#0e0e0e",
         "color_scheme": ""
       }
+    },
+    "khan_product_footer_KH4N01": {
+      "type": "khan-product-footer",
+      "blocks": {
+        "menu_nav": { "type": "menu", "settings": { "heading": "Navigate" } },
+        "menu_info": { "type": "menu", "settings": { "heading": "Info" } },
+        "menu_connect": { "type": "menu", "settings": { "heading": "Connect" } }
+      },
+      "block_order": ["menu_nav", "menu_info", "menu_connect"],
+      "settings": {}
     }
   },
   "order": [
     "hero_VDenzN",
     "hero_6yAgPJ",
-    "khan_ingredients_Hynnfd"
+    "khan_ingredients_Hynnfd",
+    "khan_product_footer_KH4N01"
   ]
 }
