@@ -41,6 +41,7 @@
         "menu_7CyEda",
         "menu_VaFbfn"
       ],
+      "disabled": true,
       "name": "Product footer (video)",
       "settings": {
         "hide_theme_footer": true,
@@ -100,7 +101,6 @@
         "menu_ePKEGn",
         "menu_kDzbPH"
       ],
-      "disabled": true,
       "name": "Photo footer",
       "settings": {
         "hide_on_home": true,
