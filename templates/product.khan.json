@@ -198,12 +198,46 @@
         "padding_bottom": 48,
         "color_scheme": ""
       }
+    },
+    "khan_sticky_cart_ebPXK4": {
+      "type": "khan-sticky-cart",
+      "name": "Sticky add to cart",
+      "settings": {
+        "product_fallback": "",
+        "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3.png",
+        "title": "Pre-workout",
+        "servings": "30 servings",
+        "weight": "420g",
+        "show_currency": true,
+        "button_label": "Add to cart",
+        "soldout_label": "Sold out",
+        "position": "bottom",
+        "bottom_offset": 12,
+        "max_width": 700,
+        "bar_height": 70,
+        "radius": 60,
+        "img_size": 90,
+        "title_size": 14,
+        "sub_size": 10,
+        "price_size": 18,
+        "button_size": 12,
+        "blur": 18,
+        "glass_tint": "#0d0d0dcc",
+        "border_color": "#ffffff1f",
+        "text_color": "#f3f3f3",
+        "muted_color": "#9a9a9a",
+        "accent_color": "#d8232a",
+        "button_top": "#9b1c1f",
+        "button_bottom": "#4a1012",
+        "button_text": "#ffffff"
+      }
     }
   },
   "order": [
     "hero_VDenzN",
     "hero_6yAgPJ",
     "khan_ingredients_Hynnfd",
-    "khan_product_footer_KH4N01"
+    "khan_product_footer_KH4N01",
+    "khan_sticky_cart_ebPXK4"
   ]
 }
