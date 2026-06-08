@@ -1,0 +1,153 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanHub-{{ section.id }}"
+  class="khan-hub color-{{ s.color_scheme }}"
+  style="
+    --hub-bg: {{ s.bg_color }};
+    --hub-text: {{ s.text_color }};
+    --hub-muted: {{ s.muted_color }};
+    --hub-accent: {{ s.accent_color }};
+    --hub-btn-bg: {{ s.button_bg }};
+    --hub-btn-text: {{ s.button_text }};
+    --hub-btn-border: {{ s.button_border }};
+    --hub-cols: {{ s.columns }};
+    --hub-maxw: {{ s.max_width }}px;
+  "
+>
+  <div class="khan-hub__inner">
+    {%- if s.logo != blank -%}
+      <img class="khan-hub__logo" src="{{ s.logo | image_url: width: 600 }}" alt="" width="{{ s.logo.width }}" height="{{ s.logo.height }}">
+    {%- endif -%}
+    {%- if s.title != blank -%}<h1 class="khan-hub__title">{{ s.title }}</h1>{%- endif -%}
+    {%- if s.subtitle != blank -%}<p class="khan-hub__subtitle">{{ s.subtitle }}</p>{%- endif -%}
+
+    <div class="khan-hub__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link' -%}
+          <a class="khan-hub__btn" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>
+            <span class="khan-hub__btn-label">{{ block.settings.label }}</span>
+            {%- if block.settings.sublabel != blank -%}<span class="khan-hub__btn-sub">{{ block.settings.sublabel }}</span>{%- endif -%}
+            <span class="khan-hub__btn-arrow" aria-hidden="true">→</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if s.footnote != blank -%}<p class="khan-hub__foot">{{ s.footnote }}</p>{%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-hub {
+    min-height: 100svh;
+    background: var(--hub-bg, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(40px, 8vw, 96px) clamp(20px, 5vw, 64px);
+  }
+  .khan-hub__inner { width: 100%; max-width: min(var(--hub-maxw, 880px), 100%); text-align: center; }
+
+  .khan-hub__logo { width: 180px; max-width: 60%; height: auto; display: block; margin: 0 auto 28px; }
+  .khan-hub__title {
+    margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(48px, 9vw); line-height: 1; letter-spacing: -0.01em; text-transform: uppercase; color: var(--hub-text, #111);
+  }
+  .khan-hub__subtitle {
+    margin: 14px 0 0; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--hub-muted, #777);
+  }
+
+  .khan-hub__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--hub-cols, 2), minmax(0, 1fr));
+    gap: 16px;
+    margin-top: clamp(32px, 5vw, 56px);
+  }
+
+  .khan-hub__btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 22px 56px 22px 24px;
+    background: var(--hub-btn-bg, #111);
+    color: var(--hub-btn-text, #fff);
+    border: 1px solid var(--hub-btn-border, transparent);
+    text-decoration: none;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    text-align: left;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .khan-hub__btn:hover { transform: translateY(-2px); }
+  .khan-hub__btn-label { font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .khan-hub__btn-sub { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
+  .khan-hub__btn-arrow { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: var(--hub-accent, #d8232a); font-size: 20px; }
+
+  .khan-hub__foot {
+    margin: clamp(28px, 4vw, 44px) 0 0;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hub-muted, #999);
+  }
+
+  @media screen and (max-width: 600px) {
+    .khan-hub__grid { grid-template-columns: 1fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Preview hub",
+  "tag": "section",
+  "class": "khan-hub-wrapper",
+  "settings": [
+    { "type": "header", "content": "Header" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Khan — preview" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Select a page to review" },
+    { "type": "text", "id": "footnote", "label": "Footnote", "default": "Work in progress — for review only." },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "columns", "label": "Buttons per row", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 480, "max": 1200, "step": 20, "unit": "px", "default": 880 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Title color", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#777777" },
+    { "type": "color", "id": "accent_color", "label": "Accent (arrow)", "default": "#d8232a" },
+    { "type": "color", "id": "button_bg", "label": "Button background", "default": "#111111" },
+    { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
+    { "type": "color", "id": "button_border", "label": "Button border", "default": "#00000000" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Page" },
+        { "type": "text", "id": "sublabel", "label": "Sub-label" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Preview hub",
+      "blocks": [
+        { "type": "link", "settings": { "label": "Home", "sublabel": "Landing", "url": "/" } },
+        { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all" } },
+        { "type": "link", "settings": { "label": "Product", "sublabel": "Product page" } },
+        { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
