@@ -139,13 +139,31 @@
             "title": "Betaine Anhydrous",
             "text": "Supports strength, power, and hydration\nfor max performance."
           }
+        },
+        "ingredient_Gki8zq": {
+          "type": "ingredient",
+          "settings": {
+            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+            "title": "Ingredient 5",
+            "text": "Short benefit description\non two lines."
+          }
+        },
+        "ingredient_6E8jgj": {
+          "type": "ingredient",
+          "settings": {
+            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+            "title": "Ingredient 6",
+            "text": "Short benefit description\non two lines."
+          }
         }
       },
       "block_order": [
         "ingredient_EiB7RC",
         "ingredient_NRwaEM",
         "ingredient_rRzgbR",
-        "ingredient_93GiHL"
+        "ingredient_93GiHL",
+        "ingredient_Gki8zq",
+        "ingredient_6E8jgj"
       ],
       "name": "Ingredients",
       "settings": {
