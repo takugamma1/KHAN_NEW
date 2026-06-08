@@ -119,7 +119,7 @@
         "muted_color": "#6a6a6a",
         "divider_color": "#0000002e",
         "max_width": 1200,
-        "padding_top": 40,
+        "padding_top": 160,
         "color_scheme": ""
       }
     }
