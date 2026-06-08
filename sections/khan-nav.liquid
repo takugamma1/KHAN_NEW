@@ -83,9 +83,15 @@
           aria-controls="KhanNavPanel-{{ section.id }}"
           aria-label="Menu"
         >
-          <span class="khan-nav__burger-line"></span>
-          <span class="khan-nav__burger-line"></span>
-          <span class="khan-nav__burger-line"></span>
+          <svg class="khan-nav__burger-ic khan-nav__burger-ic--menu" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path fill="currentColor" d="M28 6H4v4.533h24z"></path>
+            <path fill="currentColor" d="M17.333 14H4v2.667h13.333z"></path>
+            <path fill="currentColor" d="M24 21.333H4v4.533h20z"></path>
+          </svg>
+          <svg class="khan-nav__burger-ic khan-nav__burger-ic--close" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path stroke="currentColor" stroke-width="4.5" d="M6.667 6.667l18.666 18.666"></path>
+            <path stroke="currentColor" stroke-width="2.1" d="M25.333 6.667L6.667 25.333"></path>
+          </svg>
         </button>
       </div>
     </nav>
@@ -213,16 +219,12 @@
   .khan-nav__link:hover,
   .khan-nav__link.is-current { color: var(--nav-accent, #d8232a); opacity: 1; }
 
-  /* ---- burger ---- */
-  .khan-nav__burger { display: none; cursor: pointer; gap: 5px; flex-direction: column; justify-self: end; }
-  .khan-nav__burger-line {
-    width: 20px; height: 2px; border-radius: 2px;
-    background: var(--nav-accent, #d8232a);
-    transition: transform 0.25s ease, opacity 0.2s ease;
-  }
-  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(2) { opacity: 0; }
-  .khan-nav-outer.is-open .khan-nav__burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  /* ---- burger (ic-menu icon, swaps to X when open) ---- */
+  .khan-nav__burger { display: none; cursor: pointer; justify-self: end; color: var(--nav-accent, #d8232a); }
+  .khan-nav__burger-ic { width: 20px; height: 20px; display: block; }
+  .khan-nav__burger-ic--close { display: none; }
+  .khan-nav-outer.is-open .khan-nav__burger-ic--menu { display: none; }
+  .khan-nav-outer.is-open .khan-nav__burger-ic--close { display: block; }
 
   /* ---- mobile panel ---- */
   .khan-nav__panel {
@@ -276,14 +278,14 @@
     .khan-nav__acct-ic { width: 18px; }
     .khan-nav__actions { gap: 8px; }
     .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
-    .khan-nav__burger-line { width: 17px; }
+    .khan-nav__burger-ic { width: 18px; height: 18px; }
   }
   @media screen and (min-width: 990px) {
     .khan-nav__panel { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .khan-nav__panel, .khan-nav__burger-line, .khan-nav__logo { transition: none; }
+    .khan-nav__panel, .khan-nav__logo { transition: none; }
   }
 {% endstylesheet %}
 
