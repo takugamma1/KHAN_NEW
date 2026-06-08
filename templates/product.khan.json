@@ -80,7 +80,7 @@
       "name": "Ingredients hero",
       "settings": {
         "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_8_2026_09_48_25_AM.png",
-        "overlay_opacity": 0,
+        "top_overlay": 100,
         "min_height": 820,
         "top_left": "Khan collection",
         "top_right": "Ingredients",
