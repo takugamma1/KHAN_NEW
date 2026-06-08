@@ -130,7 +130,7 @@
         "menu_gap": 34,
         "side_padding": 12,
         "blur": 18,
-        "glass_tint": "#15151580",
+        "glass_tint": "#00000080",
         "bubble_tint": "#ffffff14",
         "border_color": "#ffffff24",
         "text_color": "#f3f3f3",
