@@ -168,13 +168,13 @@
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), inset 0 -2px 6px rgb(0 0 0 / 0.5);
     transition: background 0.2s ease, transform 0.2s ease;
   }
-  .khan-nav__logo { color: var(--nav-text, #f3f3f3); text-decoration: none; justify-self: start; }
+  .khan-nav__logo { color: var(--nav-text, #f3f3f3); text-decoration: none; justify-self: start; grid-column: 1; }
   .khan-nav__logo:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__star { width: var(--nav-logo, 26px); height: var(--nav-logo, 26px); display: block; }
   .khan-nav__logo-img { width: var(--nav-logo, 26px); height: auto; display: block; object-fit: contain; }
 
   /* ---- right actions + cart ---- */
-  .khan-nav__actions { justify-self: end; display: inline-flex; align-items: center; gap: 10px; }
+  .khan-nav__actions { justify-self: end; grid-column: 3; display: inline-flex; align-items: center; gap: 10px; }
   .khan-nav__cart { position: relative; color: var(--nav-text, #f3f3f3); text-decoration: none; }
   .khan-nav__cart:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__cart-ic { width: calc(var(--nav-logo, 26px) - 2px); height: auto; display: block; }
@@ -196,7 +196,7 @@
   .khan-nav__menu {
     list-style: none; margin: 0; padding: 0;
     display: flex; align-items: center; gap: var(--nav-gap, 34px);
-    justify-self: center;
+    justify-self: center; grid-column: 2;
   }
   .khan-nav__link {
     font-family: 'Nexa', var(--font-heading--family, sans-serif);
@@ -263,6 +263,20 @@
   @media screen and (max-width: 989px) {
     .khan-nav__menu { display: none; }
     .khan-nav__burger { display: inline-flex; }
+  }
+  @media screen and (max-width: 749px) {
+    .khan-nav__bar { height: 52px; padding: 0 8px; }
+    .khan-nav__logo,
+    .khan-nav__acct,
+    .khan-nav__cart,
+    .khan-nav__burger { width: 40px; height: 40px; }
+    .khan-nav__star,
+    .khan-nav__logo-img,
+    .khan-nav__cart-ic,
+    .khan-nav__acct-ic { width: 18px; }
+    .khan-nav__actions { gap: 8px; }
+    .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
+    .khan-nav__burger-line { width: 17px; }
   }
   @media screen and (min-width: 990px) {
     .khan-nav__panel { display: none; }
