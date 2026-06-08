@@ -17,9 +17,9 @@
           "settings": {
             "label": "Pre-Workout",
             "sublabel": "Продуктова страница",
-            "url": "",
+            "url": "shopify://products/pre-workout",
             "show_progress": true,
-            "progress": 0
+            "progress": 80
           }
         },
         "home": {
@@ -29,7 +29,7 @@
             "sublabel": "Landing page",
             "url": "/",
             "show_progress": true,
-            "progress": 35
+            "progress": 55
           }
         },
         "collection": {
@@ -37,7 +37,7 @@
           "settings": {
             "label": "КОЛЕКЦИЯ",
             "sublabel": "Shop grid",
-            "url": "/collections/all",
+            "url": "shopify://collections/frontpage",
             "show_progress": true,
             "progress": 50
           }
@@ -49,7 +49,7 @@
             "sublabel": "Our story",
             "url": "/pages/about",
             "show_progress": true,
-            "progress": 80
+            "progress": 69
           }
         },
         "product": {
@@ -57,7 +57,7 @@
           "settings": {
             "label": "ПРОДУКТОВА СТРАНИЦА ДРЕХИ",
             "sublabel": "Product page",
-            "url": "",
+            "url": "shopify://products/тениска-тест",
             "show_progress": true,
             "progress": 80
           }
