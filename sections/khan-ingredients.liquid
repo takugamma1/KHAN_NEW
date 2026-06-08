@@ -1,25 +1,9 @@
 {% liquid
   assign s = section.settings
-  assign H = s.shape_height
-  assign sk = s.skew
-  assign g = s.bar_gap
-  assign b1 = s.bar_width
-  assign b2 = s.bar2_width
-  assign twog = g | times: 2
-  assign used = sk | plus: twog | plus: b1 | plus: b2
-  assign P = 1000 | minus: used
-  assign Psk = P | plus: sk
-  assign x1b = P | plus: g
-  assign x2b = x1b | plus: b1
-  assign x1bt = x1b | plus: sk
-  assign x2bt = x2b | plus: sk
-  assign x1c = x2b | plus: g
-  assign x2c = x1c | plus: b2
-  assign x1ct = x1c | plus: sk
-  assign x2ct = x2c | plus: sk
-  assign ratio = 1000.00 | divided_by: H
+  assign ratio = 822.00 | divided_by: 245
 %}
-{%- capture ing_svg -%}<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 {{ H }}' preserveAspectRatio='none'><polygon fill='white' points='{{ sk }},0 {{ Psk }},0 {{ P }},{{ H }} 0,{{ H }}'/><polygon fill='white' points='{{ x1bt }},0 {{ x2bt }},0 {{ x2b }},{{ H }} {{ x1b }},{{ H }}'/><polygon fill='white' points='{{ x1ct }},0 {{ x2ct }},0 {{ x2c }},{{ H }} {{ x1c }},{{ H }}'/></svg>{%- endcapture -%}
+{%- comment -%} Custom shape mask (viewBox 822x245): trapezoid panel + slanted bar {%- endcomment -%}
+{%- capture ing_svg -%}<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 822 245' preserveAspectRatio='none'><path fill='white' d='M0 0H532.5L662 245H0V0Z'/><path fill='white' d='M544 0H666.5L822 245H675L544 0Z'/></svg>{%- endcapture -%}
 {%- assign ing_mask = ing_svg | url_encode | replace: '+', '%20' -%}
 
 <div
@@ -145,12 +129,7 @@
     { "type": "richtext", "id": "heading", "label": "Heading" },
 
     { "type": "header", "content": "Shape" },
-    { "type": "paragraph", "content": "These controls draw the built-in shape. The video fills the whole frame and shows through every piece. A pixel-exact custom SVG shape can be wired in as the mask." },
-    { "type": "range", "id": "skew", "label": "Slant", "min": 0, "max": 200, "step": 2, "default": 56 },
-    { "type": "range", "id": "shape_height", "label": "Shape height (aspect)", "min": 160, "max": 560, "step": 4, "default": 320 },
-    { "type": "range", "id": "bar_width", "label": "Bar 1 thickness", "min": 4, "max": 200, "step": 2, "default": 46 },
-    { "type": "range", "id": "bar2_width", "label": "Bar 2 thickness", "min": 4, "max": 200, "step": 2, "default": 24 },
-    { "type": "range", "id": "bar_gap", "label": "Gap between bars", "min": 0, "max": 120, "step": 2, "default": 16 },
+    { "type": "paragraph", "content": "The frame uses your custom SVG shape. The video fills the whole frame and shows through every piece; gaps are cut out to the background." },
 
     { "type": "header", "content": "Layout" },
     { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 4, "step": 1, "default": 2 },
