@@ -22,16 +22,6 @@
             "progress": 0
           }
         },
-        "link_nHKfXX": {
-          "type": "link",
-          "settings": {
-            "label": "Често задавани въпроси",
-            "sublabel": "",
-            "url": "",
-            "show_progress": true,
-            "progress": 0
-          }
-        },
         "home": {
           "type": "link",
           "settings": {
@@ -39,7 +29,7 @@
             "sublabel": "Landing page",
             "url": "/",
             "show_progress": true,
-            "progress": 100
+            "progress": 35
           }
         },
         "collection": {
@@ -49,7 +39,7 @@
             "sublabel": "Shop grid",
             "url": "/collections/all",
             "show_progress": true,
-            "progress": 75
+            "progress": 50
           }
         },
         "about": {
@@ -69,17 +59,49 @@
             "sublabel": "Product page",
             "url": "",
             "show_progress": true,
-            "progress": 40
+            "progress": 80
+          }
+        },
+        "link_NyBdeW": {
+          "type": "link",
+          "settings": {
+            "label": "Политики и условия",
+            "sublabel": "",
+            "url": "",
+            "show_progress": true,
+            "progress": 0
+          }
+        },
+        "link_nHKfXX": {
+          "type": "link",
+          "settings": {
+            "label": "Често задавани въпроси",
+            "sublabel": "",
+            "url": "",
+            "show_progress": true,
+            "progress": 0
+          }
+        },
+        "link_xfrQwK": {
+          "type": "link",
+          "settings": {
+            "label": "Контактна страница",
+            "sublabel": "",
+            "url": "",
+            "show_progress": true,
+            "progress": 0
           }
         }
       },
       "block_order": [
         "link_ETfFJB",
-        "link_nHKfXX",
         "home",
         "collection",
         "about",
-        "product"
+        "product",
+        "link_NyBdeW",
+        "link_nHKfXX",
+        "link_xfrQwK"
       ],
       "settings": {
         "title": "Khan hub",
