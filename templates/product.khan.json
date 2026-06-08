@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "main": {
+      "type": "khan-product",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "label": "Performance fit" } },
+        "f2": { "type": "feature", "settings": { "label": "Heavyweight cotton" } },
+        "f3": { "type": "feature", "settings": { "label": "Reinforced seams" } },
+        "f4": { "type": "feature", "settings": { "label": "Made to last" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4"],
+      "settings": {}
+    },
+    "engineered": {
+      "type": "khan-engineered",
+      "blocks": {
+        "e1": { "type": "feature", "settings": { "title": "Premium fabric" } },
+        "e2": { "type": "feature", "settings": { "title": "Built to move" } },
+        "e3": { "type": "feature", "settings": { "title": "Refined details" } },
+        "e4": { "type": "feature", "settings": { "title": "Tested tough" } }
+      },
+      "block_order": ["e1", "e2", "e3", "e4"],
+      "settings": {}
+    },
+    "materials": {
+      "type": "khan-materials",
+      "blocks": {
+        "m1": { "type": "feature", "settings": { "title": "Premium cotton" } },
+        "m2": { "type": "feature", "settings": { "title": "Precision cut" } },
+        "m3": { "type": "feature", "settings": { "title": "Reinforced stitch" } },
+        "m4": { "type": "feature", "settings": { "title": "Finished by hand" } },
+        "d1": { "type": "detail", "settings": { "title": "Woven label" } },
+        "d2": { "type": "detail", "settings": { "title": "Custom hardware" } },
+        "d3": { "type": "detail", "settings": { "title": "Tonal stitching" } },
+        "d4": { "type": "detail", "settings": { "title": "Care tag" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "d1", "d2", "d3", "d4"],
+      "settings": {}
+    },
+    "related": {
+      "type": "khan-collection",
+      "blocks": {
+        "p1": { "type": "product", "settings": { "button_label": "Shop now" } },
+        "p2": { "type": "product", "settings": { "button_label": "Shop now" } },
+        "p3": { "type": "product", "settings": { "button_label": "Shop now" } }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {
+        "heading": "<p>You may also<strong> like.</strong></p>",
+        "subheading": "From the KHAN drop."
+      }
+    }
+  },
+  "order": ["main", "engineered", "materials", "related"]
+}
