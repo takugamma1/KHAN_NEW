@@ -52,19 +52,33 @@
         </ul>
       {%- endif -%}
 
-      {%- comment -%} Burger bubble (mobile only) {%- endcomment -%}
-      <button
-        class="khan-nav__burger"
-        type="button"
-        data-khan-nav-toggle
-        aria-expanded="false"
-        aria-controls="KhanNavPanel-{{ section.id }}"
-        aria-label="Menu"
-      >
-        <span class="khan-nav__burger-line"></span>
-        <span class="khan-nav__burger-line"></span>
-        <span class="khan-nav__burger-line"></span>
-      </button>
+      {%- comment -%} Right actions: cart (+ burger on mobile) {%- endcomment -%}
+      <div class="khan-nav__actions">
+        {%- if s.show_cart -%}
+          <a class="khan-nav__cart" href="{{ routes.cart_url }}" aria-label="Cart ({{ cart.item_count }})">
+            <svg class="khan-nav__cart-ic" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <path d="M7.33329 12H24.6666L27.3333 28H4.66663L7.33329 12Z" fill="currentColor" stroke="currentColor" stroke-width="2"></path>
+              <path d="M10 12C10 8 12 6 16 6C20 6 22 8 22 12" fill="none" stroke="currentColor" stroke-width="2.93333"></path>
+              <path d="M12 9.33341L14.6667 6.66675M20 9.33341L17.3333 6.66675" fill="none" stroke="currentColor" stroke-width="1.86667"></path>
+              <path d="M13.3334 17.3333H18.6667V22.6666H13.3334V17.3333Z" fill="currentColor"></path>
+            </svg>
+            <span class="khan-nav__cart-count" data-khan-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+          </a>
+        {%- endif -%}
+
+        <button
+          class="khan-nav__burger"
+          type="button"
+          data-khan-nav-toggle
+          aria-expanded="false"
+          aria-controls="KhanNavPanel-{{ section.id }}"
+          aria-label="Menu"
+        >
+          <span class="khan-nav__burger-line"></span>
+          <span class="khan-nav__burger-line"></span>
+          <span class="khan-nav__burger-line"></span>
+        </button>
+      </div>
     </nav>
 
     {%- comment -%} Mobile panel {%- endcomment -%}
@@ -130,6 +144,7 @@
 
   /* ---- circular bubbles (logo + burger) ---- */
   .khan-nav__logo,
+  .khan-nav__cart,
   .khan-nav__burger {
     flex: 0 0 auto;
     display: inline-flex;
@@ -147,6 +162,22 @@
   .khan-nav__logo:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__star { width: var(--nav-logo, 26px); height: var(--nav-logo, 26px); display: block; }
   .khan-nav__logo-img { width: var(--nav-logo, 26px); height: auto; display: block; object-fit: contain; }
+
+  /* ---- right actions + cart ---- */
+  .khan-nav__actions { justify-self: end; display: inline-flex; align-items: center; gap: 10px; }
+  .khan-nav__cart { position: relative; color: var(--nav-text, #f3f3f3); text-decoration: none; }
+  .khan-nav__cart:hover { background: rgb(255 255 255 / 0.14); }
+  .khan-nav__cart-ic { width: calc(var(--nav-logo, 26px) - 2px); height: auto; display: block; }
+  .khan-nav__cart-count {
+    position: absolute; top: -3px; right: -3px;
+    min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--nav-accent, #d8232a); color: #fff;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700; line-height: 1;
+    border-radius: 999px; border: 1.5px solid rgb(0 0 0 / 0.35);
+  }
+  .khan-nav__cart-count[hidden] { display: none; }
 
   /* ---- menu (desktop) ---- */
   .khan-nav__menu {
@@ -281,6 +312,29 @@
       if (root && root.__khanNavCleanup) root.__khanNavCleanup();
     });
   })();
+
+  // Cart count badge — read-only refresh, never touches the theme's cart code
+  (function () {
+    function setCount(n) {
+      var els = document.querySelectorAll('[data-khan-cart-count]');
+      for (var i = 0; i < els.length; i++) {
+        els[i].textContent = n;
+        if (n > 0) els[i].removeAttribute('hidden'); else els[i].setAttribute('hidden', '');
+      }
+    }
+    function refresh() {
+      if (!document.querySelector('[data-khan-cart-count]')) return;
+      fetch('{{ routes.cart_url }}.js', { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (c) { if (c) setCount(c.item_count); })
+        .catch(function () {});
+    }
+    window.addEventListener('pageshow', refresh);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(); });
+    ['cart:updated', 'cart:refresh', 'cart:change', 'khan:cart:refresh'].forEach(function (ev) {
+      document.addEventListener(ev, refresh);
+    });
+  })();
 </script>
 
 {% schema %}
@@ -292,6 +346,7 @@
     { "type": "header", "content": "Menu" },
     { "type": "link_list", "id": "menu", "label": "Menu", "info": "Edit items in Content → Menus." },
     { "type": "image_picker", "id": "logo", "label": "Logo (optional)", "info": "Leave empty to use the asterisk mark." },
+    { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
 
     { "type": "header", "content": "Position" },
     { "type": "checkbox", "id": "sticky", "label": "Stick to top on scroll", "default": true },
