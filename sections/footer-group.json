@@ -11,6 +11,65 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
+    "khan_product_footer_WkDrKw": {
+      "type": "khan-product-footer",
+      "blocks": {
+        "menu_D3ypVA": {
+          "type": "menu",
+          "settings": {
+            "heading": "Navigate",
+            "menu": ""
+          }
+        },
+        "menu_7CyEda": {
+          "type": "menu",
+          "settings": {
+            "heading": "Info",
+            "menu": ""
+          }
+        },
+        "menu_VaFbfn": {
+          "type": "menu",
+          "settings": {
+            "heading": "Connect",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": [
+        "menu_D3ypVA",
+        "menu_7CyEda",
+        "menu_VaFbfn"
+      ],
+      "name": "Product footer (video)",
+      "settings": {
+        "hide_theme_footer": true,
+        "bg_video": "shopify://files/videos/hf_20260608_110718_f17f83bb-14cb-4203-9da7-948b2827ace1.mp4",
+        "overlay_opacity": 35,
+        "min_height": 640,
+        "logo_width": 200,
+        "tagline": "Built different. Made to last.",
+        "show_newsletter": true,
+        "news_heading": "Join the Khan society",
+        "news_text": "Exclusive drops. Early access. No noise. Just Khan.",
+        "news_placeholder": "Your email",
+        "news_success": "You're in.",
+        "copyright": "© 2026 Khan Apparel. All rights reserved.",
+        "tagline2": "Born from past. Built for now.",
+        "show_deco": false,
+        "coordinates": "42.6977° N  23.3219° E",
+        "text_grain": true,
+        "bg_color": "#0a0a0a",
+        "text_color": "#f2f2f2",
+        "muted_color": "#9a9a9a",
+        "accent_color": "#d8232a",
+        "heading_size": 14,
+        "link_size": 14,
+        "padding_top": 56,
+        "padding_bottom": 48,
+        "color_scheme": ""
+      }
+    },
     "khan_footer_XYejMx": {
       "type": "khan-footer",
       "blocks": {
@@ -41,6 +100,7 @@
         "menu_ePKEGn",
         "menu_kDzbPH"
       ],
+      "disabled": true,
       "name": "Photo footer",
       "settings": {
         "hide_on_home": true,
@@ -266,6 +326,7 @@
     }
   },
   "order": [
+    "khan_product_footer_WkDrKw",
     "khan_footer_XYejMx",
     "footer_m9NzUG",
     "footer_utilities_jLGE8U"
