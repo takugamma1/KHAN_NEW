@@ -90,14 +90,19 @@
 </div>
 
 {% stylesheet %}
+  /* neutralize any background/padding the theme applies to the section wrapper */
+  .khan-nav-wrapper { background: transparent !important; padding: 0 !important; margin: 0 !important; }
+
+  /* overlay the content below so the glass picks up the (dark) hero behind it */
   .khan-nav-outer {
-    position: relative;
+    position: absolute;
+    top: 0; left: 0; right: 0;
     z-index: 60;
     width: 100%;
     padding: var(--nav-top, 16px) clamp(14px, 4vw, 40px) 0;
     pointer-events: none;
   }
-  .khan-nav-outer--sticky { position: sticky; top: 0; }
+  .khan-nav-outer--sticky { position: fixed; }
 
   .khan-nav-inner { max-width: var(--nav-maxw, 1280px); margin-inline: auto; }
 
@@ -105,9 +110,9 @@
   .khan-nav__bar {
     pointer-events: auto;
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: clamp(12px, 3vw, 28px);
     height: var(--nav-h, 64px);
     padding: 0 var(--nav-pad, 12px);
@@ -138,7 +143,7 @@
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), inset 0 -2px 6px rgb(0 0 0 / 0.5);
     transition: background 0.2s ease, transform 0.2s ease;
   }
-  .khan-nav__logo { color: var(--nav-text, #f3f3f3); text-decoration: none; }
+  .khan-nav__logo { color: var(--nav-text, #f3f3f3); text-decoration: none; justify-self: start; }
   .khan-nav__logo:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__star { width: var(--nav-logo, 26px); height: var(--nav-logo, 26px); display: block; }
   .khan-nav__logo-img { width: var(--nav-logo, 26px); height: auto; display: block; object-fit: contain; }
@@ -147,6 +152,7 @@
   .khan-nav__menu {
     list-style: none; margin: 0; padding: 0;
     display: flex; align-items: center; gap: var(--nav-gap, 34px);
+    justify-self: center;
   }
   .khan-nav__link {
     font-family: 'Nexa', var(--font-heading--family, sans-serif);
@@ -164,7 +170,7 @@
   .khan-nav__link.is-current { color: var(--nav-accent, #d8232a); opacity: 1; }
 
   /* ---- burger ---- */
-  .khan-nav__burger { display: none; cursor: pointer; gap: 5px; flex-direction: column; }
+  .khan-nav__burger { display: none; cursor: pointer; gap: 5px; flex-direction: column; justify-self: end; }
   .khan-nav__burger-line {
     width: 20px; height: 2px; border-radius: 2px;
     background: var(--nav-accent, #d8232a);
