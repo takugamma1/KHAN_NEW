@@ -119,7 +119,8 @@
       "type": "khan-nav",
       "name": "Bubble nav (glass)",
       "settings": {
-        "menu": "",
+        "menu": "main-menu",
+        "logo": "shopify://shop_images/white-logo.svg",
         "sticky": true,
         "top_offset": 16,
         "max_width": 1280,
