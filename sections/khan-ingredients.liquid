@@ -1,0 +1,204 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanIng-{{ section.id }}"
+  class="khan-ing color-{{ s.color_scheme }}"
+  style="
+    --ing-bg: {{ s.bg_color }};
+    --ing-title: {{ s.title_color }};
+    --ing-text: {{ s.text_color }};
+    --ing-bar: {{ s.bar_color }};
+    --ing-skew: {{ s.skew }}px;
+    --ing-h: {{ s.media_height }}px;
+    --ing-bar-w: {{ s.bar_width }}px;
+    --ing-bar-gap: {{ s.bar_gap }}px;
+    --ing-cols: {{ s.columns }};
+    --ing-col-gap: {{ s.col_gap }}px;
+    --ing-row-gap: {{ s.row_gap }}px;
+    --ing-title-size: {{ s.title_size }}px;
+    --ing-text-size: {{ s.text_size }}px;
+    --ing-maxw: {{ s.max_width }}px;
+    --ing-pt: {{ s.padding_top }}px;
+    --ing-pb: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="khan-ing__inner">
+    {%- if s.eyebrow != blank or s.heading != blank -%}
+      <header class="khan-ing__head">
+        {%- if s.eyebrow != blank -%}<p class="khan-ing__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.heading != blank -%}<div class="khan-ing__heading">{{ s.heading }}</div>{%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="khan-ing__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'ingredient' -%}
+          {%- assign b = block.settings -%}
+          <article class="khan-ing__card" {{ block.shopify_attributes }}>
+            <div class="khan-ing__row">
+              <div class="khan-ing__panel">
+                {%- if b.video != blank -%}
+                  {{ b.video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-ing__media-el' }}
+                {%- elsif b.poster != blank -%}
+                  {{ b.poster | image_url: width: 1600 | image_tag: class: 'khan-ing__media-el', loading: 'lazy', alt: b.title }}
+                {%- else -%}
+                  <div class="khan-ing__media-el khan-ing__media-el--ph"></div>
+                {%- endif -%}
+              </div>
+              <span class="khan-ing__bar" aria-hidden="true"></span>
+              <span class="khan-ing__bar khan-ing__bar--thin" aria-hidden="true"></span>
+            </div>
+
+            <div class="khan-ing__cap">
+              {%- if b.title != blank -%}<h3 class="khan-ing__title">{{ b.title }}</h3>{%- endif -%}
+              {%- if b.text != blank -%}<p class="khan-ing__text">{{ b.text | newline_to_br }}</p>{%- endif -%}
+            </div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-ing {
+    background: var(--ing-bg, #f3f2ef);
+    padding: var(--ing-pt, 80px) clamp(20px, 5vw, 64px) var(--ing-pb, 80px);
+  }
+  .khan-ing__inner { width: 100%; max-width: var(--ing-maxw, 1500px); margin: 0 auto; }
+
+  .khan-ing__head { margin: 0 0 clamp(28px, 4vw, 48px); }
+  .khan-ing__eyebrow {
+    margin: 0 0 10px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ing-text, #6f6f6f);
+  }
+  .khan-ing__heading {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900; text-transform: uppercase; line-height: 1;
+    font-size: min(48px, 9vw); color: var(--ing-title, #bf1616);
+  }
+  .khan-ing__heading > :where(p) { margin: 0; }
+
+  .khan-ing__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ing-cols, 2), minmax(0, 1fr));
+    column-gap: var(--ing-col-gap, 72px);
+    row-gap: var(--ing-row-gap, 52px);
+  }
+
+  .khan-ing__row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--ing-bar-gap, 14px);
+    height: var(--ing-h, 240px);
+  }
+  .khan-ing__panel {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--ing-bar, #0e0e0e);
+    clip-path: polygon(var(--ing-skew, 28px) 0, 100% 0, calc(100% - var(--ing-skew, 28px)) 100%, 0 100%);
+  }
+  .khan-ing__bar {
+    flex: 0 0 var(--ing-bar-w, 30px);
+    background: var(--ing-bar, #0e0e0e);
+    clip-path: polygon(var(--ing-skew, 28px) 0, 100% 0, calc(100% - var(--ing-skew, 28px)) 100%, 0 100%);
+  }
+  .khan-ing__bar--thin { flex-basis: calc(var(--ing-bar-w, 30px) * 0.5); }
+
+  .khan-ing__media-el { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .khan-ing__media-el--ph { position: absolute; inset: 0; background: linear-gradient(135deg, #1a1a1a, #060606); }
+
+  .khan-ing__cap { margin-top: clamp(14px, 1.4vw, 18px); padding-left: 6px; }
+  .khan-ing__title {
+    margin: 0 0 8px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900; letter-spacing: 0.01em; text-transform: uppercase;
+    font-size: var(--ing-title-size, 22px); line-height: 1; color: var(--ing-title, #bf1616);
+  }
+  .khan-ing__text {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ing-text-size, 13px); line-height: 1.55; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ing-text, #6f6f6f);
+  }
+
+  @media screen and (max-width: 990px) {
+    .khan-ing__row { height: clamp(170px, 30vw, 240px); }
+  }
+  @media screen and (max-width: 749px) {
+    .khan-ing__grid { grid-template-columns: 1fr; column-gap: 0; }
+    .khan-ing__row { height: 150px; }
+    .khan-ing__panel,
+    .khan-ing__bar { clip-path: polygon(18px 0, 100% 0, calc(100% - 18px) 100%, 0 100%); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ingredients",
+  "tag": "section",
+  "class": "khan-ing-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Heading (optional)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "richtext", "id": "heading", "label": "Heading" },
+
+    { "type": "header", "content": "Shapes" },
+    { "type": "range", "id": "skew", "label": "Slant", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "media_height", "label": "Media height", "min": 140, "max": 360, "step": 4, "unit": "px", "default": 240 },
+    { "type": "range", "id": "bar_width", "label": "Side bar width", "min": 6, "max": 60, "step": 2, "unit": "px", "default": 30 },
+    { "type": "range", "id": "bar_gap", "label": "Gap between bars", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 14 },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "range", "id": "col_gap", "label": "Column gap", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "row_gap", "label": "Row gap", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 52 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 800, "max": 1800, "step": 20, "unit": "px", "default": 1500 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+
+    { "type": "header", "content": "Text sizes" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 12, "max": 48, "step": 1, "unit": "px", "default": 22 },
+    { "type": "range", "id": "text_size", "label": "Description size", "min": 9, "max": 24, "step": 1, "unit": "px", "default": 13 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f3f2ef" },
+    { "type": "color", "id": "title_color", "label": "Title", "default": "#bf1616" },
+    { "type": "color", "id": "text_color", "label": "Description", "default": "#6f6f6f" },
+    { "type": "color", "id": "bar_color", "label": "Bars / panel fill", "default": "#0e0e0e" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (looped)" },
+        { "type": "image_picker", "id": "poster", "label": "Image fallback" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Ingredient" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Short benefit description\non two lines." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Ingredients",
+      "blocks": [
+        { "type": "ingredient", "settings": { "title": "Caffeine", "text": "Clean energy and mental clarity\nto push harder, longer." } },
+        { "type": "ingredient", "settings": { "title": "L-Citrulline", "text": "Boosts blood flow and nitric oxide\nfor enhanced pumps." } },
+        { "type": "ingredient", "settings": { "title": "Beta-Alanine", "text": "Helps delay muscle fatigue\nso you can train harder." } },
+        { "type": "ingredient", "settings": { "title": "Betaine Anhydrous", "text": "Supports strength, power, and hydration\nfor max performance." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
