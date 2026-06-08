@@ -1,6 +1,10 @@
 {% liquid
   assign s = section.settings
+  assign frame_ratio = 822.00 | divided_by: 245
 %}
+{%- comment -%} Frame video shape mask (viewBox 822x245): trapezoid panel + slanted bar {%- endcomment -%}
+{%- capture ah_frame_svg -%}<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 822 245' preserveAspectRatio='none'><path fill='white' d='M0 0H532.5L662 245H0V0Z'/><path fill='white' d='M544 0H666.5L822 245H675L544 0Z'/></svg>{%- endcapture -%}
+{%- assign ah_frame_mask = ah_frame_svg | url_encode | replace: '+', '%20' -%}
 
 <div
   id="KhanAHero-{{ section.id }}"
@@ -25,8 +29,9 @@
     --ah-desc: {{ s.desc_size }}px;
     --ah-btn-h: {{ s.button_height }}px;
     --ah-btn-size: {{ s.button_text_size }}px;
-    --ah-frame-h: {{ s.frame_height }}px;
-    --ah-frame-skew: {{ s.frame_skew }}px;
+    --ah-frame-w: {{ s.frame_width }}px;
+    --ah-frame-ratio: {{ frame_ratio }};
+    --ah-frame-mask: url(&quot;data:image/svg+xml,{{ ah_frame_mask }}&quot;);
   "
 >
   {%- comment -%} z0: product / model image (sits BELOW the bottom gradient) {%- endcomment -%}
@@ -182,9 +187,10 @@
   /* frame video */
   .khan-ahero__frame {
     margin-top: clamp(28px, 3.4vw, 46px);
-    width: 100%; max-width: 600px; height: var(--ah-frame-h, 150px);
-    overflow: hidden;
-    clip-path: polygon(var(--ah-frame-skew, 24px) 0, 100% 0, calc(100% - var(--ah-frame-skew, 24px)) 100%, 0 100%);
+    width: 100%; max-width: var(--ah-frame-w, 560px);
+    aspect-ratio: var(--ah-frame-ratio, 3.355);
+    -webkit-mask: var(--ah-frame-mask) center / 100% 100% no-repeat;
+            mask: var(--ah-frame-mask) center / 100% 100% no-repeat;
   }
   .khan-ahero__frame-el { width: 100%; height: 100%; object-fit: cover; display: block; }
   .khan-ahero__frame-el--ph { background: linear-gradient(135deg, #1a1a1a, #060606); }
@@ -245,8 +251,7 @@
     { "type": "checkbox", "id": "show_frame", "label": "Show frame video", "default": true },
     { "type": "video", "id": "frame_video", "label": "Video (looped)" },
     { "type": "image_picker", "id": "frame_poster", "label": "Image fallback" },
-    { "type": "range", "id": "frame_height", "label": "Frame height", "min": 80, "max": 260, "step": 2, "unit": "px", "default": 150 },
-    { "type": "range", "id": "frame_skew", "label": "Frame slant", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "frame_width", "label": "Frame width", "min": 300, "max": 760, "step": 10, "unit": "px", "default": 560 },
 
     { "type": "header", "content": "Footer line" },
     { "type": "text", "id": "copyright", "label": "Copyright", "default": "© 2026 Khan Apparel. All rights reserved." },
