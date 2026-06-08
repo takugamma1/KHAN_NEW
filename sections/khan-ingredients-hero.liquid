@@ -1,0 +1,239 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanIHero-{{ section.id }}"
+  class="khan-ihero color-{{ s.color_scheme }}"
+  style="
+    --ih-text: {{ s.text_color }};
+    --ih-accent: {{ s.accent_color }};
+    --ih-muted: {{ s.muted_color }};
+    --ih-bg: {{ s.bg_color }};
+    --ih-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
+    --ih-minh: {{ s.min_height }}px;
+    --ih-maxw: {{ s.max_width }}px;
+    --ih-pad-y: {{ s.padding_y }}px;
+    --ih-heading: {{ s.heading_size }}px;
+    --ih-eyebrow: {{ s.eyebrow_size }}px;
+    --ih-contentw: {{ s.content_width }}px;
+    --ih-icon: {{ s.icon_size }}px;
+    --ih-title: {{ s.title_size }}px;
+    --ih-utext: {{ s.text_size }}px;
+    --ih-gap: {{ s.usp_gap }}px;
+    --ih-corner: {{ s.corner_size }}px;
+  "
+>
+  <div class="khan-ihero__bg" aria-hidden="true">
+    {%- if s.bg_image != blank -%}
+      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-ihero__bg-img', loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+    {%- endif -%}
+    <span class="khan-ihero__overlay"></span>
+  </div>
+
+  {%- if s.top_left != blank -%}
+    <span class="khan-ihero__corner khan-ihero__corner--tl">{{ s.top_left }}</span>
+  {%- endif -%}
+  {%- if s.top_right != blank -%}
+    <span class="khan-ihero__corner khan-ihero__corner--tr">{{ s.top_right }}</span>
+  {%- endif -%}
+
+  <div class="khan-ihero__inner">
+    <div class="khan-ihero__content">
+      {%- if s.eyebrow != blank -%}
+        <p class="khan-ihero__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <div class="khan-ihero__heading">{{ s.heading }}</div>
+      {%- endif -%}
+
+      <div class="khan-ihero__usps">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'usp' -%}
+            <div class="khan-ihero__usp" {{ block.shopify_attributes }}>
+              <span class="khan-ihero__usp-icon">
+                {%- if block.settings.icon != blank -%}
+                  {{ block.settings.icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
+                {%- else -%}
+                  <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                    <g stroke="currentColor" stroke-width="8" stroke-linecap="round">
+                      <line x1="50" y1="8" x2="50" y2="92"></line>
+                      <line x1="8" y1="50" x2="92" y2="50"></line>
+                      <line x1="20" y1="20" x2="80" y2="80"></line>
+                      <line x1="80" y1="20" x2="20" y2="80"></line>
+                    </g>
+                  </svg>
+                {%- endif -%}
+              </span>
+              <div class="khan-ihero__usp-body">
+                {%- if block.settings.title != blank -%}<p class="khan-ihero__usp-title">{{ block.settings.title }}</p>{%- endif -%}
+                {%- if block.settings.text != blank -%}<p class="khan-ihero__usp-text">{{ block.settings.text }}</p>{%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-ihero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: var(--ih-minh, 820px);
+    background: var(--ih-bg, #050505);
+    display: flex;
+    align-items: center;
+    padding: calc(var(--ih-pad-y, 96px) + 40px) clamp(20px, 5vw, 72px) var(--ih-pad-y, 96px);
+  }
+
+  .khan-ihero__bg { position: absolute; inset: 0; z-index: 0; }
+  .khan-ihero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .khan-ihero__overlay {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0.5) 72%, rgb(0 0 0 / 0.72) 100%),
+      rgb(0 0 0 / var(--ih-overlay, 0.25));
+  }
+
+  /* corners */
+  .khan-ihero__corner {
+    position: absolute; z-index: 2; top: clamp(18px, 3vw, 34px);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ih-corner, 12px); letter-spacing: 0.2em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .khan-ihero__corner--tl { left: clamp(20px, 5vw, 72px); color: var(--ih-muted, #b9b9b9); }
+  .khan-ihero__corner--tr { right: clamp(20px, 5vw, 72px); color: var(--ih-accent, #d8232a); }
+  .khan-ihero__corner--tr::before { content: "[ "; }
+  .khan-ihero__corner--tr::after { content: " ]"; }
+
+  /* layout — content pinned right */
+  .khan-ihero__inner {
+    position: relative; z-index: 1;
+    width: 100%; max-width: var(--ih-maxw, 1680px); margin-inline: auto;
+    display: flex; justify-content: flex-end;
+  }
+  .khan-ihero__content { width: var(--ih-contentw, 560px); max-width: 92%; }
+
+  .khan-ihero__eyebrow {
+    margin: 0 0 16px; display: flex; align-items: center; gap: 12px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ih-eyebrow, 13px); letter-spacing: 0.24em; text-transform: uppercase; color: var(--ih-accent, #d8232a);
+  }
+  .khan-ihero__eyebrow::before { content: ""; width: 30px; height: 2px; background: var(--ih-accent, #d8232a); }
+
+  .khan-ihero__heading {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--ih-heading, 88px), 11vw); line-height: 0.94; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--ih-text, #f3f3f3);
+    margin-bottom: clamp(28px, 3.4vw, 48px);
+  }
+  .khan-ihero__heading :where(p) { margin: 0; }
+  .khan-ihero__heading :where(strong) { color: var(--ih-accent, #d8232a); font-weight: 900; }
+
+  /* usps */
+  .khan-ihero__usps { display: flex; flex-direction: column; gap: var(--ih-gap, 22px); }
+  .khan-ihero__usp { display: flex; align-items: center; gap: clamp(14px, 1.4vw, 22px); }
+  .khan-ihero__usp-icon {
+    flex: 0 0 auto;
+    width: var(--ih-icon, 28px); height: var(--ih-icon, 28px);
+    color: var(--ih-accent, #d8232a);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .khan-ihero__usp-icon svg { width: 100%; height: 100%; display: block; }
+  .khan-ihero__usp-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-ihero__usp-body { min-width: 0; }
+  .khan-ihero__usp-title {
+    margin: 0 0 4px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 700;
+    font-size: var(--ih-title, 14px); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ih-accent, #d8232a);
+  }
+  .khan-ihero__usp-text {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ih-utext, 13px); line-height: 1.5; letter-spacing: 0.03em; color: var(--ih-text, #f3f3f3);
+  }
+
+  /* responsive */
+  @media screen and (max-width: 900px) {
+    .khan-ihero { align-items: flex-end; }
+    .khan-ihero__inner { justify-content: flex-start; }
+    .khan-ihero__content { width: 100%; max-width: 100%; }
+    .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
+  }
+  @media screen and (max-width: 600px) {
+    .khan-ihero__corner { font-size: 11px; letter-spacing: 0.14em; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ingredients hero",
+  "tag": "section",
+  "class": "khan-ihero-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 25 },
+    { "type": "range", "id": "min_height", "label": "Height", "min": 480, "max": 1000, "step": 20, "unit": "px", "default": 820 },
+
+    { "type": "header", "content": "Corner labels" },
+    { "type": "text", "id": "top_left", "label": "Top-left label", "default": "Khan collection" },
+    { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "Ingredients", "info": "Shown inside [ brackets ]." },
+
+    { "type": "header", "content": "Heading (right column)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Fuel the<br/><strong>discipline.</strong></p>" },
+
+    { "type": "header", "content": "USP list" },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 16, "max": 48, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 11, "max": 22, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "text_size", "label": "Description size", "min": 11, "max": 20, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "usp_gap", "label": "Gap between items", "min": 10, "max": 48, "step": 2, "unit": "px", "default": 22 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#050505" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#b9b9b9" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
+
+    { "type": "header", "content": "Sizes & spacing" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 40, "max": 140, "step": 2, "unit": "px", "default": 88 },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 11, "max": 20, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "content_width", "label": "Content width", "min": 360, "max": 820, "step": 10, "unit": "px", "default": 560 },
+    { "type": "range", "id": "corner_size", "label": "Corner label size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1680 },
+    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 96 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon (optional)", "info": "Leave empty to use the asterisk mark." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Benefit" },
+        { "type": "text", "id": "text", "label": "Description", "default": "Short description." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Ingredients hero",
+      "blocks": [
+        { "type": "usp", "settings": { "title": "Intense energy", "text": "Push harder. Longer." } },
+        { "type": "usp", "settings": { "title": "Laser focus", "text": "Dial in. Zone out." } },
+        { "type": "usp", "settings": { "title": "Powerful pumps", "text": "Feel the difference." } },
+        { "type": "usp", "settings": { "title": "Clean formula", "text": "No fillers. No shortcuts." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
