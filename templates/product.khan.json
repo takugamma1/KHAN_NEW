@@ -39,39 +39,68 @@
         "color_scheme": ""
       }
     },
-    "hero_6yAgPJ": {
-      "type": "hero",
-      "name": "t:names.hero",
+    "khan_ingredients_hero_JggNdr": {
+      "type": "khan-ingredients-hero",
+      "blocks": {
+        "usp_c6WLmp": {
+          "type": "usp",
+          "settings": {
+            "title": "Intense energy",
+            "text": "Push harder. Longer."
+          }
+        },
+        "usp_FGFXEz": {
+          "type": "usp",
+          "settings": {
+            "title": "Laser focus",
+            "text": "Dial in. Zone out."
+          }
+        },
+        "usp_A7XmcA": {
+          "type": "usp",
+          "settings": {
+            "title": "Powerful pumps",
+            "text": "Feel the difference."
+          }
+        },
+        "usp_4LMbHz": {
+          "type": "usp",
+          "settings": {
+            "title": "Clean formula",
+            "text": "No fillers. No shortcuts."
+          }
+        }
+      },
+      "block_order": [
+        "usp_c6WLmp",
+        "usp_FGFXEz",
+        "usp_A7XmcA",
+        "usp_4LMbHz"
+      ],
+      "name": "Ingredients hero",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/ChatGPT_Image_Jun_8_2026_09_48_25_AM.png",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": true,
-        "overlay_color": "#000000",
-        "overlay_style": "gradient",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_8_2026_09_48_25_AM.png",
+        "overlay_opacity": 0,
+        "min_height": 820,
+        "top_left": "Khan collection",
+        "top_right": "Ingredients",
+        "eyebrow": "",
+        "heading": "<p>Fuel the<br/><strong>discipline</strong></p>",
+        "icon_size": 28,
+        "title_size": 14,
+        "text_size": 13,
+        "usp_gap": 22,
+        "bg_color": "#ffffff",
+        "text_color": "#f3f3f3",
+        "muted_color": "#b9b9b9",
+        "accent_color": "#d8232a",
+        "heading_size": 68,
+        "eyebrow_size": 13,
+        "content_width": 400,
+        "corner_size": 12,
+        "max_width": 1680,
+        "padding_y": 96,
+        "color_scheme": ""
       }
     },
     "khan_ingredients_Hynnfd": {
@@ -231,7 +260,7 @@
   },
   "order": [
     "khan_preworkout_hero_KYCWMq",
-    "hero_6yAgPJ",
+    "khan_ingredients_hero_JggNdr",
     "khan_ingredients_Hynnfd",
     "khan_product_footer_KH4N01",
     "khan_sticky_cart_ebPXK4"
