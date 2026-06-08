@@ -18,6 +18,8 @@
     --ih-heading: {{ s.heading_size }}px;
     --ih-eyebrow: {{ s.eyebrow_size }}px;
     --ih-contentw: {{ s.content_width }}px;
+    --ih-valign: {{ s.content_valign }};
+    --ih-offset: {{ s.content_offset }}px;
     --ih-icon: {{ s.icon_size }}px;
     --ih-title: {{ s.title_size }}px;
     --ih-utext: {{ s.text_size }}px;
@@ -79,7 +81,7 @@
     min-height: var(--ih-minh, 820px);
     background: var(--ih-bg, #050505);
     display: flex;
-    align-items: center;
+    align-items: var(--ih-valign, center);
     padding: calc(var(--ih-pad-y, 96px) + 40px) clamp(20px, 5vw, 72px) var(--ih-pad-y, 96px);
   }
 
@@ -108,7 +110,7 @@
     width: 100%; max-width: var(--ih-maxw, 1680px); margin-inline: auto;
     display: flex; justify-content: flex-end;
   }
-  .khan-ihero__content { width: var(--ih-contentw, 560px); max-width: 92%; }
+  .khan-ihero__content { width: var(--ih-contentw, 560px); max-width: 92%; transform: translateY(var(--ih-offset, 0px)); }
 
   .khan-ihero__eyebrow {
     margin: 0 0 16px; display: flex; align-items: center; gap: 12px;
@@ -156,7 +158,6 @@
 
   /* responsive */
   @media screen and (max-width: 900px) {
-    .khan-ihero { align-items: flex-end; }
     .khan-ihero__inner { justify-content: flex-start; }
     .khan-ihero__content { width: 100%; max-width: 100%; }
     .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
@@ -181,6 +182,10 @@
     { "type": "header", "content": "Corner labels" },
     { "type": "text", "id": "top_left", "label": "Top-left label", "default": "Khan collection" },
     { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "Ingredients", "info": "Shown inside [ brackets ]." },
+
+    { "type": "header", "content": "Right content position" },
+    { "type": "select", "id": "content_valign", "label": "Vertical position", "options": [ { "value": "flex-start", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Bottom" } ], "default": "center" },
+    { "type": "range", "id": "content_offset", "label": "Nudge up / down", "min": -300, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Negative = up, positive = down." },
 
     { "type": "header", "content": "Heading (right column)" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
