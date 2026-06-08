@@ -27,7 +27,7 @@
           "settings": {
             "label": "НАЧАЛНА СТРАНИЦА",
             "sublabel": "Landing page",
-            "url": "/",
+            "url": "https://khan-12345568685.myshopify.com/",
             "show_progress": true,
             "progress": 55
           }
