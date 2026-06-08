@@ -12,19 +12,96 @@
     "hub": {
       "type": "khan-preview-hub",
       "blocks": {
-        "home": { "type": "link", "settings": { "label": "Home", "sublabel": "Landing page", "url": "/", "progress": 100 } },
-        "collection": { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all", "progress": 75 } },
-        "about": { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about", "progress": 90 } },
-        "product": { "type": "link", "settings": { "label": "Product", "sublabel": "Product page", "url": "", "progress": 40 } }
+        "link_ETfFJB": {
+          "type": "link",
+          "settings": {
+            "label": "Pre-Workout",
+            "sublabel": "Продуктова страница",
+            "url": "",
+            "show_progress": true,
+            "progress": 0
+          }
+        },
+        "link_nHKfXX": {
+          "type": "link",
+          "settings": {
+            "label": "Често задавани въпроси",
+            "sublabel": "",
+            "url": "",
+            "show_progress": true,
+            "progress": 0
+          }
+        },
+        "home": {
+          "type": "link",
+          "settings": {
+            "label": "НАЧАЛНА СТРАНИЦА",
+            "sublabel": "Landing page",
+            "url": "/",
+            "show_progress": true,
+            "progress": 100
+          }
+        },
+        "collection": {
+          "type": "link",
+          "settings": {
+            "label": "КОЛЕКЦИЯ",
+            "sublabel": "Shop grid",
+            "url": "/collections/all",
+            "show_progress": true,
+            "progress": 75
+          }
+        },
+        "about": {
+          "type": "link",
+          "settings": {
+            "label": "ЗА НАС",
+            "sublabel": "Our story",
+            "url": "/pages/about",
+            "show_progress": true,
+            "progress": 90
+          }
+        },
+        "product": {
+          "type": "link",
+          "settings": {
+            "label": "ПРОДУКТОВА СТРАНИЦА ДРЕХИ",
+            "sublabel": "Product page",
+            "url": "",
+            "show_progress": true,
+            "progress": 40
+          }
+        }
       },
-      "block_order": ["home", "collection", "about", "product"],
+      "block_order": [
+        "link_ETfFJB",
+        "link_nHKfXX",
+        "home",
+        "collection",
+        "about",
+        "product"
+      ],
       "settings": {
-        "title": "Khan — preview",
+        "title": "Khan hub",
         "subtitle": "Select a page to review",
         "footnote": "Work in progress — for review only.",
-        "columns": 2
+        "columns": 1,
+        "max_width": 1200,
+        "bg_color": "#000000",
+        "text_color": "#d8232a",
+        "muted_color": "#d8232a",
+        "accent_color": "#d8232a",
+        "button_bg": "#111111",
+        "button_text": "#ffffff",
+        "button_border": "rgba(0,0,0,0)",
+        "progress_track": "#2a2a2a",
+        "progress_fill": "#d8232a",
+        "progress_height": 4,
+        "color_scheme": ""
       }
     }
   },
-  "order": ["hub"]
+  "order": [
+    "hub"
+  ]
 }
