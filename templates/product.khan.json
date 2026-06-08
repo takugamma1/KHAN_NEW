@@ -143,12 +143,61 @@
     "khan_product_footer_KH4N01": {
       "type": "khan-product-footer",
       "blocks": {
-        "menu_nav": { "type": "menu", "settings": { "heading": "Navigate" } },
-        "menu_info": { "type": "menu", "settings": { "heading": "Info" } },
-        "menu_connect": { "type": "menu", "settings": { "heading": "Connect" } }
+        "menu_nav": {
+          "type": "menu",
+          "settings": {
+            "heading": "Navigate",
+            "menu": "main-menu"
+          }
+        },
+        "menu_info": {
+          "type": "menu",
+          "settings": {
+            "heading": "Info",
+            "menu": "main-menu"
+          }
+        },
+        "menu_connect": {
+          "type": "menu",
+          "settings": {
+            "heading": "Connect",
+            "menu": "footer"
+          }
+        }
       },
-      "block_order": ["menu_nav", "menu_info", "menu_connect"],
-      "settings": {}
+      "block_order": [
+        "menu_nav",
+        "menu_info",
+        "menu_connect"
+      ],
+      "settings": {
+        "hide_theme_footer": true,
+        "bg_video": "shopify://files/videos/hf_20260608_110718_f17f83bb-14cb-4203-9da7-948b2827ace1.mp4",
+        "overlay_opacity": 0,
+        "min_height": 900,
+        "logo": "shopify://shop_images/white-logo.svg",
+        "logo_width": 200,
+        "tagline": "Built different. Made to last.",
+        "show_newsletter": true,
+        "news_heading": "Join the Khan society",
+        "news_text": "Exclusive drops. Early access. No noise. Just Khan.",
+        "news_placeholder": "Your email",
+        "news_success": "You're in.",
+        "copyright": "© 2026 Khan Apparel. All rights reserved.",
+        "tagline2": "Born from past. Built for now.",
+        "show_deco": false,
+        "coordinates": "42.6977° N  23.3219° E",
+        "text_grain": false,
+        "bg_color": "#0a0a0a",
+        "text_color": "#f2f2f2",
+        "muted_color": "#9a9a9a",
+        "accent_color": "#d8232a",
+        "heading_size": 14,
+        "link_size": 14,
+        "padding_top": 56,
+        "padding_bottom": 48,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
