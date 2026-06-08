@@ -1,6 +1,26 @@
 {% liquid
   assign s = section.settings
+  assign H = s.shape_height
+  assign sk = s.skew
+  assign g = s.bar_gap
+  assign b1 = s.bar_width
+  assign b2 = s.bar2_width
+  assign twog = g | times: 2
+  assign used = sk | plus: twog | plus: b1 | plus: b2
+  assign P = 1000 | minus: used
+  assign Psk = P | plus: sk
+  assign x1b = P | plus: g
+  assign x2b = x1b | plus: b1
+  assign x1bt = x1b | plus: sk
+  assign x2bt = x2b | plus: sk
+  assign x1c = x2b | plus: g
+  assign x2c = x1c | plus: b2
+  assign x1ct = x1c | plus: sk
+  assign x2ct = x2c | plus: sk
+  assign ratio = 1000.00 | divided_by: H
 %}
+{%- capture ing_svg -%}<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 {{ H }}' preserveAspectRatio='none'><polygon fill='white' points='{{ sk }},0 {{ Psk }},0 {{ P }},{{ H }} 0,{{ H }}'/><polygon fill='white' points='{{ x1bt }},0 {{ x2bt }},0 {{ x2b }},{{ H }} {{ x1b }},{{ H }}'/><polygon fill='white' points='{{ x1ct }},0 {{ x2ct }},0 {{ x2c }},{{ H }} {{ x1c }},{{ H }}'/></svg>{%- endcapture -%}
+{%- assign ing_mask = ing_svg | url_encode | replace: '+', '%20' -%}
 
 <div
   id="KhanIng-{{ section.id }}"
@@ -10,11 +30,6 @@
     --ing-title: {{ s.title_color }};
     --ing-text: {{ s.text_color }};
     --ing-bar: {{ s.bar_color }};
-    --ing-skew: {{ s.skew }}px;
-    --ing-h: {{ s.media_height }}px;
-    --ing-bar-w: {{ s.bar_width }}px;
-    --ing-bar2: {{ s.bar2_width }}px;
-    --ing-bar-gap: {{ s.bar_gap }}px;
     --ing-cols: {{ s.columns }};
     --ing-col-gap: {{ s.col_gap }}px;
     --ing-row-gap: {{ s.row_gap }}px;
@@ -23,6 +38,8 @@
     --ing-maxw: {{ s.max_width }}px;
     --ing-pt: {{ s.padding_top }}px;
     --ing-pb: {{ s.padding_bottom }}px;
+    --ing-ratio: {{ ratio }};
+    --ing-mask: url(&quot;data:image/svg+xml,{{ ing_mask }}&quot;);
   "
 >
   <div class="khan-ing__inner">
@@ -38,18 +55,14 @@
         {%- if block.type == 'ingredient' -%}
           {%- assign b = block.settings -%}
           <article class="khan-ing__card" {{ block.shopify_attributes }}>
-            <div class="khan-ing__row">
-              <div class="khan-ing__panel">
-                {%- if b.video != blank -%}
-                  {{ b.video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-ing__media-el' }}
-                {%- elsif b.poster != blank -%}
-                  {{ b.poster | image_url: width: 1600 | image_tag: class: 'khan-ing__media-el', loading: 'lazy', alt: b.title }}
-                {%- else -%}
-                  <div class="khan-ing__media-el khan-ing__media-el--ph"></div>
-                {%- endif -%}
-              </div>
-              <span class="khan-ing__bar" aria-hidden="true"></span>
-              <span class="khan-ing__bar khan-ing__bar--thin" aria-hidden="true"></span>
+            <div class="khan-ing__frame">
+              {%- if b.video != blank -%}
+                {{ b.video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-ing__media-el' }}
+              {%- elsif b.poster != blank -%}
+                {{ b.poster | image_url: width: 1800 | image_tag: class: 'khan-ing__media-el', loading: 'lazy', alt: b.title }}
+              {%- else -%}
+                <div class="khan-ing__media-el khan-ing__media-el--ph"></div>
+              {%- endif -%}
             </div>
 
             <div class="khan-ing__cap">
@@ -90,29 +103,16 @@
     row-gap: var(--ing-row-gap, 52px);
   }
 
-  .khan-ing__row {
-    display: flex;
-    align-items: stretch;
-    gap: var(--ing-bar-gap, 14px);
-    height: var(--ing-h, 240px);
-  }
-  .khan-ing__panel {
+  .khan-ing__frame {
     position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
+    width: 100%;
+    aspect-ratio: var(--ing-ratio, 3.125);
     overflow: hidden;
-    background: var(--ing-bar, #0e0e0e);
-    clip-path: polygon(var(--ing-skew, 30px) 0, 100% 0, calc(100% - var(--ing-skew, 30px)) 100%, 0 100%);
+    -webkit-mask: var(--ing-mask) center / 100% 100% no-repeat;
+            mask: var(--ing-mask) center / 100% 100% no-repeat;
   }
-  .khan-ing__bar {
-    flex: 0 0 calc(var(--ing-skew, 30px) + var(--ing-bar-w, 26px));
-    background: var(--ing-bar, #0e0e0e);
-    clip-path: polygon(var(--ing-skew, 30px) 0, 100% 0, calc(100% - var(--ing-skew, 30px)) 100%, 0 100%);
-  }
-  .khan-ing__bar--thin { flex-basis: calc(var(--ing-skew, 30px) + var(--ing-bar2, 11px)); }
-
   .khan-ing__media-el { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-  .khan-ing__media-el--ph { position: absolute; inset: 0; background: linear-gradient(135deg, #1a1a1a, #060606); }
+  .khan-ing__media-el--ph { background: linear-gradient(135deg, #1a1a1a, #060606); }
 
   .khan-ing__cap { margin-top: clamp(14px, 1.4vw, 18px); padding-left: 6px; }
   .khan-ing__title {
@@ -128,12 +128,8 @@
     text-transform: uppercase; color: var(--ing-text, #6f6f6f);
   }
 
-  @media screen and (max-width: 990px) {
-    .khan-ing__row { height: clamp(170px, 30vw, 240px); }
-  }
   @media screen and (max-width: 749px) {
     .khan-ing__grid { grid-template-columns: 1fr; column-gap: 0; }
-    .khan-ing__row { height: clamp(150px, 40vw, 220px); }
   }
 {% endstylesheet %}
 
@@ -148,12 +144,13 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
     { "type": "richtext", "id": "heading", "label": "Heading" },
 
-    { "type": "header", "content": "Shapes" },
-    { "type": "range", "id": "skew", "label": "Slant", "min": 0, "max": 60, "step": 1, "unit": "px", "default": 30 },
-    { "type": "range", "id": "media_height", "label": "Media height", "min": 140, "max": 360, "step": 4, "unit": "px", "default": 240 },
-    { "type": "range", "id": "bar_width", "label": "Bar 1 thickness", "min": 2, "max": 60, "step": 1, "unit": "px", "default": 26 },
-    { "type": "range", "id": "bar2_width", "label": "Bar 2 thickness", "min": 2, "max": 60, "step": 1, "unit": "px", "default": 11 },
-    { "type": "range", "id": "bar_gap", "label": "Gap between bars", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 14 },
+    { "type": "header", "content": "Shape" },
+    { "type": "paragraph", "content": "These controls draw the built-in shape. The video fills the whole frame and shows through every piece. A pixel-exact custom SVG shape can be wired in as the mask." },
+    { "type": "range", "id": "skew", "label": "Slant", "min": 0, "max": 200, "step": 2, "default": 56 },
+    { "type": "range", "id": "shape_height", "label": "Shape height (aspect)", "min": 160, "max": 560, "step": 4, "default": 320 },
+    { "type": "range", "id": "bar_width", "label": "Bar 1 thickness", "min": 4, "max": 200, "step": 2, "default": 46 },
+    { "type": "range", "id": "bar2_width", "label": "Bar 2 thickness", "min": 4, "max": 200, "step": 2, "default": 24 },
+    { "type": "range", "id": "bar_gap", "label": "Gap between bars", "min": 0, "max": 120, "step": 2, "default": 16 },
 
     { "type": "header", "content": "Layout" },
     { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 4, "step": 1, "default": 2 },
@@ -171,7 +168,7 @@
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f3f2ef" },
     { "type": "color", "id": "title_color", "label": "Title", "default": "#bf1616" },
     { "type": "color", "id": "text_color", "label": "Description", "default": "#6f6f6f" },
-    { "type": "color", "id": "bar_color", "label": "Bars / panel fill", "default": "#0e0e0e" },
+    { "type": "color", "id": "bar_color", "label": "Placeholder fill (no media)", "default": "#0e0e0e" },
 
     { "type": "header", "content": "Appearance" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
