@@ -121,6 +121,8 @@
       "settings": {
         "menu": "main-menu",
         "logo": "shopify://shop_images/white-logo.svg",
+        "show_account": true,
+        "show_cart": true,
         "sticky": true,
         "top_offset": 20,
         "max_width": 1280,
