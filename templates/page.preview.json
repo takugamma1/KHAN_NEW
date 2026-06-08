@@ -12,10 +12,10 @@
     "hub": {
       "type": "khan-preview-hub",
       "blocks": {
-        "home": { "type": "link", "settings": { "label": "Home", "sublabel": "Landing page", "url": "/" } },
-        "collection": { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all" } },
-        "about": { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about" } },
-        "product": { "type": "link", "settings": { "label": "Product", "sublabel": "Product page", "url": "" } }
+        "home": { "type": "link", "settings": { "label": "Home", "sublabel": "Landing page", "url": "/", "progress": 100 } },
+        "collection": { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all", "progress": 75 } },
+        "about": { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about", "progress": 90 } },
+        "product": { "type": "link", "settings": { "label": "Product", "sublabel": "Product page", "url": "", "progress": 40 } }
       },
       "block_order": ["home", "collection", "about", "product"],
       "settings": {

@@ -15,6 +15,9 @@
     --hub-btn-border: {{ s.button_border }};
     --hub-cols: {{ s.columns }};
     --hub-maxw: {{ s.max_width }}px;
+    --hub-prog-track: {{ s.progress_track }};
+    --hub-prog-fill: {{ s.progress_fill }};
+    --hub-prog-h: {{ s.progress_height }}px;
   "
 >
   <div class="khan-hub__inner">
@@ -30,6 +33,12 @@
           <a class="khan-hub__btn" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>
             <span class="khan-hub__btn-label">{{ block.settings.label }}</span>
             {%- if block.settings.sublabel != blank -%}<span class="khan-hub__btn-sub">{{ block.settings.sublabel }}</span>{%- endif -%}
+            {%- if block.settings.show_progress -%}
+              <span class="khan-hub__btn-prog">
+                <span class="khan-hub__btn-prog-track"><span class="khan-hub__btn-prog-fill" style="width: {{ block.settings.progress }}%;"></span></span>
+                <span class="khan-hub__btn-prog-pct">{{ block.settings.progress }}%</span>
+              </span>
+            {%- endif -%}
             <span class="khan-hub__btn-arrow" aria-hidden="true">→</span>
           </a>
         {%- endif -%}
@@ -88,6 +97,11 @@
   .khan-hub__btn-sub { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
   .khan-hub__btn-arrow { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: var(--hub-accent, #d8232a); font-size: 20px; }
 
+  .khan-hub__btn-prog { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 12px; }
+  .khan-hub__btn-prog-track { flex: 1; height: var(--hub-prog-h, 4px); background: var(--hub-prog-track, #2a2a2a); border-radius: 999px; overflow: hidden; }
+  .khan-hub__btn-prog-fill { display: block; height: 100%; width: 0; background: var(--hub-prog-fill, var(--hub-accent, #d8232a)); border-radius: 999px; transition: width 0.5s ease; }
+  .khan-hub__btn-prog-pct { font-size: 11px; letter-spacing: 0.06em; opacity: 0.75; min-width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
+
   .khan-hub__foot {
     margin: clamp(28px, 4vw, 44px) 0 0;
     font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hub-muted, #999);
@@ -123,6 +137,11 @@
     { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
     { "type": "color", "id": "button_border", "label": "Button border", "default": "#00000000" },
 
+    { "type": "header", "content": "Progress bars" },
+    { "type": "color", "id": "progress_track", "label": "Track color", "default": "#2a2a2a" },
+    { "type": "color", "id": "progress_fill", "label": "Fill color", "default": "#d8232a" },
+    { "type": "range", "id": "progress_height", "label": "Bar thickness", "min": 2, "max": 12, "step": 1, "unit": "px", "default": 4 },
+
     { "type": "header", "content": "Appearance" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
   ],
@@ -133,7 +152,9 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Page" },
         { "type": "text", "id": "sublabel", "label": "Sub-label" },
-        { "type": "url", "id": "url", "label": "Link" }
+        { "type": "url", "id": "url", "label": "Link" },
+        { "type": "checkbox", "id": "show_progress", "label": "Show progress bar", "default": true },
+        { "type": "range", "id": "progress", "label": "Progress", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 0 }
       ]
     }
   ],
@@ -142,10 +163,10 @@
     {
       "name": "Preview hub",
       "blocks": [
-        { "type": "link", "settings": { "label": "Home", "sublabel": "Landing", "url": "/" } },
-        { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all" } },
-        { "type": "link", "settings": { "label": "Product", "sublabel": "Product page" } },
-        { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about" } }
+        { "type": "link", "settings": { "label": "Home", "sublabel": "Landing", "url": "/", "progress": 100 } },
+        { "type": "link", "settings": { "label": "Collection", "sublabel": "Shop grid", "url": "/collections/all", "progress": 75 } },
+        { "type": "link", "settings": { "label": "Product", "sublabel": "Product page", "progress": 40 } },
+        { "type": "link", "settings": { "label": "About", "sublabel": "Our story", "url": "/pages/about", "progress": 90 } }
       ]
     }
   ]
