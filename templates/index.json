@@ -192,12 +192,95 @@
         "bg_color": "#ffffff",
         "color_scheme": ""
       }
+    },
+    "khan_launch_hero_KicyPi": {
+      "type": "khan-launch-hero",
+      "blocks": {
+        "usp_F3fqmQ": {
+          "type": "usp",
+          "settings": {
+            "icon": "asterisk",
+            "label": "Six clinical doses"
+          }
+        },
+        "usp_dezqbB": {
+          "type": "usp",
+          "settings": {
+            "icon": "x",
+            "label": "No filler"
+          }
+        },
+        "usp_9Gzmx3": {
+          "type": "usp",
+          "settings": {
+            "icon": "diamond",
+            "label": "No sweeteners"
+          }
+        },
+        "usp_eYBLxi": {
+          "type": "usp",
+          "settings": {
+            "icon": "star",
+            "label": "Clean energy"
+          }
+        },
+        "usp_bhDa8Y": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "label": "Performance driven"
+          }
+        }
+      },
+      "block_order": [
+        "usp_F3fqmQ",
+        "usp_dezqbB",
+        "usp_9Gzmx3",
+        "usp_eYBLxi",
+        "usp_bhDa8Y"
+      ],
+      "name": "Launch hero",
+      "settings": {
+        "image": "shopify://shop_images/f6b42622-a572-4262-88e0-75a288c5351b.png",
+        "image_position": "left",
+        "eyebrow": "Supplements · 01",
+        "heading": "<p>Pre-<br/><strong>workout.</strong></p>",
+        "show_divider": true,
+        "description": "<p>Forged for the work<br/>that comes before the work.</p><p>Six clinical-dose ingredients.<br/>No sweeteners. No filler.</p>",
+        "btn1_text": "Reserve · 047 / 500",
+        "btn1_link": "",
+        "btn2_text": "Open the product",
+        "btn2_link": "",
+        "btn2_arrow": true,
+        "bg_color": "#f1f1ee",
+        "text_color": "#141414",
+        "accent_color": "#8e1316",
+        "muted_color": "#6b6b6b",
+        "icon_color": "#8e1316",
+        "btn_fill": "#560b1e",
+        "btn_fill_text": "#ffffff",
+        "btn_outline": "#141414",
+        "btn_outline_text": "#141414",
+        "heading_size": 130,
+        "eyebrow_size": 13,
+        "desc_size": 15,
+        "usp_label_size": 11,
+        "icon_size": 28,
+        "button_height": 50,
+        "button_text_size": 14,
+        "col_gap": 64,
+        "min_height": 760,
+        "max_width": 1640,
+        "padding_y": 80,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
     "khan_our_story_9deQRY",
-    "scroll_sequence_wkLHWe"
+    "scroll_sequence_wkLHWe",
+    "khan_launch_hero_KicyPi"
   ]
 }
