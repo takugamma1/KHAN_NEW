@@ -1,0 +1,283 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanAHero-{{ section.id }}"
+  class="khan-ahero color-{{ s.color_scheme }}"
+  style="
+    --ah-bg: {{ s.bg_color }};
+    --ah-text: {{ s.text_color }};
+    --ah-accent: {{ s.accent_color }};
+    --ah-muted: {{ s.muted_color }};
+    --ah-btn-fill: {{ s.btn_fill }};
+    --ah-btn-fill-text: {{ s.btn_fill_text }};
+    --ah-btn-outline: {{ s.btn_outline }};
+    --ah-btn-outline-text: {{ s.btn_outline_text }};
+    --ah-maxw: {{ s.max_width }}px;
+    --ah-pad-y: {{ s.padding_y }}px;
+    --ah-minh: {{ s.min_height }}px;
+    --ah-content-w: {{ s.content_width }}%;
+    --ah-img-w: {{ s.image_width }}%;
+    --ah-fade-h: {{ s.fade_height }}%;
+    --ah-heading: {{ s.heading_size }}px;
+    --ah-eyebrow: {{ s.eyebrow_size }}px;
+    --ah-desc: {{ s.desc_size }}px;
+    --ah-btn-h: {{ s.button_height }}px;
+    --ah-btn-size: {{ s.button_text_size }}px;
+    --ah-frame-h: {{ s.frame_height }}px;
+    --ah-frame-skew: {{ s.frame_skew }}px;
+  "
+>
+  {%- comment -%} z0: product / model image (sits BELOW the bottom gradient) {%- endcomment -%}
+  <div class="khan-ahero__image" aria-hidden="true">
+    {%- if s.image != blank -%}
+      {{ s.image | image_url: width: 1800 | image_tag: class: 'khan-ahero__image-el', loading: 'eager', widths: '600, 900, 1200, 1600, 1800', sizes: '50vw', alt: '' }}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} z1: white gradient at the bottom only {%- endcomment -%}
+  <div class="khan-ahero__fade" aria-hidden="true"></div>
+
+  {%- comment -%} z2: all content, always above the gradient {%- endcomment -%}
+  <div class="khan-ahero__inner">
+    <div class="khan-ahero__content">
+      {%- if s.eyebrow != blank -%}<p class="khan-ahero__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.heading != blank -%}<div class="khan-ahero__heading">{{ s.heading }}</div>{%- endif -%}
+
+      {%- if s.show_divider -%}
+        <div class="khan-ahero__rule" aria-hidden="true">
+          <span class="khan-ahero__rule-line"></span>
+          <svg class="khan-ahero__rule-star" viewBox="0 0 32 32" fill="none"><g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="16" y1="4" x2="16" y2="28"></line><line x1="4" y1="16" x2="28" y2="16"></line><line x1="8" y1="8" x2="24" y2="24"></line><line x1="24" y1="8" x2="8" y2="24"></line></g></svg>
+        </div>
+      {%- endif -%}
+
+      {%- if s.description != blank -%}<div class="khan-ahero__desc">{{ s.description }}</div>{%- endif -%}
+
+      {%- if s.btn1_text != blank or s.btn2_text != blank -%}
+        <div class="khan-ahero__btns">
+          {%- if s.btn1_text != blank -%}
+            <a class="khan-ahero__btn khan-ahero__btn--fill" href="{{ s.btn1_link | default: '#' }}">
+              <span class="khan-ahero__btn-inner">
+                <span class="khan-ahero__btn-label">{{ s.btn1_text }}</span>
+                {%- if s.btn1_plus -%}<span class="khan-ahero__btn-plus" aria-hidden="true">+</span>{%- endif -%}
+              </span>
+            </a>
+          {%- endif -%}
+          {%- if s.btn2_text != blank -%}
+            <a class="khan-ahero__btn khan-ahero__btn--outline" href="{{ s.btn2_link | default: '#' }}">
+              <span class="khan-ahero__btn-inner">
+                <span class="khan-ahero__btn-label">{{ s.btn2_text }}</span>
+                {%- case s.btn2_icon -%}
+                  {%- when 'play' -%}<svg class="khan-ahero__btn-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5l11 7-11 7z" fill="currentColor"></path></svg>
+                  {%- when 'arrow' -%}<svg class="khan-ahero__btn-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 6l7 6-7 6" stroke="currentColor" stroke-width="2"></path></svg>
+                {%- endcase -%}
+              </span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.show_frame -%}
+        <div class="khan-ahero__frame">
+          {%- if s.frame_video != blank -%}
+            {{ s.frame_video | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'khan-ahero__frame-el' }}
+          {%- elsif s.frame_poster != blank -%}
+            {{ s.frame_poster | image_url: width: 1200 | image_tag: class: 'khan-ahero__frame-el', loading: 'lazy', alt: '' }}
+          {%- else -%}
+            <div class="khan-ahero__frame-el khan-ahero__frame-el--ph"></div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if s.copyright != blank or s.tagline != blank -%}
+      <div class="khan-ahero__footer">
+        {%- if s.copyright != blank -%}<span>{{ s.copyright }}</span>{%- endif -%}
+        {%- if s.tagline != blank -%}<span class="khan-ahero__footer-sub">{{ s.tagline }}</span>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-ahero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--ah-bg, #f1f1ee);
+    color: var(--ah-text, #141414);
+    min-height: var(--ah-minh, 860px);
+    padding: var(--ah-pad-y, 72px) clamp(20px, 5vw, 72px);
+  }
+
+  /* z0 — image below the gradient */
+  .khan-ahero__image {
+    position: absolute; top: 0; right: 0; bottom: 0; z-index: 0;
+    width: var(--ah-img-w, 48%);
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .khan-ahero__image-el { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; display: block; }
+
+  /* z1 — bottom-only white gradient */
+  .khan-ahero__fade {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+    height: var(--ah-fade-h, 35%);
+    background: linear-gradient(to top, var(--ah-bg, #f1f1ee) 4%, rgb(255 255 255 / 0) 100%);
+    pointer-events: none;
+  }
+
+  /* z2 — content always on top */
+  .khan-ahero__inner {
+    position: relative; z-index: 2;
+    max-width: var(--ah-maxw, 1660px); margin-inline: auto;
+    min-height: calc(var(--ah-minh, 860px) - (var(--ah-pad-y, 72px) * 2));
+    display: flex; flex-direction: column;
+  }
+  .khan-ahero__content { max-width: var(--ah-content-w, 52%); }
+
+  .khan-ahero__eyebrow {
+    margin: 0 0 22px; display: flex; align-items: center; gap: 14px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ah-eyebrow, 13px); letter-spacing: 0.22em; text-transform: uppercase; color: var(--ah-muted, #6b6b6b);
+  }
+  .khan-ahero__eyebrow::before {
+    content: ""; width: 30px; height: 9px; background: var(--ah-accent, #8e1316);
+    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  }
+
+  .khan-ahero__heading {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--ah-heading, 128px), 13vw); line-height: 0.9; letter-spacing: -0.015em;
+    text-transform: uppercase; color: var(--ah-text, #141414);
+  }
+  .khan-ahero__heading :where(p) { margin: 0; }
+  .khan-ahero__heading :where(strong) { color: var(--ah-accent, #8e1316); font-weight: 900; }
+
+  .khan-ahero__rule { display: flex; align-items: center; gap: 16px; margin: clamp(22px, 3vw, 38px) 0; max-width: 520px; }
+  .khan-ahero__rule-line { flex: 1 1 auto; height: 1px; background: rgb(0 0 0 / 0.2); }
+  .khan-ahero__rule-star { flex: 0 0 auto; width: 18px; height: 18px; color: var(--ah-accent, #8e1316); }
+
+  .khan-ahero__desc {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: var(--ah-desc, 15px); line-height: 1.6; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ah-muted, #6b6b6b);
+  }
+  .khan-ahero__desc :where(p) { margin: 0 0 10px; }
+  .khan-ahero__desc :where(p):last-child { margin-bottom: 0; }
+  .khan-ahero__desc :where(strong) { color: var(--ah-text, #141414); }
+
+  /* buttons */
+  .khan-ahero__btns { display: flex; flex-wrap: wrap; gap: 16px; margin-top: clamp(26px, 3vw, 40px); }
+  .khan-ahero__btn { display: inline-block; text-decoration: none; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: transform 0.15s ease, filter 0.15s ease; }
+  .khan-ahero__btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  .khan-ahero__btn-inner { display: flex; align-items: center; justify-content: center; gap: 14px; height: var(--ah-btn-h, 50px); padding: 0 28px; }
+  .khan-ahero__btn-label { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: var(--ah-btn-size, 14px); letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+  .khan-ahero__btn-plus { font-size: calc(var(--ah-btn-size, 14px) + 6px); line-height: 1; }
+  .khan-ahero__btn-ic { width: calc(var(--ah-btn-size, 14px) + 4px); height: calc(var(--ah-btn-size, 14px) + 4px); flex: 0 0 auto; }
+  .khan-ahero__btn--fill { background: var(--ah-btn-fill, #b3122a); }
+  .khan-ahero__btn--fill .khan-ahero__btn-inner { color: var(--ah-btn-fill-text, #fff); }
+  .khan-ahero__btn--outline { background: var(--ah-btn-outline, #141414); padding: 1.5px; }
+  .khan-ahero__btn--outline .khan-ahero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--ah-bg, #f1f1ee); color: var(--ah-btn-outline-text, #141414); }
+
+  /* frame video */
+  .khan-ahero__frame {
+    margin-top: clamp(28px, 3.4vw, 46px);
+    width: 100%; max-width: 600px; height: var(--ah-frame-h, 150px);
+    overflow: hidden;
+    clip-path: polygon(var(--ah-frame-skew, 24px) 0, 100% 0, calc(100% - var(--ah-frame-skew, 24px)) 100%, 0 100%);
+  }
+  .khan-ahero__frame-el { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .khan-ahero__frame-el--ph { background: linear-gradient(135deg, #1a1a1a, #060606); }
+
+  /* footer / copyright */
+  .khan-ahero__footer {
+    margin-top: auto; padding-top: clamp(28px, 4vw, 48px);
+    display: flex; align-items: center; gap: 24px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ah-muted, #6b6b6b);
+  }
+  .khan-ahero__footer-sub { padding-left: 24px; border-left: 1px solid rgb(0 0 0 / 0.2); }
+
+  /* responsive */
+  @media screen and (max-width: 900px) {
+    .khan-ahero { min-height: 0; }
+    .khan-ahero__inner { min-height: 0; }
+    .khan-ahero__content { max-width: 100%; }
+    .khan-ahero__image { position: static; width: 100%; height: clamp(360px, 78vw, 560px); margin-top: 32px; order: 5; }
+    .khan-ahero__fade { height: clamp(120px, 22vh, 220px); }
+    .khan-ahero__heading { font-size: min(var(--ah-heading, 128px), 17vw); }
+    .khan-ahero__inner { display: flex; flex-direction: column; }
+  }
+  @media screen and (max-width: 600px) {
+    .khan-ahero__footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .khan-ahero__footer-sub { padding-left: 0; border-left: 0; }
+    .khan-ahero__btn-inner { padding: 0 22px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Apparel hero",
+  "tag": "section",
+  "class": "khan-ahero-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Product image (right)" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "range", "id": "image_width", "label": "Image width", "min": 30, "max": 60, "step": 1, "unit": "%", "default": 48 },
+    { "type": "range", "id": "fade_height", "label": "Bottom white gradient height", "min": 0, "max": 70, "step": 5, "unit": "%", "default": 35 },
+
+    { "type": "header", "content": "Eyebrow & heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Apparel · 02" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Heritage.<br/><strong>F/W 26.</strong></p>" },
+    { "type": "checkbox", "id": "show_divider", "label": "Show divider + asterisk", "default": true },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Fourteen pieces. Cut and sewn in Sofia.</p><p>Numbered hangtags.</p><p>The drop closes when the lot does.</p>" },
+
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "btn1_text", "label": "Primary button text", "default": "Enter the archive" },
+    { "type": "url", "id": "btn1_link", "label": "Primary button link" },
+    { "type": "checkbox", "id": "btn1_plus", "label": "Show + on primary", "default": true },
+    { "type": "text", "id": "btn2_text", "label": "Outlined button text", "default": "Watch the film" },
+    { "type": "url", "id": "btn2_link", "label": "Outlined button link" },
+    { "type": "select", "id": "btn2_icon", "label": "Outlined button icon", "options": [ { "value": "none", "label": "None" }, { "value": "play", "label": "Play" }, { "value": "arrow", "label": "Arrow" } ], "default": "play" },
+
+    { "type": "header", "content": "Frame video (bottom-left)" },
+    { "type": "checkbox", "id": "show_frame", "label": "Show frame video", "default": true },
+    { "type": "video", "id": "frame_video", "label": "Video (looped)" },
+    { "type": "image_picker", "id": "frame_poster", "label": "Image fallback" },
+    { "type": "range", "id": "frame_height", "label": "Frame height", "min": 80, "max": 260, "step": 2, "unit": "px", "default": 150 },
+    { "type": "range", "id": "frame_skew", "label": "Frame slant", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 24 },
+
+    { "type": "header", "content": "Footer line" },
+    { "type": "text", "id": "copyright", "label": "Copyright", "default": "© 2026 Khan Apparel. All rights reserved." },
+    { "type": "text", "id": "tagline", "label": "Sub line", "default": "Born from past. Built for now." },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f1f1ee" },
+    { "type": "color", "id": "text_color", "label": "Text / heading", "default": "#141414" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#8e1316" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" },
+    { "type": "color", "id": "btn_fill", "label": "Primary button fill", "default": "#b3122a" },
+    { "type": "color", "id": "btn_fill_text", "label": "Primary button text", "default": "#ffffff" },
+    { "type": "color", "id": "btn_outline", "label": "Outlined button border", "default": "#141414" },
+    { "type": "color", "id": "btn_outline_text", "label": "Outlined button text", "default": "#141414" },
+
+    { "type": "header", "content": "Sizes & spacing" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 128 },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 11, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "desc_size", "label": "Description size", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "button_height", "label": "Button height", "min": 40, "max": 64, "step": 2, "unit": "px", "default": 50 },
+    { "type": "range", "id": "button_text_size", "label": "Button text size", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "content_width", "label": "Content width", "min": 40, "max": 70, "step": 1, "unit": "%", "default": 52 },
+    { "type": "range", "id": "min_height", "label": "Min height", "min": 520, "max": 1100, "step": 20, "unit": "px", "default": 860 },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1660 },
+    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 72 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "Apparel hero" }
+  ]
+}
+{% endschema %}
