@@ -19,6 +19,9 @@
     --ft-pt: {{ s.padding_top }}px;
     --ft-pb: {{ s.padding_bottom }}px;
     --ft-grain: url('{{ 'khan-grain.png' | asset_url }}');
+    --ft-texture: {{ s.texture_opacity | default: 10 | divided_by: 100.0 }};
+    --ft-strip-h: {{ s.top_height | default: 140 }}px;
+    --ft-blend: {{ s.blend_color | default: '#f1f1ee' }};
   "
   data-khan-footer
 >
@@ -27,8 +30,17 @@
     {%- if s.bg_image != blank -%}
       {{ s.bg_image | image_url: width: 3000 | image_tag: class: 'khan-footer__bg-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600, 3000', sizes: '100vw', alt: '' }}
     {%- endif -%}
+    {%- if s.texture -%}<span class="khan-footer__texture"></span>{%- endif -%}
     <span class="khan-footer__overlay"></span>
+    {%- if s.blend_top -%}<span class="khan-footer__blend"></span>{%- endif -%}
   </div>
+
+  {%- comment -%} Rocks strip at the very top (flippable transition into the section above) {%- endcomment -%}
+  {%- if s.top_image != blank -%}
+    <div class="khan-footer__strip{% if s.flip_top %} khan-footer__strip--flip{% endif %}" aria-hidden="true">
+      {{ s.top_image | image_url: width: 2600 | image_tag: class: 'khan-footer__strip-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600', sizes: '100vw', alt: '' }}
+    </div>
+  {%- endif -%}
 
   {%- if s.show_deco -%}
     <span class="khan-footer__cross khan-footer__cross--1" aria-hidden="true"></span>
@@ -115,6 +127,31 @@
       rgb(0 0 0 / var(--ft-overlay, 0.55));
   }
 
+  /* stone texture over the background */
+  .khan-footer__texture {
+    position: absolute; inset: 0;
+    background-image: var(--ft-grain);
+    background-repeat: repeat;
+    background-size: 280px 280px;
+    opacity: var(--ft-texture, 0.1);
+    mix-blend-mode: screen;
+  }
+
+  /* gradient blend into the section above */
+  .khan-footer__blend {
+    position: absolute; left: 0; right: 0; top: 0; height: 180px;
+    background: linear-gradient(to bottom, var(--ft-blend, #f1f1ee) 0%, rgb(0 0 0 / 0) 100%);
+  }
+
+  /* rocks strip at the very top */
+  .khan-footer__strip {
+    position: absolute; left: 0; right: 0; top: 0; z-index: 1;
+    height: var(--ft-strip-h, 140px);
+    pointer-events: none;
+  }
+  .khan-footer__strip-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .khan-footer__strip--flip .khan-footer__strip-img { transform: scaleY(-1); }
+
   .khan-footer__inner { position: relative; z-index: 2; max-width: 1920px; margin-inline: auto; min-height: inherit; display: flex; flex-direction: column; }
 
   .khan-footer__layout {
@@ -147,11 +184,12 @@
   }
   .khan-footer__col-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
   .khan-footer__link {
+    display: inline-block;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--ft-link-size, 14px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ft-text, #f2f2f2);
-    text-decoration: none; transition: color 0.18s ease;
+    text-decoration: none; transition: color 0.18s ease, transform 0.18s ease;
   }
-  .khan-footer__link:hover { color: var(--ft-accent, #d8232a); }
+  .khan-footer__link:hover { color: var(--ft-accent, #d8232a); transform: translateX(6px); }
 
   /* ---- newsletter ---- */
   .khan-footer__right { max-width: 360px; flex: 0 0 auto; }
@@ -208,27 +246,36 @@
   "disabled_on": { "groups": ["header"] },
   "settings": [
     { "type": "header", "content": "Visibility" },
-    { "type": "checkbox", "id": "hide_on_home", "label": "Hide on the home page", "default": true },
+    { "type": "checkbox", "id": "hide_on_home", "label": "Hide on the home page", "default": false },
     { "type": "header", "content": "Background image (full-bleed)" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image" },
     { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "checkbox", "id": "texture", "label": "Stone texture overlay", "default": true },
+    { "type": "range", "id": "texture_opacity", "label": "Texture strength", "min": 0, "max": 40, "step": 2, "unit": "%", "default": 10 },
+
+    { "type": "header", "content": "Rocks strip (top edge)" },
+    { "type": "image_picker", "id": "top_image", "label": "Rocks image" },
+    { "type": "checkbox", "id": "flip_top", "label": "Flip upside down", "default": true },
+    { "type": "range", "id": "top_height", "label": "Strip height", "min": 60, "max": 300, "step": 4, "unit": "px", "default": 140 },
+    { "type": "checkbox", "id": "blend_top", "label": "Blend into section above (gradient)", "default": false },
+    { "type": "color", "id": "blend_color", "label": "Blend color (page background)", "default": "#f1f1ee" },
     { "type": "range", "id": "min_height", "label": "Footer height", "min": 360, "max": 900, "step": 20, "unit": "px", "default": 560 },
 
     { "type": "header", "content": "Logo & tagline (left)" },
     { "type": "image_picker", "id": "logo", "label": "Logo (upload)" },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 400, "step": 4, "unit": "px", "default": 200 },
-    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last." },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Изграден различно. Създаден да трае." },
 
     { "type": "header", "content": "Newsletter (right)" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter", "default": true },
-    { "type": "text", "id": "news_heading", "label": "Heading", "default": "Join the Khan society" },
-    { "type": "text", "id": "news_text", "label": "Text", "default": "Exclusive drops. Early access. No noise. Just Khan." },
-    { "type": "text", "id": "news_placeholder", "label": "Input placeholder", "default": "Your email" },
-    { "type": "text", "id": "news_success", "label": "Success message", "default": "You're in." },
+    { "type": "text", "id": "news_heading", "label": "Heading", "default": "Влез в обществото на KHAN" },
+    { "type": "text", "id": "news_text", "label": "Text", "default": "Ексклузивни дропове. Ранен достъп. Без шум. Само KHAN." },
+    { "type": "text", "id": "news_placeholder", "label": "Input placeholder", "default": "Твоят имейл" },
+    { "type": "text", "id": "news_success", "label": "Success message", "default": "Вътре си." },
 
     { "type": "header", "content": "Legal (bottom-left)" },
-    { "type": "text", "id": "copyright", "label": "Copyright", "default": "© 2026 Khan Apparel. All rights reserved." },
-    { "type": "text", "id": "tagline2", "label": "Sub line", "default": "Born from past. Built for now." },
+    { "type": "text", "id": "copyright", "label": "Copyright", "default": "© 2026 Khan Apparel. Всички права запазени." },
+    { "type": "text", "id": "tagline2", "label": "Sub line", "default": "Родено от миналото. Създадено за сега." },
 
     { "type": "header", "content": "Decoration" },
     { "type": "checkbox", "id": "show_deco", "label": "Show crosshairs & coordinates", "default": true },
@@ -236,7 +283,7 @@
 
     { "type": "header", "content": "Style" },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
-    { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#0a0a0a" },
+    { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#1b1b1b" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#f2f2f2" },
     { "type": "color", "id": "muted_color", "label": "Muted text color", "default": "#9a9a9a" },
     { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#d8232a" },
@@ -264,9 +311,9 @@
       "name": "Photo footer",
       "category": "t:categories.storytelling",
       "blocks": [
-        { "type": "menu", "settings": { "heading": "Navigate" } },
-        { "type": "menu", "settings": { "heading": "Info" } },
-        { "type": "menu", "settings": { "heading": "Connect" } }
+        { "type": "menu", "settings": { "heading": "Магазин" } },
+        { "type": "menu", "settings": { "heading": "Информация" } },
+        { "type": "menu", "settings": { "heading": "Профил" } }
       ]
     }
   ]

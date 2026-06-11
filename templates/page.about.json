@@ -112,7 +112,7 @@
         "band_heading_size": 32,
         "band_min_height": 420,
         "text_grain": true,
-        "bg_color": "#f4f1ea",
+        "bg_color": "#ffffff",
         "heading_color": "#111111",
         "accent_color": "#bf1616",
         "text_color": "#1a1a1a",

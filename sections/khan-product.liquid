@@ -49,7 +49,7 @@
           <span class="khan-product__ring" aria-hidden="true"></span>
           <div class="khan-product__main">
             {%- if p.featured_media != blank -%}
-              <img data-main-image src="{{ p.featured_media | image_url: width: 1600 }}" alt="{{ p.featured_media.alt | default: p.title }}" loading="eager">
+              <img data-main-image src="{{ p.featured_media | image_url: width: 1600 }}" alt="{{ p.featured_media.alt | default: p.title }}" width="{{ p.featured_media.width }}" height="{{ p.featured_media.height }}" loading="eager">
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'khan-product__ph' }}
             {%- endif -%}

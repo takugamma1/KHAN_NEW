@@ -4,7 +4,7 @@
 
 <div
   id="KhanNav-{{ section.id }}"
-  class="khan-nav-outer{% if s.sticky %} khan-nav-outer--sticky{% endif %}"
+  class="khan-nav-outer{% if s.sticky %} khan-nav-outer--sticky{% endif %}{% if s.full_width %} khan-nav-outer--full{% endif %}"
   data-khan-nav
   style="
     --nav-glass: {{ s.glass_tint }};
@@ -15,6 +15,7 @@
     --nav-blur: {{ s.blur }}px;
     --nav-h: {{ s.pill_height }}px;
     --nav-logo: {{ s.logo_size }}px;
+    --nav-logo-w: {{ s.logo_width | default: 120 }}px;
     --nav-maxw: {{ s.max_width }}px;
     --nav-top: {{ s.top_offset }}px;
     --nav-text-size: {{ s.text_size }}px;
@@ -25,10 +26,10 @@
   <div class="khan-nav-inner">
     <nav class="khan-nav__bar" aria-label="{{ s.menu.title | default: 'Primary' | escape }}">
 
-      {%- comment -%} Logo bubble (left) {%- endcomment -%}
-      <a class="khan-nav__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- comment -%} Logo (left) — plain or bubble {%- endcomment -%}
+      <a class="khan-nav__logo{% if s.logo_style == 'plain' %} khan-nav__logo--plain{% endif %}" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
         {%- if s.logo != blank -%}
-          <img class="khan-nav__logo-img" src="{{ s.logo | image_url: width: 200 }}" alt="{{ shop.name | escape }}" width="{{ s.logo.width }}" height="{{ s.logo.height }}">
+          <img class="khan-nav__logo-img" src="{{ s.logo | image_url: width: 480 }}" alt="{{ shop.name | escape }}" width="{{ s.logo.width }}" height="{{ s.logo.height }}">
         {%- else -%}
           <svg class="khan-nav__star" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <g stroke="currentColor" stroke-width="7" stroke-linecap="round">
@@ -135,6 +136,10 @@
 
   .khan-nav-inner { max-width: var(--nav-maxw, 1280px); margin-inline: auto; }
 
+  /* full-width: stretch the pill almost edge to edge */
+  .khan-nav-outer--full { padding-inline: clamp(10px, 1.6vw, 28px); }
+  .khan-nav-outer--full .khan-nav-inner { max-width: none; }
+
   /* ---- the glass pill ---- */
   .khan-nav__bar {
     pointer-events: auto;
@@ -178,6 +183,16 @@
   .khan-nav__logo:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__star { width: var(--nav-logo, 26px); height: var(--nav-logo, 26px); display: block; }
   .khan-nav__logo-img { width: var(--nav-logo, 26px); height: auto; display: block; object-fit: contain; }
+
+  /* plain logo: no circle, bigger mark */
+  .khan-nav__logo--plain {
+    width: auto; height: auto;
+    background: transparent; border: 0; box-shadow: none; border-radius: 0;
+    padding: 0 6px;
+  }
+  .khan-nav__logo--plain:hover { background: transparent; opacity: 0.85; }
+  .khan-nav__logo--plain .khan-nav__logo-img { width: var(--nav-logo-w, 120px); max-height: calc(var(--nav-h, 64px) - 20px); object-fit: contain; }
+  .khan-nav__logo--plain .khan-nav__star { width: calc(var(--nav-logo, 26px) + 8px); height: calc(var(--nav-logo, 26px) + 8px); }
 
   /* ---- right actions + cart ---- */
   .khan-nav__actions { justify-self: end; grid-column: 3; display: inline-flex; align-items: center; gap: 10px; }
@@ -279,6 +294,8 @@
     .khan-nav__actions { gap: 8px; }
     .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
     .khan-nav__burger-ic { width: 18px; height: 18px; }
+    .khan-nav__logo--plain { width: auto; height: auto; }
+    .khan-nav__logo--plain .khan-nav__logo-img { width: min(calc(var(--nav-logo-w, 120px) * 0.75), 96px); max-height: 36px; }
   }
   @media screen and (min-width: 990px) {
     .khan-nav__panel { display: none; }
@@ -375,13 +392,16 @@
     { "type": "header", "content": "Menu" },
     { "type": "link_list", "id": "menu", "label": "Menu", "info": "Edit items in Content → Menus." },
     { "type": "image_picker", "id": "logo", "label": "Logo (optional)", "info": "Leave empty to use the asterisk mark." },
+    { "type": "select", "id": "logo_style", "label": "Logo style", "options": [ { "value": "plain", "label": "Plain (no circle)" }, { "value": "bubble", "label": "Bubble (circle)" } ], "default": "plain" },
+    { "type": "range", "id": "logo_width", "label": "Plain logo width", "min": 60, "max": 240, "step": 4, "unit": "px", "default": 120 },
     { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": true },
     { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
 
     { "type": "header", "content": "Position" },
     { "type": "checkbox", "id": "sticky", "label": "Stick to top on scroll", "default": true },
+    { "type": "checkbox", "id": "full_width", "label": "Full width (edge to edge)", "default": true },
     { "type": "range", "id": "top_offset", "label": "Offset from top", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 16 },
-    { "type": "range", "id": "max_width", "label": "Max width", "min": 800, "max": 1600, "step": 20, "unit": "px", "default": 1280 },
+    { "type": "range", "id": "max_width", "label": "Max width (when not full width)", "min": 800, "max": 1600, "step": 20, "unit": "px", "default": 1280 },
 
     { "type": "header", "content": "Size & spacing" },
     { "type": "range", "id": "pill_height", "label": "Bar height", "min": 48, "max": 88, "step": 2, "unit": "px", "default": 64 },

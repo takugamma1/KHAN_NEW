@@ -19,6 +19,7 @@
     --ph-sub: {{ s.sub_size }}px;
     --ph-desc: {{ s.desc_size }}px;
     --ph-corner: {{ s.corner_size }}px;
+    --ph-corner-top: {{ s.corner_top | default: 96 }}px;
     --ph-rightw: {{ s.right_width }}px;
   "
 >
@@ -95,7 +96,7 @@
 
   /* corners */
   .khan-phero__corner {
-    position: absolute; z-index: 2; top: clamp(18px, 3vw, 34px);
+    position: absolute; z-index: 2; top: var(--ph-corner-top, 96px);
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--ph-corner, 12px); letter-spacing: 0.2em; text-transform: uppercase; color: var(--ph-text, #f3f3f3);
     white-space: nowrap;
@@ -179,6 +180,7 @@
     { "type": "header", "content": "Corner labels" },
     { "type": "text", "id": "top_left", "label": "Top-left label", "default": "Khan collection" },
     { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "Pre-workout", "info": "Shown inside [ brackets ]." },
+    { "type": "range", "id": "corner_top", "label": "Corner labels: distance from top", "min": 16, "max": 200, "step": 4, "unit": "px", "default": 96 },
 
     { "type": "header", "content": "Left — name & subtext" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Pre-workout" },

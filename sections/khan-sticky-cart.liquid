@@ -8,7 +8,7 @@
   if tp != blank
     assign v = tp.selected_or_first_available_variant
   endif
-  assign scart_title = s.title | default: tp.title | default: 'Product'
+  assign scart_title = s.title | default: tp.title | default: 'Продукт'
   assign scart_disabled = false
   if v == blank or v.available == false
     assign scart_disabled = true
@@ -18,10 +18,29 @@
   else
     assign scart_btn_label = s.button_label
   endif
+
+  comment
+    Size pills: find the option named "Размер"/"Size"; if the product has a
+    single option with multiple variants, use that one.
+  endcomment
+  assign size_oidx = -1
+  if tp != blank and s.show_sizes
+    for opt in tp.options_with_values
+      assign oname = opt.name | downcase | strip
+      if oname == 'размер' or oname == 'size'
+        assign size_opt = opt
+        assign size_oidx = forloop.index0
+      endif
+    endfor
+    if size_oidx == -1 and tp.options_with_values.size == 1 and tp.variants.size > 1
+      assign size_opt = tp.options_with_values[0]
+      assign size_oidx = 0
+    endif
+  endif
 %}
 {%- capture scart_price -%}
   {%- if v != blank -%}
-    <span class="khan-scart__price-amt">{{ v.price | money }}</span>
+    <span class="khan-scart__price-amt" data-khan-scart-amt>{{ v.price | money }}</span>
     {%- if s.show_currency -%}<span class="khan-scart__price-cur">{{ cart.currency.iso_code }}</span>{%- endif -%}
   {%- else -%}
     <span class="khan-scart__price-amt">—</span>
@@ -31,6 +50,35 @@
   {%- if s.servings != blank -%}<span>{{ s.servings }}</span>{%- endif -%}
   {%- if s.servings != blank and s.weight != blank -%}<span class="khan-scart__dot" aria-hidden="true">+</span>{%- endif -%}
   {%- if s.weight != blank -%}<span>{{ s.weight }}</span>{%- endif -%}
+{%- endcapture -%}
+{%- capture scart_sizes -%}
+  {%- if size_oidx > -1 -%}
+    <div class="khan-scart__sizes" role="group" aria-label="{{ size_opt.name | escape }}">
+      {%- for val in size_opt.values -%}
+        {%- assign matchv = blank -%}
+        {%- for pvar in tp.variants -%}
+          {%- if pvar.options[size_oidx] == val -%}
+            {%- if matchv == blank -%}
+              {%- assign matchv = pvar -%}
+            {%- elsif pvar.available and matchv.available == false -%}
+              {%- assign matchv = pvar -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if matchv != blank -%}
+          <button
+            type="button"
+            class="khan-scart__size"
+            data-khan-scart-size
+            data-vid="{{ matchv.id }}"
+            data-price="{{ matchv.price | money }}"
+            aria-pressed="{% if v != blank and matchv.id == v.id %}true{% else %}false{% endif %}"
+            {% if matchv.available == false %}disabled{% endif %}
+          >{{ val }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 {%- endcapture -%}
 
 <div
@@ -74,6 +122,10 @@
         <p class="khan-scart__title">{{ scart_title }}</p>
         {%- if scart_sub != blank -%}<p class="khan-scart__sub">{{ scart_sub }}</p>{%- endif -%}
       </div>
+      {%- if scart_sizes != blank -%}
+        <span class="khan-scart__div" aria-hidden="true"></span>
+        {{ scart_sizes }}
+      {%- endif -%}
       <span class="khan-scart__div" aria-hidden="true"></span>
       <div class="khan-scart__price">{{ scart_price }}</div>
       <span class="khan-scart__div" aria-hidden="true"></span>
@@ -89,7 +141,7 @@
 
     {%- comment -%} ===== Mobile bottom-sheet ===== {%- endcomment -%}
     <div class="khan-scart__sheet" data-khan-scart-sheet aria-expanded="false">
-      <button class="khan-scart__grip" type="button" data-khan-scart-toggle aria-label="Expand"></button>
+      <button class="khan-scart__grip" type="button" data-khan-scart-toggle aria-label="{{ scart_title | escape }}"></button>
 
       <div class="khan-scart__peek" data-khan-scart-toggle>
         <div class="khan-scart__peek-info">
@@ -106,6 +158,7 @@
             <img src="{{ s.image | image_url: width: 480 }}" alt="{{ scart_title | escape }}" width="{{ s.image.width }}" height="{{ s.image.height }}" loading="lazy">
           </div>
         {%- endif -%}
+        {%- if scart_sizes != blank -%}{{ scart_sizes }}{%- endif -%}
         <div class="khan-scart__price khan-scart__price--big">{{ scart_price }}</div>
         <form class="khan-scart__form khan-scart__form--m" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
           {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
@@ -140,16 +193,16 @@
     pointer-events: auto;
     display: flex;
     align-items: center;
-    gap: clamp(14px, 2vw, 28px);
+    gap: clamp(12px, 1.6vw, 22px);
     min-height: var(--scart-h, 72px);
     padding: 10px clamp(12px, 1.6vw, 18px) 10px 10px;
     border-radius: var(--scart-radius, 40px);
-    color: var(--scart-text, #f3f3f3);
-    background: var(--scart-glass, rgb(13 13 13 / 0.8));
-    border: 1px solid var(--scart-border, rgb(255 255 255 / 0.12));
-    -webkit-backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
-            backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
-    box-shadow: 0 20px 60px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--scart-text, #141414);
+    background: var(--scart-glass, rgb(255 255 255 / 0.92));
+    border: 1px solid var(--scart-border, rgb(0 0 0 / 0.1));
+    -webkit-backdrop-filter: blur(var(--scart-blur, 14px));
+            backdrop-filter: blur(var(--scart-blur, 14px));
+    box-shadow: 0 14px 40px rgb(0 0 0 / 0.16);
   }
 
   .khan-scart__media {
@@ -165,22 +218,45 @@
     margin: 0;
     font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: var(--scart-title, 20px); letter-spacing: 0.04em; line-height: 1.05;
-    text-transform: uppercase; color: var(--scart-text, #f3f3f3);
+    text-transform: uppercase; color: var(--scart-text, #141414);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .khan-scart__sub {
     margin: 6px 0 0; display: flex; align-items: center; gap: 8px;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: var(--scart-sub, 13px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--scart-muted, #9a9a9a);
+    font-size: var(--scart-sub, 13px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--scart-muted, #6f6f6f);
   }
   .khan-scart__dot { color: var(--scart-accent, #d8232a); }
 
-  .khan-scart__div { flex: 0 0 1px; align-self: stretch; margin-block: 14px; background: var(--scart-border, rgb(255 255 255 / 0.16)); }
+  /* sizes */
+  .khan-scart__sizes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .khan-scart__size {
+    min-width: 34px; height: 34px; padding: 0 9px;
+    border-radius: 10px;
+    border: 1px solid var(--scart-border, rgb(0 0 0 / 0.16));
+    background: transparent;
+    color: var(--scart-text, #141414);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .khan-scart__size:hover:not([disabled]) { border-color: var(--scart-text, #141414); }
+  .khan-scart__size[aria-pressed="true"] {
+    background: var(--scart-text, #141414);
+    color: var(--scart-glass, #fff);
+    border-color: var(--scart-text, #141414);
+  }
+  .khan-scart__size[disabled] { opacity: 0.35; text-decoration: line-through; cursor: not-allowed; }
 
+  /* divider */
+  .khan-scart__div { flex: 0 0 1px; align-self: stretch; margin-block: 14px; background: var(--scart-border, rgb(0 0 0 / 0.12)); }
+
+  /* price */
   .khan-scart__price { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
   .khan-scart__price-amt {
     font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
-    font-size: var(--scart-price, 22px); letter-spacing: 0.02em; color: var(--scart-text, #f3f3f3);
+    font-size: var(--scart-price, 22px); letter-spacing: 0.02em; color: var(--scart-text, #141414);
   }
   .khan-scart__price-cur {
     margin-top: 4px;
@@ -188,6 +264,7 @@
     font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scart-accent, #d8232a);
   }
 
+  /* button */
   .khan-scart__form { flex: 0 0 auto; margin: 0; }
   .khan-scart__btn {
     position: relative;
@@ -195,12 +272,12 @@
     min-width: clamp(148px, 12vw, 200px);
     height: calc(var(--scart-h, 72px) - 24px);
     padding: 0 22px;
-    border: 1px solid rgb(255 255 255 / 0.14);
+    border: 0;
     border-radius: 999px;
     cursor: pointer;
     color: var(--scart-btn-text, #fff);
-    background: linear-gradient(180deg, var(--scart-btn1, #9b1c1f), var(--scart-btn2, #4a1012));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 -2px 8px rgb(0 0 0 / 0.45), 0 8px 24px rgb(120 12 16 / 0.4);
+    background: linear-gradient(180deg, var(--scart-btn1, #b3122a), var(--scart-btn2, #b3122a));
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
     transition: transform 0.15s ease, filter 0.15s ease;
   }
   .khan-scart__btn:hover:not([disabled]) { transform: translateY(-1px); filter: brightness(1.08); }
@@ -239,24 +316,25 @@
       pointer-events: auto;
       display: flex; flex-direction: column;
       width: 100%;
-      color: var(--scart-text, #f3f3f3);
-      background: var(--scart-glass, rgb(13 13 13 / 0.86));
-      border-top: 1px solid var(--scart-border, rgb(255 255 255 / 0.14));
+      color: var(--scart-text, #141414);
+      background: var(--scart-glass, rgb(255 255 255 / 0.94));
+      border-top: 1px solid var(--scart-border, rgb(0 0 0 / 0.1));
       border-radius: 24px 24px 0 0;
-      -webkit-backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
-              backdrop-filter: blur(var(--scart-blur, 18px)) saturate(1.3);
-      box-shadow: 0 -16px 50px rgb(0 0 0 / 0.55);
+      -webkit-backdrop-filter: blur(var(--scart-blur, 14px));
+              backdrop-filter: blur(var(--scart-blur, 14px));
+      box-shadow: 0 -12px 40px rgb(0 0 0 / 0.25);
       max-height: 118px;
       overflow: hidden;
       transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1);
       touch-action: pan-y;
     }
-    .khan-scart.is-expanded .khan-scart__sheet { max-height: var(--scart-sheet-h, 56vh); }
+    .khan-scart.is-expanded .khan-scart__sheet { max-height: var(--scart-sheet-h, 60vh); }
 
     .khan-scart__grip {
       flex: 0 0 auto;
       width: 42px; height: 5px; padding: 0; border: 0;
-      border-radius: 999px; background: rgb(255 255 255 / 0.3);
+      border-radius: 999px; background: var(--scart-muted, #9a9a9a);
+      opacity: 0.5;
       margin: 10px auto 2px; cursor: pointer;
     }
 
@@ -279,6 +357,8 @@
       padding: 8px 22px calc(24px + env(safe-area-inset-bottom, 0px));
     }
     .khan-scart__expand .khan-scart__media { width: 42vw; max-width: 200px; height: auto; aspect-ratio: 1 / 1; }
+    .khan-scart__expand .khan-scart__sizes { justify-content: center; }
+    .khan-scart__expand .khan-scart__size { min-width: 44px; height: 42px; border-radius: 12px; font-size: 13px; }
     .khan-scart__price--big .khan-scart__price-amt { font-size: clamp(28px, 8vw, 40px); }
     .khan-scart__price--big { flex-direction: row; align-items: baseline; gap: 8px; }
     .khan-scart__price--big .khan-scart__price-cur { margin-top: 0; }
@@ -299,6 +379,22 @@
       if (!root || root.__khanSCartReady) return;
       root.__khanSCartReady = true;
       var cleanups = [];
+
+      // --- size pills: sync variant id + price across both forms ---
+      each(root.querySelectorAll('[data-khan-scart-size]'), function (pill) {
+        function onPick(e) {
+          e.preventDefault();
+          var vid = pill.getAttribute('data-vid');
+          var price = pill.getAttribute('data-price');
+          each(root.querySelectorAll('[data-khan-scart-size]'), function (p) {
+            p.setAttribute('aria-pressed', p.getAttribute('data-vid') === vid ? 'true' : 'false');
+          });
+          each(root.querySelectorAll('input[name="id"]'), function (inp) { inp.value = vid; });
+          if (price) each(root.querySelectorAll('[data-khan-scart-amt]'), function (el) { el.textContent = price; });
+        }
+        pill.addEventListener('click', onPick);
+        cleanups.push(function () { pill.removeEventListener('click', onPick); });
+      });
 
       // --- add to cart (desktop + mobile forms) ---
       each(root.querySelectorAll('[data-khan-scart-form]'), function (form) {
@@ -334,7 +430,11 @@
         if (sheet) sheet.setAttribute('aria-expanded', open ? 'true' : 'false');
       }
       each(root.querySelectorAll('[data-khan-scart-toggle]'), function (t) {
-        function onClick(e) { e.preventDefault(); setExpanded(!root.classList.contains('is-expanded')); }
+        function onClick(e) {
+          if (e.target.closest('[data-khan-scart-size]') || e.target.closest('form')) return;
+          e.preventDefault();
+          setExpanded(!root.classList.contains('is-expanded'));
+        }
         t.addEventListener('click', onClick);
         cleanups.push(function () { t.removeEventListener('click', onClick); });
       });
@@ -400,14 +500,15 @@
     { "type": "header", "content": "Product" },
     { "type": "product", "id": "product_fallback", "label": "Product", "info": "On a product page the current product is used automatically. Set this for preview or other pages." },
     { "type": "image_picker", "id": "image", "label": "Image (upload)", "info": "Shown in the bar instead of the product photo." },
+    { "type": "checkbox", "id": "show_sizes", "label": "Show size picker (Размер / Size option)", "default": true },
 
     { "type": "header", "content": "Text" },
     { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the product title." },
-    { "type": "text", "id": "servings", "label": "Servings", "default": "30 servings" },
-    { "type": "text", "id": "weight", "label": "Weight", "default": "420g" },
-    { "type": "checkbox", "id": "show_currency", "label": "Show currency code (e.g. USD)", "default": true },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
-    { "type": "text", "id": "soldout_label", "label": "Sold-out label", "default": "Sold out" },
+    { "type": "text", "id": "servings", "label": "Line 2 — left (e.g. servings / fit)" },
+    { "type": "text", "id": "weight", "label": "Line 2 — right (e.g. weight)" },
+    { "type": "checkbox", "id": "show_currency", "label": "Show currency code (e.g. EUR)", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Добави в количката" },
+    { "type": "text", "id": "soldout_label", "label": "Sold-out label", "default": "Изчерпан" },
 
     { "type": "header", "content": "Position & size" },
     { "type": "select", "id": "position", "label": "Stick to (desktop)", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
@@ -416,25 +517,25 @@
     { "type": "range", "id": "bar_height", "label": "Bar height (desktop)", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
     { "type": "range", "id": "radius", "label": "Corner radius (desktop)", "min": 16, "max": 60, "step": 2, "unit": "px", "default": 40 },
     { "type": "range", "id": "img_size", "label": "Image size (desktop)", "min": 36, "max": 90, "step": 2, "unit": "px", "default": 56 },
-    { "type": "range", "id": "sheet_height", "label": "Mobile sheet height", "min": 30, "max": 80, "step": 2, "unit": "%", "default": 56 },
+    { "type": "range", "id": "sheet_height", "label": "Mobile sheet height", "min": 30, "max": 80, "step": 2, "unit": "%", "default": 60 },
 
     { "type": "header", "content": "Text sizes" },
     { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 30, "step": 1, "unit": "px", "default": 20 },
-    { "type": "range", "id": "sub_size", "label": "Servings / weight size", "min": 9, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "sub_size", "label": "Line 2 size", "min": 9, "max": 18, "step": 1, "unit": "px", "default": 13 },
     { "type": "range", "id": "price_size", "label": "Price size", "min": 14, "max": 34, "step": 1, "unit": "px", "default": 22 },
     { "type": "range", "id": "button_size", "label": "Button text size", "min": 12, "max": 22, "step": 1, "unit": "px", "default": 16 },
 
-    { "type": "header", "content": "Glass & colors" },
-    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 18 },
-    { "type": "color", "id": "glass_tint", "label": "Glass tint", "default": "#0d0d0dcc" },
-    { "type": "color", "id": "border_color", "label": "Border / dividers", "default": "#ffffff1f" },
-    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
-    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#9a9a9a" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
+    { "type": "header", "content": "Colors (white minimal)" },
+    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 14 },
+    { "type": "color", "id": "glass_tint", "label": "Bar background", "default": "#ffffffeb" },
+    { "type": "color", "id": "border_color", "label": "Border / dividers", "default": "#00000019" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#141414" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6f6f6f" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#b3122a" },
 
     { "type": "header", "content": "Button" },
-    { "type": "color", "id": "button_top", "label": "Button gradient top", "default": "#9b1c1f" },
-    { "type": "color", "id": "button_bottom", "label": "Button gradient bottom", "default": "#4a1012" },
+    { "type": "color", "id": "button_top", "label": "Button gradient top", "default": "#b3122a" },
+    { "type": "color", "id": "button_bottom", "label": "Button gradient bottom", "default": "#8e1316" },
     { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" }
   ],
   "presets": [

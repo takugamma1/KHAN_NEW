@@ -25,6 +25,7 @@
     --ih-utext: {{ s.text_size }}px;
     --ih-gap: {{ s.usp_gap }}px;
     --ih-corner: {{ s.corner_size }}px;
+    --ih-corner-top: {{ s.corner_top | default: 96 }}px;
   "
 >
   <div class="khan-ihero__bg" aria-hidden="true">
@@ -94,7 +95,7 @@
 
   /* corners */
   .khan-ihero__corner {
-    position: absolute; z-index: 2; top: clamp(18px, 3vw, 34px);
+    position: absolute; z-index: 2; top: var(--ih-corner-top, 96px);
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--ih-corner, 12px); letter-spacing: 0.2em; text-transform: uppercase;
     white-space: nowrap;
@@ -182,6 +183,7 @@
     { "type": "header", "content": "Corner labels" },
     { "type": "text", "id": "top_left", "label": "Top-left label", "default": "Khan collection" },
     { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "Ingredients", "info": "Shown inside [ brackets ]." },
+    { "type": "range", "id": "corner_top", "label": "Corner labels: distance from top", "min": 16, "max": 200, "step": 4, "unit": "px", "default": 96 },
 
     { "type": "header", "content": "Right content position" },
     { "type": "select", "id": "content_valign", "label": "Vertical position", "options": [ { "value": "flex-start", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Bottom" } ], "default": "center" },

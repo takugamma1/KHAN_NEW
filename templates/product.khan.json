@@ -190,21 +190,21 @@
         "menu_nav": {
           "type": "menu",
           "settings": {
-            "heading": "Navigate",
+            "heading": "Навигация",
             "menu": "main-menu"
           }
         },
         "menu_info": {
           "type": "menu",
           "settings": {
-            "heading": "Info",
+            "heading": "Информация",
             "menu": "main-menu"
           }
         },
         "menu_connect": {
           "type": "menu",
           "settings": {
-            "heading": "Connect",
+            "heading": "Връзка",
             "menu": "footer"
           }
         }
@@ -221,14 +221,14 @@
         "min_height": 900,
         "logo": "shopify://shop_images/white-logo.svg",
         "logo_width": 200,
-        "tagline": "Built different. Made to last.",
+        "tagline": "Изграден различно. Създаден да трае.",
         "show_newsletter": true,
-        "news_heading": "Join the Khan society",
-        "news_text": "Exclusive drops. Early access. No noise. Just Khan.",
-        "news_placeholder": "Your email",
-        "news_success": "You're in.",
-        "copyright": "© 2026 Khan Apparel. All rights reserved.",
-        "tagline2": "Born from past. Built for now.",
+        "news_heading": "Влез в обществото на KHAN",
+        "news_text": "Ексклузивни дропове. Ранен достъп. Без шум. Само KHAN.",
+        "news_placeholder": "Твоят имейл",
+        "news_success": "Вътре си.",
+        "copyright": "© 2026 Khan Apparel. Всички права запазени.",
+        "tagline2": "Родено от миналото. Създадено за сега.",
         "show_deco": false,
         "coordinates": "42.6977° N  23.3219° E",
         "text_grain": false,
@@ -249,12 +249,12 @@
       "settings": {
         "product_fallback": "",
         "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3.png",
-        "title": "Pre-workout",
-        "servings": "30 servings",
-        "weight": "420g",
+        "title": "Pre-Workout",
+        "servings": "30 дози",
+        "weight": "420г",
         "show_currency": true,
-        "button_label": "Add to cart",
-        "soldout_label": "Sold out",
+        "button_label": "Добави в количката",
+        "soldout_label": "Изчерпан",
         "position": "bottom",
         "bottom_offset": 12,
         "max_width": 700,
@@ -266,14 +266,14 @@
         "sub_size": 10,
         "price_size": 18,
         "button_size": 12,
-        "blur": 18,
-        "glass_tint": "#0d0d0dcc",
-        "border_color": "#ffffff1f",
-        "text_color": "#f3f3f3",
-        "muted_color": "#9a9a9a",
-        "accent_color": "#d8232a",
-        "button_top": "#9b1c1f",
-        "button_bottom": "#4a1012",
+        "blur": 14,
+        "glass_tint": "#ffffffeb",
+        "border_color": "#00000019",
+        "text_color": "#141414",
+        "muted_color": "#6f6f6f",
+        "accent_color": "#b3122a",
+        "button_top": "#b3122a",
+        "button_bottom": "#8e1316",
         "button_text": "#ffffff"
       }
     }
