@@ -27,6 +27,7 @@
       --rocks-hero-min-height: var(--section-height-{{ section.settings.section_height }});
     {% endif %}
     --rocks-frame-fit: {{ section.settings.frame_fit }};
+    --rocks-bg: {{ section.settings.bg_color | default: '#000000' }};
     --rocks-logo-width: {{ section.settings.logo_width }}px;
     --rocks-logo-width-mobile: {{ section.settings.logo_width_mobile }}px;
     --rocks-pulse-duration: {{ section.settings.pulse_speed }}s;
@@ -196,8 +197,7 @@
     overflow: hidden;
     display: grid;
     place-items: center;
-    /* Solid black so an empty media slot reads as "video goes here" */
-    background-color: #000;
+    background-color: var(--rocks-bg, #000);
   }
 
   .rocks-hero[data-shopify-visual-preview] {
@@ -572,6 +572,12 @@
         { "value": "contain", "label": "Contain (no crop)" }
       ],
       "default": "cover"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color (no media)",
+      "default": "#000000"
     },
     {
       "type": "header",

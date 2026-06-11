@@ -61,10 +61,10 @@
       "type": "rocks-hero",
       "name": "Rocks hero",
       "settings": {
-        "media_type": "video",
+        "media_type": "image",
         "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
-        "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T203828.976.png",
-        "frame_fit": "fill",
+        "frame_image": "shopify://shop_images/khan-skull-black.png",
+        "frame_fit": "contain",
         "show_logo": false,
         "logo_white": false,
         "logo_width": 220,
@@ -104,7 +104,8 @@
         "usp_icon_size": 64,
         "usp_title_size": 18,
         "usp_text_size": 14,
-        "usp_divider_color": "#000000"
+        "usp_divider_color": "#000000",
+        "bg_color": "#ffffff"
       }
     },
     "khan_our_story_9deQRY": {

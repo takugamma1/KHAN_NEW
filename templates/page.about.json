@@ -120,7 +120,8 @@
         "divider_color": "#0000002e",
         "max_width": 1200,
         "padding_top": 160,
-        "color_scheme": ""
+        "color_scheme": "",
+        "story_image": "shopify://shop_images/khan-skull-black.png"
       }
     }
   },
