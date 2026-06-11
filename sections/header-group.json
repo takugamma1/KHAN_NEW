@@ -121,9 +121,12 @@
       "settings": {
         "menu": "main-menu",
         "logo": "shopify://shop_images/white-logo.svg",
+        "logo_style": "plain",
+        "logo_width": 92,
         "show_account": true,
         "show_cart": true,
         "sticky": true,
+        "full_width": true,
         "top_offset": 20,
         "max_width": 1280,
         "pill_height": 64,
