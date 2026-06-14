@@ -182,9 +182,9 @@
       ],
       "settings": {
         "hide_theme_footer": true,
-        "bg_video": "shopify://files/videos/hf_20260608_110718_f17f83bb-14cb-4203-9da7-948b2827ace1.mp4",
+        "bg_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "overlay_opacity": 0,
-        "min_height": 900,
+        "min_height": 360,
         "logo": "shopify://shop_images/white-logo.svg",
         "logo_width": 200,
         "tagline": "Изграден различно. Създаден да трае.",
