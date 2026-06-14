@@ -5,7 +5,7 @@
 {%- unless section.settings.hide_on_home and request.page_type == 'index' -%}
 <div
   id="KhanFooter-{{ section.id }}"
-  class="khan-footer color-{{ s.color_scheme }}{% if s.text_grain %} khan-footer--grain{% endif %}"
+  class="khan-footer color-{{ s.color_scheme }}{% if s.text_grain %} khan-footer--grain{% endif %}{% if s.image_only %} khan-footer--image-only{% endif %}"
   style="
     --ft-bg: {{ s.bg_color }};
     --ft-text: {{ s.text_color }};
@@ -22,6 +22,9 @@
     --ft-texture: {{ s.texture_opacity | default: 10 | divided_by: 100.0 }};
     --ft-strip-h: {{ s.top_height | default: 140 }}px;
     --ft-blend: {{ s.blend_color | default: '#f1f1ee' }};
+    --ft-img-fit: {{ s.image_fit | default: 'cover' }};
+    --ft-img-pos: {{ s.image_position | default: 'center' }};
+    --ft-img-h: {{ s.image_height | default: 320 }}px;
   "
   data-khan-footer
 >
@@ -119,7 +122,11 @@
   }
 
   .khan-footer__bg { position: absolute; inset: 0; z-index: 0; }
-  .khan-footer__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .khan-footer__bg-img { width: 100%; height: 100%; object-fit: var(--ft-img-fit, cover); object-position: center var(--ft-img-pos, center); display: block; }
+
+  /* image-only mode: just the background image, exact height, nothing else */
+  .khan-footer--image-only { min-height: var(--ft-img-h, 320px); padding: 0; }
+  .khan-footer--image-only :is(.khan-footer__overlay, .khan-footer__texture, .khan-footer__blend, .khan-footer__strip, .khan-footer__inner, .khan-footer__cross, .khan-footer__coords) { display: none !important; }
   .khan-footer__overlay {
     position: absolute; inset: 0;
     background:
@@ -249,6 +256,26 @@
     { "type": "checkbox", "id": "hide_on_home", "label": "Hide on the home page", "default": false },
     { "type": "header", "content": "Background image (full-bleed)" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "checkbox", "id": "image_only", "label": "Image only (hide all content & overlays)", "default": false },
+    { "type": "range", "id": "image_height", "label": "Image height (image-only mode)", "min": 80, "max": 900, "step": 10, "unit": "px", "default": 320 },
+    {
+      "type": "select", "id": "image_fit", "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Cover (fill, may crop)" },
+        { "value": "contain", "label": "Contain (no crop)" },
+        { "value": "fill", "label": "Stretch to edges" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select", "id": "image_position", "label": "Image anchor",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
     { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
     { "type": "checkbox", "id": "texture", "label": "Stone texture overlay", "default": true },
     { "type": "range", "id": "texture_opacity", "label": "Texture strength", "min": 0, "max": 40, "step": 2, "unit": "%", "default": 10 },
