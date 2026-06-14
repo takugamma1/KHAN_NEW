@@ -27,6 +27,7 @@
       --rocks-hero-min-height: var(--section-height-{{ section.settings.section_height }});
     {% endif %}
     --rocks-frame-fit: {{ section.settings.frame_fit }};
+    --rocks-frame-flip: {% if section.settings.flip_frame %}-1{% else %}1{% endif %};
     --rocks-media-flip: {% if section.settings.flip_media %}-1{% else %}1{% endif %};
     --rocks-media-pos: {{ section.settings.media_position | default: 'center' }};
     --rocks-frame-pos: {{ section.settings.frame_position | default: 'center' }};
@@ -243,6 +244,7 @@
     object-fit: var(--rocks-frame-fit, cover);
     object-position: center var(--rocks-frame-pos, center);
     display: block;
+    transform: scaleY(var(--rocks-frame-flip, 1));
   }
 
   .rocks-hero__logo {
@@ -607,6 +609,7 @@
       "default": "center",
       "info": "Where the frame sits (works best with Frame fit = Contain)."
     },
+    { "type": "checkbox", "id": "flip_frame", "label": "Flip frame upside down", "default": false },
     { "type": "range", "id": "frame_offset_y", "label": "Frame nudge up / down", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
     { "type": "range", "id": "frame_pad_y", "label": "Frame inset top & bottom", "min": 0, "max": 400, "step": 5, "unit": "px", "default": 0 },
     { "type": "range", "id": "frame_pad_x", "label": "Frame inset sides", "min": 0, "max": 600, "step": 10, "unit": "px", "default": 0 },
