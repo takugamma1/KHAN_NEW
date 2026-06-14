@@ -44,8 +44,8 @@
       "name": "Photo footer",
       "settings": {
         "hide_on_home": false,
-        "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-14T170117.821.png",
-        "image_only": true,
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_14_2026_05_03_44_PM.png",
+        "image_only": false,
         "image_height": 480,
         "image_fit": "cover",
         "image_position": "bottom",
