@@ -294,8 +294,8 @@
       "name": "Apparel hero",
       "settings": {
         "image": "shopify://shop_images/dffb2d59-bffe-4a03-aa98-c6dd59830304.png",
-        "image_width": 50,
-        "fade_height": 30,
+        "image_width": 40,
+        "fade_height": 45,
         "eyebrow": "Apparel",
         "heading": "<p>Heritage.<br/><strong>F/W 26.</strong></p>",
         "show_divider": true,
