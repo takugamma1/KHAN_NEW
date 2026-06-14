@@ -11,6 +11,71 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
+    "khan_footer_QbUJzn": {
+      "type": "khan-footer",
+      "blocks": {
+        "menu_PLa97t": {
+          "type": "menu",
+          "settings": {
+            "heading": "Магазин",
+            "menu": ""
+          }
+        },
+        "menu_feVeyz": {
+          "type": "menu",
+          "settings": {
+            "heading": "Информация",
+            "menu": ""
+          }
+        },
+        "menu_D4hBaT": {
+          "type": "menu",
+          "settings": {
+            "heading": "Профил",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": [
+        "menu_PLa97t",
+        "menu_feVeyz",
+        "menu_D4hBaT"
+      ],
+      "name": "Photo footer",
+      "settings": {
+        "hide_on_home": false,
+        "bg_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
+        "overlay_opacity": 0,
+        "texture": true,
+        "texture_opacity": 10,
+        "flip_top": true,
+        "top_height": 140,
+        "blend_top": false,
+        "blend_color": "#f1f1ee",
+        "min_height": 560,
+        "logo_width": 200,
+        "tagline": "Изграден различно. Създаден да трае.",
+        "show_newsletter": true,
+        "news_heading": "Влез в обществото на KHAN",
+        "news_text": "Ексклузивни дропове. Ранен достъп. Без шум. Само KHAN.",
+        "news_placeholder": "Твоят имейл",
+        "news_success": "Вътре си.",
+        "copyright": "© 2026 Khan Apparel. Всички права запазени.",
+        "tagline2": "Родено от миналото. Създадено за сега.",
+        "show_deco": true,
+        "coordinates": "42.6977° N  23.3219° E",
+        "text_grain": true,
+        "bg_color": "#1b1b1b",
+        "text_color": "#f2f2f2",
+        "muted_color": "#9a9a9a",
+        "accent_color": "#d8232a",
+        "heading_size": 14,
+        "link_size": 14,
+        "padding_top": 64,
+        "padding_bottom": 40,
+        "color_scheme": ""
+      }
+    },
     "footer_m9NzUG": {
       "type": "footer",
       "blocks": {
@@ -207,6 +272,7 @@
     }
   },
   "order": [
+    "khan_footer_QbUJzn",
     "footer_m9NzUG",
     "footer_utilities_jLGE8U"
   ]

@@ -150,65 +150,6 @@
         "color_scheme": ""
       }
     },
-    "khan_product_footer_KH4N01": {
-      "type": "khan-product-footer",
-      "blocks": {
-        "menu_nav": {
-          "type": "menu",
-          "settings": {
-            "heading": "Навигация",
-            "menu": "main-menu"
-          }
-        },
-        "menu_info": {
-          "type": "menu",
-          "settings": {
-            "heading": "Информация",
-            "menu": "main-menu"
-          }
-        },
-        "menu_connect": {
-          "type": "menu",
-          "settings": {
-            "heading": "Връзка",
-            "menu": "footer"
-          }
-        }
-      },
-      "block_order": [
-        "menu_nav",
-        "menu_info",
-        "menu_connect"
-      ],
-      "settings": {
-        "hide_theme_footer": true,
-        "bg_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
-        "overlay_opacity": 0,
-        "min_height": 360,
-        "logo": "shopify://shop_images/white-logo.svg",
-        "logo_width": 200,
-        "tagline": "Изграден различно. Създаден да трае.",
-        "show_newsletter": true,
-        "news_heading": "Влез в обществото на KHAN",
-        "news_text": "Ексклузивни дропове. Ранен достъп. Без шум. Само KHAN.",
-        "news_placeholder": "Твоят имейл",
-        "news_success": "Вътре си.",
-        "copyright": "© 2026 Khan Apparel. Всички права запазени.",
-        "tagline2": "Родено от миналото. Създадено за сега.",
-        "show_deco": false,
-        "coordinates": "42.6977° N  23.3219° E",
-        "text_grain": false,
-        "bg_color": "#0a0a0a",
-        "text_color": "#f2f2f2",
-        "muted_color": "#9a9a9a",
-        "accent_color": "#d8232a",
-        "heading_size": 14,
-        "link_size": 14,
-        "padding_top": 56,
-        "padding_bottom": 48,
-        "color_scheme": ""
-      }
-    },
     "khan_sticky_cart_ebPXK4": {
       "type": "khan-sticky-cart",
       "name": "Sticky add to cart",
@@ -249,7 +190,6 @@
     "khan_preworkout_hero_KYCWMq",
     "khan_ingredients_hero_JggNdr",
     "khan_ingredients_Hynnfd",
-    "khan_product_footer_KH4N01",
     "khan_sticky_cart_ebPXK4"
   ]
 }
