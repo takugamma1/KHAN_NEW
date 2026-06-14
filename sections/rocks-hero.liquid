@@ -27,6 +27,8 @@
       --rocks-hero-min-height: var(--section-height-{{ section.settings.section_height }});
     {% endif %}
     --rocks-frame-fit: {{ section.settings.frame_fit }};
+    --rocks-media-flip: {% if section.settings.flip_media %}-1{% else %}1{% endif %};
+    --rocks-media-pos: {{ section.settings.media_position | default: 'center' }};
     --rocks-frame-pos: {{ section.settings.frame_position | default: 'center' }};
     --rocks-frame-offy: {{ section.settings.frame_offset_y | default: 0 }}px;
     --rocks-frame-pad-x: {{ section.settings.frame_pad_x | default: 0 }}px;
@@ -220,8 +222,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center center;
+    object-position: center var(--rocks-media-pos, center);
     display: block;
+    transform: scaleY(var(--rocks-media-flip, 1));
   }
 
   .rocks-hero__frame {
@@ -555,6 +558,18 @@
       "id": "background_video",
       "label": "Background video",
       "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    { "type": "checkbox", "id": "flip_media", "label": "Flip background upside down", "default": false, "info": "Mirrors the rocks vertically (e.g. rocks hanging from the top)." },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Background anchor",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
     },
     {
       "type": "header",

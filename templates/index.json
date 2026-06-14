@@ -107,7 +107,9 @@
         "usp_icon_size": 64,
         "usp_title_size": 18,
         "usp_text_size": 14,
-        "usp_divider_color": "#000000"
+        "usp_divider_color": "#000000",
+        "flip_media": true,
+        "media_position": "center"
       }
     },
     "khan_our_story_9deQRY": {
