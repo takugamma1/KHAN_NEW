@@ -168,9 +168,11 @@
   /* content band — holds layout + legal; positioned within the section by --ft-valign */
   .khan-footer__panel { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 56px); }
   .khan-footer--panel .khan-footer__panel {
-    background: rgb(0 0 0 / var(--ft-panel, 0.5));
+    background: rgb(0 0 0 / var(--ft-panel, 0.55));
     padding: clamp(26px, 3.5vw, 48px) clamp(22px, 3.5vw, 52px);
     border-radius: var(--ft-panel-radius, 0px);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    box-shadow: 0 24px 70px rgb(0 0 0 / 0.45);
     -webkit-backdrop-filter: blur(var(--ft-panel-blur, 0px));
             backdrop-filter: blur(var(--ft-panel-blur, 0px));
   }
@@ -338,10 +340,10 @@
       "default": "flex-end",
       "info": "Keep content over the dark part of the image so text stays visible."
     },
-    { "type": "checkbox", "id": "content_panel", "label": "Dark panel behind content (for legibility)", "default": false },
-    { "type": "range", "id": "panel_opacity", "label": "Panel darkness", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 50 },
-    { "type": "range", "id": "panel_blur", "label": "Panel glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 0 },
-    { "type": "range", "id": "panel_radius", "label": "Panel corner radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "content_panel", "label": "Dark panel behind content (for legibility)", "default": true },
+    { "type": "range", "id": "panel_opacity", "label": "Panel darkness", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "range", "id": "panel_blur", "label": "Panel glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 8 },
+    { "type": "range", "id": "panel_radius", "label": "Panel corner radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 22 },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
     { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#1b1b1b" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#f2f2f2" },
