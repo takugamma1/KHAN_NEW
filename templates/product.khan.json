@@ -269,7 +269,7 @@
         "sub_size": 10,
         "price_size": 18,
         "button_size": 12,
-        "blur": 0,
+        "blur": 4,
         "glass_tint": "#161616EB",
         "border_color": "#0000001a",
         "text_color": "#FFFFFF",
