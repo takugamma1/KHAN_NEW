@@ -186,7 +186,7 @@
         "show_plus_marks": true,
         "show_brackets": true,
         "deco_color": "#c9433a",
-        "bg_color": "#fcfcfc",
+        "bg_color": "#FFFFFF",
         "max_width": 1500,
         "column_gap": 80,
         "padding_top": 96,
