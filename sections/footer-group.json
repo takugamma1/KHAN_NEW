@@ -18,21 +18,21 @@
           "type": "menu",
           "settings": {
             "heading": "Магазин",
-            "menu": ""
+            "menu": "main-menu"
           }
         },
         "menu_feVeyz": {
           "type": "menu",
           "settings": {
             "heading": "Информация",
-            "menu": ""
+            "menu": "main-menu"
           }
         },
         "menu_D4hBaT": {
           "type": "menu",
           "settings": {
             "heading": "Профил",
-            "menu": ""
+            "menu": "main-menu"
           }
         }
       },
@@ -46,17 +46,17 @@
         "hide_on_home": false,
         "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_14_2026_05_03_44_PM.png",
         "image_only": false,
-        "image_height": 130,
+        "image_height": 80,
         "image_fit": "cover",
-        "image_position": "center",
-        "overlay_opacity": 0,
+        "image_position": "top",
+        "overlay_opacity": 70,
         "texture": false,
         "texture_opacity": 0,
         "flip_top": true,
         "top_height": 300,
         "blend_top": false,
         "blend_color": "#f1f1ee",
-        "min_height": 360,
+        "min_height": 540,
         "logo": "shopify://shop_images/white-logo.svg",
         "logo_width": 200,
         "tagline": "Изграден различно. Създаден да трае.",
@@ -70,15 +70,19 @@
         "show_deco": true,
         "coordinates": "42.6977° N  23.3219° E",
         "content_valign": "center",
+        "content_panel": false,
+        "panel_opacity": 50,
+        "panel_blur": 0,
+        "panel_radius": 0,
         "text_grain": false,
         "bg_color": "#ffffff",
-        "text_color": "#FFFFFF",
-        "muted_color": "#FFFFFF",
-        "accent_color": "#FFFFFF",
+        "text_color": "#ffffff",
+        "muted_color": "#ffffff",
+        "accent_color": "#ffffff",
         "heading_size": 14,
         "link_size": 14,
-        "padding_top": 64,
-        "padding_bottom": 40,
+        "padding_top": 160,
+        "padding_bottom": 0,
         "color_scheme": ""
       }
     },
