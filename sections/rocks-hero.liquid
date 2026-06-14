@@ -34,6 +34,12 @@
     --rocks-frame-offy: {{ section.settings.frame_offset_y | default: 0 }}px;
     --rocks-frame-pad-x: {{ section.settings.frame_pad_x | default: 0 }}px;
     --rocks-frame-pad-y: {{ section.settings.frame_pad_y | default: 0 }}px;
+    --rocks-frame-pos-m: {{ section.settings.frame_position_mobile | default: section.settings.frame_position | default: 'center' }};
+    --rocks-frame-offy-m: {{ section.settings.frame_offset_y_mobile | default: 0 }}px;
+    --rocks-frame-pad-x-m: {{ section.settings.frame_pad_x_mobile | default: 0 }}px;
+    --rocks-frame-pad-y-m: {{ section.settings.frame_pad_y_mobile | default: 0 }}px;
+    --rocks-frame-scale-m: {{ section.settings.frame_scale_mobile | default: 100 | divided_by: 100.0 }};
+    --rocks-minh-m: {{ section.settings.mobile_height | default: 80 }}svh;
     --rocks-bg: {{ section.settings.bg_color | default: '#000000' }};
     --rocks-logo-width: {{ section.settings.logo_width }}px;
     --rocks-logo-width-mobile: {{ section.settings.logo_width_mobile }}px;
@@ -279,6 +285,17 @@
   @media screen and (max-width: 749px) {
     .rocks-hero__logo {
       width: var(--rocks-logo-width-mobile, 140px);
+    }
+    .rocks-hero {
+      min-height: var(--rocks-minh-m, 80svh);
+    }
+    .rocks-hero__frame {
+      padding: var(--rocks-frame-pad-y-m, 0px) var(--rocks-frame-pad-x-m, 0px);
+      transform: translateY(var(--rocks-frame-offy-m, 0px));
+    }
+    .rocks-hero__frame-img {
+      object-position: center var(--rocks-frame-pos-m, center);
+      transform: scaleY(var(--rocks-frame-flip, 1)) scale(var(--rocks-frame-scale-m, 1));
     }
   }
 
@@ -613,6 +630,25 @@
     { "type": "range", "id": "frame_offset_y", "label": "Frame nudge up / down", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
     { "type": "range", "id": "frame_pad_y", "label": "Frame inset top & bottom", "min": 0, "max": 400, "step": 5, "unit": "px", "default": 0 },
     { "type": "range", "id": "frame_pad_x", "label": "Frame inset sides", "min": 0, "max": 600, "step": 10, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Mobile" },
+    { "type": "paragraph", "content": "Independent placement for phones. Leave at defaults to reuse desktop." },
+    { "type": "range", "id": "mobile_height", "label": "Mobile section height", "min": 40, "max": 100, "step": 5, "unit": "svh", "default": 80 },
+    {
+      "type": "select",
+      "id": "frame_position_mobile",
+      "label": "Frame position (mobile)",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    { "type": "range", "id": "frame_scale_mobile", "label": "Frame size (mobile)", "min": 40, "max": 160, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "frame_offset_y_mobile", "label": "Frame nudge up / down (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "frame_pad_y_mobile", "label": "Frame inset top & bottom (mobile)", "min": 0, "max": 400, "step": 5, "unit": "px", "default": 0 },
+    { "type": "range", "id": "frame_pad_x_mobile", "label": "Frame inset sides (mobile)", "min": 0, "max": 400, "step": 10, "unit": "px", "default": 0 },
     {
       "type": "color",
       "id": "bg_color",
