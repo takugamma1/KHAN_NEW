@@ -85,6 +85,7 @@
   id="KhanSCart-{{ section.id }}"
   class="khan-scart khan-scart--{{ s.position }}"
   data-khan-scart
+  data-stop-at-footer="{% if s.stop_at_footer %}true{% else %}false{% endif %}"
   style="
     --scart-glass: {{ s.glass_tint }};
     --scart-border: {{ s.border_color }};
@@ -187,6 +188,12 @@
 
   .khan-scart__backdrop { display: none; }
   .khan-scart__inner { position: relative; z-index: 1; max-width: var(--scart-maxw, 1100px); margin-inline: auto; }
+
+  /* parked: cart slides out of view once the footer is reached */
+  .khan-scart__bar, .khan-scart__sheet { transition: transform 0.3s ease, opacity 0.3s ease, max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
+  .khan-scart.is-parked .khan-scart__bar { opacity: 0; transform: translateY(150%); pointer-events: none; }
+  .khan-scart.is-parked .khan-scart__sheet { opacity: 0; transform: translateY(100%); pointer-events: none; }
+  .khan-scart.is-parked .khan-scart__backdrop { opacity: 0 !important; pointer-events: none !important; }
 
   /* ===== Desktop bar ===== */
   .khan-scart__bar {
@@ -325,7 +332,7 @@
       box-shadow: 0 -12px 40px rgb(0 0 0 / 0.25);
       max-height: 118px;
       overflow: hidden;
-      transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease, opacity 0.3s ease;
       touch-action: pan-y;
     }
     .khan-scart.is-expanded .khan-scart__sheet { max-height: var(--scart-sheet-h, 60vh); }
@@ -471,6 +478,28 @@
       document.addEventListener('keydown', onKey);
       cleanups.push(function () { document.removeEventListener('keydown', onKey); });
 
+      // --- park (hide) the cart once a VISIBLE footer comes into view ---
+      // Re-resolvable so it survives footer section reloads (theme editor / Section Rendering API).
+      var parkIO = null;
+      function setupPark() {
+        if (root.getAttribute('data-stop-at-footer') !== 'true' || !('IntersectionObserver' in window)) return;
+        if (parkIO) { parkIO.disconnect(); parkIO = null; }
+        var parkEls = [].slice.call(document.querySelectorAll('.khan-pf-wrapper, .khan-footer-wrapper, footer'))
+          .filter(function (el) { return el.getClientRects().length > 0; }); // skip hidden (display:none) footers
+        if (!parkEls.length) { root.classList.remove('is-parked'); return; }
+        parkIO = new IntersectionObserver(function (entries) {
+          for (var i = 0; i < entries.length; i++) { entries[i].target.__scartIx = entries[i].isIntersecting; }
+          var any = false;
+          for (var j = 0; j < parkEls.length; j++) { if (parkEls[j].__scartIx) { any = true; break; } }
+          root.classList.toggle('is-parked', any);
+          if (any) setExpanded(false);
+        }, { threshold: 0, rootMargin: '0px 0px -100px 0px' }); // park only once the footer is meaningfully in view
+        for (var k = 0; k < parkEls.length; k++) { parkIO.observe(parkEls[k]); }
+      }
+      setupPark();
+      root.__khanScartRepark = setupPark;
+      cleanups.push(function () { if (parkIO) { parkIO.disconnect(); parkIO = null; } root.__khanScartRepark = null; });
+
       root.__khanSCartCleanup = function () {
         each(cleanups, function (fn) { fn(); });
         root.__khanSCartReady = false;
@@ -483,7 +512,11 @@
     }
     if (document.readyState !== 'loading') initAll();
     else document.addEventListener('DOMContentLoaded', function () { initAll(); });
-    document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
+    document.addEventListener('shopify:section:load', function (e) {
+      initAll(e.target);
+      // a footer (or any section) may have just (re)loaded — re-resolve park targets for every cart
+      each(document.querySelectorAll('[data-khan-scart]'), function (r) { if (r.__khanScartRepark) r.__khanScartRepark(); });
+    });
     document.addEventListener('shopify:section:unload', function (e) {
       var root = e.target.querySelector('[data-khan-scart]');
       if (root && root.__khanSCartCleanup) root.__khanSCartCleanup();
@@ -512,6 +545,7 @@
 
     { "type": "header", "content": "Position & size" },
     { "type": "select", "id": "position", "label": "Stick to (desktop)", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
+    { "type": "checkbox", "id": "stop_at_footer", "label": "Hide when the footer is reached", "default": true },
     { "type": "range", "id": "bottom_offset", "label": "Edge offset (desktop)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
     { "type": "range", "id": "max_width", "label": "Max width (desktop)", "min": 700, "max": 1500, "step": 20, "unit": "px", "default": 1100 },
     { "type": "range", "id": "bar_height", "label": "Bar height (desktop)", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
