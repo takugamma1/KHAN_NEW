@@ -15,6 +15,7 @@
         "media_type": "image",
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
         "frame_fit": "cover",
+        "bg_color": "#000000",
         "show_logo": true,
         "logo_white": true,
         "logo_width": 220,
@@ -62,9 +63,11 @@
       "name": "Rocks hero",
       "settings": {
         "media_type": "image",
+        "background_image": "shopify://shop_images/Untitled_design_-_2026-06-14T152316.344.png",
         "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
-        "frame_image": "shopify://shop_images/khan-skull-black.png",
+        "frame_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "frame_fit": "contain",
+        "bg_color": "#ffffff",
         "show_logo": false,
         "logo_white": false,
         "logo_width": 220,
@@ -104,8 +107,7 @@
         "usp_icon_size": 64,
         "usp_title_size": 18,
         "usp_text_size": 14,
-        "usp_divider_color": "#000000",
-        "bg_color": "#ffffff"
+        "usp_divider_color": "#000000"
       }
     },
     "khan_our_story_9deQRY": {
@@ -176,21 +178,6 @@
         "padding_top": 96,
         "padding_bottom": 96,
         "padding_inline": 56,
-        "color_scheme": ""
-      }
-    },
-    "scroll_sequence_wkLHWe": {
-      "type": "scroll-sequence",
-      "disabled": true,
-      "name": "Scroll sequence",
-      "settings": {
-        "frame_prefix": "seq-",
-        "frame_count": "144",
-        "frame_digits": "4",
-        "frame_extension": "webp",
-        "scroll_distance": 3000,
-        "fit": "cover",
-        "bg_color": "#ffffff",
         "color_scheme": ""
       }
     },
@@ -295,6 +282,7 @@
         "btn2_icon": "play",
         "show_frame": true,
         "frame_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+        "frame_width": 560,
         "copyright": "© 2026 Khan Apparel. All rights reserved.",
         "tagline": "Born from past. Built for now.",
         "bg_color": "#fcfcfc",
@@ -322,7 +310,6 @@
     "rocks_hero_Ax9Kp2",
     "rocks_hero_6ig48b",
     "khan_our_story_9deQRY",
-    "scroll_sequence_wkLHWe",
     "khan_launch_hero_KicyPi",
     "khan_apparel_hero_faAPEW"
   ]
