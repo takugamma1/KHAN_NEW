@@ -42,46 +42,10 @@
     },
     "khan_ingredients_hero_JggNdr": {
       "type": "khan-ingredients-hero",
-      "blocks": {
-        "usp_c6WLmp": {
-          "type": "usp",
-          "settings": {
-            "title": "Intense energy",
-            "text": "Push harder. Longer."
-          }
-        },
-        "usp_FGFXEz": {
-          "type": "usp",
-          "settings": {
-            "title": "Laser focus",
-            "text": "Dial in. Zone out."
-          }
-        },
-        "usp_A7XmcA": {
-          "type": "usp",
-          "settings": {
-            "title": "Powerful pumps",
-            "text": "Feel the difference."
-          }
-        },
-        "usp_4LMbHz": {
-          "type": "usp",
-          "settings": {
-            "title": "Clean formula",
-            "text": "No fillers. No shortcuts."
-          }
-        }
-      },
-      "block_order": [
-        "usp_c6WLmp",
-        "usp_FGFXEz",
-        "usp_A7XmcA",
-        "usp_4LMbHz"
-      ],
       "name": "Ingredients hero",
       "settings": {
-        "bg_image": "shopify://shop_images/ChatGPT_Image_Jun_8_2026_09_48_25_AM.png",
-        "top_overlay": 100,
+        "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-14T164422.511.png",
+        "top_overlay": 0,
         "min_height": 820,
         "top_left": "Khan collection",
         "top_right": "Ingredients",
@@ -89,7 +53,7 @@
         "content_valign": "flex-start",
         "content_offset": 0,
         "eyebrow": "",
-        "heading": "<p>Fuel the<br/><strong>discipline</strong></p>",
+        "heading": "",
         "icon_size": 48,
         "title_size": 17,
         "text_size": 13,
