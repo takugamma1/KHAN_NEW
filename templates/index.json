@@ -18,6 +18,7 @@
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
         "frame_fit": "cover",
         "frame_position": "center",
+        "flip_frame": false,
         "frame_offset_y": 0,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
@@ -75,8 +76,9 @@
         "media_position": "center",
         "frame_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "frame_fit": "contain",
-        "frame_position": "top",
-        "frame_offset_y": -400,
+        "frame_position": "center",
+        "flip_frame": true,
+        "frame_offset_y": -70,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
         "bg_color": "#ffffff",
@@ -119,8 +121,7 @@
         "usp_icon_size": 64,
         "usp_title_size": 18,
         "usp_text_size": 14,
-        "usp_divider_color": "#000000",
-        "flip_frame": true
+        "usp_divider_color": "#000000"
       }
     },
     "khan_our_story_9deQRY": {
