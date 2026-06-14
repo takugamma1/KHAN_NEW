@@ -13,8 +13,14 @@
       "type": "rocks-hero",
       "settings": {
         "media_type": "image",
+        "flip_media": false,
+        "media_position": "center",
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
         "frame_fit": "cover",
+        "frame_position": "center",
+        "frame_offset_y": 0,
+        "frame_pad_y": 0,
+        "frame_pad_x": 0,
         "bg_color": "#000000",
         "show_logo": true,
         "logo_white": true,
@@ -65,8 +71,14 @@
         "media_type": "image",
         "background_image": "shopify://shop_images/Untitled_design_-_2026-06-14T152316.344.png",
         "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
+        "flip_media": false,
+        "media_position": "center",
         "frame_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "frame_fit": "contain",
+        "frame_position": "top",
+        "frame_offset_y": -400,
+        "frame_pad_y": 0,
+        "frame_pad_x": 0,
         "bg_color": "#ffffff",
         "show_logo": false,
         "logo_white": false,
@@ -107,9 +119,7 @@
         "usp_icon_size": 64,
         "usp_title_size": 18,
         "usp_text_size": 14,
-        "usp_divider_color": "#000000",
-        "flip_media": true,
-        "media_position": "center"
+        "usp_divider_color": "#000000"
       }
     },
     "khan_our_story_9deQRY": {
