@@ -15,7 +15,7 @@
       "settings": {
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-14T155719.779.png",
         "overlay_opacity": 0,
-        "min_height": 680,
+        "min_height": 760,
         "top_left": "Khan collection",
         "top_right": "Pre-workout",
         "corner_top": 96,
@@ -164,6 +164,7 @@
         "button_label": "Добави в количката",
         "soldout_label": "Изчерпан",
         "position": "bottom",
+        "stop_at_footer": true,
         "bottom_offset": 12,
         "max_width": 700,
         "bar_height": 70,
