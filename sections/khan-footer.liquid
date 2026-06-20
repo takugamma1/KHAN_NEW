@@ -14,6 +14,7 @@
     --ft-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
     --ft-minh: {{ s.min_height }}px;
     --ft-logo-w: {{ s.logo_width }}px;
+    --ft-logo3d-w: {{ s.logo3d_size | default: 150 }}px;
     --ft-head-size: {{ s.heading_size }}px;
     --ft-link-size: {{ s.link_size }}px;
     --ft-pt: {{ s.padding_top }}px;
@@ -68,7 +69,11 @@
             <span class="khan-footer__logo khan-footer__logo--svg">{{ 'white-logo.svg' | inline_asset_content }}</span>
           {%- endif -%}
           {%- if s.tagline != blank -%}<p class="khan-footer__tagline">{{ s.tagline }}</p>{%- endif -%}
-          <img class="khan-footer__brand-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+          {%- if s.show_logo3d -%}
+            <div class="khan-footer__logo3d" aria-hidden="true">{% render 'khan-gpu-asterisk' %}</div>
+          {%- else -%}
+            <img class="khan-footer__brand-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+          {%- endif -%}
         </div>
 
         <div class="khan-footer__cols">
@@ -202,6 +207,10 @@
   }
   .khan-footer__brand-mark { width: 20px; height: 20px; object-fit: contain; margin-top: 4px; }
 
+  /* 3D GPU asterisk logo (below the tagline) */
+  .khan-footer__logo3d { width: var(--ft-logo3d-w, 150px); max-width: 100%; margin-top: 8px; }
+  .khan-footer__logo3d .mg-asterisk { margin: 0; max-width: none; }
+
   /* ---- link columns ---- */
   .khan-footer__cols { display: flex; gap: clamp(28px, 3vw, 64px); }
   .khan-footer__col-head {
@@ -312,6 +321,8 @@
     { "type": "image_picker", "id": "logo", "label": "Logo (upload)" },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 400, "step": 4, "unit": "px", "default": 200 },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Изграден различно. Създаден да трае." },
+    { "type": "checkbox", "id": "show_logo3d", "label": "3D animated asterisk (below tagline)", "default": true },
+    { "type": "range", "id": "logo3d_size", "label": "3D asterisk size", "min": 60, "max": 320, "step": 4, "unit": "px", "default": 150 },
 
     { "type": "header", "content": "Newsletter (right)" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter", "default": true },
