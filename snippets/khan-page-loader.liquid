@@ -1,0 +1,65 @@
+{%- comment -%}
+  Full-screen page-transition loader with the 3D GPU asterisk centered.
+  Shown on initial load (fades out when ready) and re-shown on outgoing internal navigation.
+  Uses the shared khan-asterisk.js renderer (loaded globally in theme.liquid).
+{%- endcomment -%}
+<div id="khan-loader" class="khan-loader" role="status" aria-live="polite" aria-label="Loading" style="--khan-loader-bg: {{ settings.khan_loader_bg | default: '#0a0a0a' }};">
+  <div class="khan-loader__mark"><canvas data-khan-asterisk></canvas></div>
+</div>
+<noscript><style>#khan-loader{display:none !important;}</style></noscript>
+
+<style>
+  .khan-loader {
+    position: fixed; inset: 0; z-index: 99999;
+    display: grid; place-items: center;
+    background: var(--khan-loader-bg, #0a0a0a);
+    opacity: 1; visibility: visible;
+    transition: opacity 0.45s ease;
+  }
+  .khan-loader.is-hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+  }
+  /* mobile-first size, larger on desktop — responsive both ways */
+  .khan-loader__mark { position: relative; width: min(46vw, 200px); aspect-ratio: 1 / 1; }
+  .khan-loader__mark canvas { width: 100%; height: 100%; display: block; }
+  .khan-loader__mark .fb { position: absolute; inset: 0; display: grid; place-items: center; }
+  @media screen and (min-width: 750px) { .khan-loader__mark { width: min(20vw, 240px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .khan-loader, .khan-loader.is-hidden { transition: opacity 0.15s ease; }
+  }
+</style>
+
+<script>
+  (function () {
+    var el = document.getElementById('khan-loader');
+    if (!el) return;
+    var done = false;
+    function hide() { if (done) return; done = true; el.classList.add('is-hidden'); }
+    function show() { done = false; el.classList.remove('is-hidden'); }
+
+    // Hide once the page is ready (small beat so the asterisk paints first).
+    function ready() { window.setTimeout(hide, 350); }
+    if (document.readyState === 'complete') ready();
+    else window.addEventListener('load', ready);
+    // Safety net: never trap the visitor behind the overlay.
+    window.setTimeout(hide, 4000);
+
+    // Re-show on outgoing internal navigation so the transition shows the mark.
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      if (a.target && a.target !== '_self') return;
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href') || '';
+      if (!href || href.charAt(0) === '#' || /^(mailto:|tel:|javascript:)/i.test(href)) return;
+      if (a.origin && a.origin !== window.location.origin) return; // external
+      if (a.pathname === window.location.pathname && a.search === window.location.search) return; // same page
+      show();
+    }, true);
+
+    // Coming back via bfcache: make sure the overlay isn't stuck on.
+    window.addEventListener('pageshow', function (ev) { if (ev.persisted) { done = true; el.classList.add('is-hidden'); } });
+  })();
+</script>

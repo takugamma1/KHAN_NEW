@@ -71,7 +71,7 @@
           {%- if s.tagline != blank -%}<p class="khan-footer__tagline">{{ s.tagline }}</p>{%- endif -%}
           {%- comment -%} 3D GPU asterisk logo; replaces the static mark when enabled {%- endcomment -%}
           {%- if s.show_logo3d -%}
-            <div class="khan-footer__logo3d" aria-hidden="true">{% render 'khan-gpu-asterisk' %}</div>
+            <div class="khan-footer__logo3d" aria-hidden="true"><canvas data-khan-asterisk></canvas></div>
           {%- else -%}
             <img class="khan-footer__brand-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
           {%- endif -%}
@@ -208,9 +208,10 @@
   }
   .khan-footer__brand-mark { width: 20px; height: 20px; object-fit: contain; margin-top: 4px; }
 
-  /* 3D GPU asterisk logo (below the tagline) */
-  .khan-footer__logo3d { width: var(--ft-logo3d-w, 150px); max-width: 100%; margin-top: 8px; }
-  .khan-footer__logo3d .mg-asterisk { margin: 0; max-width: none; }
+  /* 3D GPU asterisk logo (below the tagline) — shared khan-asterisk.js renderer */
+  .khan-footer__logo3d { width: var(--ft-logo3d-w, 150px); max-width: 100%; aspect-ratio: 1 / 1; position: relative; margin-top: 8px; }
+  .khan-footer__logo3d canvas { width: 100%; height: 100%; display: block; }
+  .khan-footer__logo3d .fb { position: absolute; inset: 0; display: grid; place-items: center; }
 
   /* ---- link columns ---- */
   .khan-footer__cols { display: flex; gap: clamp(28px, 3vw, 64px); }
@@ -272,6 +273,11 @@
     .khan-footer__cols { flex-wrap: wrap; gap: 32px; }
     .khan-footer__legal { flex-direction: column; gap: 8px; }
     .khan-footer__legal-sub { padding-left: 0; border-left: 0; }
+    /* keep the 3D mark from dominating the stacked mobile layout */
+    .khan-footer__logo3d { width: min(var(--ft-logo3d-w, 150px), 30vw); margin-top: 4px; }
+  }
+  @media screen and (max-width: 479px) {
+    .khan-footer__logo3d { width: min(var(--ft-logo3d-w, 150px), 96px); }
   }
 {% endstylesheet %}
 

@@ -2284,5 +2284,13 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Page transition loader",
+    "settings": [
+      { "type": "paragraph", "content": "A full-screen 3D asterisk shown briefly when the store loads and between pages (desktop & mobile)." },
+      { "type": "checkbox", "id": "khan_page_loader", "label": "Enable page transition loader", "default": true },
+      { "type": "color", "id": "khan_loader_bg", "label": "Loader background", "default": "#0a0a0a" }
+    ]
   }
 ]
