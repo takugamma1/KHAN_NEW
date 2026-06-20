@@ -74,7 +74,9 @@
       <div class="khan-story__right">
         {%- for block in section.blocks -%}
           <div class="khan-story__feature" {{ block.shopify_attributes }}>
-            {%- if block.settings.icon != blank -%}
+            {%- if s.feature_icon_3d -%}
+              <div class="khan-story__feature-icon khan-story__feature-icon--3d" aria-hidden="true"><canvas data-khan-asterisk data-static></canvas></div>
+            {%- elsif block.settings.icon != blank -%}
               <img
                 class="khan-story__feature-icon"
                 src="{{ block.settings.icon | image_url: width: 160 }}"
@@ -283,6 +285,18 @@
     border-radius: 4px;
   }
 
+  /* animated GPU asterisk as the feature icon — flat in-plane (2D) spin */
+  .khan-story__feature-icon--3d { position: relative; }
+  .khan-story__feature-icon--3d canvas {
+    width: 100%; height: 100%; display: block;
+    transform-origin: 50% 50%;
+    animation: khan-usp-spin 1.1s linear infinite;
+    will-change: transform;
+  }
+  .khan-story__feature-icon--3d .fb { position: absolute; inset: 0; display: grid; place-items: center; }
+  @keyframes khan-usp-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .khan-story__feature-icon--3d canvas { animation: none; } }
+
   .khan-story__feature-title {
     margin: 2px 0 6px;
     font-family: 'Nexa', var(--font-heading--family, sans-serif);
@@ -319,6 +333,8 @@
     -webkit-mask-repeat: repeat;
     mask-repeat: repeat;
   }
+  /* keep the glossy 3D asterisk clean — no grain punched through it */
+  .khan-story--grain .khan-story__feature-icon--3d { -webkit-mask-image: none; mask-image: none; }
 
   /* ---------- decorations ---------- */
   .khan-story__sideline {
@@ -409,6 +425,7 @@
 
     { "type": "header", "content": "Features (right column)" },
     { "type": "paragraph", "content": "Add, remove and reorder Feature blocks below." },
+    { "type": "checkbox", "id": "feature_icon_3d", "label": "Use animated 3D asterisk for icons", "default": true, "info": "Spins flat (in-plane). Overrides each block's icon image. Hidden on mobile like the other icons." },
     { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 56 },
     { "type": "range", "id": "feature_title_size", "label": "Feature title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 18 },
     { "type": "color", "id": "feature_title_color", "label": "Feature title color", "default": "#bf1616" },

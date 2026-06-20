@@ -40,6 +40,7 @@ function mount(canvas){
   var visible=true;
   if(true && "IntersectionObserver" in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting;},{threshold:0}).observe(root);}
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var staticMode=reduceMotion||(canvas.hasAttribute&&canvas.hasAttribute("data-static")); /* data-static: one still frame (CSS handles any spin) */
   function render(t){resize();
     gl.viewport(0,0,canvas.width,canvas.height);
     gl.uniform2f(uRes,canvas.width,canvas.height);
@@ -49,7 +50,7 @@ function mount(canvas){
   var t0=null,drewStatic=false;
   function frame(ts){requestAnimationFrame(frame);
     if(!ready||(true&&(!visible||document.hidden)))return;
-    if(reduceMotion){ if(!drewStatic){render(0.0);drewStatic=true;} return; }
+    if(staticMode){ if(!drewStatic){render(0.0);drewStatic=true;} return; }
     if(t0===null)t0=ts;
     render(((ts-t0)/1000)*CFG.speed);}
   window.addEventListener("resize",function(){drewStatic=false;});

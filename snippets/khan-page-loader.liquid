@@ -35,8 +35,14 @@
     var el = document.getElementById('khan-loader');
     if (!el) return;
     var done = false;
-    function hide() { if (done) return; done = true; el.classList.add('is-hidden'); }
-    function show() { done = false; el.classList.remove('is-hidden'); }
+    function hide() {
+      if (done) return;
+      done = true;
+      el.classList.add('is-hidden');
+      // after the fade, remove from layout so the WebGL asterisk stops rendering
+      window.setTimeout(function () { if (done) el.style.display = 'none'; }, 600);
+    }
+    function show() { done = false; el.style.display = ''; el.classList.remove('is-hidden'); }
 
     // Hide once the page is ready (small beat so the asterisk paints first).
     function ready() { window.setTimeout(hide, 350); }
