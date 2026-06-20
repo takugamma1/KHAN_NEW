@@ -69,6 +69,7 @@
             <span class="khan-footer__logo khan-footer__logo--svg">{{ 'white-logo.svg' | inline_asset_content }}</span>
           {%- endif -%}
           {%- if s.tagline != blank -%}<p class="khan-footer__tagline">{{ s.tagline }}</p>{%- endif -%}
+          {%- comment -%} 3D GPU asterisk logo; replaces the static mark when enabled {%- endcomment -%}
           {%- if s.show_logo3d -%}
             <div class="khan-footer__logo3d" aria-hidden="true">{% render 'khan-gpu-asterisk' %}</div>
           {%- else -%}
