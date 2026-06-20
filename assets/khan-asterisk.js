@@ -39,7 +39,7 @@ function mount(canvas){
     if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}}
   var visible=true;
   if(true && "IntersectionObserver" in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting;},{threshold:0}).observe(root);}
-  var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduceMotion=true; /* render one still, front-facing frame; smooth spin handled by CSS (no edge-on flip) */
   function render(t){resize();
     gl.viewport(0,0,canvas.width,canvas.height);
     gl.uniform2f(uRes,canvas.width,canvas.height);
