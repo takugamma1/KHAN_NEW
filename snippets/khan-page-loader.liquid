@@ -3,7 +3,7 @@
   Shown on initial load (fades out when ready) and re-shown on outgoing internal navigation.
   Uses the shared khan-asterisk.js renderer (loaded globally in theme.liquid).
 {%- endcomment -%}
-<div id="khan-loader" class="khan-loader" role="status" aria-live="polite" aria-label="Loading" style="--khan-loader-bg: {{ settings.khan_loader_bg | default: '#0a0a0a' }};">
+<div id="khan-loader" class="khan-loader" role="status" aria-live="polite" aria-label="Loading" style="--khan-loader-bg: {{ settings.khan_loader_bg | default: '#ffffff' }};">
   <div class="khan-loader__mark"><canvas data-khan-asterisk></canvas></div>
 </div>
 <noscript><style>#khan-loader{display:none !important;}</style></noscript>
@@ -12,7 +12,7 @@
   .khan-loader {
     position: fixed; inset: 0; z-index: 99999;
     display: grid; place-items: center;
-    background: var(--khan-loader-bg, #0a0a0a);
+    background: var(--khan-loader-bg, #ffffff);
     opacity: 1; visibility: visible;
     transition: opacity 0.45s ease;
   }
