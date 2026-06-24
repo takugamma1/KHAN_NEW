@@ -194,7 +194,7 @@
         "particle_color": "#dfdfdf",
         "particle_color_2": "#d8232a",
         "text_grain": false,
-        "show_top_asterisk": true,
+        "show_top_asterisk": false,
         "show_side_line": true,
         "show_plus_marks": true,
         "show_brackets": true,
