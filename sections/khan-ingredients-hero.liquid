@@ -1,5 +1,9 @@
 {% liquid
   assign s = section.settings
+  assign jar = s.jar_image
+  if jar == blank
+    assign jar = product.featured_image
+  endif
 %}
 
 <div
@@ -26,11 +30,17 @@
     --ih-gap: {{ s.usp_gap }}px;
     --ih-corner: {{ s.corner_size }}px;
     --ih-corner-top: {{ s.corner_top | default: 96 }}px;
+    --ih-factsw: {{ s.facts_width | default: 480 }}px;
+    --ih-facts-blur: {{ s.facts_blur | default: 16 }}px;
+    --ih-facts-op: {{ s.facts_opacity | default: 55 | divided_by: 100.0 }};
+    --ih-facts-top: {{ s.facts_top | default: 120 }}px;
+    --ih-peek: {{ s.peek | default: 64 }}px;
   "
+  data-khan-ihero
 >
   <div class="khan-ihero__bg" aria-hidden="true">
     {%- if s.bg_image != blank -%}
-      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-ihero__bg-img', loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-ihero__bg-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
     {%- endif -%}
     <span class="khan-ihero__overlay"></span>
   </div>
@@ -43,7 +53,8 @@
   {%- endif -%}
 
   <div class="khan-ihero__inner">
-    <div class="khan-ihero__content">
+
+    <div class="khan-ihero__left">
       {%- if s.eyebrow != blank -%}
         <p class="khan-ihero__eyebrow">{{ s.eyebrow }}</p>
       {%- endif -%}
@@ -51,28 +62,196 @@
         <div class="khan-ihero__heading">{{ s.heading }}</div>
       {%- endif -%}
 
-      <div class="khan-ihero__usps">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'usp' -%}
-            <div class="khan-ihero__usp" {{ block.shopify_attributes }}>
-              <span class="khan-ihero__usp-icon">
-                {%- if block.settings.icon != blank -%}
-                  {{ block.settings.icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
-                {%- else -%}
-                  <span class="khan-ihero__usp-asterisk" aria-hidden="true"></span>
-                {%- endif -%}
-              </span>
-              <div class="khan-ihero__usp-body">
-                {%- if block.settings.title != blank -%}<p class="khan-ihero__usp-title">{{ block.settings.title }}</p>{%- endif -%}
-                {%- if block.settings.text != blank -%}<p class="khan-ihero__usp-text">{{ block.settings.text }}</p>{%- endif -%}
+      {%- if jar != blank -%}
+        <div class="khan-ihero__jar">
+          {{ jar | image_url: width: 1600 | image_tag: class: 'khan-ihero__jar-img', loading: 'eager', fetchpriority: 'high', widths: '500, 800, 1100, 1400, 1600', sizes: '(max-width: 749px) 80vw, 44vw', alt: product.title | default: shop.name }}
+        </div>
+      {%- endif -%}
+
+      {%- if s.heading == blank and s.eyebrow == blank and section.blocks.size > 0 -%}
+        <div class="khan-ihero__usps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'usp' -%}
+              <div class="khan-ihero__usp" {{ block.shopify_attributes }}>
+                <span class="khan-ihero__usp-icon">
+                  {%- if block.settings.icon != blank -%}
+                    {{ block.settings.icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
+                  {%- else -%}
+                    <span class="khan-ihero__usp-asterisk" aria-hidden="true"></span>
+                  {%- endif -%}
+                </span>
+                <div class="khan-ihero__usp-body">
+                  {%- if block.settings.title != blank -%}<p class="khan-ihero__usp-title">{{ block.settings.title }}</p>{%- endif -%}
+                  {%- if block.settings.text != blank -%}<p class="khan-ihero__usp-text">{{ block.settings.text }}</p>{%- endif -%}
+                </div>
               </div>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
+
+    {%- if s.show_facts -%}
+      {%- comment -%} Mobile backdrop (portaled to <body> alongside the sheet on small screens) {%- endcomment -%}
+      <span class="khan-ihero__scrim" data-ifacts-scrim aria-hidden="true"></span>
+
+      <aside class="khan-ihero__facts" data-ifacts role="dialog" aria-label="{{ s.facts_heading | default: 'Supplement facts' | escape }}" aria-modal="false">
+        <button class="khan-ihero__facts-handle" type="button" data-ifacts-handle aria-expanded="false" aria-label="{{ s.facts_heading | default: 'Supplement facts' | escape }}">
+          <span class="khan-ihero__facts-grip" aria-hidden="true"></span>
+          <span class="khan-ihero__facts-handle-label">{{ s.facts_heading | default: 'Supplement facts' }}</span>
+          <span class="khan-ihero__facts-chevron" aria-hidden="true"></span>
+        </button>
+
+        {%- if s.legacy_label != blank -%}
+          <span class="khan-ihero__facts-legacy" aria-hidden="true">{{ s.legacy_label }}</span>
+        {%- endif -%}
+
+        <div class="khan-ihero__facts-card">
+          <div class="khan-ihero__facts-scroll">
+            {%- if s.facts_heading != blank -%}
+              <p class="khan-ihero__facts-title">{{ s.facts_heading }}</p>
+            {%- endif -%}
+
+            {%- assign rows = section.blocks | where: 'type', 'fact' -%}
+            {%- if rows.size > 0 -%}
+              <table class="khan-ihero__facts-table">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">{{ s.col1_header }}</th>
+                    <th scope="col">{{ s.col2_header }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for block in rows -%}
+                    <tr {{ block.shopify_attributes }}>
+                      <th scope="row">{{ block.settings.label }}</th>
+                      <td>{{ block.settings.col1 }}</td>
+                      <td>{{ block.settings.col2 }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            {%- endif -%}
+
+            {%- if s.facts_desc != blank -%}
+              <div class="khan-ihero__facts-desc">{{ s.facts_desc }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </aside>
+    {%- endif -%}
+
   </div>
 </div>
+
+<script>
+  (function () {
+    var root = document.getElementById('KhanIHero-{{ section.id }}');
+    if (!root) return;
+    var facts = root.querySelector('[data-ifacts]');
+    if (!facts) return;
+    var scrim = root.querySelector('[data-ifacts-scrim]');
+    var handle = facts.querySelector('[data-ifacts-handle]');
+    var mq = window.matchMedia('(max-width: 749px)');
+
+    /* ---------- desktop: slide-in once the section is on screen ---------- */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { root.classList.toggle('is-in', e.isIntersecting); });
+      }, { threshold: 0.08 }).observe(root);
+    } else {
+      root.classList.add('is-in');
+    }
+
+    /* ---------- mobile: finger-following bottom sheet ---------- */
+    var placeholder = document.createComment('ifacts-anchor');
+    var mounted = false, dragging = false, o = 0;
+    var startY = 0, o0 = 0, sheetH = 1, lastY = 0, lastT = 0, vel = 0;
+
+    function apply(animate) {
+      facts.style.transition = animate ? '' : 'none';
+      facts.style.setProperty('--o', o.toFixed(4));
+      if (scrim) {
+        scrim.style.transition = animate ? '' : 'none';
+        scrim.style.opacity = (o * 0.6).toFixed(3);
+        scrim.style.pointerEvents = o > 0.02 ? 'auto' : 'none';
+      }
+      document.body.classList.toggle('khan-ifacts-open', o > 0.02);
+      document.body.classList.toggle('khan-ifacts-locked', o > 0.92);
+      if (handle) handle.setAttribute('aria-expanded', o > 0.5 ? 'true' : 'false');
+    }
+    function setOpenness(v, animate) { o = v < 0 ? 0 : (v > 1 ? 1 : v); apply(animate); }
+
+    function onDown(e) {
+      if (!mq.matches) return;
+      dragging = true;
+      sheetH = facts.getBoundingClientRect().height || window.innerHeight;
+      startY = e.clientY; o0 = o; lastY = e.clientY; lastT = e.timeStamp || 0; vel = 0;
+      facts.style.transition = 'none';
+      if (handle && handle.setPointerCapture && e.pointerId != null) { try { handle.setPointerCapture(e.pointerId); } catch (_) {} }
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      if (e.cancelable) e.preventDefault();
+      var y = e.clientY, t = e.timeStamp || 0;
+      if (t > lastT) vel = (lastY - y) / (t - lastT); /* +ve = moving up = opening */
+      lastY = y; lastT = t;
+      setOpenness(o0 + (startY - y) / sheetH, false);
+    }
+    function onUp() {
+      if (!dragging) return;
+      dragging = false;
+      var target;
+      if (vel > 0.35) target = 1;
+      else if (vel < -0.35) target = 0;
+      else target = o >= 0.4 ? 1 : 0;
+      setOpenness(target, true);
+    }
+    function onHandleClick() { if (!dragging) setOpenness(o > 0.5 ? 0 : 1, true); }
+
+    function enableMobile() {
+      if (mounted) return; mounted = true;
+      // carry section-scoped CSS vars onto the node before it leaves the section
+      var cs = getComputedStyle(root);
+      ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'].forEach(function (v) {
+        facts.style.setProperty(v, cs.getPropertyValue(v));
+      });
+      facts.parentNode.insertBefore(placeholder, facts);
+      document.body.appendChild(facts);
+      if (scrim) document.body.appendChild(scrim);
+      root.classList.add('khan-ihero--sheet');
+      setOpenness(0, false);
+      if (handle) { handle.addEventListener('pointerdown', onDown); handle.addEventListener('click', onHandleClick); }
+      window.addEventListener('pointermove', onMove, { passive: false });
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+      if (scrim) scrim.addEventListener('click', closeFromScrim);
+    }
+    function closeFromScrim() { setOpenness(0, true); }
+    function disableMobile() {
+      if (!mounted) return; mounted = false;
+      if (handle) { handle.removeEventListener('pointerdown', onDown); handle.removeEventListener('click', onHandleClick); }
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      if (scrim) scrim.removeEventListener('click', closeFromScrim);
+      if (placeholder.parentNode) { placeholder.parentNode.insertBefore(facts, placeholder); placeholder.parentNode.removeChild(placeholder); }
+      if (scrim) root.querySelector('.khan-ihero__inner').insertBefore(scrim, facts);
+      root.classList.remove('khan-ihero--sheet');
+      document.body.classList.remove('khan-ifacts-open');
+      document.body.classList.remove('khan-ifacts-locked');
+      facts.style.transition = ''; facts.style.removeProperty('--o');
+      ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'].forEach(function (v) { facts.style.removeProperty(v); });
+      if (scrim) { scrim.style.opacity = ''; scrim.style.pointerEvents = ''; }
+    }
+    function evalMode() { if (mq.matches) enableMobile(); else disableMobile(); }
+    evalMode();
+    if (mq.addEventListener) mq.addEventListener('change', evalMode); else mq.addListener(evalMode);
+
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && mounted && o > 0) setOpenness(0, true); });
+  })();
+</script>
 
 {% stylesheet %}
   .khan-ihero {
@@ -80,9 +259,9 @@
     isolation: isolate;
     overflow: hidden;
     min-height: var(--ih-minh, 820px);
-    background: var(--ih-bg, #050505);
+    background: var(--ih-bg, #f4f4f2);
     display: flex;
-    align-items: var(--ih-valign, center);
+    align-items: stretch;
     padding: calc(var(--ih-pad-y, 96px) + 40px) clamp(20px, 5vw, 72px) var(--ih-pad-y, 96px);
   }
 
@@ -90,7 +269,7 @@
   .khan-ihero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
   .khan-ihero__overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to bottom, rgb(0 0 0 / var(--ih-top, 0.55)) 0%, rgb(0 0 0 / 0) 52%);
+    background: linear-gradient(to bottom, rgb(0 0 0 / var(--ih-top, 0)) 0%, rgb(0 0 0 / 0) 52%);
   }
 
   /* corners */
@@ -100,69 +279,168 @@
     font-size: var(--ih-corner, 12px); letter-spacing: 0.2em; text-transform: uppercase;
     white-space: nowrap;
   }
-  .khan-ihero__corner--tl { left: clamp(20px, 5vw, 72px); color: var(--ih-muted, #b9b9b9); }
+  .khan-ihero__corner--tl { left: clamp(20px, 5vw, 72px); color: var(--ih-muted, #6a6a6a); }
   .khan-ihero__corner--tr { right: clamp(20px, 5vw, 72px); color: var(--ih-accent, #d8232a); }
   .khan-ihero__corner--tr::before { content: "[ "; }
   .khan-ihero__corner--tr::after { content: " ]"; }
 
-  /* layout — content pinned right */
+  /* layout — jar left, facts right */
   .khan-ihero__inner {
     position: relative; z-index: 1;
     width: 100%; max-width: var(--ih-maxw, 1680px); margin-inline: auto;
-    display: flex; justify-content: flex-end;
+    display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 5vw, 90px);
   }
-  .khan-ihero__content { width: var(--ih-contentw, 560px); max-width: 92%; transform: translateY(var(--ih-offset, 0px)); }
+  .khan-ihero__left { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 
+  /* jar */
+  .khan-ihero__jar { width: 100%; display: flex; align-items: center; justify-content: flex-start; }
+  .khan-ihero__jar-img { width: min(100%, 640px); height: auto; object-fit: contain; display: block; filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.35)); }
+
+  /* heading (optional) */
   .khan-ihero__eyebrow {
     margin: 0 0 16px; display: flex; align-items: center; gap: 12px;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--ih-eyebrow, 13px); letter-spacing: 0.24em; text-transform: uppercase; color: var(--ih-accent, #d8232a);
   }
   .khan-ihero__eyebrow::before { content: ""; width: 30px; height: 2px; background: var(--ih-accent, #d8232a); }
-
   .khan-ihero__heading {
     font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: min(var(--ih-heading, 88px), 11vw); line-height: 0.94; letter-spacing: -0.01em;
-    text-transform: uppercase; color: var(--ih-text, #f3f3f3);
-    margin-bottom: clamp(28px, 3.4vw, 48px);
+    text-transform: uppercase; color: var(--ih-text, #111);
+    margin-bottom: clamp(20px, 2.4vw, 36px);
   }
   .khan-ihero__heading :where(p) { margin: 0; }
   .khan-ihero__heading :where(strong) { color: var(--ih-accent, #d8232a); font-weight: 900; }
 
-  /* usps */
-  .khan-ihero__usps { display: flex; flex-direction: column; gap: var(--ih-gap, 22px); }
+  /* usps (optional, legacy) */
+  .khan-ihero__usps { display: flex; flex-direction: column; gap: var(--ih-gap, 22px); margin-top: 24px; }
   .khan-ihero__usp { display: flex; align-items: center; gap: clamp(14px, 1.4vw, 22px); }
-  .khan-ihero__usp-icon {
-    flex: 0 0 auto;
-    width: var(--ih-icon, 28px); height: var(--ih-icon, 28px);
-    color: var(--ih-accent, #d8232a);
-    display: inline-flex; align-items: center; justify-content: center;
-  }
+  .khan-ihero__usp-icon { flex: 0 0 auto; width: var(--ih-icon, 28px); height: var(--ih-icon, 28px); color: var(--ih-accent, #d8232a); display: inline-flex; align-items: center; justify-content: center; }
   .khan-ihero__usp-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .khan-ihero__usp-asterisk {
-    width: 100%; height: 100%;
-    background: currentColor;
-    -webkit-mask: var(--ih-aster) center / contain no-repeat;
-            mask: var(--ih-aster) center / contain no-repeat;
+  .khan-ihero__usp-asterisk { width: 100%; height: 100%; background: currentColor; -webkit-mask: var(--ih-aster) center / contain no-repeat; mask: var(--ih-aster) center / contain no-repeat; }
+  .khan-ihero__usp-title { margin: 0 0 4px; font-family: ui-monospace, monospace; font-weight: 700; font-size: var(--ih-title, 14px); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ih-accent, #d8232a); }
+  .khan-ihero__usp-text { margin: 0; font-family: ui-monospace, monospace; font-size: var(--ih-utext, 13px); line-height: 1.5; letter-spacing: 0.03em; color: var(--ih-text, #111); }
+
+  /* ============ supplement-facts glass panel ============ */
+  .khan-ihero__facts { --o: 0; position: relative; }
+  .khan-ihero__facts-card {
+    position: relative;
+    color: #f1f1f1;
+    background: rgb(12 12 12 / var(--ih-facts-op, 0.55));
+    border: 1px solid rgb(255 255 255 / 0.10);
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 0.45);
+    -webkit-backdrop-filter: blur(var(--ih-facts-blur, 16px));
+            backdrop-filter: blur(var(--ih-facts-blur, 16px));
+    overflow: hidden;
   }
-  .khan-ihero__usp-body { min-width: 0; }
-  .khan-ihero__usp-title {
-    margin: 0 0 4px;
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 700;
-    font-size: var(--ih-title, 14px); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ih-accent, #d8232a);
+  .khan-ihero__facts-card::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.06) 0%, rgb(255 255 255 / 0) 24%);
   }
-  .khan-ihero__usp-text {
-    margin: 0;
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: var(--ih-utext, 13px); line-height: 1.5; letter-spacing: 0.03em; color: var(--ih-text, #f3f3f3);
+  .khan-ihero__facts-scroll { position: relative; z-index: 1; padding: clamp(22px, 2.4vw, 34px); }
+  .khan-ihero__facts-title {
+    margin: 0 0 18px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: clamp(22px, 2vw, 30px); letter-spacing: 0.02em; text-transform: uppercase; color: #fff;
+  }
+  .khan-ihero__facts-table { width: 100%; border-collapse: collapse; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+  .khan-ihero__facts-table th, .khan-ihero__facts-table td {
+    text-align: left; padding: 9px 10px; font-size: clamp(12px, 1vw, 14px); letter-spacing: 0.02em;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .khan-ihero__facts-table thead th { color: var(--ih-accent, #d8232a); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-bottom-color: rgb(255 255 255 / 0.28); }
+  .khan-ihero__facts-table td { text-align: right; color: #e9e9e9; white-space: nowrap; }
+  .khan-ihero__facts-table tbody th { color: #fff; font-weight: 500; }
+  .khan-ihero__facts-table tbody tr:last-child th, .khan-ihero__facts-table tbody tr:last-child td { border-bottom: 0; }
+  .khan-ihero__facts-desc { margin-top: 18px; font-family: ui-monospace, monospace; font-size: clamp(12px, 0.95vw, 13.5px); line-height: 1.7; letter-spacing: 0.02em; color: var(--ih-muted, #b3b3b3); }
+  .khan-ihero__facts-desc :where(p) { margin: 0 0 10px; }
+  .khan-ihero__facts-desc :where(p):last-child { margin-bottom: 0; }
+
+  /* vertical LEGACY label (desktop) */
+  .khan-ihero__facts-legacy {
+    position: absolute; left: -0.42em; top: 50%; z-index: 2;
+    transform: translate(-100%, -50%);
+    writing-mode: vertical-rl;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: clamp(40px, 5vw, 84px); letter-spacing: 0.06em; text-transform: uppercase;
+    color: rgb(20 20 20 / 0.9); pointer-events: none; line-height: 1;
   }
 
-  /* responsive */
-  @media screen and (max-width: 900px) {
-    .khan-ihero__inner { justify-content: flex-start; }
-    .khan-ihero__content { width: 100%; max-width: 100%; }
-    .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
+  /* mobile handle + scrim are desktop-hidden */
+  .khan-ihero__facts-handle { display: none; }
+  .khan-ihero__scrim { display: none; }
+
+  /* ---------- desktop: pin + slide-in from the right ---------- */
+  @media screen and (min-width: 750px) {
+    .khan-ihero__facts {
+      flex: 0 0 auto;
+      width: var(--ih-factsw, 480px); max-width: 42vw;
+      position: sticky; top: var(--ih-facts-top, 120px); align-self: flex-start;
+      transform: translateX(115%); opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.5s ease;
+    }
+    .khan-ihero.is-in .khan-ihero__facts { transform: translateX(0); opacity: 1; }
   }
+
+  /* ---------- mobile: finger-following bottom sheet ---------- */
+  @media screen and (max-width: 749px) {
+    .khan-ihero__inner { flex-direction: column; align-items: center; gap: 28px; }
+    .khan-ihero__jar-img { width: min(82vw, 420px); }
+    .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
+
+    .khan-ihero__facts {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      width: 100%; height: 100svh;
+      display: flex; flex-direction: column;
+      transform: translateY(calc((1 - var(--o, 0)) * (100% - var(--ih-peek, 64px))));
+      transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .khan-ihero__facts-legacy { display: none; }
+
+    .khan-ihero__facts-handle {
+      display: flex; align-items: center; gap: 12px;
+      flex: 0 0 auto; height: var(--ih-peek, 64px);
+      padding: 0 20px; margin: 0; width: 100%;
+      background: rgb(12 12 12 / 0.92);
+      -webkit-backdrop-filter: blur(var(--ih-facts-blur, 16px)); backdrop-filter: blur(var(--ih-facts-blur, 16px));
+      border: 0; border-radius: 22px 22px 0 0;
+      border-top: 1px solid rgb(255 255 255 / 0.12);
+      color: #fff; cursor: grab; touch-action: none;
+      box-shadow: 0 -14px 40px rgb(0 0 0 / 0.4);
+    }
+    .khan-ihero__facts-handle:active { cursor: grabbing; }
+    .khan-ihero__facts-grip { width: 38px; height: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.4); position: absolute; left: 50%; top: 8px; transform: translateX(-50%); }
+    .khan-ihero__facts-handle-label { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .khan-ihero__facts-chevron { margin-left: auto; width: 12px; height: 12px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-135deg); transition: transform 0.3s ease; }
+    .khan-ihero__facts-handle[aria-expanded="true"] .khan-ihero__facts-chevron { transform: rotate(45deg); }
+
+    .khan-ihero__facts-card {
+      flex: 1 1 auto; min-height: 0;
+      border-radius: 0; border: 0; box-shadow: none;
+      background: rgb(12 12 12 / 0.96);
+      display: flex; flex-direction: column;
+    }
+    .khan-ihero__facts-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; height: 100%; padding-bottom: 40px; }
+
+    .khan-ihero__scrim {
+      display: block; position: fixed; inset: 0; z-index: 59;
+      background: #000; opacity: 0; pointer-events: none;
+      transition: opacity 0.42s ease;
+    }
+  }
+
+  /* hide the sticky add-to-cart while the facts sheet is open (independent of the cart's own logic) */
+  body.khan-ifacts-open [data-khan-scart] { opacity: 0 !important; transform: translateY(160%) !important; pointer-events: none !important; transition: opacity 0.3s ease, transform 0.3s ease; }
+  body.khan-ifacts-locked { overflow: hidden; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .khan-ihero__facts { transition: none !important; }
+    .khan-ihero__scrim { transition: none !important; }
+  }
+
+  /* legacy small-screen corner sizing */
   @media screen and (max-width: 600px) {
     .khan-ihero__corner { font-size: 11px; letter-spacing: 0.14em; }
   }
@@ -175,9 +453,25 @@
   "class": "khan-ihero-wrapper",
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
+    { "type": "header", "content": "Left — jar image" },
+    { "type": "image_picker", "id": "jar_image", "label": "Jar image", "info": "A jar-only image (transparent PNG looks best). Falls back to the product's featured image." },
+
+    { "type": "header", "content": "Supplement facts panel (right)" },
+    { "type": "checkbox", "id": "show_facts", "label": "Show facts panel", "default": true },
+    { "type": "text", "id": "facts_heading", "label": "Panel heading", "default": "Supplement facts" },
+    { "type": "text", "id": "col1_header", "label": "Column 1 header", "default": "FTR T111g" },
+    { "type": "text", "id": "col2_header", "label": "Column 2 header", "default": "BRS FSIMANC - F18" },
+    { "type": "richtext", "id": "facts_desc", "label": "Description (under the table)", "default": "<p>A precision-dosed formula — every ingredient earns its place. No fillers, no shortcuts.</p>" },
+    { "type": "text", "id": "legacy_label", "label": "Big side label", "default": "Legacy", "info": "Vertical word behind the panel on desktop. Leave empty to hide." },
+    { "type": "range", "id": "facts_width", "label": "Panel width (desktop)", "min": 360, "max": 680, "step": 10, "unit": "px", "default": 480 },
+    { "type": "range", "id": "facts_top", "label": "Pinned distance from top (desktop)", "min": 60, "max": 220, "step": 4, "unit": "px", "default": 120 },
+    { "type": "range", "id": "facts_blur", "label": "Glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "facts_opacity", "label": "Glass darkness", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "range", "id": "peek", "label": "Collapsed handle height (mobile)", "min": 48, "max": 120, "step": 4, "unit": "px", "default": 64 },
+
     { "type": "header", "content": "Background" },
-    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
-    { "type": "range", "id": "top_overlay", "label": "Top gradient", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 55 },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (optional texture)" },
+    { "type": "range", "id": "top_overlay", "label": "Top gradient", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 0 },
     { "type": "range", "id": "min_height", "label": "Height", "min": 480, "max": 1000, "step": 20, "unit": "px", "default": 820 },
 
     { "type": "header", "content": "Corner labels" },
@@ -185,24 +479,20 @@
     { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "Ingredients", "info": "Shown inside [ brackets ]." },
     { "type": "range", "id": "corner_top", "label": "Corner labels: distance from top", "min": 16, "max": 200, "step": 4, "unit": "px", "default": 96 },
 
-    { "type": "header", "content": "Right content position" },
-    { "type": "select", "id": "content_valign", "label": "Vertical position", "options": [ { "value": "flex-start", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Bottom" } ], "default": "center" },
-    { "type": "range", "id": "content_offset", "label": "Nudge up / down", "min": -300, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Negative = up, positive = down." },
-
-    { "type": "header", "content": "Heading (right column)" },
+    { "type": "header", "content": "Heading (optional, left)" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
-    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Fuel the<br/><strong>discipline.</strong></p>" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "" },
 
-    { "type": "header", "content": "USP list" },
+    { "type": "header", "content": "USP list (optional)" },
     { "type": "range", "id": "icon_size", "label": "Icon size", "min": 16, "max": 48, "step": 2, "unit": "px", "default": 28 },
     { "type": "range", "id": "title_size", "label": "Title size", "min": 11, "max": 22, "step": 1, "unit": "px", "default": 14 },
     { "type": "range", "id": "text_size", "label": "Description size", "min": 11, "max": 20, "step": 1, "unit": "px", "default": 13 },
     { "type": "range", "id": "usp_gap", "label": "Gap between items", "min": 10, "max": 48, "step": 2, "unit": "px", "default": 22 },
 
     { "type": "header", "content": "Colors" },
-    { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#050505" },
-    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
-    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#b9b9b9" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f4f2" },
+    { "type": "color", "id": "text_color", "label": "Text (left)", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6a6a6a" },
     { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
 
     { "type": "header", "content": "Sizes & spacing" },
@@ -212,11 +502,26 @@
     { "type": "range", "id": "corner_size", "label": "Corner label size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1680 },
     { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "content_offset", "label": "Nudge content up / down", "min": -300, "max": 300, "step": 10, "unit": "px", "default": 0 },
+    {
+      "type": "select", "id": "content_valign", "label": "Vertical position",
+      "options": [ { "value": "flex-start", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Bottom" } ],
+      "default": "center"
+    },
 
     { "type": "header", "content": "Appearance" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
   ],
   "blocks": [
+    {
+      "type": "fact",
+      "name": "Fact row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Row label", "default": "Ingredient" },
+        { "type": "text", "id": "col1", "label": "Column 1 value", "default": "0 ng" },
+        { "type": "text", "id": "col2", "label": "Column 2 value", "default": "0 ng" }
+      ]
+    },
     {
       "type": "usp",
       "name": "USP",
@@ -227,15 +532,19 @@
       ]
     }
   ],
-  "max_blocks": 8,
+  "max_blocks": 20,
   "presets": [
     {
       "name": "Ingredients hero",
       "blocks": [
-        { "type": "usp", "settings": { "title": "Intense energy", "text": "Push harder. Longer." } },
-        { "type": "usp", "settings": { "title": "Laser focus", "text": "Dial in. Zone out." } },
-        { "type": "usp", "settings": { "title": "Powerful pumps", "text": "Feel the difference." } },
-        { "type": "usp", "settings": { "title": "Clean formula", "text": "No fillers. No shortcuts." } }
+        { "type": "fact", "settings": { "label": "Erikstut", "col1": "360 ng", "col2": "510 ng" } },
+        { "type": "fact", "settings": { "label": "Camration", "col1": "02,50 ng", "col2": "3450 ng" } },
+        { "type": "fact", "settings": { "label": "Orae rrainnie", "col1": "02,60 ng", "col2": "1100 ng" } },
+        { "type": "fact", "settings": { "label": "Oraonied", "col1": "130 ng", "col2": "30 ng" } },
+        { "type": "fact", "settings": { "label": "Riitaad", "col1": "820 ng", "col2": "500 ng" } },
+        { "type": "fact", "settings": { "label": "Frectorohonants", "col1": "820 ng", "col2": "650 ng" } },
+        { "type": "fact", "settings": { "label": "Entnnothoreruz", "col1": "350 ng", "col2": "670 ng" } },
+        { "type": "fact", "settings": { "label": "Inge iliment vliturs", "col1": "960 ng", "col2": "310 ng" } }
       ]
     }
   ]
