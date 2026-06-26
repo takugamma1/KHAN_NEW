@@ -42,17 +42,101 @@
     },
     "khan_ingredients_hero_JggNdr": {
       "type": "khan-ingredients-hero",
+      "blocks": {
+        "fact_erikstut": {
+          "type": "fact",
+          "settings": {
+            "label": "Erikstut",
+            "col1": "360 ng",
+            "col2": "510 ng"
+          }
+        },
+        "fact_camration": {
+          "type": "fact",
+          "settings": {
+            "label": "Camration",
+            "col1": "02,50 ng",
+            "col2": "3450 ng"
+          }
+        },
+        "fact_orae": {
+          "type": "fact",
+          "settings": {
+            "label": "Orae rrainnie",
+            "col1": "02,60 ng",
+            "col2": "1100 ng"
+          }
+        },
+        "fact_oraonied": {
+          "type": "fact",
+          "settings": {
+            "label": "Oraonied",
+            "col1": "130 ng",
+            "col2": "30 ng"
+          }
+        },
+        "fact_riitaad": {
+          "type": "fact",
+          "settings": {
+            "label": "Riitaad",
+            "col1": "820 ng",
+            "col2": "500 ng"
+          }
+        },
+        "fact_frecto": {
+          "type": "fact",
+          "settings": {
+            "label": "Frectorohonants",
+            "col1": "820 ng",
+            "col2": "650 ng"
+          }
+        },
+        "fact_entnno": {
+          "type": "fact",
+          "settings": {
+            "label": "Entnnothoreruz",
+            "col1": "350 ng",
+            "col2": "670 ng"
+          }
+        },
+        "fact_inge": {
+          "type": "fact",
+          "settings": {
+            "label": "Inge iliment vliturs",
+            "col1": "960 ng",
+            "col2": "310 ng"
+          }
+        }
+      },
+      "block_order": [
+        "fact_erikstut",
+        "fact_camration",
+        "fact_orae",
+        "fact_oraonied",
+        "fact_riitaad",
+        "fact_frecto",
+        "fact_entnno",
+        "fact_inge"
+      ],
       "name": "Ingredients hero",
       "settings": {
-        "bg_image": "",
         "show_facts": true,
+        "facts_heading": "Supplement facts",
+        "col1_header": "FTR T111g",
+        "col2_header": "BRS FSIMANC - F18",
+        "facts_desc": "<p>A precision-dosed formula — every ingredient earns its place. No fillers, no shortcuts.</p>",
+        "legacy_label": "Legacy",
+        "facts_width": 480,
+        "facts_top": 120,
+        "facts_blur": 16,
+        "facts_opacity": 55,
+        "peek": 64,
+        "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-26T151331.478.png",
         "top_overlay": 0,
         "min_height": 820,
         "top_left": "Khan Pre-Workout",
         "top_right": "Съставки",
         "corner_top": 96,
-        "content_valign": "flex-start",
-        "content_offset": 0,
         "eyebrow": "",
         "heading": "",
         "icon_size": 48,
@@ -69,19 +153,10 @@
         "corner_size": 12,
         "max_width": 1900,
         "padding_y": 84,
+        "content_offset": 0,
+        "content_valign": "flex-start",
         "color_scheme": ""
-      },
-      "blocks": {
-        "fact_erikstut": { "type": "fact", "settings": { "label": "Erikstut", "col1": "360 ng", "col2": "510 ng" } },
-        "fact_camration": { "type": "fact", "settings": { "label": "Camration", "col1": "02,50 ng", "col2": "3450 ng" } },
-        "fact_orae": { "type": "fact", "settings": { "label": "Orae rrainnie", "col1": "02,60 ng", "col2": "1100 ng" } },
-        "fact_oraonied": { "type": "fact", "settings": { "label": "Oraonied", "col1": "130 ng", "col2": "30 ng" } },
-        "fact_riitaad": { "type": "fact", "settings": { "label": "Riitaad", "col1": "820 ng", "col2": "500 ng" } },
-        "fact_frecto": { "type": "fact", "settings": { "label": "Frectorohonants", "col1": "820 ng", "col2": "650 ng" } },
-        "fact_entnno": { "type": "fact", "settings": { "label": "Entnnothoreruz", "col1": "350 ng", "col2": "670 ng" } },
-        "fact_inge": { "type": "fact", "settings": { "label": "Inge iliment vliturs", "col1": "960 ng", "col2": "310 ng" } }
-      },
-      "block_order": ["fact_erikstut","fact_camration","fact_orae","fact_oraonied","fact_riitaad","fact_frecto","fact_entnno","fact_inge"]
+      }
     },
     "khan_ingredients_Hynnfd": {
       "type": "khan-ingredients",
