@@ -161,11 +161,17 @@
     var handle = facts.querySelector('[data-ifacts-handle]');
     var mq = window.matchMedia('(max-width: 749px)');
 
-    /* ---------- desktop: slide-in once the section is on screen ---------- */
+    /* ---------- show only while this section is on screen ---------- */
+    var inView = true;
+    function reflectInView() {
+      // mobile tab/drawer live on <body> (portaled) — keep them tied to the section
+      if (tab) tab.style.display = inView ? '' : 'none';
+      if (!inView && o > 0) setOpenness(0, true); // scrolled away with it open -> close
+    }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) {
-        es.forEach(function (e) { root.classList.toggle('is-in', e.isIntersecting); });
-      }, { threshold: 0.08 }).observe(root);
+        es.forEach(function (e) { inView = e.isIntersecting; root.classList.toggle('is-in', inView); reflectInView(); });
+      }, { threshold: 0 }).observe(root);
     } else {
       root.classList.add('is-in');
     }
@@ -232,6 +238,7 @@
       if (tab) document.body.appendChild(tab);
       root.classList.add('khan-ihero--sheet');
       setOpenness(0, false);
+      reflectInView();
       if (handle) { handle.addEventListener('pointerdown', onDown); handle.addEventListener('click', onTap); }
       if (tab) { tab.addEventListener('pointerdown', onDown); tab.addEventListener('click', onTap); }
       window.addEventListener('pointermove', onMove, { passive: false });
@@ -258,7 +265,7 @@
       facts.style.transition = ''; facts.style.removeProperty('--o');
       VARS.forEach(function (v) { facts.style.removeProperty(v); if (tab) tab.style.removeProperty(v); });
       if (scrim) { scrim.style.opacity = ''; scrim.style.pointerEvents = ''; }
-      if (tab) { tab.style.opacity = ''; tab.style.pointerEvents = ''; }
+      if (tab) { tab.style.opacity = ''; tab.style.pointerEvents = ''; tab.style.display = ''; }
     }
     function evalMode() { if (mq.matches) enableMobile(); else disableMobile(); }
     evalMode();
