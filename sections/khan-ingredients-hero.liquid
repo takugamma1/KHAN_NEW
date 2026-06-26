@@ -161,20 +161,27 @@
     var handle = facts.querySelector('[data-ifacts-handle]');
     var mq = window.matchMedia('(max-width: 749px)');
 
-    /* ---------- show only while this section is on screen ---------- */
-    var inView = true;
-    function reflectInView() {
-      // mobile tab/drawer live on <body> (portaled) — keep them tied to the section
-      if (tab) tab.style.display = inView ? '' : 'none';
-      if (!inView && o > 0) setOpenness(0, true); // scrolled away with it open -> close
-    }
+    /* ---------- desktop: slide-in marker once the section is on screen ---------- */
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) {
-        es.forEach(function (e) { inView = e.isIntersecting; root.classList.toggle('is-in', inView); reflectInView(); });
-      }, { threshold: 0 }).observe(root);
+        es.forEach(function (e) { root.classList.toggle('is-in', e.isIntersecting); });
+      }, { threshold: 0.08 }).observe(root);
     } else {
       root.classList.add('is-in');
     }
+
+    /* keep the (fixed) mobile bubble confined to its section — a smooth manual "sticky":
+       pinned mid-screen while the section is in view, riding the section's top/bottom
+       edges in and out so it scrolls away at the section end (no display toggle, no lag). */
+    var rafPending = false;
+    function updateTabPos() {
+      if (!tab || !mq.matches) return;
+      var h = tab.offsetHeight || 120;
+      var r = root.getBoundingClientRect();
+      var pin = window.innerHeight * 0.5 - h / 2;
+      tab.style.top = Math.min(Math.max(pin, r.top), r.bottom - h) + 'px';
+    }
+    function onScroll() { if (rafPending) return; rafPending = true; requestAnimationFrame(function () { rafPending = false; updateTabPos(); }); }
 
     /* ---------- mobile: finger-following RIGHT-side drawer ---------- */
     var tab = root.querySelector('[data-ifacts-tab]');
@@ -238,13 +245,15 @@
       if (tab) document.body.appendChild(tab);
       root.classList.add('khan-ihero--sheet');
       setOpenness(0, false);
-      reflectInView();
       if (handle) { handle.addEventListener('pointerdown', onDown); handle.addEventListener('click', onTap); }
       if (tab) { tab.addEventListener('pointerdown', onDown); tab.addEventListener('click', onTap); }
       window.addEventListener('pointermove', onMove, { passive: false });
       window.addEventListener('pointerup', onUp);
       window.addEventListener('pointercancel', onUp);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
       if (scrim) scrim.addEventListener('click', closeFromScrim);
+      updateTabPos();
     }
     function closeFromScrim() { setOpenness(0, true); }
     function disableMobile() {
@@ -254,6 +263,9 @@
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (tab) tab.style.top = '';
       if (scrim) scrim.removeEventListener('click', closeFromScrim);
       var inner = root.querySelector('.khan-ihero__inner');
       if (anchor.parentNode) { anchor.parentNode.insertBefore(facts, anchor); anchor.parentNode.removeChild(anchor); }
@@ -426,7 +438,7 @@
     /* small bubble on the RIGHT edge — drag left / tap to open */
     .khan-ihero__facts-tab {
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-      position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 58;
+      position: fixed; right: 0; top: 0; z-index: 58; /* top is set by JS to stay within the section */
       width: 46px; min-height: 120px; padding: 16px 0; margin: 0;
       background: rgb(12 12 12 / 0.92);
       -webkit-backdrop-filter: blur(var(--ih-facts-blur, 16px)); backdrop-filter: blur(var(--ih-facts-blur, 16px));
