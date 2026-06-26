@@ -95,6 +95,12 @@
       {%- comment -%} Mobile backdrop (portaled to <body> alongside the sheet on small screens) {%- endcomment -%}
       <span class="khan-ihero__scrim" data-ifacts-scrim aria-hidden="true"></span>
 
+      {%- comment -%} Mobile: small right-edge bubble — drag left / tap to open the drawer {%- endcomment -%}
+      <button class="khan-ihero__facts-tab" type="button" data-ifacts-tab aria-label="{{ s.facts_heading | default: 'Supplement facts' | escape }}">
+        <span class="khan-ihero__facts-tab-arrow" aria-hidden="true"></span>
+        <span class="khan-ihero__facts-tab-label">{{ s.facts_heading | default: 'Supplement facts' }}</span>
+      </button>
+
       <aside class="khan-ihero__facts" data-ifacts role="dialog" aria-label="{{ s.facts_heading | default: 'Supplement facts' | escape }}" aria-modal="false">
         <button class="khan-ihero__facts-handle" type="button" data-ifacts-handle aria-expanded="false" aria-label="{{ s.facts_heading | default: 'Supplement facts' | escape }}">
           <span class="khan-ihero__facts-grip" aria-hidden="true"></span>
@@ -164,18 +170,24 @@
       root.classList.add('is-in');
     }
 
-    /* ---------- mobile: finger-following bottom sheet ---------- */
-    var placeholder = document.createComment('ifacts-anchor');
-    var mounted = false, dragging = false, o = 0;
-    var startY = 0, o0 = 0, sheetH = 1, lastY = 0, lastT = 0, vel = 0;
+    /* ---------- mobile: finger-following RIGHT-side drawer ---------- */
+    var tab = root.querySelector('[data-ifacts-tab]');
+    var anchor = document.createComment('ifacts-anchor');
+    var mounted = false, dragging = false, dragEl = null, o = 0;
+    var startX = 0, o0 = 0, sheetW = 1, lastX = 0, lastT = 0, vel = 0;
+    var VARS = ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'];
 
     function apply(animate) {
       facts.style.transition = animate ? '' : 'none';
       facts.style.setProperty('--o', o.toFixed(4));
       if (scrim) {
         scrim.style.transition = animate ? '' : 'none';
-        scrim.style.opacity = (o * 0.6).toFixed(3);
+        scrim.style.opacity = (o * 0.55).toFixed(3);
         scrim.style.pointerEvents = o > 0.02 ? 'auto' : 'none';
+      }
+      if (tab) {
+        tab.style.opacity = (1 - Math.min(1, o * 2)).toFixed(3);
+        tab.style.pointerEvents = o > 0.05 ? 'none' : 'auto';
       }
       document.body.classList.toggle('khan-ifacts-open', o > 0.02);
       document.body.classList.toggle('khan-ifacts-locked', o > 0.92);
@@ -185,44 +197,43 @@
 
     function onDown(e) {
       if (!mq.matches) return;
-      dragging = true;
-      sheetH = facts.getBoundingClientRect().height || window.innerHeight;
-      startY = e.clientY; o0 = o; lastY = e.clientY; lastT = e.timeStamp || 0; vel = 0;
+      dragging = true; dragEl = e.currentTarget;
+      sheetW = facts.getBoundingClientRect().width || window.innerWidth;
+      startX = e.clientX; o0 = o; lastX = e.clientX; lastT = e.timeStamp || 0; vel = 0;
       facts.style.transition = 'none';
-      if (handle && handle.setPointerCapture && e.pointerId != null) { try { handle.setPointerCapture(e.pointerId); } catch (_) {} }
+      if (dragEl && dragEl.setPointerCapture && e.pointerId != null) { try { dragEl.setPointerCapture(e.pointerId); } catch (_) {} }
     }
     function onMove(e) {
       if (!dragging) return;
       if (e.cancelable) e.preventDefault();
-      var y = e.clientY, t = e.timeStamp || 0;
-      if (t > lastT) vel = (lastY - y) / (t - lastT); /* +ve = moving up = opening */
-      lastY = y; lastT = t;
-      setOpenness(o0 + (startY - y) / sheetH, false);
+      var x = e.clientX, t = e.timeStamp || 0;
+      if (t > lastT) vel = (lastX - x) / (t - lastT); /* +ve = moving left = opening */
+      lastX = x; lastT = t;
+      setOpenness(o0 + (startX - x) / sheetW, false);
     }
     function onUp() {
       if (!dragging) return;
       dragging = false;
       var target;
-      if (vel > 0.35) target = 1;
-      else if (vel < -0.35) target = 0;
+      if (vel > 0.4) target = 1;
+      else if (vel < -0.4) target = 0;
       else target = o >= 0.4 ? 1 : 0;
       setOpenness(target, true);
     }
-    function onHandleClick() { if (!dragging) setOpenness(o > 0.5 ? 0 : 1, true); }
+    function onTap() { if (!dragging) setOpenness(o > 0.5 ? 0 : 1, true); }
 
     function enableMobile() {
       if (mounted) return; mounted = true;
-      // carry section-scoped CSS vars onto the node before it leaves the section
       var cs = getComputedStyle(root);
-      ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'].forEach(function (v) {
-        facts.style.setProperty(v, cs.getPropertyValue(v));
-      });
-      facts.parentNode.insertBefore(placeholder, facts);
+      VARS.forEach(function (v) { var val = cs.getPropertyValue(v); facts.style.setProperty(v, val); if (tab) tab.style.setProperty(v, val); });
+      facts.parentNode.insertBefore(anchor, facts);
       document.body.appendChild(facts);
       if (scrim) document.body.appendChild(scrim);
+      if (tab) document.body.appendChild(tab);
       root.classList.add('khan-ihero--sheet');
       setOpenness(0, false);
-      if (handle) { handle.addEventListener('pointerdown', onDown); handle.addEventListener('click', onHandleClick); }
+      if (handle) { handle.addEventListener('pointerdown', onDown); handle.addEventListener('click', onTap); }
+      if (tab) { tab.addEventListener('pointerdown', onDown); tab.addEventListener('click', onTap); }
       window.addEventListener('pointermove', onMove, { passive: false });
       window.addEventListener('pointerup', onUp);
       window.addEventListener('pointercancel', onUp);
@@ -231,19 +242,23 @@
     function closeFromScrim() { setOpenness(0, true); }
     function disableMobile() {
       if (!mounted) return; mounted = false;
-      if (handle) { handle.removeEventListener('pointerdown', onDown); handle.removeEventListener('click', onHandleClick); }
+      if (handle) { handle.removeEventListener('pointerdown', onDown); handle.removeEventListener('click', onTap); }
+      if (tab) { tab.removeEventListener('pointerdown', onDown); tab.removeEventListener('click', onTap); }
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
       if (scrim) scrim.removeEventListener('click', closeFromScrim);
-      if (placeholder.parentNode) { placeholder.parentNode.insertBefore(facts, placeholder); placeholder.parentNode.removeChild(placeholder); }
-      if (scrim) root.querySelector('.khan-ihero__inner').insertBefore(scrim, facts);
+      var inner = root.querySelector('.khan-ihero__inner');
+      if (anchor.parentNode) { anchor.parentNode.insertBefore(facts, anchor); anchor.parentNode.removeChild(anchor); }
+      if (scrim && inner) inner.insertBefore(scrim, facts);
+      if (tab && inner) inner.insertBefore(tab, facts);
       root.classList.remove('khan-ihero--sheet');
       document.body.classList.remove('khan-ifacts-open');
       document.body.classList.remove('khan-ifacts-locked');
       facts.style.transition = ''; facts.style.removeProperty('--o');
-      ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'].forEach(function (v) { facts.style.removeProperty(v); });
+      VARS.forEach(function (v) { facts.style.removeProperty(v); if (tab) tab.style.removeProperty(v); });
       if (scrim) { scrim.style.opacity = ''; scrim.style.pointerEvents = ''; }
+      if (tab) { tab.style.opacity = ''; tab.style.pointerEvents = ''; }
     }
     function evalMode() { if (mq.matches) enableMobile(); else disableMobile(); }
     evalMode();
@@ -367,8 +382,9 @@
     color: rgb(20 20 20 / 0.9); pointer-events: none; line-height: 1;
   }
 
-  /* mobile handle + scrim are desktop-hidden */
+  /* mobile handle + tab + scrim are desktop-hidden */
   .khan-ihero__facts-handle { display: none; }
+  .khan-ihero__facts-tab { display: none; }
   .khan-ihero__scrim { display: none; }
 
   /* ---------- desktop: pin + slide-in from the right ---------- */
@@ -383,46 +399,57 @@
     .khan-ihero.is-in .khan-ihero__facts { transform: translateX(0); opacity: 1; }
   }
 
-  /* ---------- mobile: finger-following bottom sheet ---------- */
+  /* ---------- mobile: finger-following RIGHT-side drawer ---------- */
   @media screen and (max-width: 749px) {
     .khan-ihero__inner { flex-direction: column; align-items: center; gap: 28px; }
     .khan-ihero__jar-img { width: min(82vw, 420px); }
     .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
 
+    /* full-screen panel that slides in from the right */
     .khan-ihero__facts {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-      width: 100%; height: 100svh;
-      display: flex; flex-direction: column;
-      transform: translateY(calc((1 - var(--o, 0)) * (100% - var(--ih-peek, 64px))));
+      position: fixed; inset: 0; z-index: 60;
+      width: 100vw; height: 100svh;
+      display: flex; flex-direction: row;
+      transform: translateX(calc((1 - var(--o, 0)) * 100%));
       transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform;
     }
     .khan-ihero__facts-legacy { display: none; }
 
-    .khan-ihero__facts-handle {
-      display: flex; align-items: center; gap: 12px;
-      flex: 0 0 auto; height: var(--ih-peek, 64px);
-      padding: 0 20px; margin: 0; width: 100%;
+    /* small bubble on the RIGHT edge — drag left / tap to open */
+    .khan-ihero__facts-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 58;
+      width: 46px; min-height: 120px; padding: 16px 0; margin: 0;
       background: rgb(12 12 12 / 0.92);
       -webkit-backdrop-filter: blur(var(--ih-facts-blur, 16px)); backdrop-filter: blur(var(--ih-facts-blur, 16px));
-      border: 0; border-radius: 22px 22px 0 0;
-      border-top: 1px solid rgb(255 255 255 / 0.12);
+      border: 1px solid rgb(255 255 255 / 0.12); border-right: 0; border-radius: 16px 0 0 16px;
+      box-shadow: -10px 0 30px rgb(0 0 0 / 0.35);
       color: #fff; cursor: grab; touch-action: none;
-      box-shadow: 0 -14px 40px rgb(0 0 0 / 0.4);
+      transition: opacity 0.3s ease;
+    }
+    .khan-ihero__facts-tab:active { cursor: grabbing; }
+    .khan-ihero__facts-tab-arrow { width: 10px; height: 10px; border-top: 2px solid currentColor; border-left: 2px solid currentColor; transform: rotate(-45deg); margin-left: 4px; }
+    .khan-ihero__facts-tab-label { writing-mode: vertical-rl; transform: rotate(180deg); font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ih-accent, #d8232a); }
+
+    /* close grip on the panel's LEFT edge — drag right / tap to close */
+    .khan-ihero__facts-handle {
+      display: flex; align-items: center; justify-content: center;
+      position: absolute; left: 0; top: 0; bottom: 0; z-index: 2;
+      width: 30px; padding: 0; margin: 0; border: 0; background: transparent;
+      color: rgb(255 255 255 / 0.7); cursor: grab; touch-action: none;
     }
     .khan-ihero__facts-handle:active { cursor: grabbing; }
-    .khan-ihero__facts-grip { width: 38px; height: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.4); position: absolute; left: 50%; top: 8px; transform: translateX(-50%); }
-    .khan-ihero__facts-handle-label { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
-    .khan-ihero__facts-chevron { margin-left: auto; width: 12px; height: 12px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-135deg); transition: transform 0.3s ease; }
-    .khan-ihero__facts-handle[aria-expanded="true"] .khan-ihero__facts-chevron { transform: rotate(45deg); }
+    .khan-ihero__facts-grip { width: 4px; height: 42px; border-radius: 999px; background: rgb(255 255 255 / 0.4); }
+    .khan-ihero__facts-handle-label, .khan-ihero__facts-chevron { display: none; }
 
     .khan-ihero__facts-card {
-      flex: 1 1 auto; min-height: 0;
+      flex: 1 1 auto; min-width: 0; height: 100%;
       border-radius: 0; border: 0; box-shadow: none;
-      background: rgb(12 12 12 / 0.96);
+      background: rgb(12 12 12 / 0.97);
       display: flex; flex-direction: column;
     }
-    .khan-ihero__facts-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; height: 100%; padding-bottom: 40px; }
+    .khan-ihero__facts-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; height: 100%; padding-left: 30px; padding-bottom: 40px; }
 
     .khan-ihero__scrim {
       display: block; position: fixed; inset: 0; z-index: 59;
