@@ -15,7 +15,7 @@
       "settings": {
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-14T155719.779.png",
         "overlay_opacity": 0,
-        "min_height": 760,
+        "min_height": 800,
         "top_left": "Khan collection",
         "top_right": "Pre-workout",
         "corner_top": 96,
@@ -47,7 +47,7 @@
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-14T164422.511.png",
         "top_overlay": 0,
         "min_height": 820,
-        "top_left": "Khan collection",
+        "top_left": "Khan Pre-Workout",
         "top_right": "Ingredients",
         "corner_top": 96,
         "content_valign": "flex-start",
