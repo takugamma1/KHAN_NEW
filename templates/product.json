@@ -439,7 +439,7 @@
         "subheading_size": 13,
         "heading_color": "#bf1616",
         "accent_color": "#ffffff",
-        "text_color": "#1a1a1a",
+        "text_color": "#000000",
         "anim_style": "wipe",
         "anim_duration": 1100,
         "anim_stagger": 180,
