@@ -443,7 +443,7 @@
         "anim_style": "wipe",
         "anim_duration": 1100,
         "anim_stagger": 180,
-        "text_grain": true,
+        "text_grain": false,
         "card_bg": "#ffffff",
         "frame_color": "#d8232a",
         "card_border_width": 2,
