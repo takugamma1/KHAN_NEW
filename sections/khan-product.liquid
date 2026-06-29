@@ -239,6 +239,47 @@
           .catch(function () { buynow.disabled = false; });
       });
     }
+
+    // smooth open/close for the inspiration box + info tabs (native <details> just pops)
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function animateDetails(d) {
+      var summary = d.querySelector(':scope > summary');
+      var body = summary && summary.nextElementSibling;
+      if (!summary || !body) return;
+      var OPEN = 340, CLOSE = 280;
+      summary.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (d.dataset.busy) return;
+        d.dataset.busy = '1';
+        body.style.overflow = 'hidden';
+        if (d.open) {
+          var from = body.scrollHeight;
+          body.style.height = from + 'px'; body.style.opacity = '1';
+          void body.offsetHeight; // reflow
+          body.style.transition = 'height ' + CLOSE + 'ms cubic-bezier(.4,0,.2,1), opacity ' + CLOSE + 'ms ease';
+          body.style.height = '0px'; body.style.opacity = '0';
+          window.setTimeout(function () {
+            d.open = false;
+            body.removeAttribute('style');
+            delete d.dataset.busy;
+          }, CLOSE);
+        } else {
+          d.open = true;
+          var to = body.scrollHeight;
+          body.style.height = '0px'; body.style.opacity = '0';
+          void body.offsetHeight; // reflow
+          body.style.transition = 'height ' + OPEN + 'ms cubic-bezier(.4,0,.2,1), opacity ' + OPEN + 'ms ease';
+          body.style.height = to + 'px'; body.style.opacity = '1';
+          window.setTimeout(function () {
+            body.removeAttribute('style');
+            delete d.dataset.busy;
+          }, OPEN);
+        }
+      });
+    }
+    if (!reduce) {
+      root.querySelectorAll('.khan-product__insp, .khan-product__tab').forEach(animateDetails);
+    }
   })();
 </script>
 
@@ -359,7 +400,7 @@
   .khan-product__insp[open] .khan-product__insp-caret { transform: rotate(-135deg); }
   .khan-product__insp-intro { display: block; margin-top: 14px; font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; letter-spacing: 0.02em; color: #b6b6b6; text-transform: none; }
   .khan-product__insp-intro p { margin: 0; }
-  .khan-product__insp-reveal { padding: 0 20px 22px; }
+  .khan-product__insp-reveal { padding: 0 20px 22px; box-sizing: border-box; }
   .khan-product__insp-extext { font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #b6b6b6; }
   .khan-product__insp-extext p { margin: 0 0 8px; }
   .khan-product__insp-exhead { margin: 16px 0 12px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / 0.12); font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
@@ -377,7 +418,7 @@
   .khan-product__tab-sign::before { left: 0; right: 0; top: 50%; height: 1.5px; transform: translateY(-50%); }
   .khan-product__tab-sign::after { top: 0; bottom: 0; left: 50%; width: 1.5px; transform: translateX(-50%); }
   .khan-product__tab[open] .khan-product__tab-sign { transform: rotate(45deg); }
-  .khan-product__tab-body { padding: 0 2px 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .khan-product__tab-body { padding: 0 2px 22px; box-sizing: border-box; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .khan-product__tab-text { font-family: ui-monospace, monospace; font-size: 13px; line-height: 1.7; letter-spacing: 0.02em; color: var(--kp-muted, #555); }
   .khan-product__tab-text p { margin: 0 0 8px; }
   .khan-product__tab-text p:last-child { margin-bottom: 0; }
