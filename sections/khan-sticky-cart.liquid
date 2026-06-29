@@ -20,22 +20,19 @@
   endif
 
   comment
-    Size pills: find the option named "Размер"/"Size"; if the product has a
-    single option with multiple variants, use that one.
+    Image: uploaded override, else the variant image, else the product image.
+    When no override is set the image is dynamic (updates with the variant).
   endcomment
-  assign size_oidx = -1
-  if tp != blank and s.show_sizes
-    for opt in tp.options_with_values
-      assign oname = opt.name | downcase | strip
-      if oname == 'размер' or oname == 'size'
-        assign size_opt = opt
-        assign size_oidx = forloop.index0
-      endif
-    endfor
-    if size_oidx == -1 and tp.options_with_values.size == 1 and tp.variants.size > 1
-      assign size_opt = tp.options_with_values[0]
-      assign size_oidx = 0
-    endif
+  assign scart_img = s.image
+  if scart_img == blank and v != blank and v.image != blank
+    assign scart_img = v.image
+  endif
+  if scart_img == blank and tp != blank
+    assign scart_img = tp.featured_image
+  endif
+  assign scart_dynimg = false
+  if s.image == blank
+    assign scart_dynimg = true
   endif
 %}
 {%- capture scart_price -%}
@@ -51,35 +48,33 @@
   {%- if s.servings != blank and s.weight != blank -%}<span class="khan-scart__dot" aria-hidden="true">+</span>{%- endif -%}
   {%- if s.weight != blank -%}<span>{{ s.weight }}</span>{%- endif -%}
 {%- endcapture -%}
-{%- capture scart_sizes -%}
-  {%- if size_oidx > -1 -%}
-    <div class="khan-scart__sizes" role="group" aria-label="{{ size_opt.name | escape }}">
-      {%- for val in size_opt.values -%}
-        {%- assign matchv = blank -%}
-        {%- for pvar in tp.variants -%}
-          {%- if pvar.options[size_oidx] == val -%}
-            {%- if matchv == blank -%}
-              {%- assign matchv = pvar -%}
-            {%- elsif pvar.available and matchv.available == false -%}
-              {%- assign matchv = pvar -%}
-            {%- endif -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- if matchv != blank -%}
-          <button
-            type="button"
-            class="khan-scart__size"
-            data-khan-scart-size
-            data-vid="{{ matchv.id }}"
-            data-price="{{ matchv.price | money }}"
-            aria-pressed="{% if v != blank and matchv.id == v.id %}true{% else %}false{% endif %}"
-            {% if matchv.available == false %}disabled{% endif %}
-          >{{ val }}</button>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
+{%- capture scart_opts -%}
+  {%- if s.show_sizes and tp != blank and tp.variants.size > 1 -%}
+    {%- for opt in tp.options_with_values -%}
+      {%- assign oi = forloop.index0 -%}
+      {%- assign oname = opt.name | downcase | strip -%}
+      {%- assign is_color = false -%}
+      {%- if oname == 'цвят' or oname == 'color' or oname == 'colour' -%}{%- assign is_color = true -%}{%- endif -%}
+      <div class="khan-scart__opt{% if is_color %} khan-scart__opt--color{% endif %}">
+        <span class="khan-scart__opt-name">{{ opt.name }}</span>
+        <div class="khan-scart__opt-vals" role="group" aria-label="{{ opt.name | escape }}">
+          {%- for val in opt.values -%}
+            <button
+              type="button"
+              class="khan-scart__optbtn"
+              data-khan-scart-opt
+              data-oi="{{ oi }}"
+              data-val="{{ val | escape }}"
+              aria-pressed="{% if v != blank and v.options[oi] == val %}true{% else %}false{% endif %}"
+              title="{{ val | escape }}"
+            >{{ val }}</button>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
   {%- endif -%}
 {%- endcapture -%}
+{%- capture scart_variants_json -%}[{%- if tp != blank -%}{%- for var in tp.variants -%}{"id":{{ var.id }},"o":{{ var.options | json }},"p":{{ var.price | money | json }},"a":{% if var.available %}true{% else %}false{% endif %}{%- if scart_dynimg and var.image != blank -%},"img":{{ var.image | image_url: width: 480 | json }}{%- endif -%}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endif -%}]{%- endcapture -%}
 
 <div
   id="KhanSCart-{{ section.id }}"
@@ -110,26 +105,25 @@
 >
   <div class="khan-scart__backdrop" data-khan-scart-close aria-hidden="true"></div>
 
+  <script type="application/json" data-khan-scart-variants>{{ scart_variants_json }}</script>
+
   <div class="khan-scart__inner">
 
     {%- comment -%} ===== Desktop bar ===== {%- endcomment -%}
     <div class="khan-scart__bar">
-      {%- if s.image != blank -%}
+      {%- if scart_img != blank -%}
         <div class="khan-scart__media">
-          <img src="{{ s.image | image_url: width: 200 }}" alt="{{ scart_title | escape }}" width="{{ s.image.width }}" height="{{ s.image.height }}" loading="lazy">
+          <img data-khan-scart-img{% if scart_dynimg %} data-dyn="1"{% endif %} src="{{ scart_img | image_url: width: 200 }}" alt="{{ scart_title | escape }}" width="{{ scart_img.width | default: 200 }}" height="{{ scart_img.height | default: 200 }}" loading="lazy">
         </div>
       {%- endif -%}
       <div class="khan-scart__info">
         <p class="khan-scart__title">{{ scart_title }}</p>
         {%- if scart_sub != blank -%}<p class="khan-scart__sub">{{ scart_sub }}</p>{%- endif -%}
       </div>
-      {%- if scart_sizes != blank -%}
-        <span class="khan-scart__div" aria-hidden="true"></span>
-        {{ scart_sizes }}
+      {%- if scart_opts != blank -%}
+        <div class="khan-scart__opts">{{ scart_opts }}</div>
       {%- endif -%}
-      <span class="khan-scart__div" aria-hidden="true"></span>
       <div class="khan-scart__price">{{ scart_price }}</div>
-      <span class="khan-scart__div" aria-hidden="true"></span>
       <form class="khan-scart__form" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
         {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
         <input type="hidden" name="quantity" value="1">
@@ -154,12 +148,12 @@
       </div>
 
       <div class="khan-scart__expand">
-        {%- if s.image != blank -%}
+        {%- if scart_img != blank -%}
           <div class="khan-scart__media khan-scart__media--big">
-            <img src="{{ s.image | image_url: width: 480 }}" alt="{{ scart_title | escape }}" width="{{ s.image.width }}" height="{{ s.image.height }}" loading="lazy">
+            <img data-khan-scart-img{% if scart_dynimg %} data-dyn="1"{% endif %} src="{{ scart_img | image_url: width: 480 }}" alt="{{ scart_title | escape }}" width="{{ scart_img.width | default: 480 }}" height="{{ scart_img.height | default: 480 }}" loading="lazy">
           </div>
         {%- endif -%}
-        {%- if scart_sizes != blank -%}{{ scart_sizes }}{%- endif -%}
+        {%- if scart_opts != blank -%}<div class="khan-scart__opts khan-scart__opts--m">{{ scart_opts }}</div>{%- endif -%}
         <div class="khan-scart__price khan-scart__price--big">{{ scart_price }}</div>
         <form class="khan-scart__form khan-scart__form--m" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
           {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
@@ -200,6 +194,8 @@
     pointer-events: auto;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 8px;
     gap: clamp(12px, 1.6vw, 22px);
     min-height: var(--scart-h, 72px);
     padding: 10px clamp(12px, 1.6vw, 18px) 10px 10px;
@@ -255,6 +251,26 @@
     border-color: var(--scart-text, #141414);
   }
   .khan-scart__size[disabled] { opacity: 0.35; text-decoration: line-through; cursor: not-allowed; }
+
+  /* option groups (color, size, …) */
+  .khan-scart__opts { display: flex; align-items: center; gap: clamp(10px, 1.4vw, 18px); flex-wrap: nowrap; min-width: 0; }
+  .khan-scart__opt { display: flex; align-items: center; gap: 8px; }
+  .khan-scart__opt-name { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--scart-muted, #6f6f6f); white-space: nowrap; }
+  .khan-scart__opt-vals { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .khan-scart__optbtn {
+    min-width: 34px; height: 34px; padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid var(--scart-border, rgb(0 0 0 / 0.16));
+    background: transparent;
+    color: var(--scart-text, #141414);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  }
+  .khan-scart__optbtn:hover:not(.is-unavail) { border-color: var(--scart-text, #141414); }
+  .khan-scart__optbtn[aria-pressed="true"] { background: var(--scart-text, #141414); color: var(--scart-glass, #fff); border-color: var(--scart-text, #141414); }
+  .khan-scart__optbtn.is-unavail { opacity: 0.35; text-decoration: line-through; }
 
   /* divider */
   .khan-scart__div { flex: 0 0 1px; align-self: stretch; margin-block: 14px; background: var(--scart-border, rgb(0 0 0 / 0.12)); }
@@ -366,6 +382,12 @@
     .khan-scart__expand .khan-scart__media { width: 42vw; max-width: 200px; height: auto; aspect-ratio: 1 / 1; }
     .khan-scart__expand .khan-scart__sizes { justify-content: center; }
     .khan-scart__expand .khan-scart__size { min-width: 44px; height: 42px; border-radius: 12px; font-size: 13px; }
+    /* configuring area: stack option groups full width */
+    .khan-scart__opts--m { flex-direction: column; align-items: stretch; gap: 14px; width: 100%; }
+    .khan-scart__opts--m .khan-scart__opt { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .khan-scart__opts--m .khan-scart__opt-name { font-size: 11px; }
+    .khan-scart__opts--m .khan-scart__opt-vals { gap: 8px; }
+    .khan-scart__opts--m .khan-scart__optbtn { min-width: 46px; height: 44px; border-radius: 12px; font-size: 13px; padding: 0 14px; }
     .khan-scart__price--big .khan-scart__price-amt { font-size: clamp(28px, 8vw, 40px); }
     .khan-scart__price--big { flex-direction: row; align-items: baseline; gap: 8px; }
     .khan-scart__price--big .khan-scart__price-cur { margin-top: 0; }
@@ -387,21 +409,62 @@
       root.__khanSCartReady = true;
       var cleanups = [];
 
-      // --- size pills: sync variant id + price across both forms ---
-      each(root.querySelectorAll('[data-khan-scart-size]'), function (pill) {
+      // --- multi-option variant picker: resolve the variant from the selected option values ---
+      var variants = [];
+      var vdata = root.querySelector('[data-khan-scart-variants]');
+      if (vdata) { try { variants = JSON.parse(vdata.textContent); } catch (err) { variants = []; } }
+      var selected = [];
+      each(root.querySelectorAll('[data-khan-scart-opt][aria-pressed="true"]'), function (b) {
+        selected[parseInt(b.getAttribute('data-oi'), 10)] = b.getAttribute('data-val');
+      });
+      function findVariant() {
+        for (var i = 0; i < variants.length; i++) {
+          var vr = variants[i], ok = true;
+          for (var oi = 0; oi < selected.length; oi++) {
+            if (selected[oi] != null && vr.o[oi] !== selected[oi]) { ok = false; break; }
+          }
+          if (ok) return vr;
+        }
+        return null;
+      }
+      function updateAvailability() {
+        each(root.querySelectorAll('[data-khan-scart-opt]'), function (btn) {
+          var oi = parseInt(btn.getAttribute('data-oi'), 10), val = btn.getAttribute('data-val'), any = false;
+          for (var i = 0; i < variants.length; i++) {
+            var vr = variants[i];
+            if (!vr.a || vr.o[oi] !== val) continue;
+            var ok = true;
+            for (var k = 0; k < selected.length; k++) {
+              if (k !== oi && selected[k] != null && vr.o[k] !== selected[k]) { ok = false; break; }
+            }
+            if (ok) { any = true; break; }
+          }
+          btn.classList.toggle('is-unavail', !any);
+        });
+      }
+      function applyVariant() {
+        var vr = findVariant();
+        if (vr) each(root.querySelectorAll('input[name="id"]'), function (inp) { inp.value = vr.id; });
+        if (vr && vr.p) each(root.querySelectorAll('[data-khan-scart-amt]'), function (el) { el.innerHTML = vr.p; });
+        if (vr && vr.img) each(root.querySelectorAll('[data-khan-scart-img][data-dyn]'), function (img) { img.src = vr.img; });
+        var avail = !!(vr && vr.a);
+        each(root.querySelectorAll('[data-khan-scart-form] button[type="submit"]'), function (btn) { btn.disabled = !avail; });
+        updateAvailability();
+      }
+      each(root.querySelectorAll('[data-khan-scart-opt]'), function (btn) {
         function onPick(e) {
           e.preventDefault();
-          var vid = pill.getAttribute('data-vid');
-          var price = pill.getAttribute('data-price');
-          each(root.querySelectorAll('[data-khan-scart-size]'), function (p) {
-            p.setAttribute('aria-pressed', p.getAttribute('data-vid') === vid ? 'true' : 'false');
+          var oi = parseInt(btn.getAttribute('data-oi'), 10), val = btn.getAttribute('data-val');
+          selected[oi] = val;
+          each(root.querySelectorAll('[data-khan-scart-opt][data-oi="' + oi + '"]'), function (b) {
+            b.setAttribute('aria-pressed', b.getAttribute('data-val') === val ? 'true' : 'false');
           });
-          each(root.querySelectorAll('input[name="id"]'), function (inp) { inp.value = vid; });
-          if (price) each(root.querySelectorAll('[data-khan-scart-amt]'), function (el) { el.textContent = price; });
+          applyVariant();
         }
-        pill.addEventListener('click', onPick);
-        cleanups.push(function () { pill.removeEventListener('click', onPick); });
+        btn.addEventListener('click', onPick);
+        cleanups.push(function () { btn.removeEventListener('click', onPick); });
       });
+      if (variants.length && selected.length) applyVariant();
 
       // --- add to cart (desktop + mobile forms) ---
       each(root.querySelectorAll('[data-khan-scart-form]'), function (form) {
@@ -438,7 +501,7 @@
       }
       each(root.querySelectorAll('[data-khan-scart-toggle]'), function (t) {
         function onClick(e) {
-          if (e.target.closest('[data-khan-scart-size]') || e.target.closest('form')) return;
+          if (e.target.closest('[data-khan-scart-opt]') || e.target.closest('form')) return;
           e.preventDefault();
           setExpanded(!root.classList.contains('is-expanded'));
         }
@@ -533,7 +596,7 @@
     { "type": "header", "content": "Product" },
     { "type": "product", "id": "product_fallback", "label": "Product", "info": "On a product page the current product is used automatically. Set this for preview or other pages." },
     { "type": "image_picker", "id": "image", "label": "Image (upload)", "info": "Shown in the bar instead of the product photo." },
-    { "type": "checkbox", "id": "show_sizes", "label": "Show size picker (Размер / Size option)", "default": true },
+    { "type": "checkbox", "id": "show_sizes", "label": "Show option pickers (color, size, …)", "default": true },
 
     { "type": "header", "content": "Text" },
     { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the product title." },

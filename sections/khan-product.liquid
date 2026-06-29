@@ -108,6 +108,7 @@
             </div>
           {%- endif -%}
 
+          {%- if s.show_buy -%}
           {%- form 'product', p, id: 'khan-pf', class: 'khan-product__form', novalidate: 'novalidate' -%}
             <input type="hidden" name="id" value="{{ cur.id }}" data-variant-input>
 
@@ -139,6 +140,7 @@
               <span>Buy now</span><span aria-hidden="true">→</span>
             </button>
           {%- endform -%}
+          {%- endif -%}
 
           {%- assign info_tabs = section.blocks | where: 'type', 'tab' -%}
           {%- if info_tabs.size > 0 -%}
@@ -467,6 +469,7 @@
     { "type": "header", "content": "Product" },
     { "type": "paragraph", "content": "Uses the current product on a product page. On other pages, pick a fallback to preview." },
     { "type": "product", "id": "product_fallback", "label": "Fallback product (preview)" },
+    { "type": "checkbox", "id": "show_buy", "label": "Show price, size & buy buttons", "default": true, "info": "Turn off when a sticky add-to-cart provides the buy UI." },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last." },
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
