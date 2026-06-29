@@ -6,11 +6,12 @@
   endif
   assign cur = p.selected_or_first_available_variant
   assign media_count = p.media.size
+  assign insp_alt = s.insp_expanded_heading | default: s.insp_heading
 %}
 
 <div
   id="KhanProduct-{{ section.id }}"
-  class="khan-product color-{{ s.color_scheme }}{% if s.text_grain %} khan-product--grain{% endif %}"
+  class="khan-product color-{{ s.color_scheme }}{% if s.text_grain %} khan-product--grain{% endif %}{% if s.hide_bottom_mobile %} khan-product--hide-bottom-m{% endif %}"
   style="
     --kp-bg: {{ s.bg_color }};
     --kp-text: {{ s.text_color }};
@@ -70,17 +71,39 @@
             <div class="khan-product__desc">{{ p.description }}</div>
           {%- endif -%}
 
-          {%- if section.blocks.size > 0 -%}
-            <div class="khan-product__feats">
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'feature' -%}
-                  <div class="khan-product__feat" {{ block.shopify_attributes }}>
-                    {%- if block.settings.icon != blank -%}
-                      <img class="khan-product__feat-icon" src="{{ block.settings.icon | image_url: width: 120 }}" alt="" width="40" height="40" loading="lazy">
-                    {%- endif -%}
-                    <span class="khan-product__feat-label">{{ block.settings.label }}</span>
-                  </div>
+          {%- if s.show_inspiration and s.insp_heading != blank -%}
+            <details class="khan-product__insp"{% if s.insp_open %} open{% endif %}>
+              <summary class="khan-product__insp-summary">
+                <span class="khan-product__insp-head">
+                  <span class="khan-product__insp-title">{{ s.insp_heading }}</span>
+                  <span class="khan-product__insp-toggle">
+                    <span class="khan-product__insp-lbl khan-product__insp-lbl--show">{{ s.insp_toggle_label | default: 'See inspiration' }}</span>
+                    <span class="khan-product__insp-lbl khan-product__insp-lbl--hide">{{ s.insp_hide_label | default: 'Hide' }}</span>
+                    <span class="khan-product__insp-caret" aria-hidden="true"></span>
+                  </span>
+                </span>
+                {%- if s.insp_intro != blank -%}<span class="khan-product__insp-intro">{{ s.insp_intro | newline_to_br }}</span>{%- endif -%}
+              </summary>
+              <div class="khan-product__insp-reveal">
+                {%- if s.insp_expanded_text != blank -%}<div class="khan-product__insp-extext">{{ s.insp_expanded_text }}</div>{%- endif -%}
+                {%- if s.insp_expanded_heading != blank -%}<p class="khan-product__insp-exhead">{{ s.insp_expanded_heading }}</p>{%- endif -%}
+                {%- if s.insp_image != blank -%}
+                  {{ s.insp_image | image_url: width: 1200 | image_tag: class: 'khan-product__insp-img', loading: 'lazy', widths: '400, 700, 1000, 1200', sizes: '(max-width: 749px) 88vw, 38vw', alt: insp_alt }}
                 {%- endif -%}
+              </div>
+            </details>
+          {%- endif -%}
+
+          {%- assign feats = section.blocks | where: 'type', 'feature' -%}
+          {%- if feats.size > 0 -%}
+            <div class="khan-product__feats">
+              {%- for block in feats -%}
+                <div class="khan-product__feat" {{ block.shopify_attributes }}>
+                  {%- if block.settings.icon != blank -%}
+                    <img class="khan-product__feat-icon" src="{{ block.settings.icon | image_url: width: 120 }}" alt="" width="40" height="40" loading="lazy">
+                  {%- endif -%}
+                  <span class="khan-product__feat-label">{{ block.settings.label }}</span>
+                </div>
               {%- endfor -%}
             </div>
           {%- endif -%}
@@ -116,6 +139,43 @@
               <span>Buy now</span><span aria-hidden="true">→</span>
             </button>
           {%- endform -%}
+
+          {%- assign info_tabs = section.blocks | where: 'type', 'tab' -%}
+          {%- if info_tabs.size > 0 -%}
+            <div class="khan-product__tabs">
+              {%- for block in info_tabs -%}
+                <details class="khan-product__tab"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+                  <summary class="khan-product__tab-head">
+                    {%- if block.settings.icon != blank -%}<img class="khan-product__tab-icon" src="{{ block.settings.icon | image_url: width: 60 }}" alt="" width="18" height="18" loading="lazy">{%- endif -%}
+                    <span class="khan-product__tab-title">{{ block.settings.heading }}</span>
+                    <span class="khan-product__tab-sign" aria-hidden="true"></span>
+                  </summary>
+                  {%- if block.settings.body != blank or block.settings.table != blank -%}
+                  <div class="khan-product__tab-body">
+                    {%- if block.settings.body != blank -%}<div class="khan-product__tab-text">{{ block.settings.body }}</div>{%- endif -%}
+                    {%- if block.settings.table != blank -%}
+                      {%- assign tab_rows = block.settings.table | strip | newline_to_br | split: '<br />' -%}
+                      <table class="khan-product__tab-table">
+                        {%- assign header_done = false -%}
+                        {%- for row in tab_rows -%}
+                          {%- assign cells = row | strip | split: '|' -%}
+                          {%- if row != blank and cells.size > 0 -%}
+                            <tr>
+                              {%- for c in cells -%}
+                                {%- if header_done -%}<td>{{ c | strip }}</td>{%- else -%}<th>{{ c | strip }}</th>{%- endif -%}
+                              {%- endfor -%}
+                            </tr>
+                            {%- assign header_done = true -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </table>
+                    {%- endif -%}
+                  </div>
+                  {%- endif -%}
+                </details>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
         </div>
       </div>
     {%- else -%}
@@ -269,20 +329,63 @@
   .khan-product__bottom-img { display: block; width: 100%; height: auto; max-height: var(--kp-bottom-h, 360px); object-fit: cover; object-position: bottom center; }
 
   /* ---- decorations ---- */
-  .khan-product__corner { position: absolute; left: 28px; bottom: calc(var(--kp-bottom-h, 220px) + 16px); z-index: 2; font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #888); white-space: pre-line; }
+  .khan-product__corner { position: absolute; left: 28px; bottom: calc(var(--kp-bottom-h, 360px) + 16px); z-index: 2; font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #888); white-space: pre-line; }
   .khan-product__deco-ast { position: absolute; right: 4%; top: 26%; width: 22px; height: 22px; object-fit: contain; z-index: 2; }
   .khan-product__cross { position: absolute; z-index: 1; width: 16px; height: 16px; }
   .khan-product__cross::before, .khan-product__cross::after { content: ""; position: absolute; background: var(--kp-accent, #d8232a); opacity: 0.6; }
   .khan-product__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
   .khan-product__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
   .khan-product__cross--1 { left: 6%; top: 10%; }
-  .khan-product__cross--2 { right: 30%; bottom: calc(var(--kp-bottom-h, 220px) + 8%); }
+  .khan-product__cross--2 { right: 30%; bottom: calc(var(--kp-bottom-h, 360px) + 8%); }
 
   /* ---- grain ---- */
-  .khan-product--grain :is(.khan-product__title, .khan-product__tagline, .khan-product__desc, .khan-product__count, .khan-product__feat-label, .khan-product__feat-icon) {
+  .khan-product--grain :is(.khan-product__title, .khan-product__tagline, .khan-product__desc, .khan-product__count, .khan-product__feat-label) {
     -webkit-mask-image: var(--kp-grain); mask-image: var(--kp-grain);
     -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
   }
+
+  /* ---- inspiration disclosure (dark panel) ---- */
+  .khan-product__insp { margin: 22px 0 4px; background: #0d0d0d; color: #f1f1f1; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 14px; overflow: hidden; }
+  .khan-product__insp-summary { list-style: none; cursor: pointer; display: block; padding: 18px 20px; }
+  .khan-product__insp-summary::-webkit-details-marker { display: none; }
+  .khan-product__insp-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .khan-product__insp-title { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #cfcfcf; }
+  .khan-product__insp-toggle { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgb(255 255 255 / 0.28); border-radius: 8px; padding: 8px 13px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; white-space: nowrap; transition: border-color 0.2s ease, background 0.2s ease; }
+  .khan-product__insp-summary:hover .khan-product__insp-toggle { border-color: var(--kp-accent, #d8232a); }
+  .khan-product__insp-lbl--hide { display: none; }
+  .khan-product__insp[open] .khan-product__insp-lbl--show { display: none; }
+  .khan-product__insp[open] .khan-product__insp-lbl--hide { display: inline; }
+  .khan-product__insp-caret { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform 0.25s ease; }
+  .khan-product__insp[open] .khan-product__insp-caret { transform: rotate(-135deg); }
+  .khan-product__insp-intro { display: block; margin-top: 14px; font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; letter-spacing: 0.02em; color: #b6b6b6; text-transform: none; }
+  .khan-product__insp-intro p { margin: 0; }
+  .khan-product__insp-reveal { padding: 0 20px 22px; }
+  .khan-product__insp-extext { font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #b6b6b6; }
+  .khan-product__insp-extext p { margin: 0 0 8px; }
+  .khan-product__insp-exhead { margin: 16px 0 12px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / 0.12); font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+  .khan-product__insp-img { display: block; width: 100%; height: auto; border: 1px solid rgb(255 255 255 / 0.14); border-radius: 8px; background: #fff; }
+
+  /* ---- info tabs (accordions) ---- */
+  .khan-product__tabs { margin-top: 28px; border-top: 1px solid rgb(0 0 0 / 0.14); }
+  .khan-product__tab { border-bottom: 1px solid rgb(0 0 0 / 0.14); }
+  .khan-product__tab-head { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 18px 2px; font-family: ui-monospace, monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--kp-text, #111); }
+  .khan-product__tab-head::-webkit-details-marker { display: none; }
+  .khan-product__tab-icon { width: 18px; height: 18px; object-fit: contain; flex: 0 0 auto; }
+  .khan-product__tab-title { flex: 1 1 auto; }
+  .khan-product__tab-sign { position: relative; width: 13px; height: 13px; flex: 0 0 auto; transition: transform 0.25s ease; }
+  .khan-product__tab-sign::before, .khan-product__tab-sign::after { content: ""; position: absolute; background: var(--kp-text, #111); }
+  .khan-product__tab-sign::before { left: 0; right: 0; top: 50%; height: 1.5px; transform: translateY(-50%); }
+  .khan-product__tab-sign::after { top: 0; bottom: 0; left: 50%; width: 1.5px; transform: translateX(-50%); }
+  .khan-product__tab[open] .khan-product__tab-sign { transform: rotate(45deg); }
+  .khan-product__tab-body { padding: 0 2px 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .khan-product__tab-text { font-family: ui-monospace, monospace; font-size: 13px; line-height: 1.7; letter-spacing: 0.02em; color: var(--kp-muted, #555); }
+  .khan-product__tab-text p { margin: 0 0 8px; }
+  .khan-product__tab-text p:last-child { margin-bottom: 0; }
+  .khan-product__tab-table { width: 100%; min-width: max-content; border-collapse: collapse; margin-top: 6px; font-family: ui-monospace, monospace; font-size: 12.5px; }
+  .khan-product__tab-table th, .khan-product__tab-table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid rgb(0 0 0 / 0.1); letter-spacing: 0.04em; }
+  .khan-product__tab-table th { color: var(--kp-text, #111); text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; border-bottom-color: rgb(0 0 0 / 0.24); }
+  .khan-product__tab-table td { color: var(--kp-muted, #666); }
+  .khan-product__tab-table tr:last-child th, .khan-product__tab-table tr:last-child td { border-bottom: 0; }
 
   /* ---- responsive ---- */
   @media screen and (max-width: 1100px) {
@@ -294,6 +397,14 @@
     .khan-product__grid { grid-template-columns: 1fr; }
     .khan-product__thumbs { flex-direction: row; order: 2; }
     .khan-product__corner, .khan-product__deco-ast { display: none; }
+    /* avoid a second product image stacked under the hero on phones */
+    .khan-product--hide-bottom-m { padding-bottom: 48px; }
+    .khan-product--hide-bottom-m .khan-product__bottom { display: none; }
+    .khan-product__insp-summary { padding: 16px; }
+    .khan-product__insp-reveal { padding: 0 16px 18px; }
+    .khan-product__insp-head { flex-wrap: wrap; gap: 10px; min-width: 0; }
+    .khan-product__insp-toggle { white-space: normal; max-width: 100%; }
+    .khan-product__tab-table th, .khan-product__tab-table td { padding: 8px 6px; }
   }
 {% endstylesheet %}
 
@@ -310,10 +421,22 @@
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
 
+    { "type": "header", "content": "Inspiration disclosure" },
+    { "type": "checkbox", "id": "show_inspiration", "label": "Show inspiration box", "default": true },
+    { "type": "checkbox", "id": "insp_open", "label": "Open by default", "default": false },
+    { "type": "text", "id": "insp_heading", "label": "Heading", "default": "Носено в бурята" },
+    { "type": "textarea", "id": "insp_intro", "label": "Intro (always visible)", "default": "Тежък 400gsm органичен памук с печат, вдъхновен от древни тракийски символи. За тези, които живеят на улицата и не се извиняват." },
+    { "type": "text", "id": "insp_toggle_label", "label": "Show label", "default": "Виж вдъхновението" },
+    { "type": "text", "id": "insp_hide_label", "label": "Hide label", "default": "Скрий" },
+    { "type": "richtext", "id": "insp_expanded_text", "label": "Expanded text", "default": "<p>За направата на този суитшърт са използвани дизайни, преработени от български шарки на носии и българската азбука глаголица, преправени от наш дизайнер.</p>" },
+    { "type": "text", "id": "insp_expanded_heading", "label": "Expanded heading", "default": "Глаголица – оригиналната българска азбука" },
+    { "type": "image_picker", "id": "insp_image", "label": "Inspiration image", "info": "Upload the Glagolitic alphabet (or any inspiration image)." },
+
     { "type": "header", "content": "Bottom overlay image" },
     { "type": "paragraph", "content": "Bleeds up over the lower edge so the section blends into the next instead of a hard cut." },
     { "type": "image_picker", "id": "bottom_image", "label": "Image" },
     { "type": "range", "id": "bottom_height", "label": "Overlay max height", "min": 60, "max": 700, "step": 10, "unit": "px", "default": 360 },
+    { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide on mobile (avoids a 2nd product image)", "default": true },
 
     { "type": "header", "content": "Decoration" },
     { "type": "checkbox", "id": "show_deco", "label": "Show ring, crosshairs & corner text", "default": true },
@@ -341,9 +464,20 @@
         { "type": "image_picker", "id": "icon", "label": "Icon" },
         { "type": "text", "id": "label", "label": "Label", "default": "Performance fit" }
       ]
+    },
+    {
+      "type": "tab",
+      "name": "Info tab",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon (optional)" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Описание" },
+        { "type": "richtext", "id": "body", "label": "Text" },
+        { "type": "textarea", "id": "table", "label": "Size table (optional)", "info": "One row per line; separate cells with | . The first row is the header." },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 20,
   "enabled_on": { "templates": ["product"] },
   "presets": [
     {
@@ -353,7 +487,8 @@
         { "type": "feature", "settings": { "label": "Performance fit" } },
         { "type": "feature", "settings": { "label": "Moisture wicking" } },
         { "type": "feature", "settings": { "label": "Durable fabric" } },
-        { "type": "feature", "settings": { "label": "Built to endure" } }
+        { "type": "tab", "settings": { "heading": "Описание", "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица.</p>" } },
+        { "type": "tab", "settings": { "heading": "Размери & крой", "body": "<p>Oversized fit – препоръчваме твоя обикновен размер за relaxed или един под за по-fitted.</p>", "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90" } }
       ]
     }
   ]
