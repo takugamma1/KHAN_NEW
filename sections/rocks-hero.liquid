@@ -17,7 +17,7 @@
 
 <div
   id="RocksHero-{{ section.id }}"
-  class="rocks-hero color-{{ section.settings.color_scheme }}{% if section.settings.text_grain %} rocks-hero--grain{% endif %}"
+  class="rocks-hero color-{{ section.settings.color_scheme }}{% if section.settings.text_grain %} rocks-hero--grain{% endif %}{% if section.settings.background_image_mobile != blank %} rocks-hero--mobimg{% endif %}"
   style="
     {% if section.settings.section_height == 'custom' %}
       --rocks-hero-min-height: {{ section.settings.section_height_custom }}svh;
@@ -47,6 +47,8 @@
     --rocks-pulse-scale: {{ section.settings.pulse_amount | divided_by: 1000.0 | plus: 1 }};
     --rocks-pulse-min-opacity: {{ section.settings.pulse_opacity | divided_by: 100.0 }};
     --rocks-accent: {{ section.settings.accent_color }};
+    --rocks-heading-color: {{ section.settings.heading_color | default: '#ffffff' }};
+    --rocks-text-color: {{ section.settings.text_color | default: '#ffffff' }};
     --rocks-heading-size: {{ section.settings.heading_size }}px;
     --rocks-text-size: {{ section.settings.text_size }}px;
     --rocks-ast-size: {{ section.settings.asterisk_size }}px;
@@ -62,6 +64,8 @@
     --usp-icon: {{ section.settings.usp_icon_size }}px;
     --usp-title-size: {{ section.settings.usp_title_size }}px;
     --usp-text-size: {{ section.settings.usp_text_size }}px;
+    --usp-title-color: {{ section.settings.usp_title_color | default: section.settings.accent_color }};
+    --usp-text-color: {{ section.settings.usp_text_color | default: '#ffffff' }};
     --usp-divider: {{ section.settings.usp_divider_color }};
     --usp-card-width: {{ section.settings.usp_card_width }}px;
   "
@@ -80,11 +84,25 @@
           widths: '832, 1200, 1600, 1920, 2560, 3840',
           height: section.settings.background_image.height,
           alt: section.settings.background_image.alt,
-          class: 'rocks-hero__media-item',
+          class: 'rocks-hero__media-item rocks-hero__media-item--d',
           sizes: '100vw',
           fetchpriority: fetch_priority,
           data-testid: 'rocks-hero-image'
       }}
+      {%- if section.settings.background_image_mobile != blank -%}
+        {{
+          section.settings.background_image_mobile
+          | image_url: width: 1600
+          | image_tag:
+            width: section.settings.background_image_mobile.width,
+            widths: '600, 900, 1200, 1600',
+            height: section.settings.background_image_mobile.height,
+            alt: section.settings.background_image_mobile.alt,
+            class: 'rocks-hero__media-item rocks-hero__media-item--m',
+            sizes: '100vw',
+            loading: 'lazy'
+        }}
+      {%- endif -%}
     {%- elsif has_video -%}
       {{
         section.settings.background_video
@@ -232,6 +250,13 @@
     object-position: center var(--rocks-media-pos, center);
     display: block;
     transform: scaleY(var(--rocks-media-flip, 1));
+  }
+
+  /* separate mobile background image (used instead of the desktop one ≤749px when set) */
+  .rocks-hero__media-item--m { display: none; }
+  @media screen and (max-width: 749px) {
+    .rocks-hero--mobimg .rocks-hero__media-item--d { display: none; }
+    .rocks-hero--mobimg .rocks-hero__media-item--m { display: block; }
   }
 
   .rocks-hero__frame {
@@ -382,7 +407,7 @@
     font-weight: 900;
     font-size: min(var(--rocks-heading-size, 80px), 11vw);
     line-height: 0.95;
-    color: #fff;
+    color: var(--rocks-heading-color, #fff);
   }
 
   .rocks-hero__text {
@@ -392,7 +417,7 @@
     font-size: var(--rocks-text-size, 20px);
     line-height: 1.5;
     letter-spacing: 0.02em;
-    color: #fff;
+    color: var(--rocks-text-color, #fff);
   }
 
   /* Bold words in the rich-text fields render in the red accent */
@@ -514,7 +539,7 @@
     line-height: 1.05;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--rocks-accent, #d8232a);
+    color: var(--usp-title-color, var(--rocks-accent, #d8232a));
   }
 
   .rocks-hero__usp-text {
@@ -522,7 +547,7 @@
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--usp-text-size, 14px);
     line-height: 1.5;
-    color: #fff;
+    color: var(--usp-text-color, #fff);
   }
 
   .rocks-hero__usp-text p { margin: 0; }
@@ -570,6 +595,13 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Background image — mobile",
+      "info": "Used instead of the background image on phones (≤749px). Leave empty to reuse the desktop image.",
       "visible_if": "{{ section.settings.media_type == 'image' }}"
     },
     {
@@ -784,6 +816,8 @@
       "label": "Accent (red) color",
       "default": "#d8232a"
     },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Paragraph color", "default": "#ffffff" },
     {
       "type": "checkbox",
       "id": "use_nexa",
@@ -1055,6 +1089,8 @@
       "unit": "px",
       "default": 14
     },
+    { "type": "color", "id": "usp_title_color", "label": "USP title color", "default": "#d8232a" },
+    { "type": "color", "id": "usp_text_color", "label": "USP text color", "default": "#ffffff" },
     {
       "type": "color",
       "id": "usp_divider_color",
