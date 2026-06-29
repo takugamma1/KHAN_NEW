@@ -273,6 +273,12 @@
           window.setTimeout(function () {
             body.removeAttribute('style');
             delete d.dataset.busy;
+            // if the opened drawer now runs past the screen, bring it into view
+            var r = d.getBoundingClientRect();
+            if (r.bottom > window.innerHeight + 2) {
+              var fits = r.height <= window.innerHeight - 90;
+              d.scrollIntoView({ behavior: 'smooth', block: fits ? 'nearest' : 'start' });
+            }
           }, OPEN);
         }
       });
@@ -384,6 +390,9 @@
     -webkit-mask-image: var(--kp-grain); mask-image: var(--kp-grain);
     -webkit-mask-size: 170px 170px; mask-size: 170px 170px;
   }
+
+  /* drawers leave room for a sticky header when auto-scrolled to the top */
+  .khan-product__insp, .khan-product__tab { scroll-margin-top: 90px; }
 
   /* ---- inspiration disclosure (dark panel) ---- */
   .khan-product__insp { margin: 22px 0 4px; background: #0d0d0d; color: #f1f1f1; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 14px; overflow: hidden; }
