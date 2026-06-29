@@ -169,23 +169,36 @@
   </div>
   {%- endif -%}
 
-  {%- comment -%} Layer 5: heading + paragraph overlay {%- endcomment -%}
+  {%- comment -%} Layer 5: heading + paragraph overlay (paragraph can take its own position) {%- endcomment -%}
+  {%- liquid
+    assign text_pos = section.settings.text_position
+    if text_pos == blank or text_pos == 'same'
+      assign text_pos = section.settings.content_position
+    endif
+    assign split_text = false
+    if text_pos != section.settings.content_position
+      assign split_text = true
+    endif
+  -%}
+  {%- capture content_mods -%}{% if section.settings.use_nexa %} rocks-hero__content--nexa{% endif %}{% if section.settings.enable_shadow %} rocks-hero__content--shadow{% endif %}{%- endcapture -%}
   {%- if section.settings.heading != blank or section.settings.text != blank -%}
-    <div
-      class="
-        rocks-hero__content
-        rocks-hero__content--{{ section.settings.content_position }}
-        {% if section.settings.use_nexa %}rocks-hero__content--nexa{% endif %}
-        {% if section.settings.enable_shadow %}rocks-hero__content--shadow{% endif %}
-      "
-    >
+    {%- if split_text -%}
       {%- if section.settings.heading != blank -%}
-        <div class="rocks-hero__heading">{{ section.settings.heading }}</div>
+        <div class="rocks-hero__content rocks-hero__content--{{ section.settings.content_position }}{{ content_mods }}">
+          <div class="rocks-hero__heading">{{ section.settings.heading }}</div>
+        </div>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
-        <div class="rocks-hero__text">{{ section.settings.text }}</div>
+        <div class="rocks-hero__content rocks-hero__content--{{ text_pos }}{{ content_mods }}">
+          <div class="rocks-hero__text">{{ section.settings.text }}</div>
+        </div>
       {%- endif -%}
-    </div>
+    {%- else -%}
+      <div class="rocks-hero__content rocks-hero__content--{{ section.settings.content_position }}{{ content_mods }}">
+        {%- if section.settings.heading != blank -%}<div class="rocks-hero__heading">{{ section.settings.heading }}</div>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="rocks-hero__text">{{ section.settings.text }}</div>{%- endif -%}
+      </div>
+    {%- endif -%}
   {%- endif -%}
 
   {%- comment -%} Layer 6: asterisks, bottom-right {%- endcomment -%}
@@ -799,7 +812,7 @@
     {
       "type": "select",
       "id": "content_position",
-      "label": "Position",
+      "label": "Heading position",
       "options": [
         { "value": "top-left", "label": "Top left" },
         { "value": "top-right", "label": "Top right" },
@@ -809,6 +822,22 @@
         { "value": "bottom-right", "label": "Bottom right" }
       ],
       "default": "center-left"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Paragraph position",
+      "info": "Position the paragraph separately. \"Same as heading\" keeps it stacked under the heading.",
+      "options": [
+        { "value": "same", "label": "Same as heading" },
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "center-left", "label": "Center left" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "same"
     },
     {
       "type": "color",
