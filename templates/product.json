@@ -320,7 +320,7 @@
       ],
       "name": "Product hero",
       "settings": {
-        "product_fallback": "",
+        "product_fallback": "сет",
         "tagline": "Built different. Made to last.",
         "description": "",
         "size_guide_link": "",
