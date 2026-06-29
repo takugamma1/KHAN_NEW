@@ -300,7 +300,6 @@
       "name": "Product hero",
       "settings": {
         "product_fallback": "сет",
-        "show_buy": false,
         "tagline": "Built different. Made to last.",
         "description": "",
         "size_guide_link": "",
@@ -469,30 +468,12 @@
         "padding_bottom": 96,
         "color_scheme": ""
       }
-    },
-    "khan_sticky_cart_apparel": {
-      "type": "khan-sticky-cart",
-      "name": "Sticky add to cart",
-      "settings": {
-        "product_fallback": "",
-        "image": "",
-        "show_sizes": true,
-        "title": "",
-        "servings": "",
-        "weight": "",
-        "show_currency": true,
-        "button_label": "Добави в количката",
-        "soldout_label": "Изчерпан",
-        "position": "bottom",
-        "stop_at_footer": true
-      }
     }
   },
   "order": [
     "main",
     "khan_product_Pccd6t",
     "khan_engineered_3R4Qkt",
-    "khan_collection_t4cqrJ",
-    "khan_sticky_cart_apparel"
+    "khan_collection_t4cqrJ"
   ]
 }
