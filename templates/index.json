@@ -81,7 +81,7 @@
         "flip_media": false,
         "media_position": "center",
         "frame_image": "shopify://shop_images/Untitled_design_-_2026-05-31T203828.976.png",
-        "frame_fit": "contain",
+        "frame_fit": "cover",
         "frame_position": "center",
         "flip_frame": false,
         "frame_offset_y": -60,
