@@ -84,7 +84,7 @@
         "frame_fit": "cover",
         "frame_position": "center",
         "flip_frame": false,
-        "frame_offset_y": -60,
+        "frame_offset_y": 40,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
         "mobile_height": 80,
