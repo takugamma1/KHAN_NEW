@@ -296,7 +296,9 @@
           "type": "tab",
           "settings": {
             "heading": "Описание",
-            "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица. Изграден да издържа.</p>"
+            "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица. Изграден да издържа.</p>",
+            "table": "",
+            "open": false
           }
         },
         "tab_size": {
@@ -304,7 +306,8 @@
           "settings": {
             "heading": "Размери & крой",
             "body": "<p>Oversized fit – препоръчваме твоя обикновен размер за relaxed или един под за по-fitted.</p>",
-            "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90"
+            "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90",
+            "open": false
           }
         }
       },
@@ -321,11 +324,20 @@
         "tagline": "Built different. Made to last.",
         "description": "",
         "size_guide_link": "",
+        "show_inspiration": true,
+        "insp_open": false,
+        "insp_heading": "Носено в бурята",
+        "insp_intro": "Тежък 400gsm органичен памук с печат, вдъхновен от древни тракийски символи. За тези, които живеят на улицата и не се извиняват.",
+        "insp_toggle_label": "Виж вдъхновението",
+        "insp_hide_label": "Скрий",
+        "insp_expanded_text": "<p>За направата на този суитшърт са използвани дизайни, преработени от български шарки на носии и българската азбука глаголица, преправени от наш дизайнер.</p>",
+        "insp_expanded_heading": "Глаголица – оригиналната българска азбука",
         "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "bottom_height": 500,
+        "hide_bottom_mobile": true,
         "show_deco": true,
         "corner_text": "K // 26\nApparel div.\nBuilt for now.",
-        "text_grain": true,
+        "text_grain": false,
         "bg_color": "#ffffff",
         "text_color": "#111111",
         "muted_color": "#666666",
