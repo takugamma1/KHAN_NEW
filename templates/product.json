@@ -300,6 +300,7 @@
       "name": "Product hero",
       "settings": {
         "product_fallback": "сет",
+        "show_buy": true,
         "tagline": "Built different. Made to last.",
         "description": "",
         "size_guide_link": "",
