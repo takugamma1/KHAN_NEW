@@ -447,7 +447,8 @@
   @media screen and (max-width: 749px) {
     .khan-product { padding-bottom: 140px; }
     .khan-product__grid { grid-template-columns: 1fr; }
-    .khan-product__thumbs { flex-direction: row; order: 2; }
+    /* the main image already shows above; thumbnails on mobile just duplicate it */
+    .khan-product__thumbs { display: none; }
     .khan-product__corner, .khan-product__deco-ast { display: none; }
     /* avoid a second product image stacked under the hero on phones */
     .khan-product--hide-bottom-m { padding-bottom: 48px; }
