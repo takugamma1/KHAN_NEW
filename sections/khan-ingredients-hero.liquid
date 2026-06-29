@@ -8,7 +8,7 @@
 
 <div
   id="KhanIHero-{{ section.id }}"
-  class="khan-ihero color-{{ s.color_scheme }}"
+  class="khan-ihero color-{{ s.color_scheme }}{% if s.bg_image_mobile != blank %} khan-ihero--mobimg{% endif %}"
   style="
     --ih-text: {{ s.text_color }};
     --ih-accent: {{ s.accent_color }};
@@ -40,7 +40,10 @@
 >
   <div class="khan-ihero__bg" aria-hidden="true">
     {%- if s.bg_image != blank -%}
-      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-ihero__bg-img', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-ihero__bg-img khan-ihero__bg-img--d', loading: 'lazy', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+    {%- endif -%}
+    {%- if s.bg_image_mobile != blank -%}
+      {{ s.bg_image_mobile | image_url: width: 1400 | image_tag: class: 'khan-ihero__bg-img khan-ihero__bg-img--m', loading: 'lazy', widths: '600, 900, 1200, 1400', sizes: '100vw', alt: '' }}
     {%- endif -%}
     <span class="khan-ihero__overlay"></span>
   </div>
@@ -301,6 +304,11 @@
 
   .khan-ihero__bg { position: absolute; inset: 0; z-index: 0; }
   .khan-ihero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .khan-ihero__bg-img--m { display: none; }
+  @media screen and (max-width: 749px) {
+    .khan-ihero--mobimg .khan-ihero__bg-img--d { display: none; }
+    .khan-ihero--mobimg .khan-ihero__bg-img--m { display: block; }
+  }
   .khan-ihero__overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to bottom, rgb(0 0 0 / var(--ih-top, 0)) 0%, rgb(0 0 0 / 0) 52%);
@@ -517,6 +525,7 @@
 
     { "type": "header", "content": "Background" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image (optional texture)" },
+    { "type": "image_picker", "id": "bg_image_mobile", "label": "Background image — mobile", "info": "Used instead of the background image on phones (≤749px). Leave empty to reuse the desktop image." },
     { "type": "range", "id": "top_overlay", "label": "Top gradient", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 0 },
     { "type": "range", "id": "min_height", "label": "Height", "min": 480, "max": 1000, "step": 20, "unit": "px", "default": 820 },
 
