@@ -274,24 +274,6 @@
     "khan_product_Pccd6t": {
       "type": "khan-product",
       "blocks": {
-        "feature_wGRFjH": {
-          "type": "feature",
-          "settings": {
-            "label": "Performance fit"
-          }
-        },
-        "feature_xrbd3V": {
-          "type": "feature",
-          "settings": {
-            "label": "Moisture wicking"
-          }
-        },
-        "feature_KnzmmV": {
-          "type": "feature",
-          "settings": {
-            "label": "Durable fabric"
-          }
-        },
         "tab_desc": {
           "type": "tab",
           "settings": {
@@ -312,9 +294,6 @@
         }
       },
       "block_order": [
-        "feature_wGRFjH",
-        "feature_xrbd3V",
-        "feature_KnzmmV",
         "tab_desc",
         "tab_size"
       ],
