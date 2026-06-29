@@ -107,7 +107,7 @@
         "pulse_amount": 35,
         "pulse_opacity": 90,
         "pulse_speed": 3,
-        "heading": "",
+        "heading": "<p><strong>ПРИМЕРЕН <br/></strong>ТЕКСТ</p>",
         "text": "<p>lorem impus</p>",
         "content_position": "bottom-left",
         "accent_color": "#bf1616",
