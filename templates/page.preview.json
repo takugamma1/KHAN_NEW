@@ -19,7 +19,7 @@
             "sublabel": "Продуктова страница",
             "url": "shopify://products/pre-workout",
             "show_progress": true,
-            "progress": 80
+            "progress": 90
           }
         },
         "home": {
@@ -29,7 +29,7 @@
             "sublabel": "Landing page",
             "url": "https://khan-12345568685.myshopify.com/",
             "show_progress": true,
-            "progress": 55
+            "progress": 85
           }
         },
         "collection": {
@@ -39,7 +39,7 @@
             "sublabel": "Shop grid",
             "url": "shopify://collections/frontpage",
             "show_progress": true,
-            "progress": 50
+            "progress": 75
           }
         },
         "about": {
@@ -49,7 +49,7 @@
             "sublabel": "Our story",
             "url": "/pages/about",
             "show_progress": true,
-            "progress": 69
+            "progress": 80
           }
         },
         "product": {
@@ -59,7 +59,7 @@
             "sublabel": "Product page",
             "url": "shopify://products/тениска-тест",
             "show_progress": true,
-            "progress": 80
+            "progress": 90
           }
         },
         "link_NyBdeW": {
@@ -119,6 +119,7 @@
         "progress_track": "#2a2a2a",
         "progress_fill": "#d8232a",
         "progress_height": 4,
+        "hide_header": true,
         "hide_footer": true,
         "color_scheme": ""
       }
