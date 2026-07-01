@@ -111,7 +111,7 @@
         "band_accent": "This is KHAN.",
         "band_heading_size": 32,
         "band_min_height": 420,
-        "text_grain": true,
+        "text_grain": false,
         "bg_color": "#ffffff",
         "heading_color": "#111111",
         "accent_color": "#bf1616",
@@ -120,8 +120,7 @@
         "divider_color": "#0000002e",
         "max_width": 1200,
         "padding_top": 160,
-        "color_scheme": "",
-        "story_image": "shopify://shop_images/khan-skull-black.png"
+        "color_scheme": ""
       }
     }
   },
