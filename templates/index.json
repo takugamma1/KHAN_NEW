@@ -114,7 +114,7 @@
         "text_position": "bottom-right",
         "accent_color": "#bf1616",
         "heading_color": "#000000",
-        "text_color": "#ffffff",
+        "text_color": "#000000",
         "use_nexa": true,
         "enable_shadow": false,
         "text_grain": false,
