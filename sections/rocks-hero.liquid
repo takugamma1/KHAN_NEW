@@ -13,6 +13,17 @@
   if section.index == 1
     assign fetch_priority = 'high'
   endif
+
+  comment
+    Mobile: a split heading/paragraph layout stacks centered — keep the vertical
+    anchor (top / center / bottom) from the heading's position.
+  endcomment
+  assign v_anchor_m = 'center'
+  if section.settings.content_position contains 'top'
+    assign v_anchor_m = 'flex-start'
+  elsif section.settings.content_position contains 'bottom'
+    assign v_anchor_m = 'flex-end'
+  endif
 %}
 
 <div
@@ -47,6 +58,7 @@
     --rocks-pulse-scale: {{ section.settings.pulse_amount | divided_by: 1000.0 | plus: 1 }};
     --rocks-pulse-min-opacity: {{ section.settings.pulse_opacity | divided_by: 100.0 }};
     --rocks-accent: {{ section.settings.accent_color }};
+    --rocks-valign-m: {{ v_anchor_m }};
     --rocks-heading-color: {{ section.settings.heading_color | default: '#ffffff' }};
     --rocks-text-color: {{ section.settings.text_color | default: '#ffffff' }};
     --rocks-heading-size: {{ section.settings.heading_size }}px;
@@ -183,16 +195,18 @@
   {%- capture content_mods -%}{% if section.settings.use_nexa %} rocks-hero__content--nexa{% endif %}{% if section.settings.enable_shadow %} rocks-hero__content--shadow{% endif %}{%- endcapture -%}
   {%- if section.settings.heading != blank or section.settings.text != blank -%}
     {%- if split_text -%}
-      {%- if section.settings.heading != blank -%}
-        <div class="rocks-hero__content rocks-hero__content--{{ section.settings.content_position }}{{ content_mods }}">
-          <div class="rocks-hero__heading">{{ section.settings.heading }}</div>
-        </div>
-      {%- endif -%}
-      {%- if section.settings.text != blank -%}
-        <div class="rocks-hero__content rocks-hero__content--{{ text_pos }}{{ content_mods }}">
-          <div class="rocks-hero__text">{{ section.settings.text }}</div>
-        </div>
-      {%- endif -%}
+      <div class="rocks-hero__content-group">
+        {%- if section.settings.heading != blank -%}
+          <div class="rocks-hero__content rocks-hero__content--{{ section.settings.content_position }}{{ content_mods }}">
+            <div class="rocks-hero__heading">{{ section.settings.heading }}</div>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rocks-hero__content rocks-hero__content--{{ text_pos }}{{ content_mods }}">
+            <div class="rocks-hero__text">{{ section.settings.text }}</div>
+          </div>
+        {%- endif -%}
+      </div>
     {%- else -%}
       <div class="rocks-hero__content rocks-hero__content--{{ section.settings.content_position }}{{ content_mods }}">
         {%- if section.settings.heading != blank -%}<div class="rocks-hero__heading">{{ section.settings.heading }}</div>{%- endif -%}
@@ -413,6 +427,33 @@
     inset: auto 0 0 auto;
     align-items: flex-end;
     text-align: right;
+  }
+
+  /* Split heading/paragraph: independent on desktop, one centered stack on mobile */
+  .rocks-hero__content-group { display: contents; }
+  @media screen and (max-width: 749px) {
+    .rocks-hero__content-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: var(--rocks-valign-m, flex-end);
+      text-align: center;
+      position: absolute;
+      inset: 0;
+      padding: clamp(56px, 14vw, 96px) clamp(20px, 6vw, 40px);
+      gap: 0.5em;
+      z-index: var(--layer-heightened, 4);
+      pointer-events: none;
+    }
+    .rocks-hero__content-group .rocks-hero__content {
+      position: static;
+      inset: auto;
+      transform: none;
+      align-items: center;
+      text-align: center;
+      max-width: 100%;
+      padding: 0;
+    }
   }
 
   .rocks-hero__heading {
