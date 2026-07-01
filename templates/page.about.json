@@ -63,6 +63,7 @@
         "feature_AmLtwx": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Heritage",
             "text": "<p>Rooted in history. Inspired by legacy. Designed for the now.</p>"
           }
