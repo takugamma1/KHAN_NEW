@@ -63,7 +63,6 @@
         "feature_AmLtwx": {
           "type": "feature",
           "settings": {
-            "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
             "title": "Heritage",
             "text": "<p>Rooted in history. Inspired by legacy. Designed for the now.</p>"
           }
@@ -109,6 +108,7 @@
         "icon_size": 40,
         "feat_title_size": 13,
         "feat_text_size": 11,
+        "band_image": "shopify://shop_images/Untitled_design_-_2026-05-31T212016.342.png",
         "band_heading": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>",
         "band_accent": "This is KHAN.",
         "band_heading_size": 32,
