@@ -208,7 +208,7 @@
         "anim_style": "wipe",
         "anim_duration": 1500,
         "anim_stagger": 400,
-        "text_grain": true,
+        "text_grain": false,
         "card_bg": "rgba(0,0,0,0)",
         "frame_color": "#62000029",
         "card_border_width": 1,
