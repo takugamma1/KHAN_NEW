@@ -463,7 +463,7 @@
         "show_swatches": true,
         "swatch_size": 30,
         "bg_color": "#0a0a0a",
-        "max_width": 1700,
+        "max_width": 1300,
         "column_gap": 28,
         "padding_top": 96,
         "padding_bottom": 96,
