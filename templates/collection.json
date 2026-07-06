@@ -211,7 +211,7 @@
         "text_grain": false,
         "card_bg": "rgba(0,0,0,0)",
         "frame_color": "#62000029",
-        "card_border_width": 1,
+        "card_border_width": 0,
         "label_color": "#1a1a1a",
         "button_bg": "#111111",
         "button_text": "#ffffff",
