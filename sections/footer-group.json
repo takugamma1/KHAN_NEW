@@ -68,7 +68,7 @@
         "news_success": "Вътре си.",
         "copyright": "© 2026 Khan Apparel. Всички права запазени.",
         "tagline2": "Родено от миналото. Създадено за сега.",
-        "show_deco": true,
+        "show_deco": false,
         "coordinates": "42.6977° N  23.3219° E",
         "content_valign": "flex-end",
         "content_panel": true,
