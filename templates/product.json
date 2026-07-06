@@ -500,7 +500,7 @@
         "border_color": "#0000001a",
         "text_color": "#ffffff",
         "muted_color": "#6f6f6f",
-        "accent_color": "#b3122a",
+        "accent_color": "#FFFFFF",
         "button_top": "#b3122a",
         "button_bottom": "#8e1316",
         "button_text": "#ffffff"
