@@ -455,7 +455,7 @@
         "anim_stagger": 180,
         "text_grain": false,
         "card_bg": "#ffffff",
-        "frame_color": "#d8232a",
+        "frame_color": "#000000",
         "card_border_width": 2,
         "label_color": "#111111",
         "button_bg": "#111111",
