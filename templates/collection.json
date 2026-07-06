@@ -203,7 +203,7 @@
         "heading_size": 72,
         "subheading_size": 13,
         "heading_color": "#bf1616",
-        "accent_color": "#111111",
+        "accent_color": "#FFFFFF",
         "text_color": "#1a1a1a",
         "anim_style": "wipe",
         "anim_duration": 1500,
