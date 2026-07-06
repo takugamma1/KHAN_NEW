@@ -475,7 +475,7 @@
       "name": "Sticky add to cart",
       "settings": {
         "product_fallback": "сет",
-        "image": "shopify://shop_images/dffb2d59-bffe-4a03-aa98-c6dd59830304.png",
+        "image": "shopify://shop_images/white-logo.svg",
         "show_sizes": true,
         "title": "",
         "servings": "",
