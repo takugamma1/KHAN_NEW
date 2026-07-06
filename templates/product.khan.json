@@ -128,7 +128,7 @@
         "legacy_label": "",
         "facts_width": 680,
         "facts_top": 60,
-        "facts_blur": 30,
+        "facts_blur": 8,
         "facts_opacity": 90,
         "peek": 64,
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-26T151331.478.png",
