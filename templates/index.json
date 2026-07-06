@@ -221,50 +221,6 @@
     },
     "khan_launch_hero_KicyPi": {
       "type": "khan-launch-hero",
-      "blocks": {
-        "usp_F3fqmQ": {
-          "type": "usp",
-          "settings": {
-            "icon": "asterisk",
-            "label": "Six clinical doses"
-          }
-        },
-        "usp_dezqbB": {
-          "type": "usp",
-          "settings": {
-            "icon": "x",
-            "label": "No filler"
-          }
-        },
-        "usp_9Gzmx3": {
-          "type": "usp",
-          "settings": {
-            "icon": "diamond",
-            "label": "No sweeteners"
-          }
-        },
-        "usp_eYBLxi": {
-          "type": "usp",
-          "settings": {
-            "icon": "star",
-            "label": "Clean energy"
-          }
-        },
-        "usp_bhDa8Y": {
-          "type": "usp",
-          "settings": {
-            "icon": "shield",
-            "label": "Performance driven"
-          }
-        }
-      },
-      "block_order": [
-        "usp_F3fqmQ",
-        "usp_dezqbB",
-        "usp_9Gzmx3",
-        "usp_eYBLxi",
-        "usp_bhDa8Y"
-      ],
       "name": "Launch hero",
       "settings": {
         "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3_60a199a8-699c-4f5f-832a-b11f7df06d1f.png",
