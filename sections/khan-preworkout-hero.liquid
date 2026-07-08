@@ -27,7 +27,23 @@
 >
   <div class="khan-phero__bg" aria-hidden="true">
     {%- if s.bg_image != blank -%}
-      {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-phero__bg-img', loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+      {%- liquid
+        # animated formats: CDN resizing strips the animation, so serve the original file
+        assign bg_ext = s.bg_image.src | split: '?' | first | split: '.' | last | downcase
+      -%}
+      {%- if bg_ext == 'webp' or bg_ext == 'gif' -%}
+        <img
+          class="khan-phero__bg-img"
+          src="{{ s.bg_image | image_url: width: s.bg_image.width }}"
+          width="{{ s.bg_image.width }}"
+          height="{{ s.bg_image.height }}"
+          loading="eager"
+          fetchpriority="high"
+          alt=""
+        >
+      {%- else -%}
+        {{ s.bg_image | image_url: width: 3200 | image_tag: class: 'khan-phero__bg-img', loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2600, 3200', sizes: '100vw', alt: '' }}
+      {%- endif -%}
     {%- endif -%}
     <span class="khan-phero__overlay"></span>
   </div>

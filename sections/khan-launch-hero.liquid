@@ -32,7 +32,22 @@
 
     <div class="khan-lhero__media">
       {%- if s.image != blank -%}
-        {{ s.image | image_url: width: 1600 | image_tag: class: 'khan-lhero__img', loading: 'eager', widths: '600, 900, 1200, 1600', sizes: '(max-width: 900px) 100vw, 50vw', alt: s.eyebrow | default: shop.name }}
+        {%- liquid
+          # animated formats: CDN resizing strips the animation, so serve the original file
+          assign img_ext = s.image.src | split: '?' | first | split: '.' | last | downcase
+        -%}
+        {%- if img_ext == 'webp' or img_ext == 'gif' -%}
+          <img
+            class="khan-lhero__img"
+            src="{{ s.image | image_url: width: s.image.width }}"
+            width="{{ s.image.width }}"
+            height="{{ s.image.height }}"
+            loading="eager"
+            alt="{{ s.eyebrow | default: shop.name }}"
+          >
+        {%- else -%}
+          {{ s.image | image_url: width: 1600 | image_tag: class: 'khan-lhero__img', loading: 'eager', widths: '600, 900, 1200, 1600', sizes: '(max-width: 900px) 100vw, 50vw', alt: s.eyebrow | default: shop.name }}
+        {%- endif -%}
       {%- else -%}
         <div class="khan-lhero__img khan-lhero__img--ph"></div>
       {%- endif -%}
