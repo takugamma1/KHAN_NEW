@@ -56,6 +56,7 @@
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest && e.target.closest('a[href]');
       if (!a) return;
+      if (a.closest('.khan-nav__cart')) return; // cart opens the drawer, not a page
       if (a.target && a.target !== '_self') return;
       if (a.hasAttribute('download')) return;
       var href = a.getAttribute('href') || '';

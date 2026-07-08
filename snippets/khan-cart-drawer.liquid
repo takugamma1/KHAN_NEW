@@ -144,7 +144,8 @@
       var cartLink = e.target.closest('.khan-nav__cart');
       if (cartLink && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
-        refresh().then(open);
+        open();
+        refresh();
         return;
       }
       if (e.target.closest('[data-khan-cdrawer-close]')) { close(); return; }
