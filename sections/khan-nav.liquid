@@ -119,6 +119,9 @@
   </div>
 </div>
 
+{%- comment -%} Cart drawer (opens from the cart icon; replaces the /cart page nav) {%- endcomment -%}
+{% render 'khan-cart-drawer' %}
+
 {% stylesheet %}
   /* neutralize any background/padding the theme applies to the section wrapper */
   .khan-nav-wrapper { background: transparent !important; padding: 0 !important; margin: 0 !important; }

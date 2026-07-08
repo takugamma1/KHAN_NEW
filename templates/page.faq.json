@@ -1,0 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "khan_faq": {
+      "type": "khan-faq",
+      "name": "FAQ",
+      "blocks": {
+        "faq_delivery": {
+          "type": "item",
+          "settings": {
+            "question": "Кога ще получа поръчката си?",
+            "answer": "<p>Изпращаме до 1 работен ден. Доставката отнема 1–3 работни дни с куриер до адрес или офис.</p>"
+          }
+        },
+        "faq_returns": {
+          "type": "item",
+          "settings": {
+            "question": "Мога ли да върна или заменя продукт?",
+            "answer": "<p>Да — имаш 14 дни право на връщане. Дрехите трябва да са неносени, с етикети. Хранителни добавки се приемат само с неразпечатана опаковка.</p>"
+          }
+        },
+        "faq_sizes": {
+          "type": "item",
+          "settings": {
+            "question": "Как да избера правилния размер?",
+            "answer": "<p>Виж таблицата с размери на всяка продуктова страница. Ако си между два размера, препоръчваме по-големия.</p>"
+          }
+        },
+        "faq_usage": {
+          "type": "item",
+          "settings": {
+            "question": "Как да приемам pre-workout продукта?",
+            "answer": "<p>Една доза (един скуп) с 300–400 мл вода, 20–30 минути преди тренировка. Не превишавай препоръчителната дневна доза.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_delivery",
+        "faq_returns",
+        "faq_sizes",
+        "faq_usage"
+      ],
+      "settings": {
+        "eyebrow": "FAQ",
+        "heading": "Често задавани въпроси.",
+        "question_size": 17,
+        "answer_size": 13,
+        "max_width": 880,
+        "bg_color": "#ffffff",
+        "text_color": "#111111",
+        "muted_color": "#6f6f6f",
+        "accent_color": "#560B1E",
+        "padding_top": 140,
+        "padding_bottom": 96,
+        "color_scheme": ""
+      }
+    }
+  },
+  "order": [
+    "khan_faq"
+  ]
+}

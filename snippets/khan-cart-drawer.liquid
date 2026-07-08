@@ -1,0 +1,331 @@
+{%- comment -%}
+  KHAN cart drawer — dark glass panel (same material as the supplement-facts
+  bubble). Slides in from the right on desktop, full screen on mobile.
+  Opens on any .khan-nav__cart click and after any /cart/add form submit
+  (sticky cart, product forms). Contents render server-side first, then
+  refresh via /cart.js after every change.
+{%- endcomment -%}
+<div class="khan-cdrawer" data-khan-cdrawer aria-hidden="true">
+  <div class="khan-cdrawer__overlay" data-khan-cdrawer-close></div>
+  <aside class="khan-cdrawer__panel" role="dialog" aria-modal="true" aria-label="Количка">
+    <header class="khan-cdrawer__head">
+      <p class="khan-cdrawer__title">Количка <span class="khan-cdrawer__count" data-khan-cdrawer-count>{{ cart.item_count }}</span></p>
+      <button class="khan-cdrawer__close" type="button" data-khan-cdrawer-close aria-label="Затвори">
+        <span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="khan-cdrawer__items" data-khan-cdrawer-items>
+      {%- for item in cart.items -%}
+        <div class="khan-cdrawer__item" data-key="{{ item.key }}">
+          <div class="khan-cdrawer__thumb">
+            {%- if item.image != blank -%}
+              <img src="{{ item.image | image_url: width: 140 }}" alt="{{ item.product_title | escape }}" width="56" height="56" loading="lazy">
+            {%- endif -%}
+          </div>
+          <div class="khan-cdrawer__info">
+            <p class="khan-cdrawer__name">{{ item.product_title }}</p>
+            {%- unless item.variant_title == blank or item.variant_title contains 'Default' -%}
+              <p class="khan-cdrawer__variant">{{ item.variant_title }}</p>
+            {%- endunless -%}
+            <div class="khan-cdrawer__qty">
+              <button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" data-khan-cdrawer-qty="1" aria-label="Увеличи">+</button>
+            </div>
+          </div>
+          <div class="khan-cdrawer__right">
+            <p class="khan-cdrawer__price">{{ item.final_line_price | money }}</p>
+            <button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>
+          </div>
+        </div>
+      {%- endfor -%}
+      <p class="khan-cdrawer__empty" data-khan-cdrawer-empty{% if cart.item_count > 0 %} hidden{% endif %}>Количката е празна.</p>
+    </div>
+
+    <footer class="khan-cdrawer__foot"{% if cart.item_count == 0 %} hidden{% endif %} data-khan-cdrawer-foot>
+      <div class="khan-cdrawer__total">
+        <span class="khan-cdrawer__total-label">Обща сума</span>
+        <span class="khan-cdrawer__total-amt" data-khan-cdrawer-total>{{ cart.total_price | money }}</span>
+      </div>
+      <p class="khan-cdrawer__note">Доставката се изчислява при плащане.</p>
+      <a class="khan-cdrawer__checkout" href="{{ routes.cart_url }}/checkout"><span>Плащане</span></a>
+      <a class="khan-cdrawer__viewcart" href="{{ routes.cart_url }}">Виж количката</a>
+    </footer>
+  </aside>
+</div>
+
+<script>
+  (function () {
+    if (window.__khanCdrawer) return;
+    window.__khanCdrawer = true;
+
+    var root = document.querySelector('[data-khan-cdrawer]');
+    if (!root) return;
+    var itemsEl = root.querySelector('[data-khan-cdrawer-items]');
+    var emptyEl = root.querySelector('[data-khan-cdrawer-empty]');
+    var footEl = root.querySelector('[data-khan-cdrawer-foot]');
+    var countEl = root.querySelector('[data-khan-cdrawer-count]');
+    var totalEl = root.querySelector('[data-khan-cdrawer-total]');
+    var busy = false;
+
+    function money(cents, currency) {
+      try {
+        return new Intl.NumberFormat(document.documentElement.lang || 'bg', { style: 'currency', currency: currency }).format(cents / 100);
+      } catch (e) {
+        return (cents / 100).toFixed(2) + ' ' + currency;
+      }
+    }
+
+    function open() {
+      root.classList.add('is-open');
+      root.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('khan-cdrawer-lock');
+    }
+    function close() {
+      root.classList.remove('is-open');
+      root.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('khan-cdrawer-lock');
+    }
+
+    function render(cart) {
+      var navCounts = document.querySelectorAll('[data-khan-cart-count]');
+      navCounts.forEach(function (el) {
+        el.textContent = cart.item_count;
+        el.hidden = cart.item_count === 0;
+      });
+      if (countEl) countEl.textContent = cart.item_count;
+      if (totalEl) totalEl.textContent = money(cart.total_price, cart.currency);
+      if (footEl) footEl.hidden = cart.item_count === 0;
+      if (emptyEl) emptyEl.hidden = cart.item_count > 0;
+
+      var html = '';
+      cart.items.forEach(function (it) {
+        var img = it.image ? it.image.replace(/(\.[a-z]{2,4})(\?|$)/i, '_140x$1$2') : '';
+        html += '<div class="khan-cdrawer__item" data-key="' + it.key + '">'
+          + '<div class="khan-cdrawer__thumb">' + (img ? '<img src="' + img + '" alt="" width="56" height="56" loading="lazy">' : '') + '</div>'
+          + '<div class="khan-cdrawer__info">'
+          + '<p class="khan-cdrawer__name">' + it.product_title + '</p>'
+          + (it.variant_title && it.variant_title.indexOf('Default') === -1 ? '<p class="khan-cdrawer__variant">' + it.variant_title + '</p>' : '')
+          + '<div class="khan-cdrawer__qty">'
+          + '<button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>'
+          + '<span>' + it.quantity + '</span>'
+          + '<button type="button" data-khan-cdrawer-qty="1" aria-label="Увеличи">+</button>'
+          + '</div></div>'
+          + '<div class="khan-cdrawer__right">'
+          + '<p class="khan-cdrawer__price">' + money(it.final_line_price, cart.currency) + '</p>'
+          + '<button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>'
+          + '</div></div>';
+      });
+      itemsEl.querySelectorAll('.khan-cdrawer__item').forEach(function (n) { n.remove(); });
+      if (emptyEl) emptyEl.insertAdjacentHTML('beforebegin', html);
+    }
+
+    function refresh() {
+      return fetch('/cart.js').then(function (r) { return r.json(); }).then(render);
+    }
+
+    function change(key, qty) {
+      if (busy) return;
+      busy = true;
+      root.classList.add('is-busy');
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: qty })
+      })
+        .then(function (r) { return r.json(); })
+        .then(render)
+        .finally(function () { busy = false; root.classList.remove('is-busy'); });
+    }
+
+    // open from any nav cart icon
+    document.addEventListener('click', function (e) {
+      var cartLink = e.target.closest('.khan-nav__cart');
+      if (cartLink && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        refresh().then(open);
+        return;
+      }
+      if (e.target.closest('[data-khan-cdrawer-close]')) { close(); return; }
+
+      var qtyBtn = e.target.closest('[data-khan-cdrawer-qty]');
+      if (qtyBtn) {
+        var row = qtyBtn.closest('.khan-cdrawer__item');
+        var current = parseInt(row.querySelector('.khan-cdrawer__qty span').textContent, 10) || 0;
+        change(row.getAttribute('data-key'), Math.max(0, current + parseInt(qtyBtn.getAttribute('data-khan-cdrawer-qty'), 10)));
+        return;
+      }
+      var removeBtn = e.target.closest('[data-khan-cdrawer-remove]');
+      if (removeBtn) {
+        var rrow = removeBtn.closest('.khan-cdrawer__item');
+        change(rrow.getAttribute('data-key'), 0);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && root.classList.contains('is-open')) close();
+    });
+
+    // intercept add-to-cart forms (sticky cart etc.) -> add via AJAX, open drawer
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!(form instanceof HTMLFormElement)) return;
+      var action = form.getAttribute('action') || '';
+      if (action.indexOf('/cart/add') === -1) return;
+      e.preventDefault();
+      var fd = new FormData(form);
+      fetch('/cart/add.js', { method: 'POST', body: fd })
+        .then(function (r) { return r.json(); })
+        .then(function () { return refresh(); })
+        .then(open)
+        .catch(function () { form.submit(); });
+    }, true);
+  })();
+</script>
+
+{% stylesheet %}
+  .khan-cdrawer { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+  .khan-cdrawer-lock { overflow: hidden; }
+
+  .khan-cdrawer__overlay {
+    position: absolute; inset: 0;
+    background: rgb(0 0 0 / 0.5);
+    opacity: 0;
+    transition: opacity 0.32s ease;
+  }
+  .khan-cdrawer.is-open { pointer-events: auto; }
+  .khan-cdrawer.is-open .khan-cdrawer__overlay { opacity: 1; }
+
+  /* the black bubble panel — same material as the supplement-facts card */
+  .khan-cdrawer__panel {
+    position: absolute; top: 12px; right: 12px; bottom: 12px;
+    width: min(440px, calc(100vw - 24px));
+    display: flex; flex-direction: column;
+    color: #f1f1f1;
+    background: rgb(12 12 12 / 0.92);
+    border: 1px solid rgb(255 255 255 / 0.10);
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 0.45);
+    -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+    overflow: hidden;
+  }
+  .khan-cdrawer.is-open .khan-cdrawer__panel { transform: translateX(0); }
+  .khan-cdrawer.is-busy .khan-cdrawer__items { opacity: 0.5; pointer-events: none; }
+
+  .khan-cdrawer__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.10);
+  }
+  .khan-cdrawer__title {
+    margin: 0;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff;
+  }
+  .khan-cdrawer__count {
+    display: inline-block; min-width: 22px; padding: 2px 7px; margin-left: 8px;
+    background: #560B1E; color: #fff; border-radius: 999px;
+    font-family: ui-monospace, monospace; font-size: 11px; text-align: center;
+  }
+  .khan-cdrawer__close { position: relative; width: 34px; height: 34px; background: transparent; border: 0; cursor: pointer; }
+  .khan-cdrawer__close span::before,
+  .khan-cdrawer__close span::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 18px; height: 2px;
+    background: #fff; transition: background 0.18s ease;
+  }
+  .khan-cdrawer__close span::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .khan-cdrawer__close span::after { transform: translate(-50%, -50%) rotate(-45deg); }
+  .khan-cdrawer__close:hover span::before, .khan-cdrawer__close:hover span::after { background: #ff9d9d; }
+
+  .khan-cdrawer__items { flex: 1 1 auto; overflow-y: auto; padding: 8px 24px; transition: opacity 0.2s ease; }
+
+  .khan-cdrawer__item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+  .khan-cdrawer__thumb { flex: 0 0 56px; width: 56px; height: 56px; background: rgb(255 255 255 / 0.06); border-radius: 10px; overflow: hidden; }
+  .khan-cdrawer__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .khan-cdrawer__info { flex: 1 1 auto; min-width: 0; }
+  .khan-cdrawer__name {
+    margin: 0 0 2px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .khan-cdrawer__variant {
+    margin: 0 0 8px;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; color: #9a9a9a;
+  }
+  .khan-cdrawer__qty { display: inline-flex; align-items: center; gap: 2px; border: 1px solid rgb(255 255 255 / 0.18); }
+  .khan-cdrawer__qty button {
+    width: 26px; height: 26px; background: transparent; border: 0; color: #fff;
+    font-size: 15px; line-height: 1; cursor: pointer; transition: background 0.15s ease;
+  }
+  .khan-cdrawer__qty button:hover { background: rgb(255 255 255 / 0.1); }
+  .khan-cdrawer__qty span {
+    min-width: 26px; text-align: center;
+    font-family: ui-monospace, monospace; font-size: 12px; color: #fff;
+  }
+  .khan-cdrawer__right { flex: 0 0 auto; text-align: right; }
+  .khan-cdrawer__price { margin: 0 0 8px; font-family: ui-monospace, monospace; font-size: 13px; color: #fff; }
+  .khan-cdrawer__remove {
+    background: transparent; border: 0; padding: 0; cursor: pointer;
+    font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #8d8d8d; text-decoration: underline; text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .khan-cdrawer__remove:hover { color: #ff9d9d; }
+
+  .khan-cdrawer__empty {
+    margin: 40px 0; text-align: center;
+    font-family: ui-monospace, monospace; font-size: 13px; letter-spacing: 0.08em; color: #9a9a9a;
+  }
+
+  .khan-cdrawer__foot { padding: 18px 24px 22px; border-top: 1px solid rgb(255 255 255 / 0.10); }
+  .khan-cdrawer__total { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .khan-cdrawer__total-label {
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a9a9a;
+  }
+  .khan-cdrawer__total-amt {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 20px; color: #fff;
+  }
+  .khan-cdrawer__note { margin: 0 0 14px; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; color: #7a7a7a; }
+  .khan-cdrawer__checkout {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    padding: 16px 24px;
+    background: #560B1E; color: #fff; text-decoration: none;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  }
+  .khan-cdrawer__checkout::before {
+    content: ""; position: absolute; inset: 0; background: #000;
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .khan-cdrawer__checkout:hover::before { transform: scaleX(1); }
+  .khan-cdrawer__checkout > span { position: relative; z-index: 1; }
+  .khan-cdrawer__viewcart {
+    display: block; margin-top: 12px; text-align: center;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #9a9a9a; text-decoration: underline; text-underline-offset: 4px;
+  }
+  .khan-cdrawer__viewcart:hover { color: #fff; }
+
+  /* mobile: full screen */
+  @media screen and (max-width: 700px) {
+    .khan-cdrawer__panel {
+      top: 0; right: 0; bottom: 0; left: 0;
+      width: 100%;
+      border-radius: 0;
+      border: 0;
+      transform: translateX(100%);
+    }
+  }
+{% endstylesheet %}
