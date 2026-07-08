@@ -154,11 +154,15 @@
 
   /* responsive */
   @media screen and (max-width: 900px) {
-    .khan-phero { align-items: flex-end; --ph-bg-zoom: var(--ph-bg-zoom-m, 100); }
-    .khan-phero__bg-img { object-fit: contain; }
-    .khan-phero__inner { flex-direction: column; align-items: flex-start; gap: 36px; }
-    .khan-phero__left, .khan-phero__right { max-width: 100%; width: 100%; }
-    .khan-phero__heading { font-size: min(var(--ph-heading, 104px), 17vw); }
+    /* stacked flow: labels / title / subtext / jar / formula */
+    .khan-phero { flex-direction: column; align-items: stretch; justify-content: flex-start; min-height: 0; gap: 28px; }
+    .khan-phero__inner { display: contents; }
+    .khan-phero__left { order: 1; max-width: 100%; width: 100%; position: relative; z-index: 1; }
+    .khan-phero__bg { position: static; inset: auto; order: 2; height: calc(var(--ph-bg-zoom-m, 100) * 2.8px); }
+    .khan-phero__bg-img { object-fit: contain; transform: none; }
+    .khan-phero__overlay { display: none; }
+    .khan-phero__right { order: 3; max-width: 100%; width: 100%; position: relative; z-index: 1; }
+    .khan-phero__heading { font-size: min(var(--ph-heading, 104px), 12.5vw); }
   }
   @media screen and (max-width: 600px) {
     .khan-phero__corner { font-size: 11px; letter-spacing: 0.14em; }
