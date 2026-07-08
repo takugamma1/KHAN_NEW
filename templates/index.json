@@ -223,7 +223,7 @@
       "type": "khan-launch-hero",
       "name": "Launch hero",
       "settings": {
-        "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3_60a199a8-699c-4f5f-832a-b11f7df06d1f.png",
+        "image": "shopify://shop_images/Vurtene_1.webp",
         "image_position": "left",
         "eyebrow": "Supplement",
         "heading": "<p>Pre-<br/><strong>workout</strong></p>",
@@ -265,7 +265,7 @@
         "image_width": 40,
         "fade_height": 5,
         "eyebrow": "Apparel",
-        "heading": "<p>Heritage<br/><strong>F/W 26.</strong></p>",
+        "heading": "<p>Heritage.<br/><strong>F/W 26.</strong></p>",
         "show_divider": true,
         "description": "<p>Fourteen pieces. Cut and sewn in Sofia.</p><p>Numbered hangtags.</p><p>The drop closes when the lot does.</p>",
         "btn1_text": "Enter the archive",
