@@ -1,0 +1,27 @@
+{%- comment -%}
+  Proportional page scaling for large monitors — the "VW fix" agreed at the
+  08.07 meeting. The client's test: browser zoom at 200% on a big monitor
+  makes the site look right ("пропорционално сайта изглежда по същия начин").
+  This reproduces exactly that: at or below the 1920px reference width the
+  page is untouched; on wider screens the whole page zooms uniformly, so
+  layout, spacing and positioning stay identical — just scaled to the screen.
+  Covers every section (khan + stock) without touching individual px values.
+{%- endcomment -%}
+<style>
+  body { zoom: var(--khan-page-zoom, 1); }
+</style>
+<script>
+  (function () {
+    var REF = 1920;
+    function apply() {
+      var w = document.documentElement.clientWidth || window.innerWidth;
+      document.documentElement.style.setProperty(
+        '--khan-page-zoom',
+        w > REF ? (w / REF).toFixed(4) : '1'
+      );
+    }
+    apply();
+    window.addEventListener('resize', apply);
+    window.addEventListener('orientationchange', apply);
+  })();
+</script>
