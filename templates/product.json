@@ -491,7 +491,7 @@
         "button_label": "Добави в количката",
         "soldout_label": "Изчерпан",
         "position": "bottom",
-        "stop_at_footer": true,
+        "stop_at_footer": false,
         "bottom_offset": 20,
         "max_width": 1100,
         "bar_height": 72,
