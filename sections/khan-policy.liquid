@@ -1,0 +1,113 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  class="khan-policy color-{{ s.color_scheme }}"
+  style="
+    --pol-bg: {{ s.bg_color }};
+    --pol-text: {{ s.text_color }};
+    --pol-muted: {{ s.muted_color }};
+    --pol-accent: {{ s.accent_color }};
+    --pol-maxw: {{ s.max_width }}px;
+    --pol-pt: {{ s.padding_top }}px;
+    --pol-pb: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="khan-policy__inner">
+    {%- if s.updated != blank -%}
+      <p class="khan-policy__eyebrow">{{ s.updated }}</p>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <h1 class="khan-policy__heading">{{ s.heading }}</h1>
+    {%- elsif page.title != blank -%}
+      <h1 class="khan-policy__heading">{{ page.title }}</h1>
+    {%- endif -%}
+
+    <div class="khan-policy__body">
+      {%- if s.body != blank -%}
+        {{ s.body }}
+      {%- else -%}
+        {{ page.content }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-policy {
+    background: var(--pol-bg, #ffffff);
+    padding: var(--pol-pt, 140px) clamp(20px, 5vw, 64px) var(--pol-pb, 96px);
+  }
+  .khan-policy__inner { max-width: var(--pol-maxw, 780px); margin-inline: auto; }
+
+  .khan-policy__eyebrow {
+    margin: 0 0 14px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--pol-accent, #560B1E);
+  }
+  .khan-policy__heading {
+    margin: 0 0 30px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: clamp(28px, 4.6vw, 46px); line-height: 0.98; letter-spacing: -0.01em;
+    text-transform: uppercase; color: var(--pol-text, #111);
+  }
+
+  .khan-policy__body {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.8; letter-spacing: 0.03em;
+    color: var(--pol-muted, #444);
+  }
+  .khan-policy__body h2 {
+    margin: 34px 0 12px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--pol-text, #111);
+    padding-top: 18px;
+    border-top: 1px solid rgb(0 0 0 / 0.12);
+  }
+  .khan-policy__body h2:first-child { margin-top: 0; border-top: 0; padding-top: 0; }
+  .khan-policy__body h3 {
+    margin: 22px 0 8px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--pol-text, #111);
+  }
+  .khan-policy__body p { margin: 0 0 12px; }
+  .khan-policy__body :is(ul, ol) { margin: 0 0 14px; padding-left: 20px; }
+  .khan-policy__body li { margin-bottom: 6px; }
+  .khan-policy__body li::marker { color: var(--pol-accent, #560B1E); }
+  .khan-policy__body :is(strong, b) { color: var(--pol-text, #111); }
+  .khan-policy__body a { color: var(--pol-accent, #560B1E); }
+  .khan-policy__body em { font-style: italic; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Policy page",
+  "tag": "section",
+  "class": "khan-policy-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Blank = page title" },
+    { "type": "text", "id": "updated", "label": "Updated line", "default": "Последна актуализация: 08.07.2026" },
+    { "type": "html", "id": "body", "label": "Body (HTML)", "info": "Blank = page content from admin" },
+
+    { "type": "header", "content": "Colors & spacing" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Headings", "default": "#111111" },
+    { "type": "color", "id": "muted_color", "label": "Body text", "default": "#444444" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#560B1E" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 560, "max": 1100, "step": 20, "unit": "px", "default": 780 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 140 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 96 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "Policy page", "category": "t:categories.storytelling" }
+  ]
+}
+{% endschema %}
