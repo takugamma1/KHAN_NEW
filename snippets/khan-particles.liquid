@@ -1,0 +1,84 @@
+{%- comment -%}
+  Shared floating-particles canvas.
+  Usage:
+    {% render 'khan-particles', count: 50, size: 2, color1: '#560B1E', color2: '#dfdfdf', direction: 'down' %}
+  The canvas fills its nearest positioned ancestor (render it inside a
+  position:relative section root). Safe to render multiple times per page —
+  the init script is shared and idempotent. direction: 'down' (blood-drop
+  fall) or 'up'.
+{%- endcomment -%}
+<canvas
+  class="khan-particles"
+  data-count="{{ count | default: 50 }}"
+  data-size="{{ size | default: 2 }}"
+  data-c1="{{ color1 | default: '#560B1E' }}"
+  data-c2="{{ color2 | default: '#dfdfdf' }}"
+  data-dir="{{ direction | default: 'down' }}"
+  aria-hidden="true"
+  style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0;"
+></canvas>
+<script>
+  (function () {
+    if (window.__khanParticlesInit) { window.__khanParticlesInit(); return; }
+    function initCanvas(c) {
+      if (c.__kp || !c.getContext) return;
+      c.__kp = true;
+      var ctx = c.getContext('2d');
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var DENS = parseInt(c.getAttribute('data-count') || '50', 10);
+      var SZ = parseFloat(c.getAttribute('data-size') || '2');
+      var c1 = c.getAttribute('data-c1') || '#560B1E';
+      var c2 = c.getAttribute('data-c2') || '#dfdfdf';
+      var dirSign = c.getAttribute('data-dir') === 'up' ? -1 : 1;
+      var w = 1, h = 1, dpr = 1, parts = [], raf = 0;
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = c.clientWidth || 1; h = c.clientHeight || 1;
+        c.width = w * dpr; c.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      function make() {
+        parts = [];
+        for (var i = 0; i < DENS; i++) {
+          parts.push({
+            x: Math.random(), y: Math.random(),
+            r: Math.random() * SZ + 0.3,
+            col: Math.random() < 0.62 ? c1 : c2,
+            o: Math.random() * 0.5 + 0.2,
+            vy: Math.random() * 0.00055 + 0.0001,
+            ph: Math.random() * 6.283
+          });
+        }
+      }
+      function draw(t) {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = 0; i < parts.length; i++) {
+          var p = parts[i];
+          var x = p.x * w + Math.sin(t * 0.0002 + p.ph) * 6;
+          var y = p.y * h;
+          if (!reduced) { y = (((p.y + dirSign * t * p.vy) % 1) + 1) % 1 * h; }
+          ctx.globalAlpha = p.o; ctx.fillStyle = p.col;
+          ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.283); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        if (!reduced) raf = window.requestAnimationFrame(draw);
+      }
+      resize(); make();
+      if (reduced) draw(0); else raf = window.requestAnimationFrame(draw);
+      window.addEventListener('resize', function () { resize(); make(); });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { if (!reduced && !raf) raf = window.requestAnimationFrame(draw); }
+            else { window.cancelAnimationFrame(raf); raf = 0; }
+          });
+        }, { threshold: 0 }).observe(c.parentElement || c);
+      }
+    }
+    window.__khanParticlesInit = function () {
+      document.querySelectorAll('canvas.khan-particles').forEach(initCanvas);
+    };
+    window.__khanParticlesInit();
+    document.addEventListener('shopify:section:load', window.__khanParticlesInit);
+  })();
+</script>

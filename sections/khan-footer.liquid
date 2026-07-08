@@ -1,5 +1,10 @@
 {% liquid
   assign s = section.settings
+  # collection page gets a dark footer for contrast against the white page
+  assign ft_bg = s.bg_color
+  if s.invert_on_collection and request.page_type == 'collection'
+    assign ft_bg = s.collection_bg | default: '#0a0a0a'
+  endif
 %}
 
 {%- unless section.settings.hide_on_home and request.page_type == 'index' -%}
@@ -7,7 +12,7 @@
   id="KhanFooter-{{ section.id }}"
   class="khan-footer color-{{ s.color_scheme }}{% if s.text_grain %} khan-footer--grain{% endif %}{% if s.image_only %} khan-footer--image-only{% endif %}{% if s.content_panel %} khan-footer--panel{% endif %}"
   style="
-    --ft-bg: {{ s.bg_color }};
+    --ft-bg: {{ ft_bg }};
     --ft-text: {{ s.text_color }};
     --ft-accent: {{ s.accent_color }};
     --ft-muted: {{ s.muted_color }};
@@ -364,6 +369,8 @@
     { "type": "range", "id": "panel_radius", "label": "Panel corner radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 22 },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
     { "type": "color", "id": "bg_color", "label": "Background fallback", "default": "#1b1b1b" },
+    { "type": "checkbox", "id": "invert_on_collection", "label": "Dark background on collection pages", "default": true },
+    { "type": "color", "id": "collection_bg", "label": "Collection page background", "default": "#0a0a0a" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#f2f2f2" },
     { "type": "color", "id": "muted_color", "label": "Muted text color", "default": "#9a9a9a" },
     { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#560B1E" },

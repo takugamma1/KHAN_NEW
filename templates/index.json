@@ -73,7 +73,13 @@
         "usp_text_size": 14,
         "usp_title_color": "#560B1E",
         "usp_text_color": "#ffffff",
-        "usp_divider_color": "#ffffff47"
+        "usp_divider_color": "#ffffff47",
+        "show_particles": true,
+        "particle_count": 50,
+        "particle_size": 2,
+        "particle_color": "#560B1E",
+        "particle_color_2": "#dfdfdf",
+        "particle_dir": "down"
       }
     },
     "rocks_hero_6ig48b": {
@@ -144,7 +150,13 @@
         "usp_text_size": 14,
         "usp_title_color": "#560B1E",
         "usp_text_color": "#ffffff",
-        "usp_divider_color": "#000000"
+        "usp_divider_color": "#000000",
+        "show_particles": true,
+        "particle_count": 50,
+        "particle_size": 2,
+        "particle_color": "#560B1E",
+        "particle_color_2": "#dfdfdf",
+        "particle_dir": "down"
       }
     },
     "khan_our_story_9deQRY": {
@@ -216,7 +228,8 @@
         "padding_top": 96,
         "padding_bottom": 96,
         "padding_inline": 56,
-        "color_scheme": ""
+        "color_scheme": "",
+        "particle_dir": "down"
       }
     },
     "khan_launch_hero_KicyPi": {
@@ -256,7 +269,13 @@
         "min_height": 760,
         "max_width": 1640,
         "padding_y": 80,
-        "color_scheme": ""
+        "color_scheme": "",
+        "show_particles": true,
+        "particle_count": 50,
+        "particle_size": 2,
+        "particle_color": "#560B1E",
+        "particle_color_2": "#dfdfdf",
+        "particle_dir": "down"
       }
     },
     "khan_apparel_hero_faAPEW": {
@@ -298,7 +317,13 @@
         "min_height": 860,
         "max_width": 1660,
         "padding_y": 72,
-        "color_scheme": ""
+        "color_scheme": "",
+        "show_particles": true,
+        "particle_count": 50,
+        "particle_size": 2,
+        "particle_color": "#560B1E",
+        "particle_color_2": "#dfdfdf",
+        "particle_dir": "down"
       }
     }
   },

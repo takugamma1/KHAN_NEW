@@ -33,14 +33,7 @@
   "
 >
   {%- if s.show_particles -%}
-    <canvas
-      class="khan-story__particles"
-      data-count="{{ s.particle_count }}"
-      data-size="{{ s.particle_size }}"
-      data-c1="{{ s.particle_color | default: '#560B1E' }}"
-      data-c2="{{ s.particle_color_2 | default: '#111111' }}"
-      aria-hidden="true"
-    ></canvas>
+    {% render 'khan-particles', count: s.particle_count, size: s.particle_size, color1: s.particle_color, color2: s.particle_color_2, direction: s.particle_dir %}
   {%- endif -%}
 
   {%- comment -%} Edge/side decorations (kept off the very top & bottom so the section still flows into its neighbours). {%- endcomment -%}
@@ -103,64 +96,6 @@
   </div>
 </div>
 
-<script>
-  (function () {
-    var root = document.getElementById('KhanStory-{{ section.id }}');
-    if (!root) return;
-    var c = root.querySelector('canvas.khan-story__particles');
-    if (!c || !c.getContext) return;
-    var ctx = c.getContext('2d');
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var DENS = parseInt(c.getAttribute('data-count') || '120', 10);
-    var SZ = parseFloat(c.getAttribute('data-size') || '2.5');
-    var c1 = c.getAttribute('data-c1') || '#560B1E';
-    var c2 = c.getAttribute('data-c2') || '#111111';
-    var w = 1, h = 1, dpr = 1, parts = [], raf = 0;
-    function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = c.clientWidth || 1; h = c.clientHeight || 1;
-      c.width = w * dpr; c.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function make() {
-      parts = [];
-      for (var i = 0; i < DENS; i++) {
-        parts.push({
-          x: Math.random(), y: Math.random(),
-          r: Math.random() * SZ + 0.3,
-          col: Math.random() < 0.62 ? c1 : c2,
-          o: Math.random() * 0.5 + 0.2,
-          vy: Math.random() * 0.00055 + 0.0001,
-          ph: Math.random() * 6.283
-        });
-      }
-    }
-    function draw(t) {
-      ctx.clearRect(0, 0, w, h);
-      for (var i = 0; i < parts.length; i++) {
-        var p = parts[i];
-        var x = p.x * w + Math.sin(t * 0.0002 + p.ph) * 6;
-        var y = p.y * h;
-        if (!reduced) { y = ((p.y - (t * p.vy)) % 1 + 1) % 1 * h; }
-        ctx.globalAlpha = p.o; ctx.fillStyle = p.col;
-        ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.283); ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      if (!reduced) raf = window.requestAnimationFrame(draw);
-    }
-    resize(); make();
-    if (reduced) draw(0); else raf = window.requestAnimationFrame(draw);
-    window.addEventListener('resize', function () { resize(); make(); });
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) { if (!reduced && !raf) raf = window.requestAnimationFrame(draw); }
-          else { window.cancelAnimationFrame(raf); raf = 0; }
-        });
-      }, { threshold: 0 }).observe(root);
-    }
-  })();
-</script>
 
 {% stylesheet %}
   .khan-story {
@@ -438,6 +373,7 @@
     { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 3 },
     { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#560B1E" },
     { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#111111" },
+    { "type": "select", "id": "particle_dir", "label": "Particle direction", "options": [ { "value": "down", "label": "Falling (blood drops)" }, { "value": "up", "label": "Rising" } ], "default": "down" },
 
     { "type": "header", "content": "Grain" },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text & icons", "default": true, "info": "Applies a subtle grain to the content only, not the background." },

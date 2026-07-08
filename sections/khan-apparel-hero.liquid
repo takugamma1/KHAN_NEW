@@ -34,6 +34,9 @@
     --ah-frame-mask: url(&quot;data:image/svg+xml,{{ ah_frame_mask }}&quot;);
   "
 >
+  {%- if s.show_particles -%}
+    {% render 'khan-particles', count: s.particle_count, size: s.particle_size, color1: s.particle_color, color2: s.particle_color_2, direction: s.particle_dir %}
+  {%- endif -%}
   {%- comment -%} z0: product / model image (sits BELOW the bottom gradient) {%- endcomment -%}
   <div class="khan-ahero__image" aria-hidden="true">
     {%- if s.image != blank -%}
@@ -279,6 +282,14 @@
     { "type": "range", "id": "min_height", "label": "Min height", "min": 520, "max": 1100, "step": 20, "unit": "px", "default": 860 },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1660 },
     { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 72 },
+
+    { "type": "header", "content": "Particles" },
+    { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": false },
+    { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 50 },
+    { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#560B1E" },
+    { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#dfdfdf" },
+    { "type": "select", "id": "particle_dir", "label": "Particle direction", "options": [ { "value": "down", "label": "Falling (blood drops)" }, { "value": "up", "label": "Rising" } ], "default": "down" },
 
     { "type": "header", "content": "Appearance" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }

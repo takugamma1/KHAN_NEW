@@ -85,6 +85,9 @@
     data-shopify-visual-preview
   {% endif %}
 >
+  {%- if section.settings.show_particles -%}
+    {% render 'khan-particles', count: section.settings.particle_count, size: section.settings.particle_size, color1: section.settings.particle_color, color2: section.settings.particle_color_2, direction: section.settings.particle_dir %}
+  {%- endif -%}
   {%- comment -%} Layer 1: background media (image or video). Black when empty -> drop video here. {%- endcomment -%}
   <div class="rocks-hero__media" data-testid="rocks-hero-media">
     {%- if has_image -%}
@@ -1044,6 +1047,16 @@
       "default": 100,
       "visible_if": "{{ section.settings.section_height == 'custom' }}"
     },
+    {
+      "type": "header",
+      "content": "Particles"
+    },
+    { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": false },
+    { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 50 },
+    { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#560B1E" },
+    { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#dfdfdf" },
+    { "type": "select", "id": "particle_dir", "label": "Particle direction", "options": [ { "value": "down", "label": "Falling (blood drops)" }, { "value": "up", "label": "Rising" } ], "default": "down" },
     {
       "type": "header",
       "content": "Appearance"
