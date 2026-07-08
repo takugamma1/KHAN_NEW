@@ -177,7 +177,7 @@
   .khan-footer__inner { position: relative; z-index: 2; max-width: 1920px; margin-inline: auto; min-height: calc(var(--ft-minh, 560px) - var(--ft-pt, 64px) - var(--ft-pb, 40px)); display: flex; flex-direction: column; justify-content: var(--ft-valign, flex-end); }
 
   /* content band — holds layout + legal; positioned within the section by --ft-valign */
-  .khan-footer__panel { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 56px); }
+  .khan-footer__panel { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 28px); }
   .khan-footer--panel .khan-footer__panel {
     background: rgb(0 0 0 / var(--ft-panel, 0.55));
     padding: clamp(26px, 3.5vw, 48px) clamp(22px, 3.5vw, 52px);
@@ -188,18 +188,16 @@
             backdrop-filter: blur(var(--ft-panel-blur, 0px));
   }
 
-  /* legibility over the image without a visible gradient/vignette */
-  .khan-footer__inner :is(.khan-footer__tagline, .khan-footer__col-head, .khan-footer__link, .khan-footer__news-head, .khan-footer__news-text, .khan-footer__legal) { text-shadow: 0 1px 6px rgb(0 0 0 / 0.45); }
-  .khan-footer__logo { filter: drop-shadow(0 2px 8px rgb(0 0 0 / 0.4)); }
 
   .khan-footer__layout {
     flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
-    gap: clamp(40px, 6vw, 120px);
+    align-items: flex-start;
+    gap: clamp(28px, 4vw, 72px);
   }
 
-  .khan-footer__leftgroup { display: flex; gap: clamp(32px, 4vw, 80px); }
+  .khan-footer__leftgroup { display: flex; gap: clamp(24px, 3vw, 56px); }
 
   /* ---- brand ---- */
   .khan-footer__brand { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -327,7 +325,7 @@
     { "type": "range", "id": "top_height", "label": "Strip height", "min": 60, "max": 300, "step": 4, "unit": "px", "default": 140 },
     { "type": "checkbox", "id": "blend_top", "label": "Blend into section above (gradient)", "default": false },
     { "type": "color", "id": "blend_color", "label": "Blend color (page background)", "default": "#f1f1ee" },
-    { "type": "range", "id": "min_height", "label": "Footer height", "min": 360, "max": 900, "step": 20, "unit": "px", "default": 560 },
+    { "type": "range", "id": "min_height", "label": "Footer height", "min": 160, "max": 900, "step": 20, "unit": "px", "default": 560 },
 
     { "type": "header", "content": "Logo & tagline (left)" },
     { "type": "image_picker", "id": "logo", "label": "Logo (upload)" },

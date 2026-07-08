@@ -66,20 +66,22 @@
 
       <div class="khan-story__right">
         {%- for block in section.blocks -%}
-          <div class="khan-story__feature" {{ block.shopify_attributes }}>
-            {%- if s.feature_icon_3d -%}
-              <div class="khan-story__feature-icon khan-story__feature-icon--3d" aria-hidden="true"><canvas data-khan-asterisk data-static></canvas></div>
-            {%- elsif block.settings.icon != blank -%}
-              <img
-                class="khan-story__feature-icon"
-                src="{{ block.settings.icon | image_url: width: 160 }}"
-                alt=""
-                width="80"
-                height="80"
-                loading="lazy"
-              >
-            {%- else -%}
-              <span class="khan-story__feature-icon khan-story__feature-icon--placeholder" aria-hidden="true"></span>
+          <div class="khan-story__feature{% unless s.show_feat_icons %} khan-story__feature--textonly{% endunless %}" {{ block.shopify_attributes }}>
+            {%- if s.show_feat_icons -%}
+              {%- if s.feature_icon_3d -%}
+                <div class="khan-story__feature-icon khan-story__feature-icon--3d" aria-hidden="true"><canvas data-khan-asterisk data-static></canvas></div>
+              {%- elsif block.settings.icon != blank -%}
+                <img
+                  class="khan-story__feature-icon"
+                  src="{{ block.settings.icon | image_url: width: 160 }}"
+                  alt=""
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <span class="khan-story__feature-icon khan-story__feature-icon--placeholder" aria-hidden="true"></span>
+              {%- endif -%}
             {%- endif -%}
             <div class="khan-story__feature-body">
               {%- if block.settings.title != blank -%}
@@ -219,6 +221,9 @@
     border: 1px dashed rgb(0 0 0 / 0.3);
     border-radius: 4px;
   }
+
+  /* text-only mode: no icons, no divider line */
+  .khan-story__feature--textonly .khan-story__feature-body { border-left: 0; padding-left: 0; }
 
   /* animated GPU asterisk as the feature icon — flat in-plane (2D) spin */
   .khan-story__feature-icon--3d { position: relative; }
@@ -360,6 +365,7 @@
 
     { "type": "header", "content": "Features (right column)" },
     { "type": "paragraph", "content": "Add, remove and reorder Feature blocks below." },
+    { "type": "checkbox", "id": "show_feat_icons", "label": "Show feature icons & dividers", "default": true, "info": "Off = text only." },
     { "type": "checkbox", "id": "feature_icon_3d", "label": "Use animated 3D asterisk for icons", "default": true, "info": "Spins flat (in-plane). Overrides each block's icon image. Hidden on mobile like the other icons." },
     { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 56 },
     { "type": "range", "id": "feature_title_size", "label": "Feature title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 18 },

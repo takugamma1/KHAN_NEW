@@ -229,7 +229,8 @@
         "padding_top": 96,
         "padding_bottom": 96,
         "padding_inline": 56,
-        "color_scheme": ""
+        "color_scheme": "",
+        "show_feat_icons": false
       }
     },
     "khan_launch_hero_KicyPi": {
