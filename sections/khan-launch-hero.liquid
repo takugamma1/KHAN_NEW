@@ -137,7 +137,8 @@
   }
   .khan-lhero--img-right .khan-lhero__media { order: 2; }
 
-  .khan-lhero__media { flex: 1 1 0; min-width: 0; align-self: stretch; display: flex; align-items: center; }
+  .khan-lhero__media { flex: 1 1 0; min-width: 0; align-self: stretch; display: flex; align-items: center; position: relative; z-index: 0; }
+  .khan-lhero__content { position: relative; z-index: 1; }
   .khan-lhero__img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .khan-lhero__img--ph { aspect-ratio: 4 / 5; background: linear-gradient(135deg, #ddd, #bbb); }
   @media screen and (min-width: 901px) {
