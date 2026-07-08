@@ -17,7 +17,7 @@
         "bg_zoom": 85,
         "bg_zoom_mobile": 95,
         "overlay_opacity": 0,
-        "min_height": 900,
+        "min_height": 1000,
         "top_left": "",
         "top_right": "Pre-workout",
         "corner_top": 96,
