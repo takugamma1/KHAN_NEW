@@ -21,25 +21,25 @@
             "menu": "main-menu"
           }
         },
-        "menu_feVeyz": {
-          "type": "menu",
-          "settings": {
-            "heading": "Информация",
-            "menu": "footer"
-          }
-        },
         "menu_D4hBaT": {
           "type": "menu",
           "settings": {
             "heading": "Профил",
+            "menu": "main-menu"
+          }
+        },
+        "menu_feVeyz": {
+          "type": "menu",
+          "settings": {
+            "heading": "Информация",
             "menu": "customer-account-main-menu"
           }
         }
       },
       "block_order": [
         "menu_PLa97t",
-        "menu_feVeyz",
-        "menu_D4hBaT"
+        "menu_D4hBaT",
+        "menu_feVeyz"
       ],
       "name": "Photo footer",
       "settings": {
