@@ -168,10 +168,19 @@
       if (e.key === 'Escape' && root.classList.contains('is-open')) close();
     });
 
-    // intercept add-to-cart forms (sticky cart etc.) -> add via AJAX, open drawer
+    // the sticky cart (and other khan components) do their own AJAX add and
+    // announce it — the drawer only reacts, so nothing is ever added twice
+    document.addEventListener('khan:cart:refresh', function () {
+      refresh().then(open);
+    });
+
+    // intercept remaining plain /cart/add forms that have NO ajax handler of
+    // their own (never the sticky cart's)
     document.addEventListener('submit', function (e) {
       var form = e.target;
       if (!(form instanceof HTMLFormElement)) return;
+      if (form.hasAttribute('data-khan-scart-form')) return;
+      if (e.defaultPrevented) return;
       var action = form.getAttribute('action') || '';
       if (action.indexOf('/cart/add') === -1) return;
       e.preventDefault();
@@ -181,7 +190,7 @@
         .then(function () { return refresh(); })
         .then(open)
         .catch(function () { form.submit(); });
-    }, true);
+    });
   })();
 </script>
 
