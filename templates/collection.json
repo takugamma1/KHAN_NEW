@@ -162,8 +162,9 @@
           "settings": {
             "product": "тениска-тест",
             "label": "(ИМЕ НА ТЕНИСКА)",
-            "button_label": "Shop now",
+            "button_label": "Тениска име",
             "button_link": "shopify://products/тениска-тест",
+            "edition_text": "",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -173,8 +174,9 @@
           "settings": {
             "product": "тениска-без-ръкав",
             "label": "(ИМЕ НА БЕЗРЪКАВ)",
-            "button_label": "Shop now",
+            "button_label": "Потник име",
             "button_link": "shopify://products/тениска-без-ръкав",
+            "edition_text": "",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -184,8 +186,9 @@
           "settings": {
             "product": "сет",
             "label": "(ИМЕ НА СЕТ)",
-            "button_label": "Shop now",
+            "button_label": "Екип",
             "button_link": "shopify://products/сет",
+            "edition_text": "",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -202,8 +205,8 @@
         "subheading": "Built different. Made to last.",
         "heading_size": 72,
         "subheading_size": 13,
-        "heading_color": "#560B1E",
-        "accent_color": "#FFFFFF",
+        "heading_color": "#560b1e",
+        "accent_color": "#ffffff",
         "text_color": "#1a1a1a",
         "anim_style": "wipe",
         "anim_duration": 1500,
@@ -217,6 +220,10 @@
         "button_text": "#ffffff",
         "show_swatches": true,
         "swatch_size": 30,
+        "show_edition": true,
+        "edition_total": "500",
+        "show_fav": true,
+        "fav_color": "#3b0211",
         "bg_color": "#ffffff",
         "max_width": 1900,
         "column_gap": 12,
@@ -310,7 +317,7 @@
         "caption_size": 10,
         "text_grain": false,
         "heading_color": "#111111",
-        "accent_color": "#560B1E",
+        "accent_color": "#560b1e",
         "text_color": "#1a1a1a",
         "frame_color": "#00000029",
         "bg_color": "#ffffff",
