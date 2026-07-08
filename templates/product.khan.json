@@ -14,6 +14,8 @@
       "name": "Pre-workout hero",
       "settings": {
         "bg_image": "shopify://shop_images/Vurtene_1.webp",
+        "bg_zoom": 85,
+        "bg_zoom_mobile": 60,
         "overlay_opacity": 0,
         "min_height": 700,
         "top_left": "Khan collection",
