@@ -25,7 +25,7 @@
           "type": "menu",
           "settings": {
             "heading": "Профил",
-            "menu": "main-menu"
+            "menu": "footer"
           }
         },
         "menu_feVeyz": {
