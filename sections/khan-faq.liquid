@@ -75,8 +75,12 @@
       entries.forEach(function (en) {
         if (en.isIntersecting) { root.classList.add('khan-faq--in'); io.disconnect(); }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0 });
     io.observe(root);
+    window.setTimeout(function () {
+      var r = root.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) root.classList.add('khan-faq--in');
+    }, 1500);
     document.addEventListener('shopify:section:select', function (e) {
       if (e.detail && e.detail.sectionId === '{{ section.id }}') root.classList.add('khan-faq--in');
     });

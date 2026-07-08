@@ -139,16 +139,27 @@
   (function () {
     var root = document.getElementById('KhanColl-{{ section.id }}');
     if (!root) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { root.classList.add('khan-coll--in'); return; }
-    if (!('IntersectionObserver' in window)) { root.classList.add('khan-coll--in'); return; }
+    var reveal = function () { root.classList.add('khan-coll--in'); };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { reveal(); return; }
+    if (!('IntersectionObserver' in window)) { reveal(); return; }
+    {%- comment -%}
+      threshold 0: on mobile the stacked grid makes this section taller than
+      the viewport, so a percentage threshold can never be reached — fire as
+      soon as any part of it enters the screen instead.
+    {%- endcomment -%}
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { root.classList.add('khan-coll--in'); io.disconnect(); }
+        if (e.isIntersecting) { reveal(); io.disconnect(); }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
     io.observe(root);
+    {%- comment -%} safety net: products must never stay invisible {%- endcomment -%}
+    window.setTimeout(function () {
+      var r = root.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) reveal();
+    }, 1500);
     document.addEventListener('shopify:section:select', function (e) {
-      if (e.detail && e.detail.sectionId === '{{ section.id }}') root.classList.add('khan-coll--in');
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') reveal();
     });
   })();
 </script>
