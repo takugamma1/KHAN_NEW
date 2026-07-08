@@ -72,7 +72,7 @@
 {% stylesheet %}
   .khan-eng {
     position: relative;
-    border-top: var(--eng-line-w, 2px) solid var(--eng-line-c, #d8232a);
+    border-top: var(--eng-line-w, 2px) solid var(--eng-line-c, #560B1E);
     background: var(--eng-bg, #0a0a0a);
     padding-block: var(--eng-pt, 44px) var(--eng-pb, 44px);
     padding-inline: clamp(20px, 4vw, 56px);
@@ -127,7 +127,7 @@
     text-transform: uppercase; color: var(--eng-heading, #f3f3f3);
   }
   .khan-eng__heading p { margin: 0; }
-  .khan-eng__heading :is(strong, b) { color: var(--eng-accent, #d8232a); font-weight: inherit; }
+  .khan-eng__heading :is(strong, b) { color: var(--eng-accent, #560B1E); font-weight: inherit; }
   .khan-eng__ast { width: 16px; height: 16px; object-fit: contain; margin-top: 6px; flex: 0 0 auto; }
   .khan-eng__rule { display: block; height: 1px; background: var(--eng-divider, rgb(255 255 255 / 0.2)); margin: 18px 0; max-width: 280px; }
   .khan-eng__body { font-size: var(--eng-body-size, 13px); line-height: 1.7; letter-spacing: 0.02em; color: var(--eng-muted, #b9b9b9); }
@@ -137,7 +137,7 @@
   .khan-eng__feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
   .khan-eng__feat { padding: 0 clamp(16px, 1.6vw, 28px); border-left: 1px solid var(--eng-divider, rgb(255 255 255 / 0.18)); }
   .khan-eng__feat-icon { width: var(--eng-icon-size, 40px); height: var(--eng-icon-size, 40px); object-fit: contain; display: block; margin-bottom: 16px; }
-  .khan-eng__feat-title { margin: 0 0 10px; font-weight: 700; font-size: var(--eng-feat-title-size, 14px); letter-spacing: 0.1em; text-transform: uppercase; color: var(--eng-accent, #d8232a); }
+  .khan-eng__feat-title { margin: 0 0 10px; font-weight: 700; font-size: var(--eng-feat-title-size, 14px); letter-spacing: 0.1em; text-transform: uppercase; color: var(--eng-accent, #560B1E); }
   .khan-eng__feat-text { font-size: var(--eng-feat-text-size, 12px); line-height: 1.6; color: var(--eng-muted, #b9b9b9); }
   .khan-eng__feat-text p { margin: 0; }
 
@@ -172,7 +172,7 @@
   "settings": [
     { "type": "header", "content": "Top divider line" },
     { "type": "range", "id": "line_width", "label": "Line thickness", "min": 0, "max": 20, "step": 1, "unit": "px", "default": 2 },
-    { "type": "color", "id": "line_color", "label": "Line color", "default": "#d8232a" },
+    { "type": "color", "id": "line_color", "label": "Line color", "default": "#560B1E" },
 
     { "type": "header", "content": "Glass background" },
     { "type": "checkbox", "id": "glass", "label": "Glass texture", "default": true },
@@ -200,7 +200,7 @@
     { "type": "header", "content": "Style" },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
     { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#f3f3f3" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#d8232a" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#560B1E" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#e6e6e6" },
     { "type": "color", "id": "muted_color", "label": "Muted text color", "default": "#b9b9b9" },
     { "type": "color", "id": "divider_color", "label": "Divider line color", "default": "#ffffff2e" },

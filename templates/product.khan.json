@@ -30,7 +30,7 @@
         "bg_color": "#ffffff",
         "text_color": "#000000",
         "muted_color": "#000000",
-        "accent_color": "#d8232a",
+        "accent_color": "#560B1E",
         "heading_size": 62,
         "eyebrow_size": 13,
         "sub_size": 16,
@@ -149,7 +149,7 @@
         "bg_color": "#ffffff",
         "text_color": "#111111",
         "muted_color": "#6a6a6a",
-        "accent_color": "#d8232a",
+        "accent_color": "#560B1E",
         "heading_size": 60,
         "eyebrow_size": 13,
         "content_width": 360,
@@ -234,7 +234,7 @@
         "title_size": 22,
         "text_size": 13,
         "bg_color": "#ffffff",
-        "title_color": "#bf1616",
+        "title_color": "#560B1E",
         "text_color": "#6f6f6f",
         "bar_color": "#0e0e0e",
         "color_scheme": ""
@@ -271,8 +271,8 @@
         "text_color": "#ffffff",
         "muted_color": "#ffffff",
         "accent_color": "#ffffff",
-        "button_top": "#b3122a",
-        "button_bottom": "#8e1316",
+        "button_top": "#560B1E",
+        "button_bottom": "#3B0211",
         "button_text": "#ffffff"
       }
     }

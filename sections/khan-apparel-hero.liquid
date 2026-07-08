@@ -147,7 +147,7 @@
     font-size: var(--ah-eyebrow, 13px); letter-spacing: 0.22em; text-transform: uppercase; color: var(--ah-muted, #6b6b6b);
   }
   .khan-ahero__eyebrow::before {
-    content: ""; width: 30px; height: 9px; background: var(--ah-accent, #8e1316);
+    content: ""; width: 30px; height: 9px; background: var(--ah-accent, #3B0211);
     clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
   }
 
@@ -157,11 +157,11 @@
     text-transform: uppercase; color: var(--ah-text, #141414);
   }
   .khan-ahero__heading :where(p) { margin: 0; }
-  .khan-ahero__heading :where(strong) { color: var(--ah-accent, #8e1316); font-weight: 900; }
+  .khan-ahero__heading :where(strong) { color: var(--ah-accent, #3B0211); font-weight: 900; }
 
   .khan-ahero__rule { display: flex; align-items: center; gap: 16px; margin: clamp(22px, 3vw, 38px) 0; max-width: 520px; }
   .khan-ahero__rule-line { flex: 1 1 auto; height: 1px; background: rgb(0 0 0 / 0.2); }
-  .khan-ahero__rule-star { flex: 0 0 auto; width: 18px; height: 18px; color: var(--ah-accent, #8e1316); }
+  .khan-ahero__rule-star { flex: 0 0 auto; width: 18px; height: 18px; color: var(--ah-accent, #3B0211); }
 
   .khan-ahero__desc {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -179,10 +179,12 @@
   .khan-ahero__btn-label { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: var(--ah-btn-size, 14px); letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
   .khan-ahero__btn-plus { font-size: calc(var(--ah-btn-size, 14px) + 6px); line-height: 1; }
   .khan-ahero__btn-ic { width: calc(var(--ah-btn-size, 14px) + 4px); height: calc(var(--ah-btn-size, 14px) + 4px); flex: 0 0 auto; }
-  .khan-ahero__btn--fill { background: var(--ah-btn-fill, #b3122a); }
+  .khan-ahero__btn--fill { background: var(--ah-btn-fill, #560B1E); }
   .khan-ahero__btn--fill .khan-ahero__btn-inner { color: var(--ah-btn-fill-text, #fff); }
   .khan-ahero__btn--outline { background: var(--ah-btn-outline, #141414); padding: 1.5px; }
-  .khan-ahero__btn--outline .khan-ahero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--ah-bg, #f1f1ee); color: var(--ah-btn-outline-text, #141414); }
+  .khan-ahero__btn--outline .khan-ahero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--ah-bg, #f1f1ee); color: var(--ah-btn-outline-text, #141414); transition: background 0.22s ease, color 0.22s ease; }
+  .khan-ahero__btn--outline:hover { filter: none; }
+  .khan-ahero__btn--outline:hover .khan-ahero__btn-inner { background: #000; color: #fff; }
 
   /* frame video */
   .khan-ahero__frame {
@@ -260,9 +262,9 @@
     { "type": "header", "content": "Colors" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f1f1ee" },
     { "type": "color", "id": "text_color", "label": "Text / heading", "default": "#141414" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#8e1316" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#3B0211" },
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" },
-    { "type": "color", "id": "btn_fill", "label": "Primary button fill", "default": "#b3122a" },
+    { "type": "color", "id": "btn_fill", "label": "Primary button fill", "default": "#560B1E" },
     { "type": "color", "id": "btn_fill_text", "label": "Primary button text", "default": "#ffffff" },
     { "type": "color", "id": "btn_outline", "label": "Outlined button border", "default": "#141414" },
     { "type": "color", "id": "btn_outline_text", "label": "Outlined button text", "default": "#141414" },

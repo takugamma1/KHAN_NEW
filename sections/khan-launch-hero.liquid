@@ -155,7 +155,7 @@
     font-size: var(--lh-eyebrow, 13px); letter-spacing: 0.22em; text-transform: uppercase; color: var(--lh-muted, #6b6b6b);
   }
   .khan-lhero__eyebrow::before {
-    content: ""; width: 30px; height: 9px; background: var(--lh-accent, #8e1316);
+    content: ""; width: 30px; height: 9px; background: var(--lh-accent, #3B0211);
     clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
   }
 
@@ -166,7 +166,7 @@
     text-transform: uppercase; color: var(--lh-text, #141414);
   }
   .khan-lhero__heading :where(p) { margin: 0; }
-  .khan-lhero__heading :where(strong) { color: var(--lh-accent, #8e1316); font-weight: 900; }
+  .khan-lhero__heading :where(strong) { color: var(--lh-accent, #3B0211); font-weight: 900; }
 
   /* rule */
   .khan-lhero__rule { display: block; height: 1px; background: rgb(0 0 0 / 0.18); margin: clamp(22px, 3vw, 38px) 0; position: relative; }
@@ -193,13 +193,14 @@
   .khan-lhero__btn--fill { background: var(--lh-btn-fill, #560B1E); }
   .khan-lhero__btn--fill .khan-lhero__btn-inner { color: var(--lh-btn-fill-text, #fff); }
   .khan-lhero__btn--outline { background: var(--lh-btn-outline, #141414); padding: 1.5px; }
-  .khan-lhero__btn--outline .khan-lhero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--lh-bg, #f1f1ee); color: var(--lh-btn-outline-text, #141414); }
+  .khan-lhero__btn--outline .khan-lhero__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--lh-bg, #f1f1ee); color: var(--lh-btn-outline-text, #141414); transition: background 0.22s ease, color 0.22s ease; }
+  .khan-lhero__btn--outline:hover { filter: none; }
+  .khan-lhero__btn--outline:hover .khan-lhero__btn-inner { background: #000; color: #fff; }
 
   /* usps */
-  .khan-lhero__usps { display: flex; align-items: stretch; margin-top: clamp(32px, 4vw, 52px); border-top: 1px solid rgb(0 0 0 / 0.14); padding-top: clamp(20px, 2.4vw, 30px); }
-  .khan-lhero__usp { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 4px clamp(8px, 1vw, 18px); border-left: 1px solid rgb(0 0 0 / 0.14); }
-  .khan-lhero__usp:first-child { border-left: 0; }
-  .khan-lhero__usp-icon { width: var(--lh-icon-size, 28px); height: var(--lh-icon-size, 28px); color: var(--lh-icon, #8e1316); display: inline-flex; align-items: center; justify-content: center; }
+  .khan-lhero__usps { display: flex; align-items: stretch; margin-top: clamp(32px, 4vw, 52px); padding-top: clamp(20px, 2.4vw, 30px); }
+  .khan-lhero__usp { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 4px clamp(8px, 1vw, 18px); }
+  .khan-lhero__usp-icon { width: var(--lh-icon-size, 28px); height: var(--lh-icon-size, 28px); color: var(--lh-icon, #3B0211); display: inline-flex; align-items: center; justify-content: center; }
   .khan-lhero__usp-icon svg { width: 100%; height: 100%; display: block; }
   .khan-lhero__usp-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .khan-lhero__usp-label { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: var(--lh-usp-label, 11px); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.3; color: var(--lh-text, #141414); }
@@ -248,9 +249,9 @@
     { "type": "header", "content": "Colors" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f1f1ee" },
     { "type": "color", "id": "text_color", "label": "Text / heading", "default": "#141414" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#8e1316" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#3B0211" },
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" },
-    { "type": "color", "id": "icon_color", "label": "USP icon color", "default": "#8e1316" },
+    { "type": "color", "id": "icon_color", "label": "USP icon color", "default": "#3B0211" },
     { "type": "color", "id": "btn_fill", "label": "Primary button fill", "default": "#560b1e" },
     { "type": "color", "id": "btn_fill_text", "label": "Primary button text", "default": "#ffffff" },
     { "type": "color", "id": "btn_outline", "label": "Outlined button border", "default": "#141414" },

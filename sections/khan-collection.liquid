@@ -181,7 +181,7 @@
     line-height: 1;
     letter-spacing: 0.01em;
     text-transform: uppercase;
-    color: var(--coll-heading, #bf1616);
+    color: var(--coll-heading, #560B1E);
   }
   .khan-coll__heading p { margin: 0; }
   .khan-coll__heading :is(strong, b) { color: var(--coll-heading-accent, #111); font-weight: inherit; }
@@ -197,7 +197,7 @@
     text-transform: uppercase;
     color: var(--coll-label, #1a1a1a);
   }
-  .khan-coll__plus { color: var(--coll-heading-accent, #bf1616); }
+  .khan-coll__plus { color: var(--coll-heading-accent, #560B1E); }
 
   /* ---- grid ---- */
   .khan-coll__grid {
@@ -292,15 +292,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-inline: clamp(20px, 12%, 64px);
     padding: 16px 40px;
     background: var(--coll-btn-bg, #111);
     color: var(--coll-btn-text, #fff);
     text-decoration: none;
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
     font-size: 14px;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     text-align: center;
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
     transition: background 0.2s ease;
   }
   .khan-coll__btn:hover { background: #000; }
@@ -380,7 +383,7 @@
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "Built different. Made to last." },
     { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 120, "step": 2, "unit": "px", "default": 72 },
     { "type": "range", "id": "subheading_size", "label": "Subheading size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 13 },
-    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#bf1616" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#560B1E" },
     { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#111111" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#1a1a1a" },
 

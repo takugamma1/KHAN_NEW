@@ -37,7 +37,7 @@
       class="khan-story__particles"
       data-count="{{ s.particle_count }}"
       data-size="{{ s.particle_size }}"
-      data-c1="{{ s.particle_color | default: '#bf1616' }}"
+      data-c1="{{ s.particle_color | default: '#560B1E' }}"
       data-c2="{{ s.particle_color_2 | default: '#111111' }}"
       aria-hidden="true"
     ></canvas>
@@ -113,7 +113,7 @@
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var DENS = parseInt(c.getAttribute('data-count') || '120', 10);
     var SZ = parseFloat(c.getAttribute('data-size') || '2.5');
-    var c1 = c.getAttribute('data-c1') || '#bf1616';
+    var c1 = c.getAttribute('data-c1') || '#560B1E';
     var c2 = c.getAttribute('data-c2') || '#111111';
     var w = 1, h = 1, dpr = 1, parts = [], raf = 0;
     function resize() {
@@ -207,14 +207,14 @@
     font-size: var(--ks-eyebrow-size, 13px);
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--ks-eyebrow-color, #bf1616);
+    color: var(--ks-eyebrow-color, #560B1E);
   }
 
   .khan-story__flag {
     display: inline-block;
     width: 26px;
     height: 12px;
-    background: var(--ks-accent, #bf1616);
+    background: var(--ks-accent, #560B1E);
     clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
   }
 
@@ -233,7 +233,7 @@
   .khan-story__heading p { margin: 0; }
 
   .khan-story__heading :is(strong, b) {
-    color: var(--ks-accent, #bf1616);
+    color: var(--ks-accent, #560B1E);
     font-weight: inherit;
   }
 
@@ -249,7 +249,7 @@
 
   .khan-story__body p { margin: 0 0 1.4em; }
   .khan-story__body p:last-child { margin-bottom: 0; }
-  .khan-story__body :is(strong, b) { color: var(--ks-accent, #bf1616); font-weight: inherit; }
+  .khan-story__body :is(strong, b) { color: var(--ks-accent, #560B1E); font-weight: inherit; }
 
   /* ---------- right (features) ---------- */
   .khan-story__right {
@@ -305,7 +305,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     overflow-wrap: break-word;
-    color: var(--ks-feat-title-color, #bf1616);
+    color: var(--ks-feat-title-color, #560B1E);
   }
 
   .khan-story__feature-text {
@@ -343,7 +343,7 @@
     top: 22%;
     bottom: 22%;
     width: 1px;
-    border-left: 1px dashed var(--ks-deco-color, #c9433a);
+    border-left: 1px dashed var(--ks-deco-color, #560B1E);
     z-index: 1;
   }
 
@@ -362,7 +362,7 @@
     right: 40px;
     font-family: ui-monospace, monospace;
     font-size: 20px;
-    color: var(--ks-deco-color, #c9433a);
+    color: var(--ks-deco-color, #560B1E);
     z-index: 1;
   }
   .khan-story__plus--1 { top: 44%; }
@@ -408,7 +408,7 @@
     { "type": "header", "content": "Eyebrow" },
     { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Our story" },
-    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow color", "default": "#bf1616" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow color", "default": "#560B1E" },
     { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 10, "max": 22, "step": 1, "unit": "px", "default": 13 },
 
     { "type": "header", "content": "Heading" },
@@ -416,7 +416,7 @@
     { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Forged<br/>by <strong>discipline.</strong></p>" },
     { "type": "range", "id": "heading_size", "label": "Heading size", "min": 32, "max": 160, "step": 2, "unit": "px", "default": 92 },
     { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#bf1616" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#560B1E" },
 
     { "type": "header", "content": "Body" },
     { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Khan supplements was born from a simple truth: <strong>results are earned, never given.</strong></p><p>We created formulations that support the relentless pursuit of more — more focus, more energy, more performance. Every ingredient, every dose, every detail is chosen with purpose and proven by science.</p><p><strong>This isn't just supplementation. It's a standard.</strong></p>" },
@@ -428,7 +428,7 @@
     { "type": "checkbox", "id": "feature_icon_3d", "label": "Use animated 3D asterisk for icons", "default": true, "info": "Spins flat (in-plane). Overrides each block's icon image. Hidden on mobile like the other icons." },
     { "type": "range", "id": "icon_size", "label": "Icon size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 56 },
     { "type": "range", "id": "feature_title_size", "label": "Feature title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 18 },
-    { "type": "color", "id": "feature_title_color", "label": "Feature title color", "default": "#bf1616" },
+    { "type": "color", "id": "feature_title_color", "label": "Feature title color", "default": "#560B1E" },
     { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 11, "max": 24, "step": 1, "unit": "px", "default": 14 },
     { "type": "range", "id": "feature_gap", "label": "Space between features", "min": 8, "max": 80, "step": 2, "unit": "px", "default": 30 },
 
@@ -436,7 +436,7 @@
     { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": true },
     { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 120, "info": "Kept light on purpose." },
     { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 3 },
-    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#bf1616" },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#560B1E" },
     { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#111111" },
 
     { "type": "header", "content": "Grain" },
@@ -447,7 +447,7 @@
     { "type": "checkbox", "id": "show_side_line", "label": "Show dashed side line", "default": true },
     { "type": "checkbox", "id": "show_plus_marks", "label": "Show plus marks", "default": true },
     { "type": "checkbox", "id": "show_brackets", "label": "Show corner brackets", "default": true },
-    { "type": "color", "id": "deco_color", "label": "Decoration color", "default": "#c9433a" },
+    { "type": "color", "id": "deco_color", "label": "Decoration color", "default": "#560B1E" },
 
     { "type": "header", "content": "Background" },
     { "type": "color", "id": "bg_color", "label": "Background color", "default": "#f4f1ea" },

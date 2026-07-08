@@ -320,7 +320,7 @@
   .khan-product__thumbs { display: flex; flex-direction: column; gap: 14px; }
   .khan-product__thumb { padding: 0; border: 1px solid rgb(0 0 0 / 0.14); background: #fff; cursor: pointer; aspect-ratio: 1; overflow: hidden; }
   .khan-product__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .khan-product__thumb.is-active { border-color: var(--kp-accent, #d8232a); }
+  .khan-product__thumb.is-active { border-color: var(--kp-accent, #560B1E); }
 
   /* ---- stage ---- */
   .khan-product__stage { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -335,13 +335,13 @@
   .khan-product__main img, .khan-product__ph { width: 100%; height: auto; display: block; object-fit: contain; max-height: 78svh; }
 
   /* ---- info ---- */
-  .khan-product__count { margin: 0 0 18px; font-size: 14px; letter-spacing: 0.2em; color: var(--kp-accent, #d8232a); }
+  .khan-product__count { margin: 0 0 18px; font-size: 14px; letter-spacing: 0.2em; color: var(--kp-accent, #560B1E); }
   .khan-product__title {
     margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: min(var(--kp-title-size, 64px), 7vw); line-height: 0.92; letter-spacing: -0.01em;
     text-transform: uppercase; color: var(--kp-text, #111);
   }
-  .khan-product__tagline { margin: 12px 0 0; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kp-accent, #d8232a); }
+  .khan-product__tagline { margin: 12px 0 0; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kp-accent, #560B1E); }
   .khan-product__rule { display: block; height: 1px; background: rgb(0 0 0 / 0.2); margin: 22px 0; }
   .khan-product__desc { font-size: 14px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--kp-text, #1a1a1a); }
   .khan-product__desc p { margin: 0 0 0.4em; }
@@ -368,7 +368,7 @@
   }
   .khan-product__atc { background: #111; color: #fff; border: 0; }
   .khan-product__atc:hover { background: #000; }
-  .khan-product__atc-plus { position: absolute; right: 18px; color: var(--kp-accent, #d8232a); }
+  .khan-product__atc-plus { position: absolute; right: 18px; color: var(--kp-accent, #560B1E); }
   .khan-product__buynow { margin-top: 12px; background: transparent; color: var(--kp-text, #111); border: 1px solid rgb(0 0 0 / 0.3); gap: 14px; }
   .khan-product__buynow:hover { border-color: #111; }
   .khan-product__atc[disabled], .khan-product__buynow[disabled] { opacity: 0.45; cursor: not-allowed; }
@@ -381,7 +381,7 @@
   .khan-product__corner { position: absolute; left: 28px; bottom: calc(var(--kp-bottom-h, 360px) + 16px); z-index: 2; font-size: 11px; line-height: 1.5; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #888); white-space: pre-line; }
   .khan-product__deco-ast { position: absolute; right: 4%; top: 26%; width: 22px; height: 22px; object-fit: contain; z-index: 2; }
   .khan-product__cross { position: absolute; z-index: 1; width: 16px; height: 16px; }
-  .khan-product__cross::before, .khan-product__cross::after { content: ""; position: absolute; background: var(--kp-accent, #d8232a); opacity: 0.6; }
+  .khan-product__cross::before, .khan-product__cross::after { content: ""; position: absolute; background: var(--kp-accent, #560B1E); opacity: 0.6; }
   .khan-product__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
   .khan-product__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
   .khan-product__cross--1 { left: 6%; top: 10%; }
@@ -403,7 +403,7 @@
   .khan-product__insp-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
   .khan-product__insp-title { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #cfcfcf; }
   .khan-product__insp-toggle { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgb(255 255 255 / 0.28); border-radius: 8px; padding: 8px 13px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; white-space: nowrap; transition: border-color 0.2s ease, background 0.2s ease; }
-  .khan-product__insp-summary:hover .khan-product__insp-toggle { border-color: var(--kp-accent, #d8232a); }
+  .khan-product__insp-summary:hover .khan-product__insp-toggle { border-color: var(--kp-accent, #560B1E); }
   .khan-product__insp-lbl--hide { display: none; }
   .khan-product__insp[open] .khan-product__insp-lbl--show { display: none; }
   .khan-product__insp[open] .khan-product__insp-lbl--hide { display: inline; }
@@ -501,7 +501,7 @@
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
     { "type": "color", "id": "muted_color", "label": "Muted color", "default": "#666666" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#d8232a" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red) color", "default": "#560B1E" },
     { "type": "range", "id": "title_size", "label": "Title size", "min": 32, "max": 110, "step": 2, "unit": "px", "default": 64 },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1200, "max": 1900, "step": 20, "unit": "px", "default": 1820 },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },

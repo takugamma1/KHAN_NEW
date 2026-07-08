@@ -203,7 +203,7 @@
     position: absolute; top: -3px; right: -3px;
     min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box;
     display: inline-flex; align-items: center; justify-content: center;
-    background: var(--nav-accent, #d8232a); color: #fff;
+    background: var(--nav-accent, #560B1E); color: #fff;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 11px; font-weight: 700; line-height: 1;
     border-radius: 999px; border: 1.5px solid rgb(0 0 0 / 0.35);
@@ -232,10 +232,10 @@
     transition: color 0.18s ease, opacity 0.18s ease;
   }
   .khan-nav__link:hover,
-  .khan-nav__link.is-current { color: var(--nav-accent, #d8232a); opacity: 1; }
+  .khan-nav__link.is-current { color: var(--nav-accent, #560B1E); opacity: 1; }
 
   /* ---- burger (ic-menu icon, swaps to X when open) ---- */
-  .khan-nav__burger { display: none; cursor: pointer; justify-self: end; color: var(--nav-accent, #d8232a); }
+  .khan-nav__burger { display: none; cursor: pointer; justify-self: end; color: var(--nav-accent, #560B1E); }
   .khan-nav__burger-ic { width: 20px; height: 20px; display: block; }
   .khan-nav__burger-ic--close { display: none; }
   .khan-nav-outer.is-open .khan-nav__burger-ic--menu { display: none; }
@@ -266,7 +266,7 @@
     font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--nav-text, #f3f3f3); text-decoration: none;
   }
-  .khan-nav__panel-link:hover, .khan-nav__panel-link.is-current { color: var(--nav-accent, #d8232a); background: rgb(255 255 255 / 0.05); }
+  .khan-nav__panel-link:hover, .khan-nav__panel-link.is-current { color: var(--nav-accent, #560B1E); background: rgb(255 255 255 / 0.05); }
   .khan-nav__panel-sub { padding: 0 0 6px 16px; }
   .khan-nav__panel-sublink {
     display: block; padding: 9px 16px;
@@ -274,7 +274,7 @@
     font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--nav-text, #f3f3f3); opacity: 0.7; text-decoration: none;
   }
-  .khan-nav__panel-sublink:hover { opacity: 1; color: var(--nav-accent, #d8232a); }
+  .khan-nav__panel-sublink:hover { opacity: 1; color: var(--nav-accent, #560B1E); }
 
   /* ---- responsive: burger under 990, inline menu above ---- */
   @media screen and (max-width: 989px) {
@@ -416,7 +416,7 @@
     { "type": "color", "id": "bubble_tint", "label": "Bubble tint", "default": "#ffffff14" },
     { "type": "color", "id": "border_color", "label": "Border / edge", "default": "#ffffff24" },
     { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#d8232a" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#560B1E" },
 
     { "type": "header", "content": "Appearance" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }

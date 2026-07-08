@@ -243,7 +243,7 @@
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: var(--scart-sub, 13px); letter-spacing: 0.12em; text-transform: uppercase; color: var(--scart-muted, #6f6f6f);
   }
-  .khan-scart__dot { color: var(--scart-accent, #d8232a); }
+  .khan-scart__dot { color: var(--scart-accent, #560B1E); }
 
   /* sizes */
   .khan-scart__sizes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -298,7 +298,7 @@
   .khan-scart__price-cur {
     margin-top: 4px;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scart-accent, #d8232a);
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scart-accent, #560B1E);
   }
 
   /* button */
@@ -310,10 +310,10 @@
     height: calc(var(--scart-h, 72px) - 24px);
     padding: 0 22px;
     border: 0;
-    border-radius: 999px;
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
     cursor: pointer;
     color: var(--scart-btn-text, #fff);
-    background: linear-gradient(180deg, var(--scart-btn1, #b3122a), var(--scart-btn2, #b3122a));
+    background: linear-gradient(180deg, var(--scart-btn1, #560B1E), var(--scart-btn2, #560B1E));
     box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
     transition: transform 0.15s ease, filter 0.15s ease;
   }
@@ -649,11 +649,11 @@
     { "type": "color", "id": "border_color", "label": "Border / dividers", "default": "#00000019" },
     { "type": "color", "id": "text_color", "label": "Text", "default": "#141414" },
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6f6f6f" },
-    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#b3122a" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#560B1E" },
 
     { "type": "header", "content": "Button" },
-    { "type": "color", "id": "button_top", "label": "Button gradient top", "default": "#b3122a" },
-    { "type": "color", "id": "button_bottom", "label": "Button gradient bottom", "default": "#8e1316" },
+    { "type": "color", "id": "button_top", "label": "Button gradient top", "default": "#560B1E" },
+    { "type": "color", "id": "button_bottom", "label": "Button gradient bottom", "default": "#3B0211" },
     { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" }
   ],
   "presets": [
