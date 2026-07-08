@@ -119,9 +119,7 @@
         {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
         <input type="hidden" name="quantity" value="1">
         <button class="khan-scart__btn" type="submit"{% if scart_disabled %} disabled{% endif %}>
-          <span class="khan-scart__btn-label">{{ scart_btn_label }}</span>
-          <span class="khan-scart__btn-plus" aria-hidden="true">+</span>
-        </button>
+          <span class="khan-scart__btn-label">{{ scart_btn_label }}</span>        </button>
       </form>
     </div>
 
@@ -189,7 +187,7 @@
     row-gap: 8px;
     gap: clamp(12px, 1.6vw, 22px);
     min-height: var(--scart-h, 72px);
-    padding: 10px clamp(12px, 1.6vw, 18px) 10px 10px;
+    padding: 10px clamp(12px, 1.6vw, 18px) 10px clamp(20px, 2.2vw, 30px);
     border-radius: var(--scart-radius, 40px);
     color: var(--scart-text, #141414);
     position: relative;
@@ -303,7 +301,7 @@
     height: calc(var(--scart-h, 72px) - 24px);
     padding: 0 22px;
     border: 0;
-    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    border-radius: var(--scart-radius, 40px);
     cursor: pointer;
     color: var(--scart-btn-text, #fff);
     background: linear-gradient(180deg, var(--scart-btn1, #560B1E), var(--scart-btn2, #560B1E));
@@ -316,7 +314,6 @@
     font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: var(--scart-btn-size, 16px); letter-spacing: 0.14em; text-transform: uppercase;
   }
-  .khan-scart__btn-plus { font-size: calc(var(--scart-btn-size, 16px) + 6px); line-height: 1; }
   .khan-scart__form.is-added .khan-scart__btn { filter: brightness(1.18); }
 
   /* ===== Mobile sheet (hidden on desktop) ===== */

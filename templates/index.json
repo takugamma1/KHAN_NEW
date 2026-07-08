@@ -292,7 +292,7 @@
         "description": "<p>Fourteen pieces. Cut and sewn in Sofia.</p><p>Numbered hangtags.</p><p>The drop closes when the lot does.</p>",
         "btn1_text": "Enter the archive",
         "btn1_link": "",
-        "btn1_plus": true,
+        "btn1_plus": false,
         "btn2_text": "Watch the film",
         "btn2_link": "",
         "btn2_icon": "play",
