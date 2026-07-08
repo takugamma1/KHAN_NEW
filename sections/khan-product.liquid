@@ -22,6 +22,7 @@
     --kp-pt: {{ s.padding_top }}px;
     --kp-pb: {{ s.padding_bottom }}px;
     --kp-bottom-h: {{ s.bottom_height }}px;
+    --kp-bottom-shift: {{ s.bottom_shift | default: 0 }}px;
     --kp-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   data-khan-product
@@ -374,7 +375,7 @@
   .khan-product__atc[disabled], .khan-product__buynow[disabled] { opacity: 0.45; cursor: not-allowed; }
 
   /* ---- bottom overlay image (bleeds up over the section's lower edge) ---- */
-  .khan-product__bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; line-height: 0; }
+  .khan-product__bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; line-height: 0; transform: translateY(var(--kp-bottom-shift, 0)); }
   .khan-product__bottom-img { display: block; width: 100%; height: auto; max-height: var(--kp-bottom-h, 360px); object-fit: cover; object-position: bottom center; }
 
   /* ---- decorations ---- */
@@ -490,6 +491,7 @@
     { "type": "paragraph", "content": "Bleeds up over the lower edge so the section blends into the next instead of a hard cut." },
     { "type": "image_picker", "id": "bottom_image", "label": "Image" },
     { "type": "range", "id": "bottom_height", "label": "Overlay max height", "min": 60, "max": 700, "step": 10, "unit": "px", "default": 360 },
+    { "type": "range", "id": "bottom_shift", "label": "Push image down", "min": 0, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Slides the image below the section edge so less of it stays visible." },
     { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide on mobile (avoids a 2nd product image)", "default": true },
 
     { "type": "header", "content": "Decoration" },

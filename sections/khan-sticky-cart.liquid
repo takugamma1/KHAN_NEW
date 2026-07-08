@@ -20,20 +20,11 @@
   endif
 
   comment
-    Image: uploaded override, else the variant image, else the product image.
-    When no override is set the image is dynamic (updates with the variant).
+    Image: only an uploaded override is shown — by default the bar stays
+    image-free (name + variant bubbles + price + button).
   endcomment
   assign scart_img = s.image
-  if scart_img == blank and v != blank and v.image != blank
-    assign scart_img = v.image
-  endif
-  if scart_img == blank and tp != blank
-    assign scart_img = tp.featured_image
-  endif
   assign scart_dynimg = false
-  if s.image == blank
-    assign scart_dynimg = true
-  endif
 %}
 {%- capture scart_price -%}
   {%- if v != blank -%}
@@ -272,18 +263,20 @@
   .khan-scart__opt-name { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--scart-muted, #6f6f6f); white-space: nowrap; }
   .khan-scart__opt-vals { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .khan-scart__optbtn {
-    min-width: 34px; height: 34px; padding: 0 10px;
-    border-radius: 10px;
+    min-width: 34px; height: 34px; padding: 0 12px;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
     border: 1px solid var(--scart-border, rgb(0 0 0 / 0.16));
     background: transparent;
     color: var(--scart-text, #141414);
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
     font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
     cursor: pointer; white-space: nowrap;
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
   }
-  .khan-scart__optbtn:hover:not(.is-unavail) { border-color: var(--scart-text, #141414); }
-  .khan-scart__optbtn[aria-pressed="true"] { background: var(--scart-text, #141414); color: var(--scart-glass, #fff); border-color: var(--scart-text, #141414); }
+  .khan-scart__opt--color .khan-scart__optbtn { clip-path: none; border-radius: 999px; }
+  .khan-scart__optbtn:hover:not(.is-unavail) { border-color: var(--scart-btn1, #560B1E); }
+  .khan-scart__optbtn[aria-pressed="true"] { background: var(--scart-btn1, #560B1E); color: #fff; border-color: var(--scart-btn1, #560B1E); }
   .khan-scart__optbtn.is-unavail { opacity: 0.35; text-decoration: line-through; }
 
   /* divider */

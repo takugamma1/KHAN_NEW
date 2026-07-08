@@ -66,7 +66,7 @@
               <a class="khan-coll__card-link" href="{{ url }}" aria-label="{{ label | default: 'Product' | escape }}">
             {%- endif -%}
             {%- if img != blank -%}
-              {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1200', class: 'khan-coll__card-img', alt: label }}
+              {{ img | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 800, 1200', class: 'khan-coll__card-img', alt: label }}
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'khan-coll__card-img khan-coll__card-img--placeholder' }}
             {%- endif -%}
@@ -304,9 +304,18 @@
     text-transform: uppercase;
     text-align: center;
     clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
-    transition: background 0.2s ease;
   }
-  .khan-coll__btn:hover { background: #000; }
+  .khan-coll__btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #000;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .khan-coll__btn:hover::before { transform: scaleX(1); }
+  .khan-coll__btn > span { position: relative; z-index: 1; }
 
   /* ---- variant bubbles (showcase only) ---- */
   .khan-coll__swatches {

@@ -315,6 +315,7 @@
         "insp_image": "shopify://shop_images/IMG_3063.png",
         "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "bottom_height": 250,
+        "bottom_shift": 80,
         "hide_bottom_mobile": false,
         "show_deco": false,
         "corner_text": "",
