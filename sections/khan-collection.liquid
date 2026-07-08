@@ -30,6 +30,7 @@
     --coll-stagger: {{ s.anim_stagger }}ms;
     --coll-swatch: {{ s.swatch_size }}px;
     --coll-grain: url('{{ 'khan-grain.png' | asset_url }}');
+    --coll-fav: {{ s.fav_color | default: '#3B0211' }};
   "
   data-khan-coll
 >
@@ -59,20 +60,51 @@
           endif
         -%}
         <article class="khan-coll__card" style="--card-i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
-          <span class="khan-coll__corner khan-coll__corner--tl" aria-hidden="true"></span>
-          <span class="khan-coll__corner khan-coll__corner--br" aria-hidden="true"></span>
-
-          <div class="khan-coll__card-top">
-            <img class="khan-coll__card-mark" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
-            <span class="khan-coll__card-label">{{ label | default: 'Product' }}</span>
-            <span class="khan-coll__card-target" aria-hidden="true"></span>
-          </div>
 
           <div class="khan-coll__card-media">
+            {%- if url != blank -%}
+              <a class="khan-coll__card-link" href="{{ url }}" aria-label="{{ label | default: 'Product' | escape }}">
+            {%- endif -%}
             {%- if img != blank -%}
               {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1200', class: 'khan-coll__card-img', alt: label }}
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'khan-coll__card-img khan-coll__card-img--placeholder' }}
+            {%- endif -%}
+            {%- if url != blank -%}
+              </a>
+            {%- endif -%}
+
+            {%- if s.show_edition -%}
+              {%- liquid
+                assign edition_text = block.settings.edition_text
+                if edition_text == blank and p != blank
+                  assign qty = 0
+                  assign tracked = false
+                  for v in p.variants
+                    if v.inventory_management != blank
+                      assign tracked = true
+                      assign qty = qty | plus: v.inventory_quantity
+                    endif
+                  endfor
+                  if tracked
+                    assign qty_str = qty | at_least: 0 | prepend: '00' | slice: -3, 3
+                    assign edition_text = qty_str | append: '/' | append: s.edition_total
+                  endif
+                endif
+              -%}
+              {%- if edition_text != blank -%}
+                <span class="khan-coll__edition">
+                  <span class="khan-coll__edition-kicker">Edition</span>
+                  <strong class="khan-coll__edition-num">{{ edition_text }}</strong>
+                </span>
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if s.show_fav -%}
+              <svg class="khan-coll__fav" viewBox="0 0 70 84" aria-hidden="true" focusable="false">
+                <path d="M0 0H70V57.12L35 84 0 57.12Z" fill="var(--coll-fav, #3B0211)"/>
+                <path d="M35 30.5l2.42 8.58L46 41.5l-8.58 2.42L35 52.5l-2.42-8.58L24 41.5l8.58-2.42Z" fill="#ffffff" opacity="0.65"/>
+              </svg>
             {%- endif -%}
           </div>
 
@@ -95,7 +127,6 @@
           {%- if url != blank or block.settings.button_label != blank -%}
             <a class="khan-coll__btn" {% if url != blank %}href="{{ url }}"{% endif %}>
               <span>{{ block.settings.button_label | default: 'Shop now' }}</span>
-              <span class="khan-coll__btn-plus" aria-hidden="true">+</span>
             </a>
           {%- endif -%}
         </article>
@@ -185,56 +216,75 @@
     background: var(--coll-card-bg, transparent);
   }
 
-  .khan-coll__corner {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--coll-heading-accent, #bf1616);
-    opacity: 0.65;
-  }
-  .khan-coll__corner--tl { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
-  .khan-coll__corner--br { right: -2px; bottom: -2px; border-left: 0; border-top: 0; }
-
-  .khan-coll__card-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-  }
-  .khan-coll__card-mark { width: 22px; height: 22px; object-fit: contain; flex: 0 0 auto; }
-  .khan-coll__card-label {
-    flex: 1 1 auto;
-    min-width: 0;
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 13px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--coll-label, #1a1a1a);
-  }
-  .khan-coll__card-target {
-    flex: 0 0 auto;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    border: 1.5px solid var(--coll-label, #1a1a1a);
-    position: relative;
-    opacity: 0.6;
-  }
-  .khan-coll__card-target::before,
-  .khan-coll__card-target::after {
-    content: ""; position: absolute; background: var(--coll-label, #1a1a1a);
-  }
-  .khan-coll__card-target::before { left: 50%; top: -4px; bottom: -4px; width: 1.5px; transform: translateX(-50%); }
-  .khan-coll__card-target::after { top: 50%; left: -4px; right: -4px; height: 1.5px; transform: translateY(-50%); }
-
   .khan-coll__card-media {
+    position: relative;
     flex: 1 1 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1.15;
-    margin: 8px 0 18px;
+    margin: 0 0 18px;
+  }
+  .khan-coll__card-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
   .khan-coll__card-img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
+
+  /* ---- card badges ---- */
+  .khan-coll__edition {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 92px;
+    padding: 13px 16px 11px;
+    background: #ffffff;
+    color: #0a0a0a;
+    clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
+    pointer-events: none;
+  }
+  .khan-coll__edition::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #0a0a0a;
+  }
+  .khan-coll__edition-kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 9px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .khan-coll__edition-num {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: 17px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+  .khan-coll__fav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    width: 42px;
+    height: auto;
+    pointer-events: none;
+  }
 
   .khan-coll__btn {
     position: relative;
@@ -253,13 +303,6 @@
     transition: background 0.2s ease;
   }
   .khan-coll__btn:hover { background: #000; }
-  .khan-coll__btn-plus {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--coll-heading-accent, #bf1616);
-  }
 
   /* ---- variant bubbles (showcase only) ---- */
   .khan-coll__swatches {
@@ -286,7 +329,7 @@
   }
 
   /* ---- grain on content (not the background) ---- */
-  .khan-coll--grain :is(.khan-coll__heading, .khan-coll__sub, .khan-coll__card-label, .khan-coll__card-mark) {
+  .khan-coll--grain :is(.khan-coll__heading, .khan-coll__sub) {
     -webkit-mask-image: var(--coll-grain);
     mask-image: var(--coll-grain);
     -webkit-mask-size: 170px 170px;
@@ -368,6 +411,12 @@
     { "type": "checkbox", "id": "show_swatches", "label": "Show variant bubbles (showcase)", "default": true },
     { "type": "range", "id": "swatch_size", "label": "Bubble size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 30 },
 
+    { "type": "header", "content": "Card badges" },
+    { "type": "checkbox", "id": "show_edition", "label": "Show edition tag (left)", "default": true },
+    { "type": "text", "id": "edition_total", "label": "Edition total", "default": "500", "info": "Remaining count comes from product inventory. Override per card in the block settings." },
+    { "type": "checkbox", "id": "show_fav", "label": "Show favorites badge (right)", "default": true },
+    { "type": "color", "id": "fav_color", "label": "Favorites badge color", "default": "#3B0211" },
+
     { "type": "header", "content": "Background & spacing" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1000, "max": 1900, "step": 20, "unit": "px", "default": 1700 },
@@ -388,6 +437,7 @@
         { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
         { "type": "url", "id": "button_link", "label": "Button link override" },
+        { "type": "text", "id": "edition_text", "label": "Edition tag override", "info": "e.g. 047/500 — leave blank to use live inventory" },
         { "type": "header", "content": "Variant bubbles (showcase)" },
         { "type": "image_picker", "id": "bubble_1", "label": "Bubble 1" },
         { "type": "image_picker", "id": "bubble_2", "label": "Bubble 2" },
