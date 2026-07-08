@@ -282,11 +282,48 @@
         "padding-block-start": 20,
         "padding-block-end": 48
       }
+    },
+    "khan_sticky_global": {
+      "type": "khan-sticky-cart",
+      "name": "Sticky add to cart (global)",
+      "settings": {
+        "product_fallback": "pre-workout",
+        "global_mode": true,
+        "show_sizes": true,
+        "title": "",
+        "servings": "",
+        "weight": "",
+        "show_currency": true,
+        "button_label": "Добави в количката",
+        "soldout_label": "Изчерпан",
+        "position": "bottom",
+        "stop_at_footer": true,
+        "bottom_offset": 20,
+        "max_width": 1100,
+        "bar_height": 72,
+        "radius": 40,
+        "img_size": 56,
+        "sheet_height": 60,
+        "title_size": 14,
+        "sub_size": 10,
+        "price_size": 18,
+        "button_size": 12,
+        "blur": 40,
+        "glass_tint": "#000000",
+        "border_color": "#0000001a",
+        "text_color": "#ffffff",
+        "muted_color": "#6f6f6f",
+        "accent_color": "#ffffff",
+        "button_top": "#560b1e",
+        "button_bottom": "#3b0211",
+        "button_text": "#ffffff"
+      }
     }
   },
   "order": [
     "khan_footer_QbUJzn",
     "footer_m9NzUG",
-    "footer_utilities_jLGE8U"
+    "footer_utilities_jLGE8U",
+    "khan_sticky_global"
   ]
 }

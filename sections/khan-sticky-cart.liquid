@@ -67,6 +67,11 @@
 {%- endcapture -%}
 {%- capture scart_variants_json -%}[{%- if tp != blank -%}{%- for var in tp.variants -%}{"id":{{ var.id }},"o":{{ var.options | json }},"p":{{ var.price | money | json }},"a":{% if var.available %}true{% else %}false{% endif %}{%- if scart_dynimg and var.image != blank -%},"img":{{ var.image | image_url: width: 480 | json }}{%- endif -%}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endif -%}]{%- endcapture -%}
 
+{%- comment -%}
+  global_mode: this instance lives in the footer group and covers every
+  NON-product page — product templates keep their own contextual instance.
+{%- endcomment -%}
+{%- unless s.global_mode and request.page_type == 'product' -%}
 <div
   id="KhanSCart-{{ section.id }}"
   class="khan-scart khan-scart--{{ s.position }}"
@@ -157,6 +162,7 @@
 
   </div>
 </div>
+{%- endunless -%}
 
 {% stylesheet %}
   .khan-scart {
@@ -606,6 +612,7 @@
   "settings": [
     { "type": "header", "content": "Product" },
     { "type": "product", "id": "product_fallback", "label": "Product", "info": "On a product page the current product is used automatically. Set this for preview or other pages." },
+    { "type": "checkbox", "id": "global_mode", "label": "Global bar (hide on product pages)", "default": false, "info": "For the footer-group instance that covers all non-product pages." },
     { "type": "image_picker", "id": "image", "label": "Image (upload)", "info": "Shown in the bar instead of the product photo." },
     { "type": "checkbox", "id": "show_sizes", "label": "Show option pickers (color, size, …)", "default": true },
 
