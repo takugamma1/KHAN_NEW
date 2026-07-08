@@ -211,7 +211,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: clamp(18px, 2vw, 28px);
+    --coll-card-pad: clamp(18px, 2vw, 28px);
+    padding: var(--coll-card-pad);
     border: var(--coll-card-border-w, 1px) solid var(--coll-frame, rgb(0 0 0 / 0.16));
     background: var(--coll-card-bg, transparent);
   }
@@ -237,8 +238,8 @@
   /* ---- card badges ---- */
   .khan-coll__edition {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: calc(-1 * var(--coll-card-pad));
+    left: calc(-1 * var(--coll-card-pad));
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -278,8 +279,8 @@
   }
   .khan-coll__fav {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: calc(-1 * var(--coll-card-pad));
+    right: calc(16px - var(--coll-card-pad));
     z-index: 1;
     width: 42px;
     height: auto;
