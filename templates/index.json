@@ -225,8 +225,8 @@
       "settings": {
         "image": "shopify://shop_images/Vurtene_2.webp",
         "image_position": "left",
-        "img_zoom": 170,
-        "img_minh": 560,
+        "img_zoom": 200,
+        "img_minh": 680,
         "eyebrow": "Supplement",
         "heading": "<p>Pre-<br/><strong>workout</strong></p>",
         "show_divider": true,
