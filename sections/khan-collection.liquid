@@ -66,7 +66,7 @@
               <a class="khan-coll__card-link" href="{{ url }}" aria-label="{{ label | default: 'Product' | escape }}">
             {%- endif -%}
             {%- if img != blank -%}
-              {{ img | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 800, 1200', class: 'khan-coll__card-img', alt: label }}
+              {{ img | image_url: width: 1200 | image_tag: loading: 'eager', widths: '400, 600, 800, 1200', sizes: '(max-width: 990px) 92vw, 30vw', class: 'khan-coll__card-img', alt: label }}
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'khan-coll__card-img khan-coll__card-img--placeholder' }}
             {%- endif -%}
@@ -230,21 +230,26 @@
 
   .khan-coll__card-media {
     position: relative;
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
     aspect-ratio: 1 / 1.15;
     margin: 0 0 18px;
   }
+  /* absolute layers pinned to the aspect-ratio box — no %-height chains,
+     which iOS Safari fails to resolve through nested wrappers */
   .khan-coll__card-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  .khan-coll__card-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
   }
-  .khan-coll__card-img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
 
   /* ---- card badges ---- */
   .khan-coll__edition {
