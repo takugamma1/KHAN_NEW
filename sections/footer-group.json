@@ -25,14 +25,14 @@
           "type": "menu",
           "settings": {
             "heading": "Информация",
-            "menu": "main-menu"
+            "menu": "footer"
           }
         },
         "menu_D4hBaT": {
           "type": "menu",
           "settings": {
             "heading": "Профил",
-            "menu": "main-menu"
+            "menu": "customer-account-main-menu"
           }
         }
       },
@@ -77,6 +77,8 @@
         "panel_radius": 0,
         "text_grain": false,
         "bg_color": "#0a0a0a",
+        "invert_on_collection": true,
+        "collection_bg": "#0a0a0a",
         "text_color": "#ffffff",
         "muted_color": "#ffffff",
         "accent_color": "#ffffff",
