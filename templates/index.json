@@ -41,7 +41,7 @@
         "text": "",
         "content_position": "center-left",
         "text_position": "same",
-        "accent_color": "#9A1F33",
+        "accent_color": "#9a1f33",
         "heading_color": "#ffffff",
         "text_color": "#ffffff",
         "use_nexa": true,
@@ -205,6 +205,7 @@
         "body": "<p>Khan supplements was born from a simple truth: <strong>results are earned, never given.</strong></p><p>We created formulations that support the relentless pursuit of more — more focus, more energy, more performance. Every ingredient, every dose, every detail is chosen with purpose and proven by science.</p><p><strong>This isn't just supplementation. It's a standard.</strong></p>",
         "body_size": 14,
         "text_color": "#1a1a1a",
+        "show_feat_icons": false,
         "feature_icon_3d": false,
         "icon_size": 56,
         "feature_title_size": 15,
@@ -229,8 +230,7 @@
         "padding_top": 96,
         "padding_bottom": 96,
         "padding_inline": 56,
-        "color_scheme": "",
-        "show_feat_icons": false
+        "color_scheme": ""
       }
     },
     "khan_launch_hero_KicyPi": {
@@ -246,9 +246,9 @@
         "show_divider": true,
         "description": "<p>Forged for the work<br/>that comes before the work.</p><p>Six clinical-dose ingredients.<br/>No sweeteners. No filler.</p>",
         "btn1_text": "Reserve · 047 / 500",
-        "btn1_link": "",
+        "btn1_link": "shopify://products/pre-workout",
         "btn2_text": "Open the product",
-        "btn2_link": "",
+        "btn2_link": "shopify://products/pre-workout",
         "btn2_arrow": true,
         "bg_color": "#ffffff",
         "text_color": "#141414",
@@ -305,7 +305,7 @@
         "text_color": "#141414",
         "accent_color": "#3b0211",
         "muted_color": "#6b6b6b",
-        "btn_fill": "#9A1F33",
+        "btn_fill": "#9a1f33",
         "btn_fill_text": "#ffffff",
         "btn_outline": "#141414",
         "btn_outline_text": "#141414",
