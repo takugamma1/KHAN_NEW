@@ -50,7 +50,6 @@
       </div>
       <p class="khan-cdrawer__note">Доставката се изчислява при плащане.</p>
       <a class="khan-cdrawer__checkout" href="{{ routes.cart_url }}/checkout"><span>Плащане</span></a>
-      <a class="khan-cdrawer__viewcart" href="{{ routes.cart_url }}">Виж количката</a>
     </footer>
   </aside>
 </div>
@@ -321,12 +320,6 @@
   }
   .khan-cdrawer__checkout:hover::before { transform: scaleX(1); }
   .khan-cdrawer__checkout > span { position: relative; z-index: 1; }
-  .khan-cdrawer__viewcart {
-    display: block; margin-top: 12px; text-align: center;
-    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: #9a9a9a; text-decoration: underline; text-underline-offset: 4px;
-  }
-  .khan-cdrawer__viewcart:hover { color: #fff; }
 
   /* mobile: full screen */
   @media screen and (max-width: 700px) {
