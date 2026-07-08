@@ -15,7 +15,7 @@
       "settings": {
         "bg_image": "shopify://shop_images/Vurtene_1.webp",
         "overlay_opacity": 0,
-        "min_height": 800,
+        "min_height": 700,
         "top_left": "Khan collection",
         "top_right": "Pre-workout",
         "corner_top": 96,
@@ -25,7 +25,7 @@
         "show_asterisk": false,
         "right_heading": "The formula",
         "right_text": "<p>A precision-dosed pre-workout built for clean, relentless energy — sharp focus, bigger pumps, and zero crash. No fillers, no shortcuts.</p>",
-        "bg_color": "#FFFFFF",
+        "bg_color": "#ffffff",
         "text_color": "#000000",
         "muted_color": "#000000",
         "accent_color": "#d8232a",
