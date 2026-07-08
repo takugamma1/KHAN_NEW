@@ -13,7 +13,7 @@
       "type": "khan-preworkout-hero",
       "name": "Pre-workout hero",
       "settings": {
-        "bg_image": "shopify://shop_images/Comp-800.gif",
+        "bg_image": "shopify://shop_images/Vurtene_1.webp",
         "overlay_opacity": 0,
         "min_height": 800,
         "top_left": "Khan collection",
@@ -231,7 +231,7 @@
         "padding_bottom": 80,
         "title_size": 22,
         "text_size": 13,
-        "bg_color": "#FFFFFF",
+        "bg_color": "#ffffff",
         "title_color": "#bf1616",
         "text_color": "#6f6f6f",
         "bar_color": "#0e0e0e",
