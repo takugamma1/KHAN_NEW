@@ -27,30 +27,36 @@
 >
   <div class="khan-about__inner">
 
-    {%- comment -%} top bar {%- endcomment -%}
-    <div class="khan-about__topbar">
-      <p class="khan-about__eyebrow"><span class="khan-about__num">{{ s.counter }}</span> / {{ s.eyebrow }}</p>
-      {%- if s.top_tagline != blank -%}
-        <p class="khan-about__topright"><span class="khan-about__cross" aria-hidden="true"></span>{{ s.top_tagline }}</p>
-      {%- endif -%}
-    </div>
+    {%- comment -%} top bar — only when there is content for it {%- endcomment -%}
+    {%- if s.counter != blank or s.eyebrow != blank or s.top_tagline != blank -%}
+      <div class="khan-about__topbar">
+        {%- if s.counter != blank or s.eyebrow != blank -%}
+          <p class="khan-about__eyebrow">
+            {%- if s.counter != blank -%}<span class="khan-about__num">{{ s.counter }}</span>{%- endif -%}
+            {%- if s.counter != blank and s.eyebrow != blank %} / {% endif -%}
+            {{- s.eyebrow -}}
+          </p>
+        {%- endif -%}
+        {%- if s.top_tagline != blank -%}
+          <p class="khan-about__topright">{{ s.top_tagline }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
     {%- comment -%} story {%- endcomment -%}
     <div class="khan-about__story">
       <div class="khan-about__story-text">
         {%- if s.heading != blank -%}<div class="khan-about__heading">{{ s.heading }}</div>{%- endif -%}
-        <img class="khan-about__ast" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+        {%- if s.heading != blank or s.body != blank -%}
+          <img class="khan-about__ast" src="{{ 'asterisk.png' | asset_url }}" alt="" width="258" height="320" loading="lazy">
+        {%- endif -%}
         {%- if s.body != blank -%}<div class="khan-about__body">{{ s.body }}</div>{%- endif -%}
       </div>
-      <div class="khan-about__story-media">
-        {%- if s.story_image != blank -%}
+      {%- if s.story_image != blank -%}
+        <div class="khan-about__story-media">
           {{ s.story_image | image_url: width: 1400 | image_tag: class: 'khan-about__story-img', loading: 'lazy', widths: '500, 800, 1100, 1400', sizes: '(min-width: 750px) 45vw, 92vw', alt: s.story_image.alt }}
-        {%- else -%}
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'khan-about__story-img' }}
-        {%- endif -%}
-        <span class="khan-about__cross khan-about__cross--tl" aria-hidden="true"></span>
-        <span class="khan-about__cross khan-about__cross--br" aria-hidden="true"></span>
-      </div>
+        </div>
+      {%- endif -%}
     </div>
 
     {%- comment -%} features {%- endcomment -%}
@@ -109,6 +115,7 @@
 
   /* ---- story ---- */
   .khan-about__story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start; margin-top: clamp(28px, 4vw, 56px); }
+  .khan-about__story:not(:has(.khan-about__story-media)) { grid-template-columns: 1fr; }
   .khan-about__heading {
     margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: min(var(--ab-heading-size, 56px), 12vw); line-height: 0.95; letter-spacing: -0.01em;
@@ -147,17 +154,6 @@
   .khan-about__band-heading :is(strong, b) { color: var(--ab-accent, #560B1E); font-weight: inherit; }
   .khan-about__band-accent { margin: 18px 0 0; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ab-accent, #560B1E); }
 
-  /* ---- crosshairs ---- */
-  .khan-about__cross { width: 14px; height: 14px; position: relative; display: inline-block; flex: 0 0 auto; }
-  .khan-about__cross::before, .khan-about__cross::after { content: ""; position: absolute; background: currentColor; opacity: 0.55; }
-  .khan-about__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
-  .khan-about__cross::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
-  .khan-about__story-media .khan-about__cross { position: absolute; color: var(--ab-accent, #560B1E); }
-  .khan-about__cross--tl { top: -7px; left: -7px; }
-  .khan-about__cross--br { bottom: -7px; right: -7px; }
-  .khan-about__cross--band1, .khan-about__cross--band2 { position: absolute; z-index: 1; color: #fff; }
-  .khan-about__cross--band1 { top: 22px; right: 26px; }
-  .khan-about__cross--band2 { bottom: 22px; left: 26px; }
 
   /* ---- grain on text ---- */
   .khan-about--grain :is(.khan-about__heading, .khan-about__body, .khan-about__feat-title, .khan-about__feat-text, .khan-about__band-heading, .khan-about__feat-icon) {
