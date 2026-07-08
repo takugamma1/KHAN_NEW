@@ -26,6 +26,8 @@
     --lh-icon-size: {{ s.icon_size }}px;
     --lh-btn-h: {{ s.button_height }}px;
     --lh-btn-size: {{ s.button_text_size }}px;
+    --lh-img-zoom: {{ s.img_zoom | default: 100 }};
+    --lh-img-minh: {{ s.img_minh | default: 0 }}px;
   "
 >
   <div class="khan-lhero__inner">
@@ -138,6 +140,10 @@
   .khan-lhero__media { flex: 1 1 0; min-width: 0; align-self: stretch; display: flex; align-items: center; }
   .khan-lhero__img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .khan-lhero__img--ph { aspect-ratio: 4 / 5; background: linear-gradient(135deg, #ddd, #bbb); }
+  @media screen and (min-width: 901px) {
+    .khan-lhero__media { min-height: var(--lh-img-minh, 0); }
+    .khan-lhero__img { transform: scale(calc(var(--lh-img-zoom, 100) / 100)); transform-origin: center; }
+  }
 
   .khan-lhero__content { flex: 1 1 0; min-width: 0; }
 
@@ -222,6 +228,8 @@
     { "type": "header", "content": "Layout" },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "select", "id": "image_position", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+    { "type": "range", "id": "img_zoom", "label": "Image zoom — desktop", "min": 50, "max": 250, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "img_minh", "label": "Image area height — desktop", "min": 0, "max": 900, "step": 20, "unit": "px", "default": 0 },
 
     { "type": "header", "content": "Eyebrow & heading" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Supplements · 01" },
