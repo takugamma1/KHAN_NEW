@@ -1,0 +1,215 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="KhanContact-{{ section.id }}"
+  class="khan-contact color-{{ s.color_scheme }}"
+  style="
+    --kc-bg: {{ s.bg_color }};
+    --kc-accent: {{ s.accent_color }};
+    --kc-card-op: {{ s.card_opacity | divided_by: 100.0 }};
+    --kc-blur: {{ s.card_blur }}px;
+    --kc-radius: {{ s.card_radius }}px;
+    --kc-maxw: {{ s.max_width }}px;
+    --kc-pt: {{ s.padding_top }}px;
+    --kc-pb: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="khan-contact__card">
+    {%- if s.eyebrow != blank -%}
+      <p class="khan-contact__eyebrow">{{ s.eyebrow }}</p>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <h1 class="khan-contact__heading">{{ s.heading }}</h1>
+    {%- endif -%}
+    {%- if s.intro != blank -%}
+      <div class="khan-contact__intro">{{ s.intro }}</div>
+    {%- endif -%}
+
+    {%- if s.email != blank or s.phone != blank or s.instagram != blank -%}
+      <div class="khan-contact__meta">
+        {%- if s.email != blank -%}
+          <a class="khan-contact__meta-item" href="mailto:{{ s.email }}"><span class="khan-contact__meta-label">Имейл</span>{{ s.email }}</a>
+        {%- endif -%}
+        {%- if s.phone != blank -%}
+          <a class="khan-contact__meta-item" href="tel:{{ s.phone | remove: ' ' }}"><span class="khan-contact__meta-label">Телефон</span>{{ s.phone }}</a>
+        {%- endif -%}
+        {%- if s.instagram != blank -%}
+          <a class="khan-contact__meta-item" href="{{ s.instagram }}" target="_blank" rel="noopener"><span class="khan-contact__meta-label">Instagram</span>@khan</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- form 'contact', class: 'khan-contact__form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="khan-contact__ok">{{ s.success_text }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <p class="khan-contact__err">{{ form.errors.translated_fields.email }} {{ form.errors.messages.email }}</p>
+      {%- endif -%}
+
+      <div class="khan-contact__row">
+        <label class="khan-contact__field">
+          <span class="khan-contact__label">Име</span>
+          <input class="khan-contact__input" type="text" name="contact[name]" autocomplete="name" required>
+        </label>
+        <label class="khan-contact__field">
+          <span class="khan-contact__label">Имейл</span>
+          <input class="khan-contact__input" type="email" name="contact[email]" autocomplete="email" required>
+        </label>
+      </div>
+      <label class="khan-contact__field">
+        <span class="khan-contact__label">Телефон (по избор)</span>
+        <input class="khan-contact__input" type="tel" name="contact[phone]" autocomplete="tel">
+      </label>
+      <label class="khan-contact__field">
+        <span class="khan-contact__label">Съобщение</span>
+        <textarea class="khan-contact__input khan-contact__input--area" name="contact[body]" rows="6" required></textarea>
+      </label>
+
+      <button class="khan-contact__btn" type="submit">
+        <span>{{ s.button_label }}</span>
+      </button>
+    {%- endform -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-contact {
+    background: var(--kc-bg, #f4f1ea);
+    padding: var(--kc-pt, 96px) clamp(20px, 5vw, 64px) var(--kc-pb, 96px);
+  }
+
+  /* the black bubble — same material as the supplement-facts card */
+  .khan-contact__card {
+    max-width: var(--kc-maxw, 880px);
+    margin-inline: auto;
+    color: #f1f1f1;
+    background: rgb(12 12 12 / var(--kc-card-op, 0.92));
+    border: 1px solid rgb(255 255 255 / 0.10);
+    border-radius: var(--kc-radius, 22px);
+    box-shadow: 0 24px 70px rgb(0 0 0 / 0.45);
+    -webkit-backdrop-filter: blur(var(--kc-blur, 8px));
+            backdrop-filter: blur(var(--kc-blur, 8px));
+    padding: clamp(28px, 4vw, 56px);
+  }
+
+  .khan-contact__eyebrow {
+    margin: 0 0 14px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--kc-accent, #560B1E);
+  }
+  .khan-contact__heading {
+    margin: 0 0 16px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: clamp(30px, 4.4vw, 52px); line-height: 0.96; letter-spacing: -0.01em;
+    text-transform: uppercase; color: #fff;
+  }
+  .khan-contact__intro {
+    margin: 0 0 26px; max-width: 56ch;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.7; letter-spacing: 0.04em; color: #b9b9b9;
+  }
+  .khan-contact__intro :is(strong, b) { color: #fff; }
+
+  .khan-contact__meta { display: flex; flex-wrap: wrap; gap: 14px 36px; margin: 0 0 30px; }
+  .khan-contact__meta-item {
+    display: flex; flex-direction: column; gap: 4px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.08em; color: #f1f1f1; text-decoration: none;
+  }
+  .khan-contact__meta-item:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+  .khan-contact__meta-label { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--kc-accent, #560B1E); }
+
+  .khan-contact__form { display: flex; flex-direction: column; gap: 18px; }
+  .khan-contact__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .khan-contact__field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .khan-contact__label {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: #8d8d8d;
+  }
+  .khan-contact__input {
+    width: 100%;
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: 0;
+    padding: 13px 14px;
+    color: #fff;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.06em;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .khan-contact__input:focus { outline: none; border-color: var(--kc-accent, #560B1E); background: rgb(255 255 255 / 0.07); }
+  .khan-contact__input--area { resize: vertical; min-height: 130px; }
+
+  .khan-contact__btn {
+    position: relative;
+    align-self: flex-start;
+    margin-top: 6px;
+    padding: 16px 44px;
+    border: 0;
+    background: var(--kc-accent, #560B1E);
+    color: #fff;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer;
+    clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  }
+  .khan-contact__btn::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: #000;
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .khan-contact__btn:hover::before { transform: scaleX(1); }
+  .khan-contact__btn > span { position: relative; z-index: 1; }
+
+  .khan-contact__ok { margin: 0; font-family: ui-monospace, monospace; font-size: 13px; color: #9fe6a0; }
+  .khan-contact__err { margin: 0; font-family: ui-monospace, monospace; font-size: 13px; color: #ff7a7a; }
+
+  @media screen and (max-width: 700px) {
+    .khan-contact__row { grid-template-columns: 1fr; }
+    .khan-contact__btn { align-self: stretch; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact (bubble)",
+  "tag": "section",
+  "class": "khan-contact-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Контакт" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Свържи се с нас." },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>Пиши ни за поръчки, партньорства или каквото и да е друго. Отговаряме до 24 часа в работни дни.</p>" },
+    { "type": "text", "id": "email", "label": "Email", "default": "info@khan.bg" },
+    { "type": "text", "id": "phone", "label": "Phone" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Изпрати" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "Съобщението е изпратено. Ще се свържем с теб възможно най-скоро." },
+
+    { "type": "header", "content": "Bubble" },
+    { "type": "range", "id": "card_opacity", "label": "Bubble darkness", "min": 40, "max": 100, "step": 4, "unit": "%", "default": 92 },
+    { "type": "range", "id": "card_blur", "label": "Glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 8 },
+    { "type": "range", "id": "card_radius", "label": "Corner radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 22 },
+    { "type": "range", "id": "max_width", "label": "Bubble max width", "min": 560, "max": 1200, "step": 20, "unit": "px", "default": 880 },
+
+    { "type": "header", "content": "Colors & spacing" },
+    { "type": "color", "id": "bg_color", "label": "Page background", "default": "#f4f1ea" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#560B1E" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "Contact (bubble)", "category": "t:categories.forms" }
+  ]
+}
+{% endschema %}
