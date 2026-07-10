@@ -148,8 +148,8 @@
         "usp_gap": 22,
         "bg_color": "#ffffff",
         "text_color": "#111111",
-        "muted_color": "#6a6a6a",
-        "accent_color": "#ffffff",
+        "muted_color": "#FFFFFF",
+        "accent_color": "#9A1F33",
         "heading_size": 60,
         "eyebrow_size": 13,
         "content_width": 360,
@@ -245,6 +245,7 @@
       "name": "Sticky add to cart",
       "settings": {
         "product_fallback": "",
+        "global_mode": false,
         "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3.png",
         "show_sizes": true,
         "title": "Pre-Workout",
