@@ -7,11 +7,32 @@
   assign cur = p.selected_or_first_available_variant
   assign media_count = p.media.size
   assign insp_alt = s.insp_expanded_heading | default: s.insp_heading
+
+  comment
+    Colour option (Цвят / Color): drives the gallery filter + colour switcher.
+  endcomment
+  assign color_oidx = -1
+  assign color_opt = blank
+  if p != blank
+    for opt in p.options_with_values
+      assign oname = opt.name | downcase | strip
+      if oname == 'цвят' or oname == 'color' or oname == 'colour'
+        assign color_opt = opt
+        assign color_oidx = forloop.index0
+      endif
+    endfor
+  endif
+  assign cur_color = ''
+  if color_oidx > -1
+    assign cur_color = cur.options[color_oidx]
+  endif
 %}
 
 <div
   id="KhanProduct-{{ section.id }}"
-  class="khan-product color-{{ s.color_scheme }}{% if s.text_grain %} khan-product--grain{% endif %}{% if s.hide_bottom_mobile %} khan-product--hide-bottom-m{% endif %}"
+  class="khan-product color-{{ s.color_scheme }}{% if s.text_grain %} khan-product--grain{% endif %}{% if s.hide_bottom_mobile %} khan-product--hide-bottom-m{% endif %}{% if s.enable_animations %} khan-product--anim{% endif %}"
+  data-color-oidx="{{ color_oidx }}"
+  data-filter-colors="{% if s.filter_media_by_color and color_oidx > -1 %}true{% else %}false{% endif %}"
   style="
     --kp-bg: {{ s.bg_color }};
     --kp-text: {{ s.text_color }};
@@ -38,16 +59,37 @@
     {%- if p != blank -%}
       <div class="khan-product__grid">
 
-        {%- comment -%} ===== gallery ===== {%- endcomment -%}
-        <div class="khan-product__thumbs">
-          {%- for media in p.media limit: 6 -%}
-            <button type="button" class="khan-product__thumb{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index }}" data-full="{{ media | image_url: width: 1600 }}" aria-label="View image {{ forloop.index }}">
+        {%- comment -%} ===== gallery (each image tagged with its colour: variant image -> variant colour, else colour name in alt text, else shown for all) ===== {%- endcomment -%}
+        <div class="khan-product__thumbs" data-rev style="--rev: 0">
+          {%- for media in p.media limit: 12 -%}
+            {%- liquid
+              assign mcolor = 'all'
+              if color_oidx > -1
+                for v in p.variants
+                  if v.featured_media != blank and v.featured_media.id == media.id
+                    assign mcolor = v.options[color_oidx] | downcase
+                    break
+                  endif
+                endfor
+                if mcolor == 'all'
+                  assign malt = media.alt | downcase
+                  for val in color_opt.values
+                    assign lval = val | downcase
+                    if malt contains lval
+                      assign mcolor = lval
+                      break
+                    endif
+                  endfor
+                endif
+              endif
+            -%}
+            <button type="button" class="khan-product__thumb{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index }}" data-color="{{ mcolor | escape }}" data-full="{{ media | image_url: width: 1600 }}" aria-label="View image {{ forloop.index }}">
               {{ media | image_url: width: 220 | image_tag: loading: 'lazy', widths: '110, 220', alt: '' }}
             </button>
           {%- endfor -%}
         </div>
 
-        <div class="khan-product__stage">
+        <div class="khan-product__stage" data-rev style="--rev: 1">
           <span class="khan-product__ring" aria-hidden="true"></span>
           <div class="khan-product__main">
             {%- if p.featured_media != blank -%}
@@ -60,20 +102,33 @@
 
         {%- comment -%} ===== info / buy ===== {%- endcomment -%}
         <div class="khan-product__info">
-          <p class="khan-product__count"><span data-counter>01</span> / {% if media_count < 10 %}0{% endif %}{{ media_count | default: 1 }}</p>
+          <p class="khan-product__count" data-rev style="--rev: 2"><span data-counter>01</span> / <span data-counter-total>{% if media_count < 10 %}0{% endif %}{{ media_count | default: 1 }}</span></p>
 
-          <h1 class="khan-product__title">{{ p.title | default: 'Product title' }}</h1>
-          {%- if s.tagline != blank -%}<p class="khan-product__tagline">{{ s.tagline }}</p>{%- endif -%}
+          <h1 class="khan-product__title" data-rev style="--rev: 3">{{ p.title | default: 'Product title' }}</h1>
+          {%- if s.tagline != blank -%}<p class="khan-product__tagline" data-rev style="--rev: 4">{{ s.tagline }}</p>{%- endif -%}
           <span class="khan-product__rule" aria-hidden="true"></span>
 
+          {%- if s.show_color_picker and color_oidx > -1 and color_opt.values.size > 1 -%}
+            <div class="khan-product__colors" data-color-picker data-rev style="--rev: 5">
+              <p class="khan-product__colors-label">{{ color_opt.name }} <span class="khan-product__colors-name" data-color-name>{{ cur_color }}</span></p>
+              <div class="khan-product__colors-row" role="group" aria-label="{{ color_opt.name | escape }}">
+                {%- for val in color_opt.values -%}
+                  <button type="button" class="khan-product__color" data-kp-color="{{ val | escape }}" aria-pressed="{% if cur_color == val %}true{% else %}false{% endif %}">
+                    <span>{{ val }}</span>
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
           {%- if s.description != blank -%}
-            <div class="khan-product__desc">{{ s.description }}</div>
+            <div class="khan-product__desc" data-rev style="--rev: 6">{{ s.description }}</div>
           {%- elsif p.description != blank -%}
-            <div class="khan-product__desc">{{ p.description }}</div>
+            <div class="khan-product__desc" data-rev style="--rev: 6">{{ p.description }}</div>
           {%- endif -%}
 
           {%- if s.show_inspiration and s.insp_heading != blank -%}
-            <details class="khan-product__insp"{% if s.insp_open %} open{% endif %}>
+            <details class="khan-product__insp" data-rev style="--rev: 7"{% if s.insp_open %} open{% endif %}>
               <summary class="khan-product__insp-summary">
                 <span class="khan-product__insp-head">
                   <span class="khan-product__insp-title">{{ s.insp_heading }}</span>
@@ -97,7 +152,7 @@
 
           {%- assign feats = section.blocks | where: 'type', 'feature' -%}
           {%- if feats.size > 0 -%}
-            <div class="khan-product__feats">
+            <div class="khan-product__feats" data-rev style="--rev: 8">
               {%- for block in feats -%}
                 <div class="khan-product__feat" {{ block.shopify_attributes }}>
                   {%- if block.settings.icon != blank -%}
@@ -145,7 +200,7 @@
 
           {%- assign info_tabs = section.blocks | where: 'type', 'tab' -%}
           {%- if info_tabs.size > 0 -%}
-            <div class="khan-product__tabs">
+            <div class="khan-product__tabs" data-rev style="--rev: 9">
               {%- for block in info_tabs -%}
                 <details class="khan-product__tab"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
                   <summary class="khan-product__tab-head">
@@ -198,19 +253,94 @@
     var root = document.getElementById('KhanProduct-{{ section.id }}');
     if (!root) return;
 
-    // gallery
+    // entrance reveal (CSS only hides once this class lands, so no-JS stays visible)
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (root.classList.contains('khan-product--anim') && !reduce && 'IntersectionObserver' in window) {
+      root.classList.add('kp-anim-ready');
+      new IntersectionObserver(function (es, io) {
+        es.forEach(function (e) { if (e.isIntersecting) { root.classList.add('kp-in'); io.disconnect(); } });
+      }, { threshold: 0.12 }).observe(root);
+    }
+
+    // gallery: crossfade swaps + colour filtering
     var main = root.querySelector('[data-main-image]');
     var counter = root.querySelector('[data-counter]');
+    var counterTotal = root.querySelector('[data-counter-total]');
+    var thumbs = [].slice.call(root.querySelectorAll('.khan-product__thumb'));
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
-    root.querySelectorAll('.khan-product__thumb').forEach(function (t) {
-      t.addEventListener('click', function () {
-        var full = t.getAttribute('data-full');
-        if (main && full) main.src = full;
-        root.querySelectorAll('.khan-product__thumb').forEach(function (x) { x.classList.remove('is-active'); });
-        t.classList.add('is-active');
-        if (counter) counter.textContent = pad(parseInt(t.getAttribute('data-i'), 10));
+
+    function swapMain(src) {
+      if (!main || !src || main.src === src) return;
+      if (reduce) { main.src = src; return; }
+      main.classList.add('is-fading');
+      window.setTimeout(function () {
+        var done = function () { main.classList.remove('is-fading'); };
+        main.onload = done;
+        main.src = src;
+        if (main.complete) done();
+      }, 190);
+    }
+
+    function visibleThumbs() {
+      return thumbs.filter(function (t) { return !t.classList.contains('is-off'); });
+    }
+    function updateCounter(activeThumb) {
+      var vis = visibleThumbs();
+      if (counterTotal) counterTotal.textContent = pad(vis.length || 1);
+      if (counter) counter.textContent = pad(Math.max(1, vis.indexOf(activeThumb) + 1));
+    }
+    function activate(t) {
+      swapMain(t.getAttribute('data-full'));
+      thumbs.forEach(function (x) { x.classList.remove('is-active'); });
+      t.classList.add('is-active');
+      updateCounter(t);
+    }
+    thumbs.forEach(function (t) { t.addEventListener('click', function () { activate(t); }); });
+
+    // colour filtering: hide photos that belong to other colours
+    var filterOn = root.getAttribute('data-filter-colors') === 'true';
+    var colorOidx = parseInt(root.getAttribute('data-color-oidx'), 10);
+    var colorName = root.querySelector('[data-color-name]');
+    var syncing = false;
+
+    function applyColor(val, syncSticky) {
+      var lval = (val || '').toLowerCase();
+      root.querySelectorAll('[data-kp-color]').forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-kp-color') === val ? 'true' : 'false');
       });
+      if (colorName) colorName.textContent = val;
+      if (filterOn) {
+        thumbs.forEach(function (t) {
+          var c = t.getAttribute('data-color');
+          t.classList.toggle('is-off', !(c === 'all' || c === lval));
+        });
+        var vis = visibleThumbs();
+        var active = root.querySelector('.khan-product__thumb.is-active');
+        if (vis.length && (!active || active.classList.contains('is-off'))) activate(vis[0]);
+        else updateCounter(active || vis[0]);
+      }
+      if (syncSticky && colorOidx > -1 && !syncing) {
+        syncing = true;
+        document.querySelectorAll('[data-khan-scart-opt][data-oi="' + colorOidx + '"]').forEach(function (b) {
+          if (b.getAttribute('data-val') === val && b.getAttribute('aria-pressed') !== 'true') b.click();
+        });
+        syncing = false;
+      }
+    }
+    root.querySelectorAll('[data-kp-color]').forEach(function (b) {
+      b.addEventListener('click', function () { applyColor(b.getAttribute('data-kp-color'), true); });
     });
+    // picking a colour in the sticky cart filters the gallery too
+    if (colorOidx > -1) {
+      document.addEventListener('click', function (e) {
+        if (syncing) return;
+        var b = e.target.closest && e.target.closest('[data-khan-scart-opt][data-oi="' + colorOidx + '"]');
+        if (b) { syncing = true; applyColor(b.getAttribute('data-val'), false); syncing = false; }
+      });
+    }
+    // initial filter to the selected variant's colour
+    var pressed = root.querySelector('[data-kp-color][aria-pressed="true"]');
+    if (filterOn && pressed) applyColor(pressed.getAttribute('data-kp-color'), false);
 
     // variants
     var input = root.querySelector('[data-variant-input]');
@@ -397,6 +527,43 @@
   /* drawers leave room for a sticky header when auto-scrolled to the top */
   .khan-product__insp, .khan-product__tab { scroll-margin-top: 90px; }
 
+  /* ---- gallery animations + colour filtering ---- */
+  [data-main-image] { transition: opacity 0.3s ease, transform 0.3s ease; }
+  [data-main-image].is-fading { opacity: 0; transform: scale(0.985); }
+  .khan-product__thumb { transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.15s ease; }
+  .khan-product__thumb.is-off { display: none; }
+
+  /* ---- colour switcher ---- */
+  .khan-product__colors { margin: 2px 0 20px; }
+  .khan-product__colors-label {
+    margin: 0 0 10px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--kp-muted, #555);
+  }
+  .khan-product__colors-name { color: var(--kp-accent, #d8232a); }
+  .khan-product__colors-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .khan-product__color {
+    padding: 11px 16px;
+    background: transparent;
+    border: 1px solid rgb(0 0 0 / 0.16);
+    color: var(--kp-text, #111);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .khan-product__color:hover { border-color: var(--kp-text, #111); transform: translateY(-1px); }
+  .khan-product__color[aria-pressed="true"] { background: #111; color: #fff; border-color: #111; }
+
+  /* ---- entrance reveal (only hides once JS confirms it will animate) ---- */
+  .khan-product--anim.kp-anim-ready [data-rev] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition-delay: calc(var(--rev, 0) * 70ms);
+  }
+  .khan-product--anim.kp-anim-ready.kp-in [data-rev] { opacity: 1; transform: none; }
+
   /* ---- inspiration disclosure (dark panel) ---- */
   .khan-product__insp { margin: 22px 0 4px; background: #0d0d0d; color: #f1f1f1; border: 1px solid rgb(255 255 255 / 0.08); border-radius: 14px; overflow: hidden; }
   .khan-product__insp-summary { list-style: none; cursor: pointer; display: block; padding: 18px 20px; }
@@ -472,6 +639,12 @@
     { "type": "paragraph", "content": "Uses the current product on a product page. On other pages, pick a fallback to preview." },
     { "type": "product", "id": "product_fallback", "label": "Fallback product (preview)" },
     { "type": "checkbox", "id": "show_buy", "label": "Show price, size & buy buttons", "default": true, "info": "Turn off when a sticky add-to-cart provides the buy UI." },
+
+    { "type": "header", "content": "Colours & gallery" },
+    { "type": "checkbox", "id": "show_color_picker", "label": "Show colour switcher", "default": true, "info": "Lets visitors switch colour from the hero; stays in sync with the sticky add-to-cart." },
+    { "type": "checkbox", "id": "filter_media_by_color", "label": "Only show photos of the selected colour", "default": true },
+    { "type": "paragraph", "content": "To link a photo to a colour: set it as that variant's image, or put the colour name in the photo's alt text (e.g. \"Черен\"). Photos with no colour show for every colour." },
+    { "type": "checkbox", "id": "enable_animations", "label": "Entrance animations", "default": true, "info": "Content fades in as the section appears. Image changes always crossfade." },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last." },
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
