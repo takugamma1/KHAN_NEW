@@ -316,8 +316,13 @@
         });
         var vis = visibleThumbs();
         var active = root.querySelector('.khan-product__thumb.is-active');
-        if (vis.length && (!active || active.classList.contains('is-off'))) activate(vis[0]);
-        else updateCounter(active || vis[0]);
+        if (vis.length && (!active || active.classList.contains('is-off'))) {
+          // prefer a photo of the newly selected colour over shared ones
+          var exact = vis.filter(function (t) { return t.getAttribute('data-color') === lval; });
+          activate(exact[0] || vis[0]);
+        } else {
+          updateCounter(active || vis[0]);
+        }
       }
       if (syncSticky && colorOidx > -1 && !syncing) {
         syncing = true;
