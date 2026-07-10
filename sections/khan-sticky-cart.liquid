@@ -176,7 +176,12 @@
   .khan-scart--top { top: var(--scart-edge, 20px); }
 
   .khan-scart__backdrop { display: none; }
-  .khan-scart__inner { position: relative; z-index: 1; max-width: var(--scart-maxw, 1100px); margin-inline: auto; }
+  .khan-scart__inner {
+    position: relative; z-index: 1; max-width: var(--scart-maxw, 1100px); margin-inline: auto;
+    /* docked at the footer: rides up exactly as far as the footer has entered the viewport */
+    transform: translateY(calc(-1 * var(--scart-push, 0px)));
+    will-change: transform;
+  }
 
   /* parked: cart slides out of view once the footer is reached */
   .khan-scart__bar, .khan-scart__sheet { transition: transform 0.3s ease, opacity 0.3s ease, max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -558,27 +563,45 @@
       document.addEventListener('keydown', onKey);
       cleanups.push(function () { document.removeEventListener('keydown', onKey); });
 
-      // --- park (hide) the cart once a VISIBLE footer comes into view ---
-      // Re-resolvable so it survives footer section reloads (theme editor / Section Rendering API).
-      var parkIO = null;
-      function setupPark() {
-        if (root.getAttribute('data-stop-at-footer') !== 'true' || !('IntersectionObserver' in window)) return;
-        if (parkIO) { parkIO.disconnect(); parkIO = null; }
-        var parkEls = [].slice.call(document.querySelectorAll('.khan-pf-wrapper, .khan-footer-wrapper, footer'))
+      // --- dock at the footer: the cart stops at the footer's top edge instead of covering it ---
+      // Deterministic scroll math (no observer timing): push = how far the footer has
+      // entered the viewport; the cart rides up by exactly that amount.
+      var docking = root.getAttribute('data-stop-at-footer') === 'true';
+      var parkEls = [];
+      function resolveParkEls() {
+        parkEls = [].slice.call(document.querySelectorAll('.khan-pf-wrapper, .khan-footer-wrapper, footer'))
           .filter(function (el) { return el.getClientRects().length > 0; }); // skip hidden (display:none) footers
-        if (!parkEls.length) { root.classList.remove('is-parked'); return; }
-        parkIO = new IntersectionObserver(function (entries) {
-          for (var i = 0; i < entries.length; i++) { entries[i].target.__scartIx = entries[i].isIntersecting; }
-          var any = false;
-          for (var j = 0; j < parkEls.length; j++) { if (parkEls[j].__scartIx) { any = true; break; } }
-          root.classList.toggle('is-parked', any);
-          if (any) setExpanded(false);
-        }, { threshold: 0, rootMargin: '0px 0px -100px 0px' }); // park only once the footer is meaningfully in view
-        for (var k = 0; k < parkEls.length; k++) { parkIO.observe(parkEls[k]); }
       }
-      setupPark();
-      root.__khanScartRepark = setupPark;
-      cleanups.push(function () { if (parkIO) { parkIO.disconnect(); parkIO = null; } root.__khanScartRepark = null; });
+      var dockTick = false;
+      function updateDock() {
+        dockTick = false;
+        if (!docking) return;
+        var top = Infinity;
+        for (var i = 0; i < parkEls.length; i++) {
+          var r = parkEls[i].getBoundingClientRect();
+          if (r.top < top) top = r.top;
+        }
+        var push = 0;
+        if (top !== Infinity && !root.classList.contains('is-expanded')) {
+          push = window.innerHeight - top;
+          if (push < 0) push = 0;
+        }
+        root.style.setProperty('--scart-push', push.toFixed(1) + 'px');
+      }
+      function onDockScroll() { if (!dockTick) { dockTick = true; window.requestAnimationFrame(updateDock); } }
+      if (docking) {
+        resolveParkEls();
+        window.addEventListener('scroll', onDockScroll, { passive: true });
+        window.addEventListener('resize', onDockScroll);
+        updateDock();
+        cleanups.push(function () {
+          window.removeEventListener('scroll', onDockScroll);
+          window.removeEventListener('resize', onDockScroll);
+          root.style.removeProperty('--scart-push');
+        });
+      }
+      root.__khanScartRepark = function () { resolveParkEls(); updateDock(); };
+      cleanups.push(function () { root.__khanScartRepark = null; });
 
       root.__khanSCartCleanup = function () {
         each(cleanups, function (fn) { fn(); });
@@ -626,7 +649,7 @@
 
     { "type": "header", "content": "Position & size" },
     { "type": "select", "id": "position", "label": "Stick to (desktop)", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
-    { "type": "checkbox", "id": "stop_at_footer", "label": "Hide when the footer is reached", "default": true },
+    { "type": "checkbox", "id": "stop_at_footer", "label": "Stop at the footer (never cover it)", "default": true },
     { "type": "range", "id": "bottom_offset", "label": "Edge offset (desktop)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
     { "type": "range", "id": "max_width", "label": "Max width (desktop)", "min": 700, "max": 1500, "step": 20, "unit": "px", "default": 1100 },
     { "type": "range", "id": "bar_height", "label": "Bar height (desktop)", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
