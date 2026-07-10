@@ -410,7 +410,7 @@
             "label": "ТЕНИСКА ИМЕ",
             "button_label": "Shop now",
             "button_link": "",
-            "edition_text": "",
+            "edition_text": "1/100",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -422,7 +422,7 @@
             "label": "ТЕНИСКА БЕЗ РЪКАВИ ИМЕ",
             "button_label": "Shop now",
             "button_link": "",
-            "edition_text": "",
+            "edition_text": "1/100",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -434,7 +434,7 @@
             "label": "СЕТ ИМЕ",
             "button_label": "Shop now",
             "button_link": "",
-            "edition_text": "",
+            "edition_text": "1/100",
             "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
             "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
           }
@@ -483,6 +483,7 @@
       "name": "Sticky add to cart",
       "settings": {
         "product_fallback": "сет",
+        "global_mode": false,
         "show_sizes": true,
         "title": "",
         "servings": "",
