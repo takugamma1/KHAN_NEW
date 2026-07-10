@@ -462,7 +462,7 @@
         "frame_color": "#000000",
         "card_border_width": 0,
         "label_color": "#111111",
-        "button_bg": "#111111",
+        "button_bg": "#9A1F33",
         "button_text": "#ffffff",
         "show_swatches": true,
         "swatch_size": 30,
