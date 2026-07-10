@@ -583,10 +583,10 @@
             return !inFixedOverlay(el);                          // e.g. the cart drawer's own <footer>
           });
       }
-      var dockTick = false;
+      var lastPush = -1;
       function updateDock() {
-        dockTick = false;
         if (!docking) return;
+        if (!parkEls.length) resolveParkEls();
         var top = Infinity;
         for (var i = 0; i < parkEls.length; i++) {
           var r = parkEls[i].getBoundingClientRect();
@@ -597,17 +597,23 @@
           push = window.innerHeight - top;
           if (push < 0) push = 0;
         }
-        root.style.setProperty('--scart-push', push.toFixed(1) + 'px');
+        push = Math.round(push);
+        if (push !== lastPush) {
+          lastPush = push;
+          root.style.setProperty('--scart-push', push + 'px');
+        }
       }
-      function onDockScroll() { if (!dockTick) { dockTick = true; window.requestAnimationFrame(updateDock); } }
       if (docking) {
         resolveParkEls();
-        window.addEventListener('scroll', onDockScroll, { passive: true });
-        window.addEventListener('resize', onDockScroll);
+        // direct handler (2 cheap rect reads) — an rAF gate can be starved/lost on heavy pages
+        window.addEventListener('scroll', updateDock, { passive: true });
+        window.addEventListener('resize', updateDock);
+        var dockPoll = window.setInterval(updateDock, 500); // safety net if scroll events are missed
         updateDock();
         cleanups.push(function () {
-          window.removeEventListener('scroll', onDockScroll);
-          window.removeEventListener('resize', onDockScroll);
+          window.removeEventListener('scroll', updateDock);
+          window.removeEventListener('resize', updateDock);
+          window.clearInterval(dockPoll);
           root.style.removeProperty('--scart-push');
         });
       }
