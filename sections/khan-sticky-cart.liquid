@@ -568,9 +568,20 @@
       // entered the viewport; the cart rides up by exactly that amount.
       var docking = root.getAttribute('data-stop-at-footer') === 'true';
       var parkEls = [];
+      function inFixedOverlay(el) {
+        for (var n = el; n && n !== document.body; n = n.parentElement) {
+          var pos = window.getComputedStyle(n).position;
+          if (pos === 'fixed' || pos === 'sticky') return true;
+        }
+        return false;
+      }
       function resolveParkEls() {
         parkEls = [].slice.call(document.querySelectorAll('.khan-pf-wrapper, .khan-footer-wrapper, footer'))
-          .filter(function (el) { return el.getClientRects().length > 0; }); // skip hidden (display:none) footers
+          .filter(function (el) {
+            if (!el.getClientRects().length) return false;      // hidden (display:none)
+            if (el.closest('[data-khan-scart]')) return false;  // the cart itself
+            return !inFixedOverlay(el);                          // e.g. the cart drawer's own <footer>
+          });
       }
       var dockTick = false;
       function updateDock() {
