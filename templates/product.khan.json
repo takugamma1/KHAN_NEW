@@ -276,12 +276,45 @@
         "button_bottom": "#3b0211",
         "button_text": "#ffffff"
       }
+    },
+    "khan_faq_pw": {
+      "type": "khan-faq",
+      "name": "FAQ",
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "close_others": true,
+        "skew": -8,
+        "show_shadow": true,
+        "gap": 18,
+        "bg_color": "#efefec",
+        "bar_bg": "#ffffff",
+        "text_color": "#111111",
+        "accent_color": "#560B1E",
+        "open_text": "#ffffff",
+        "panel_bg": "#ffffff",
+        "muted_color": "#444444",
+        "question_size": 17,
+        "answer_size": 14,
+        "max_width": 1100,
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "color_scheme": ""
+      },
+      "blocks": {
+        "faq_desc": { "type": "item", "settings": { "question": "Описание", "answer": "<p>Прецизно дозиран пре-уъркаут за чиста, безкомпромисна енергия — остър фокус, по-големи помпи и нула краш. Без пълнители, без компромиси.</p>" } },
+        "faq_use": { "type": "item", "settings": { "question": "Как се използва?", "answer": "<h3>Как да използвам KHAN Pre-Workout?</h3><p>Разбъркай една (1) до две (2) дози с 300–400мл вода около 20–30 минути преди тренировка. Така тялото усвоява оптимално всички активни съставки.</p><p>Препоръчваме на нови потребители да започнат с половин доза, за да проверят поносимостта си. Не превишавай препоръчителната дневна доза.</p>" } },
+        "faq_caffeine": { "type": "item", "settings": { "question": "Колко кофеин съдържа?", "answer": "<p>Една (1) доза съдържа 180мг кофеин, а две (2) дози — 360мг.</p><p><strong>Внимание:</strong> продуктът е с високо съдържание на кофеин и не е подходящ за деца, бременни и кърмещи жени.</p>" } },
+        "faq_disclaimer": { "type": "item", "settings": { "question": "Дисклеймър", "answer": "<p>Хранителните добавки не заместват разнообразното хранене и здравословния начин на живот. Съхранявай на сухо и хладно място, далеч от деца.</p>" } }
+      },
+      "block_order": ["faq_desc", "faq_use", "faq_caffeine", "faq_disclaimer"]
     }
   },
   "order": [
     "khan_preworkout_hero_KYCWMq",
     "khan_ingredients_hero_JggNdr",
     "khan_ingredients_Hynnfd",
+    "khan_faq_pw",
     "khan_sticky_cart_ebPXK4"
   ]
 }
