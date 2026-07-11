@@ -31,7 +31,7 @@
     --coll-swatch: {{ s.swatch_size }}px;
     --coll-grain: url('{{ 'khan-grain.png' | asset_url }}');
     --coll-fav: {{ s.fav_color | default: '#3B0211' }};
-    --coll-fav-on: {{ s.fav_color_active | default: '#E8232E' }};
+    --coll-fav-on: {{ s.fav_color_active | default: '#9A1F33' }};
   "
   data-khan-coll
 >
@@ -338,7 +338,7 @@
     transition: color 0.25s ease, transform 0.2s ease;
   }
   .khan-coll__favbtn:hover { transform: translateY(2px); }
-  .khan-coll__favbtn.is-fav { color: var(--coll-fav-on, #E8232E); }
+  .khan-coll__favbtn.is-fav { color: var(--coll-fav-on, #9A1F33); }
   .khan-coll__favbtn.is-fav .khan-coll__fav { animation: khan-fav-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
   @keyframes khan-fav-pop {
     0% { transform: scale(1); }
@@ -488,7 +488,7 @@
     { "type": "text", "id": "edition_total", "label": "Edition total", "default": "500", "info": "Remaining count comes from product inventory. Override per card in the block settings." },
     { "type": "checkbox", "id": "show_fav", "label": "Show favorites badge (right)", "default": true },
     { "type": "color", "id": "fav_color", "label": "Favorites badge color", "default": "#3B0211" },
-    { "type": "color", "id": "fav_color_active", "label": "Favorites badge color — favourited", "default": "#E8232E", "info": "Brighter red shows the product is in favourites." },
+    { "type": "color", "id": "fav_color_active", "label": "Favorites badge color — favourited", "default": "#9A1F33", "info": "Brighter red shows the product is in favourites." },
 
     { "type": "header", "content": "Background & spacing" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },
