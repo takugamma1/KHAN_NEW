@@ -64,6 +64,33 @@
           </a>
         {%- endif -%}
 
+        {%- if s.show_favs -%}
+          <div class="khan-nav__favs" data-khan-favs>
+            <button class="khan-nav__favbtn" type="button" data-khan-favs-toggle aria-expanded="false" aria-label="Любими продукти">
+              <svg class="khan-nav__fav-ic" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <g stroke="currentColor" stroke-width="9" stroke-linecap="round">
+                  <line x1="50" y1="10" x2="50" y2="90"></line>
+                  <line x1="10" y1="50" x2="90" y2="50"></line>
+                  <line x1="22" y1="22" x2="78" y2="78"></line>
+                  <line x1="78" y1="22" x2="22" y2="78"></line>
+                </g>
+              </svg>
+              <span class="khan-nav__cart-count khan-nav__favs-count" data-khan-favs-count hidden>0</span>
+            </button>
+
+            <div class="khan-nav__favs-pop" data-khan-favs-pop hidden>
+              <p class="khan-favs__head">Любими</p>
+              {%- if customer -%}
+                <div class="khan-favs__list" data-khan-favs-list></div>
+                <p class="khan-favs__empty" data-khan-favs-empty hidden>Все още нямаш любими продукти.</p>
+              {%- else -%}
+                <p class="khan-favs__empty">Влез в профила си, за да запазваш любими продукти.</p>
+                <a class="khan-favs__login" href="{{ routes.account_login_url }}">Вход</a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
         {%- if s.show_cart -%}
           <a class="khan-nav__cart" href="{{ routes.cart_url }}" aria-label="Cart ({{ cart.item_count }})">
             <svg class="khan-nav__cart-ic" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
@@ -199,6 +226,66 @@
 
   /* ---- right actions + cart ---- */
   .khan-nav__actions { justify-self: end; grid-column: 3; display: inline-flex; align-items: center; gap: 10px; }
+
+  /* ---- favourites icon + dark-glass popup ---- */
+  .khan-nav__favs { position: relative; }
+  .khan-nav__favbtn {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    padding: 6px; margin: 0; border: 0; background: transparent; border-radius: 50%;
+    color: var(--nav-text, #f3f3f3); cursor: pointer;
+    transition: background 0.15s ease, color 0.2s ease;
+  }
+  .khan-nav__favbtn:hover { background: rgb(255 255 255 / 0.14); }
+  .khan-nav__fav-ic { width: calc(var(--nav-logo, 26px) - 6px); height: auto; display: block; }
+  .khan-nav__favs-count { pointer-events: none; }
+
+  .khan-nav__favs-pop {
+    position: absolute; right: 0; top: calc(100% + 14px); z-index: 60;
+    width: min(360px, calc(100vw - 32px));
+    padding: 18px;
+    color: #f1f1f1;
+    background: color-mix(in srgb, #0c0c0c 78%, transparent);
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 18px;
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.18);
+    opacity: 0; transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+  .khan-nav__favs-pop.is-open { opacity: 1; transform: none; pointer-events: auto; }
+  .khan-nav__favs-pop[hidden] { display: block; visibility: hidden; }
+  .khan-nav__favs-pop.is-open[hidden] { visibility: visible; }
+
+  .khan-favs__head {
+    margin: 0 0 12px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+  }
+  .khan-favs__list { display: flex; flex-direction: column; gap: 10px; max-height: min(50vh, 380px); overflow-y: auto; }
+  .khan-favs__row { display: flex; align-items: center; gap: 12px; }
+  .khan-favs__img { flex: 0 0 46px; width: 46px; height: 46px; background: rgb(255 255 255 / 0.06); border-radius: 10px; overflow: hidden; }
+  .khan-favs__img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-favs__meta { flex: 1 1 auto; min-width: 0; text-decoration: none; display: flex; flex-direction: column; gap: 3px; }
+  .khan-favs__title {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .khan-favs__price { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--nav-accent, #d8232a); }
+  .khan-favs__rm {
+    flex: 0 0 auto; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%;
+    background: rgb(255 255 255 / 0.08); color: #cfcfcf; font-size: 15px; line-height: 1; cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .khan-favs__rm:hover { background: rgb(255 255 255 / 0.18); color: #fff; }
+  .khan-favs__empty { margin: 0; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12.5px; line-height: 1.6; letter-spacing: 0.04em; color: #b9b9b9; }
+  .khan-favs__login {
+    display: inline-block; margin-top: 12px; padding: 10px 18px; border-radius: 999px;
+    background: var(--nav-accent, #d8232a); color: #fff; text-decoration: none;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  }
   .khan-nav__cart { position: relative; color: var(--nav-text, #f3f3f3); text-decoration: none; }
   .khan-nav__cart:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__cart-ic { width: calc(var(--nav-logo, 26px) - 2px); height: auto; display: block; }
@@ -362,6 +449,35 @@
     });
   })();
 
+  // Favourites popup — open/close (the list itself is rendered by khan-favs.js)
+  (function () {
+    document.addEventListener('click', function (e) {
+      var toggle = e.target.closest && e.target.closest('[data-khan-favs-toggle]');
+      var wrap = e.target.closest && e.target.closest('[data-khan-favs]');
+      var pops = document.querySelectorAll('[data-khan-favs-pop]');
+      if (toggle) {
+        var pop = toggle.parentElement.querySelector('[data-khan-favs-pop]');
+        if (!pop) return;
+        var open = !pop.classList.contains('is-open');
+        for (var i = 0; i < pops.length; i++) { pops[i].classList.remove('is-open'); }
+        if (open) { pop.hidden = false; pop.classList.add('is-open'); }
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        return;
+      }
+      // click outside (but not on a favourite-toggle/remove button) closes
+      if (!wrap && !(e.target.closest && (e.target.closest('[data-khan-fav]') || e.target.closest('[data-khan-fav-rm]')))) {
+        for (var j = 0; j < pops.length; j++) { pops[j].classList.remove('is-open'); }
+        var ts = document.querySelectorAll('[data-khan-favs-toggle]');
+        for (var k = 0; k < ts.length; k++) { ts[k].setAttribute('aria-expanded', 'false'); }
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var pops = document.querySelectorAll('[data-khan-favs-pop]');
+      for (var i = 0; i < pops.length; i++) { pops[i].classList.remove('is-open'); }
+    });
+  })();
+
   // Cart count badge — read-only refresh, never touches the theme's cart code
   (function () {
     function setCount(n) {
@@ -398,6 +514,7 @@
     { "type": "select", "id": "logo_style", "label": "Logo style", "options": [ { "value": "plain", "label": "Plain (no circle)" }, { "value": "bubble", "label": "Bubble (circle)" } ], "default": "plain" },
     { "type": "range", "id": "logo_width", "label": "Plain logo width", "min": 60, "max": 240, "step": 4, "unit": "px", "default": 120 },
     { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": true },
+    { "type": "checkbox", "id": "show_favs", "label": "Show favourites icon", "default": true },
     { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
 
     { "type": "header", "content": "Position" },

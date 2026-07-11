@@ -31,6 +31,7 @@
     --coll-swatch: {{ s.swatch_size }}px;
     --coll-grain: url('{{ 'khan-grain.png' | asset_url }}');
     --coll-fav: {{ s.fav_color | default: '#3B0211' }};
+    --coll-fav-on: {{ s.fav_color_active | default: '#E8232E' }};
   "
   data-khan-coll
 >
@@ -101,10 +102,30 @@
             {%- endif -%}
 
             {%- if s.show_fav -%}
-              <svg class="khan-coll__fav" viewBox="0 0 70 84" aria-hidden="true" focusable="false">
-                <path d="M0 0H70V57.12L35 84 0 57.12Z" fill="var(--coll-fav, #3B0211)"/>
-                <path d="M35 30.5l2.42 8.58L46 41.5l-8.58 2.42L35 52.5l-2.42-8.58L24 41.5l8.58-2.42Z" fill="#ffffff" opacity="0.65"/>
-              </svg>
+              {%- if p != blank -%}
+                <button
+                  class="khan-coll__favbtn"
+                  type="button"
+                  data-khan-fav
+                  data-handle="{{ p.handle | escape }}"
+                  data-title="{{ p.title | escape }}"
+                  data-price="{{ p.selected_or_first_available_variant.price | money | strip_html | escape }}"
+                  data-image="{{ img | image_url: width: 200 }}"
+                  data-url="{{ url | escape }}"
+                  aria-pressed="false"
+                  aria-label="Добави в любими: {{ p.title | escape }}"
+                >
+                  <svg class="khan-coll__fav" viewBox="0 0 70 84" aria-hidden="true" focusable="false">
+                    <path d="M0 0H70V57.12L35 84 0 57.12Z" fill="currentColor"/>
+                    <path d="M35 30.5l2.42 8.58L46 41.5l-8.58 2.42L35 52.5l-2.42-8.58L24 41.5l8.58-2.42Z" fill="#ffffff" opacity="0.65"/>
+                  </svg>
+                </button>
+              {%- else -%}
+                <svg class="khan-coll__fav khan-coll__fav--static" viewBox="0 0 70 84" aria-hidden="true" focusable="false">
+                  <path d="M0 0H70V57.12L35 84 0 57.12Z" fill="var(--coll-fav, #3B0211)"/>
+                  <path d="M35 30.5l2.42 8.58L46 41.5l-8.58 2.42L35 52.5l-2.42-8.58L24 41.5l8.58-2.42Z" fill="#ffffff" opacity="0.65"/>
+                </svg>
+              {%- endif -%}
             {%- endif -%}
           </div>
 
@@ -294,13 +315,35 @@
     letter-spacing: 0.04em;
   }
   .khan-coll__fav {
+    width: 42px;
+    height: auto;
+    display: block;
+  }
+  .khan-coll__fav--static {
     position: absolute;
     top: calc(-1 * var(--coll-card-pad));
     right: calc(16px - var(--coll-card-pad));
     z-index: 1;
-    width: 42px;
-    height: auto;
     pointer-events: none;
+  }
+  /* working favourite toggle: darker red idle -> bright red when favourited */
+  .khan-coll__favbtn {
+    position: absolute;
+    top: calc(-1 * var(--coll-card-pad));
+    right: calc(16px - var(--coll-card-pad));
+    z-index: 2;
+    padding: 0; margin: 0; border: 0; background: transparent;
+    color: var(--coll-fav, #3B0211);
+    cursor: pointer;
+    transition: color 0.25s ease, transform 0.2s ease;
+  }
+  .khan-coll__favbtn:hover { transform: translateY(2px); }
+  .khan-coll__favbtn.is-fav { color: var(--coll-fav-on, #E8232E); }
+  .khan-coll__favbtn.is-fav .khan-coll__fav { animation: khan-fav-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes khan-fav-pop {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.18); }
+    100% { transform: scale(1); }
   }
 
   .khan-coll__btn {
@@ -445,6 +488,7 @@
     { "type": "text", "id": "edition_total", "label": "Edition total", "default": "500", "info": "Remaining count comes from product inventory. Override per card in the block settings." },
     { "type": "checkbox", "id": "show_fav", "label": "Show favorites badge (right)", "default": true },
     { "type": "color", "id": "fav_color", "label": "Favorites badge color", "default": "#3B0211" },
+    { "type": "color", "id": "fav_color_active", "label": "Favorites badge color — favourited", "default": "#E8232E", "info": "Brighter red shows the product is in favourites." },
 
     { "type": "header", "content": "Background & spacing" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f4f1ea" },

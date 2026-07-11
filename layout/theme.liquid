@@ -43,6 +43,8 @@
 
     {%- comment -%} Shared 3D GPU asterisk renderer — powers the footer mark and the page loader {%- endcomment -%}
     <script src="{{ 'khan-asterisk.js' | asset_url }}" defer></script>
+    {%- comment -%} Favourites (wishlist) engine — buttons, count badges and popup lists {%- endcomment -%}
+    <script src="{{ 'khan-favs.js' | asset_url }}" defer></script>
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
