@@ -67,13 +67,9 @@
         {%- if s.show_favs -%}
           <div class="khan-nav__favs" data-khan-favs>
             <button class="khan-nav__favbtn" type="button" data-khan-favs-toggle aria-expanded="false" aria-label="Любими продукти">
-              <svg class="khan-nav__fav-ic" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
-                  <line x1="50" y1="12" x2="50" y2="88"></line>
-                  <line x1="12" y1="50" x2="88" y2="50"></line>
-                  <line x1="23" y1="23" x2="77" y2="77"></line>
-                  <line x1="77" y1="23" x2="23" y2="77"></line>
-                </g>
+              <svg class="khan-nav__fav-ic" viewBox="0 0 70 84" aria-hidden="true" focusable="false">
+                <path d="M0 0H70V57.12L35 84 0 57.12Z" fill="currentColor"/>
+                <path d="M35 30.5l2.42 8.58L46 41.5l-8.58 2.42L35 52.5l-2.42-8.58L24 41.5l8.58-2.42Z" fill="#000000" opacity="0.35"/>
               </svg>
               <span class="khan-nav__cart-count khan-nav__favs-count" data-khan-favs-count hidden>0</span>
             </button>
@@ -232,7 +228,7 @@
   .khan-nav__favs { position: relative; }
   .khan-nav__favbtn { position: relative; padding: 0; margin: 0; color: var(--nav-text, #f3f3f3); cursor: pointer; }
   .khan-nav__favbtn:hover { background: rgb(255 255 255 / 0.14); }
-  .khan-nav__fav-ic { width: calc(var(--nav-logo, 26px) - 4px); height: auto; display: block; }
+  .khan-nav__fav-ic { height: calc(var(--nav-logo, 26px) - 4px); width: auto; display: block; }
   .khan-nav__favs-count { pointer-events: none; }
 
   .khan-nav__favs-pop {
@@ -378,7 +374,7 @@
     .khan-nav__logo-img,
     .khan-nav__cart-ic,
     .khan-nav__acct-ic { width: 18px; }
-    .khan-nav__fav-ic { width: 16px; }
+    .khan-nav__fav-ic { height: 16px; width: auto; }
     .khan-nav__actions { gap: 8px; }
     .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
     .khan-nav__burger-ic { width: 18px; height: 18px; }
