@@ -165,8 +165,8 @@
             "button_label": "Тениска име",
             "button_link": "shopify://products/тениска-тест",
             "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
-            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_50_04_AM.png",
+            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
         },
         "product_3Rr7gz": {
@@ -206,7 +206,7 @@
         "heading_size": 72,
         "subheading_size": 13,
         "heading_color": "#560b1e",
-        "accent_color": "#FFFFFF",
+        "accent_color": "#ffffff",
         "text_color": "#1a1a1a",
         "anim_style": "wipe",
         "anim_duration": 750,
@@ -216,7 +216,7 @@
         "frame_color": "#62000029",
         "card_border_width": 0,
         "label_color": "#1a1a1a",
-        "button_bg": "#560B1E",
+        "button_bg": "#560b1e",
         "button_text": "#ffffff",
         "show_swatches": true,
         "swatch_size": 30,
@@ -224,7 +224,7 @@
         "edition_total": "100",
         "show_fav": true,
         "fav_color": "#3b0211",
-        "bg_color": "#FFFFFF",
+        "bg_color": "#ffffff",
         "max_width": 1900,
         "column_gap": 12,
         "padding_top": 96,
