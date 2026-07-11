@@ -35,6 +35,7 @@
     --ih-facts-op: {{ s.facts_opacity | default: 55 | divided_by: 100.0 }};
     --ih-facts-top: {{ s.facts_top | default: 120 }}px;
     --ih-peek: {{ s.peek | default: 64 }}px;
+    --ih-tab-bg: {{ s.tab_bg | default: '#ffffff' }};
   "
   data-khan-ihero
 >
@@ -191,7 +192,7 @@
     var anchor = document.createComment('ifacts-anchor');
     var mounted = false, dragging = false, dragEl = null, o = 0;
     var startX = 0, o0 = 0, sheetW = 1, lastX = 0, lastT = 0, vel = 0;
-    var VARS = ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted'];
+    var VARS = ['--ih-facts-op', '--ih-facts-blur', '--ih-peek', '--ih-accent', '--ih-muted', '--ih-tab-bg'];
 
     function apply(animate) {
       facts.style.transition = animate ? '' : 'none';
@@ -448,11 +449,11 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
       position: fixed; right: 0; top: 0; z-index: 58; /* top is set by JS to stay within the section */
       width: 46px; min-height: 120px; padding: 16px 0; margin: 0;
-      background: rgb(12 12 12 / 0.92);
+      background: var(--ih-tab-bg, #ffffff);
       -webkit-backdrop-filter: blur(var(--ih-facts-blur, 16px)); backdrop-filter: blur(var(--ih-facts-blur, 16px));
-      border: 1px solid rgb(255 255 255 / 0.12); border-right: 0; border-radius: 16px 0 0 16px;
-      box-shadow: -10px 0 30px rgb(0 0 0 / 0.35);
-      color: #fff; cursor: grab; touch-action: none;
+      border: 1px solid rgb(0 0 0 / 0.12); border-right: 0; border-radius: 16px 0 0 16px;
+      box-shadow: -10px 0 30px rgb(0 0 0 / 0.18);
+      color: var(--ih-accent, #9A1F33); cursor: grab; touch-action: none;
       transition: opacity 0.3s ease;
     }
     .khan-ihero__facts-tab:active { cursor: grabbing; }
@@ -522,6 +523,7 @@
     { "type": "range", "id": "facts_blur", "label": "Glass blur", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 16 },
     { "type": "range", "id": "facts_opacity", "label": "Glass darkness", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
     { "type": "range", "id": "peek", "label": "Collapsed handle height (mobile)", "min": 48, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "color", "id": "tab_bg", "label": "Mobile bubble background", "default": "#ffffff", "info": "The label and arrow use the accent colour." },
 
     { "type": "header", "content": "Background" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image (optional texture)" },
