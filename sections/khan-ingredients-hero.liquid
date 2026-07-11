@@ -1,9 +1,6 @@
 {% liquid
   assign s = section.settings
   assign jar = s.jar_image
-  if jar == blank
-    assign jar = product.featured_image
-  endif
 %}
 
 <div
@@ -509,7 +506,7 @@
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     { "type": "header", "content": "Left — jar image" },
-    { "type": "image_picker", "id": "jar_image", "label": "Jar image", "info": "A jar-only image (transparent PNG looks best). Falls back to the product's featured image." },
+    { "type": "image_picker", "id": "jar_image", "label": "Jar image", "info": "Optional. Leave empty for no image (e.g. when the background already shows the jar)." },
 
     { "type": "header", "content": "Supplement facts panel (right)" },
     { "type": "checkbox", "id": "show_facts", "label": "Show facts panel", "default": true },
