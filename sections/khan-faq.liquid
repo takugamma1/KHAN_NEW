@@ -72,11 +72,12 @@
       function closeD() {
         if (d.dataset.busy || !d.open) return;
         d.dataset.busy = '1';
+        var mt = window.getComputedStyle(body).marginTop;
         body.style.overflow = 'hidden';
-        body.style.height = body.scrollHeight + 'px'; body.style.opacity = '1';
+        body.style.height = body.scrollHeight + 'px'; body.style.opacity = '1'; body.style.marginTop = mt;
         void body.offsetHeight;
-        body.style.transition = 'height ' + CLOSE + 'ms cubic-bezier(.4,0,.2,1), opacity ' + CLOSE + 'ms ease';
-        body.style.height = '0px'; body.style.opacity = '0';
+        body.style.transition = 'height ' + CLOSE + 'ms cubic-bezier(.4,0,.2,1), opacity ' + CLOSE + 'ms ease, margin-top ' + CLOSE + 'ms cubic-bezier(.4,0,.2,1)';
+        body.style.height = '0px'; body.style.opacity = '0'; body.style.marginTop = '0px';
         window.setTimeout(function () {
           d.open = false;
           body.removeAttribute('style');
@@ -87,12 +88,13 @@
         if (d.dataset.busy || d.open) return;
         d.dataset.busy = '1';
         d.open = true;
+        var mt = window.getComputedStyle(body).marginTop;
         body.style.overflow = 'hidden';
         var to = body.scrollHeight;
-        body.style.height = '0px'; body.style.opacity = '0';
+        body.style.height = '0px'; body.style.opacity = '0'; body.style.marginTop = '0px';
         void body.offsetHeight;
-        body.style.transition = 'height ' + OPEN + 'ms cubic-bezier(.4,0,.2,1), opacity ' + OPEN + 'ms ease';
-        body.style.height = to + 'px'; body.style.opacity = '1';
+        body.style.transition = 'height ' + OPEN + 'ms cubic-bezier(.4,0,.2,1), opacity ' + OPEN + 'ms ease, margin-top ' + OPEN + 'ms cubic-bezier(.4,0,.2,1)';
+        body.style.height = to + 'px'; body.style.opacity = '1'; body.style.marginTop = mt;
         window.setTimeout(function () {
           body.removeAttribute('style');
           delete d.dataset.busy;
