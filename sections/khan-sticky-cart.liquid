@@ -624,11 +624,19 @@
         window.addEventListener('scroll', updateDock, { passive: true });
         window.addEventListener('resize', updateDock);
         var dockPoll = window.setInterval(updateDock, 500); // safety net if scroll events are missed
+        // layout changes without scrolling (e.g. an accordion opening above the footer)
+        // fire per-frame during the animation, keeping the cart glued instead of snapping
+        var dockRO = null;
+        if ('ResizeObserver' in window) {
+          dockRO = new ResizeObserver(updateDock);
+          dockRO.observe(document.body);
+        }
         updateDock();
         cleanups.push(function () {
           window.removeEventListener('scroll', updateDock);
           window.removeEventListener('resize', updateDock);
           window.clearInterval(dockPoll);
+          if (dockRO) dockRO.disconnect();
           root.style.removeProperty('--scart-push');
         });
       }
