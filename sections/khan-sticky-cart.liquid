@@ -583,7 +583,8 @@
             return !inFixedOverlay(el);                          // e.g. the cart drawer's own <footer>
           });
       }
-      var lastPush = -1;
+      var lastPush = -1, lastParked = null;
+      var dockMq = window.matchMedia('(max-width: 749px)');
       function updateDock() {
         if (!docking) return;
         if (!parkEls.length) resolveParkEls();
@@ -598,9 +599,23 @@
           if (push < 0) push = 0;
         }
         push = Math.round(push);
-        if (push !== lastPush) {
-          lastPush = push;
-          root.style.setProperty('--scart-push', push + 'px');
+        if (dockMq.matches) {
+          // mobile: riding a (tall) footer up mid-screen looks broken — slide the
+          // sheet away instead, and bring it back when the footer leaves the view
+          if (lastPush !== 0) { lastPush = 0; root.style.setProperty('--scart-push', '0px'); }
+          var parked = push > 24;
+          if (parked !== lastParked) {
+            lastParked = parked;
+            root.classList.toggle('is-parked', parked);
+            if (parked) setExpanded(false);
+          }
+        } else {
+          // desktop: dock — the bar stops at the footer's edge and rides with it
+          if (lastParked !== false) { lastParked = false; root.classList.remove('is-parked'); }
+          if (push !== lastPush) {
+            lastPush = push;
+            root.style.setProperty('--scart-push', push + 'px');
+          }
         }
       }
       if (docking) {
