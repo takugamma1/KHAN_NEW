@@ -301,6 +301,9 @@
       "settings": {
         "product_fallback": "сет",
         "show_buy": false,
+        "show_color_picker": true,
+        "filter_media_by_color": true,
+        "enable_animations": true,
         "tagline": "Built different. Made to last.",
         "description": "",
         "size_guide_link": "",
@@ -411,8 +414,8 @@
             "button_label": "Shop now",
             "button_link": "",
             "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
-            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
+            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
         },
         "product_6ap6bA": {
@@ -423,8 +426,8 @@
             "button_label": "Shop now",
             "button_link": "",
             "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
-            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
+            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
         },
         "product_9pq9M6": {
@@ -435,8 +438,8 @@
             "button_label": "Shop now",
             "button_link": "",
             "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.03.png",
-            "bubble_2": "shopify://shop_images/Screenshot_2026-06-04_at_15.51.36.png"
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
+            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
         }
       },
