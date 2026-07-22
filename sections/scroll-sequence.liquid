@@ -18,8 +18,8 @@
     --ss-distance: {{ section.settings.scroll_distance }}px;
     --ss-bg: {{ section.settings.bg_color }};
     --ss-fit: {{ section.settings.fit }};
-    --ss-fit-m: {{ section.settings.fit_mobile | default: 'contain' }};
-    --ss-anchor-m: {{ section.settings.anchor_mobile | default: 'bottom' }};
+    --ss-fit-m: {{ section.settings.fit_mobile | default: 'cover' }};
+    --ss-anchor-m: {{ section.settings.anchor_mobile | default: 'center' }};
   "
   data-scroll-seq
 >
@@ -88,8 +88,8 @@
     }
     var ctx = canvas.getContext('2d');
     var fit = (getComputedStyle(root).getPropertyValue('--ss-fit') || 'cover').trim() || 'cover';
-    var fitM = (getComputedStyle(root).getPropertyValue('--ss-fit-m') || 'contain').trim() || 'contain';
-    var anchorM = (getComputedStyle(root).getPropertyValue('--ss-anchor-m') || 'bottom').trim() || 'bottom';
+    var fitM = (getComputedStyle(root).getPropertyValue('--ss-fit-m') || 'cover').trim() || 'cover';
+    var anchorM = (getComputedStyle(root).getPropertyValue('--ss-anchor-m') || 'center').trim() || 'center';
     var mqMobile = window.matchMedia('(max-width: 749px)');
 
     // Smooth scrub: ease a float frame toward the scroll target every rAF, so
@@ -336,8 +336,8 @@
         { "value": "contain", "label": "Contain (whole frame visible)" },
         { "value": "cover", "label": "Cover (fill, crops the sides)" }
       ],
-      "default": "contain",
-      "info": "Landscape frames zoom heavily on portrait phones with Cover — Contain shows the full picture."
+      "default": "cover",
+      "info": "Cover fills the phone screen (crops the sides); Contain shows the whole frame letterboxed."
     },
     {
       "type": "select",
@@ -348,8 +348,8 @@
         { "value": "center", "label": "Center" },
         { "value": "bottom", "label": "Bottom" }
       ],
-      "default": "bottom",
-      "info": "Where the frame sits on the phone screen. Bottom keeps bottom-anchored footage lined up with the screen edge."
+      "default": "center",
+      "info": "Where the frame sits on the phone screen when it doesn't fill it."
     },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#000000" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
