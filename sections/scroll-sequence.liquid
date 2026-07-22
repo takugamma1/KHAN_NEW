@@ -19,6 +19,7 @@
     --ss-bg: {{ section.settings.bg_color }};
     --ss-fit: {{ section.settings.fit }};
     --ss-fit-m: {{ section.settings.fit_mobile | default: 'contain' }};
+    --ss-anchor-m: {{ section.settings.anchor_mobile | default: 'bottom' }};
   "
   data-scroll-seq
 >
@@ -87,6 +88,7 @@
     var ctx = canvas.getContext('2d');
     var fit = (getComputedStyle(root).getPropertyValue('--ss-fit') || 'cover').trim() || 'cover';
     var fitM = (getComputedStyle(root).getPropertyValue('--ss-fit-m') || 'contain').trim() || 'contain';
+    var anchorM = (getComputedStyle(root).getPropertyValue('--ss-anchor-m') || 'bottom').trim() || 'bottom';
     var mqMobile = window.matchMedia('(max-width: 749px)');
 
     // Smooth scrub: ease a float frame toward the scroll target every rAF, so
@@ -115,7 +117,12 @@
       var s = useFit === 'contain' ? Math.min(cw / iw, ch / ih) : Math.max(cw / iw, ch / ih);
       var dw = iw * s, dh = ih * s;
       ctx.clearRect(0, 0, cw, ch);
-      ctx.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      var dy = (ch - dh) / 2;
+      if (mqMobile.matches) {
+        if (anchorM === 'bottom') dy = ch - dh;
+        else if (anchorM === 'top') dy = 0;
+      }
+      ctx.drawImage(im, (cw - dw) / 2, dy, dw, dh);
       drawn = idx;
     }
 
@@ -324,6 +331,18 @@
       ],
       "default": "contain",
       "info": "Landscape frames zoom heavily on portrait phones with Cover — Contain shows the full picture."
+    },
+    {
+      "type": "select",
+      "id": "anchor_mobile",
+      "label": "Frame position — mobile",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "bottom",
+      "info": "Where the frame sits on the phone screen. Bottom keeps bottom-anchored footage lined up with the screen edge."
     },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#000000" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
