@@ -7,3 +7,4 @@ assets/seq-*.webp
 
 # lossless original frames (360MB — deployed via CLI only, kept out of git)
 assets/seq2o-*.webp
+assets/seq2u-*.webp
