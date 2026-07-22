@@ -18,6 +18,7 @@
     --ss-distance: {{ section.settings.scroll_distance }}px;
     --ss-bg: {{ section.settings.bg_color }};
     --ss-fit: {{ section.settings.fit }};
+    --ss-fit-m: {{ section.settings.fit_mobile | default: 'contain' }};
   "
   data-scroll-seq
 >
@@ -85,6 +86,8 @@
     }
     var ctx = canvas.getContext('2d');
     var fit = (getComputedStyle(root).getPropertyValue('--ss-fit') || 'cover').trim() || 'cover';
+    var fitM = (getComputedStyle(root).getPropertyValue('--ss-fit-m') || 'contain').trim() || 'contain';
+    var mqMobile = window.matchMedia('(max-width: 749px)');
 
     // Smooth scrub: ease a float frame toward the scroll target every rAF, so
     // a coarse mouse wheel (big jumps) still animates THROUGH the frames instead
@@ -108,7 +111,8 @@
       if (!im || !im.naturalWidth) return;
       var cw = canvas.clientWidth, ch = canvas.clientHeight;
       var iw = im.naturalWidth, ih = im.naturalHeight;
-      var s = fit === 'contain' ? Math.min(cw / iw, ch / ih) : Math.max(cw / iw, ch / ih);
+      var useFit = mqMobile.matches ? fitM : fit;
+      var s = useFit === 'contain' ? Math.min(cw / iw, ch / ih) : Math.max(cw / iw, ch / ih);
       var dw = iw * s, dh = ih * s;
       ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
@@ -309,6 +313,17 @@
         { "value": "contain", "label": "Contain (no crop)" }
       ],
       "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "fit_mobile",
+      "label": "Frame fit — mobile",
+      "options": [
+        { "value": "contain", "label": "Contain (whole frame visible)" },
+        { "value": "cover", "label": "Cover (fill, crops the sides)" }
+      ],
+      "default": "contain",
+      "info": "Landscape frames zoom heavily on portrait phones with Cover — Contain shows the full picture."
     },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#000000" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
