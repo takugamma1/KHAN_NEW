@@ -78,6 +78,20 @@
     {%- endfor -%}
   ];
   {%- endif -%}
+  {%- assign oprefix = section.settings.frame_prefix_orig | strip -%}
+  {%- if oprefix != blank -%}
+  window.SCROLLSEQ_O = window.SCROLLSEQ_O || {};
+  window.SCROLLSEQ_O["{{ section.id }}"] = [
+    {%- for i in (1..fc) -%}
+      {%- assign numstr = i | append: '' -%}
+      {%- assign pad = digits | minus: numstr.size -%}
+      {%- assign fn = oprefix -%}
+      {%- if pad > 0 -%}{%- for z in (1..pad) -%}{%- assign fn = fn | append: '0' -%}{%- endfor -%}{%- endif -%}
+      {%- assign fn = fn | append: numstr | append: '.' | append: ext -%}
+      "{{ fn | asset_url }}"{%- unless forloop.last -%},{% endunless %}
+    {%- endfor -%}
+  ];
+  {%- endif -%}
   {%- assign hdprefix = section.settings.frame_prefix_mobile_hd | strip -%}
   {%- if hdprefix != blank -%}
   window.SCROLLSEQ_HD = window.SCROLLSEQ_HD || {};
@@ -101,12 +115,13 @@
     if (!root) return;
     var frames = (window.SCROLLSEQ || {})[id] || [];
     var mframes = (window.SCROLLSEQ_M || {})[id] || [];
-    var hdframes = [];
+    var hdframes = [], oframes = [];
     if (mframes.length && window.matchMedia('(max-width: 749px)').matches) {
       frames = mframes;
       hdframes = (window.SCROLLSEQ_HD || {})[id] || [];
     } else {
       hdframes = (window.SCROLLSEQ_HDD || {})[id] || [];
+      oframes = (window.SCROLLSEQ_O || {})[id] || [];
     }
     if (!frames.length) return;
     var canvas = root.querySelector('.scroll-seq__canvas');
@@ -144,8 +159,32 @@
     }
 
     var imgsHD = [];
+
+    // Lossless originals: too heavy to stream in full, so fetch a single frame
+    // whenever the scrub comes to rest — the frame being looked at becomes
+    // pixel-identical to the source render. Cached frames stay upgraded.
+    var imgsO = [], oLoading = {}, origTimer = 0;
+    function scheduleOrig(idx) {
+      if (!oframes.length) return;
+      clearTimeout(origTimer);
+      origTimer = setTimeout(function () {
+        if (Math.round(currentF) !== idx) return;
+        if (imgsO[idx]) { drawn = -1; paint(idx); return; }
+        if (oLoading[idx]) return;
+        oLoading[idx] = 1;
+        var oi = new Image();
+        oi.onload = function () {
+          imgsO[idx] = oi;
+          if (Math.round(currentF) === idx) { drawn = -1; paint(idx); }
+        };
+        oi.onerror = function () { delete oLoading[idx]; };
+        oi.src = oframes[idx];
+      }, 200);
+    }
+
     function paint(idx) {
-      var im = (imgsHD[idx] && imgsHD[idx].naturalWidth) ? imgsHD[idx] : imgs[idx];
+      var im = (imgsO[idx] && imgsO[idx].naturalWidth) ? imgsO[idx]
+        : (imgsHD[idx] && imgsHD[idx].naturalWidth) ? imgsHD[idx] : imgs[idx];
       if (!im || !im.naturalWidth) return;
       var cw = canvas.clientWidth, ch = canvas.clientHeight;
       var iw = im.naturalWidth, ih = im.naturalHeight;
@@ -170,6 +209,7 @@
       if (Math.abs(diff) < 0.01) {            // settled — stop the loop until next scroll
         currentF = target;
         if (Math.round(currentF) !== drawn) paint(Math.round(currentF));
+        scheduleOrig(Math.round(currentF));
         return;
       }
       currentF += diff * EASE;
@@ -357,6 +397,7 @@
     { "type": "text", "id": "frame_prefix_mobile", "label": "Mobile filename prefix (optional)", "info": "A lighter frame set for phones, same count/digits/extension (e.g. seq2m-). Leave empty to use the main set everywhere." },
     { "type": "text", "id": "frame_prefix_mobile_hd", "label": "Mobile HD prefix (optional)", "info": "High-res portrait set streamed in the background after the fast set loads — frames upgrade to sharp as they arrive (e.g. seq2p-)." },
     { "type": "text", "id": "frame_prefix_hd", "label": "Desktop HD prefix (optional)", "info": "Full-resolution set streamed in the background on desktop — original-quality frames replace the fast ones as they arrive (e.g. seq2d-)." },
+    { "type": "text", "id": "frame_prefix_orig", "label": "Lossless original prefix (optional)", "info": "Pixel-perfect originals fetched one frame at a time whenever scrolling pauses — the frame on screen upgrades to true original quality (e.g. seq2o-). Desktop only." },
 
     { "type": "header", "content": "Scroll hint" },
     { "type": "checkbox", "id": "show_hint", "label": "Show scroll hint", "default": true, "info": "Appears once the frames have loaded; fades away as soon as the visitor scrolls." },
