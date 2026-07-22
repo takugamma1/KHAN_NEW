@@ -26,6 +26,12 @@
     <div class="scroll-seq__loader" data-loader>
       <span class="scroll-seq__loader-num" data-loader-num>0%</span>
     </div>
+    {%- if section.settings.show_hint -%}
+      <div class="scroll-seq__hint" data-seq-hint aria-hidden="true">
+        <span class="scroll-seq__hint-text">{{ section.settings.hint_text | default: 'Скролни надолу' }}</span>
+        <span class="scroll-seq__hint-chevs" aria-hidden="true"><i></i><i></i><i></i></span>
+      </div>
+    {%- endif -%}
   </div>
 </div>
 
@@ -41,6 +47,20 @@
       "{{ fn | asset_url }}"{%- unless forloop.last -%},{% endunless %}
     {%- endfor -%}
   ];
+  {%- assign mprefix = section.settings.frame_prefix_mobile | strip -%}
+  {%- if mprefix != blank -%}
+  window.SCROLLSEQ_M = window.SCROLLSEQ_M || {};
+  window.SCROLLSEQ_M["{{ section.id }}"] = [
+    {%- for i in (1..fc) -%}
+      {%- assign numstr = i | append: '' -%}
+      {%- assign pad = digits | minus: numstr.size -%}
+      {%- assign fn = mprefix -%}
+      {%- if pad > 0 -%}{%- for z in (1..pad) -%}{%- assign fn = fn | append: '0' -%}{%- endfor -%}{%- endif -%}
+      {%- assign fn = fn | append: numstr | append: '.' | append: ext -%}
+      "{{ fn | asset_url }}"{%- unless forloop.last -%},{% endunless %}
+    {%- endfor -%}
+  ];
+  {%- endif -%}
 </script>
 
 <script>
@@ -49,11 +69,20 @@
     var root = document.getElementById('ScrollSeq-' + id);
     if (!root) return;
     var frames = (window.SCROLLSEQ || {})[id] || [];
+    var mframes = (window.SCROLLSEQ_M || {})[id] || [];
+    if (mframes.length && window.matchMedia('(max-width: 749px)').matches) frames = mframes;
     if (!frames.length) return;
     var canvas = root.querySelector('.scroll-seq__canvas');
     var sticky = root.querySelector('.scroll-seq__sticky');
     var loader = root.querySelector('[data-loader]');
     var loaderNum = root.querySelector('[data-loader-num]');
+    var hint = root.querySelector('[data-seq-hint]');
+    function updateHint() {
+      if (!hint || !ready) return;
+      var p = frames.length > 1 ? target / (frames.length - 1) : 1;
+      if (p > 0.03) hint.classList.add('is-off');
+      else if (p < 0.01) hint.classList.remove('is-off');
+    }
     var ctx = canvas.getContext('2d');
     var fit = (getComputedStyle(root).getPropertyValue('--ss-fit') || 'cover').trim() || 'cover';
 
@@ -89,6 +118,7 @@
     function tick() {
       rafId = 0;
       target = targetFrame();
+      updateHint();
       var diff = target - currentF;
       if (Math.abs(diff) < 0.01) {            // settled — stop the loop until next scroll
         currentF = target;
@@ -124,6 +154,7 @@
             currentF = target = targetFrame();
             size();
             paint(Math.round(currentF));
+            if (hint) { hint.classList.add('is-on'); updateHint(); }
             kick();
           }
         };
@@ -187,6 +218,62 @@
     opacity: 0.85;
   }
 
+  /* ---- scroll hint: dark glass pill, appears after load, hides once scrolling starts ---- */
+  .scroll-seq__hint {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(26px, 6vh, 56px);
+    transform: translateX(-50%) translateY(8px);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    color: #fff;
+    background: rgb(12 12 12 / 0.62);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+            backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: 0 14px 40px rgb(0 0 0 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .scroll-seq__hint.is-on { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .scroll-seq__hint.is-on.is-off { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  .scroll-seq__hint-text {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .scroll-seq__hint-chevs { display: flex; flex-direction: column; align-items: center; gap: 3px; height: 22px; }
+  .scroll-seq__hint-chevs i {
+    width: 9px; height: 9px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    opacity: 0.25;
+    animation: seq-chev 1.5s ease-in-out infinite;
+  }
+  .scroll-seq__hint-chevs i:nth-child(2) { animation-delay: 0.2s; margin-top: -5px; }
+  .scroll-seq__hint-chevs i:nth-child(3) { animation-delay: 0.4s; margin-top: -5px; }
+  @keyframes seq-chev {
+    0%, 60%, 100% { opacity: 0.25; transform: rotate(45deg) translate(0, 0); }
+    30% { opacity: 1; transform: rotate(45deg) translate(2px, 2px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-seq__hint { transition: opacity 0.2s ease; }
+    .scroll-seq__hint-chevs i { animation: none; opacity: 0.8; }
+  }
+  @media screen and (max-width: 749px) {
+    .scroll-seq__hint { padding: 12px 18px; bottom: clamp(20px, 5vh, 40px); }
+    .scroll-seq__hint-text { font-size: 11px; letter-spacing: 0.2em; }
+  }
+
 {% endstylesheet %}
 
 {% schema %}
@@ -202,6 +289,11 @@
     { "type": "text", "id": "frame_count", "label": "Frame count", "default": "144" },
     { "type": "text", "id": "frame_digits", "label": "Zero-padded digits", "default": "4" },
     { "type": "text", "id": "frame_extension", "label": "File extension", "default": "webp" },
+    { "type": "text", "id": "frame_prefix_mobile", "label": "Mobile filename prefix (optional)", "info": "A lighter frame set for phones, same count/digits/extension (e.g. seq2m-). Leave empty to use the main set everywhere." },
+
+    { "type": "header", "content": "Scroll hint" },
+    { "type": "checkbox", "id": "show_hint", "label": "Show scroll hint", "default": true, "info": "Appears once the frames have loaded; fades away as soon as the visitor scrolls." },
+    { "type": "text", "id": "hint_text", "label": "Hint text", "default": "Скролни надолу" },
 
     { "type": "header", "content": "Scroll" },
     { "type": "paragraph", "content": "Scroll distance ≈ felt seconds × 1000. 6000px ≈ 6s, ~42px/frame (smooth). Increase = slower, decrease = faster." },
