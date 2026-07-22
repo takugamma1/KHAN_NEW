@@ -64,6 +64,20 @@
     {%- endfor -%}
   ];
   {%- endif -%}
+  {%- assign hdprefix = section.settings.frame_prefix_mobile_hd | strip -%}
+  {%- if hdprefix != blank -%}
+  window.SCROLLSEQ_HD = window.SCROLLSEQ_HD || {};
+  window.SCROLLSEQ_HD["{{ section.id }}"] = [
+    {%- for i in (1..fc) -%}
+      {%- assign numstr = i | append: '' -%}
+      {%- assign pad = digits | minus: numstr.size -%}
+      {%- assign fn = hdprefix -%}
+      {%- if pad > 0 -%}{%- for z in (1..pad) -%}{%- assign fn = fn | append: '0' -%}{%- endfor -%}{%- endif -%}
+      {%- assign fn = fn | append: numstr | append: '.' | append: ext -%}
+      "{{ fn | asset_url }}"{%- unless forloop.last -%},{% endunless %}
+    {%- endfor -%}
+  ];
+  {%- endif -%}
 </script>
 
 <script>
@@ -73,7 +87,11 @@
     if (!root) return;
     var frames = (window.SCROLLSEQ || {})[id] || [];
     var mframes = (window.SCROLLSEQ_M || {})[id] || [];
-    if (mframes.length && window.matchMedia('(max-width: 749px)').matches) frames = mframes;
+    var hdframes = [];
+    if (mframes.length && window.matchMedia('(max-width: 749px)').matches) {
+      frames = mframes;
+      hdframes = (window.SCROLLSEQ_HD || {})[id] || [];
+    }
     if (!frames.length) return;
     var canvas = root.querySelector('.scroll-seq__canvas');
     var sticky = root.querySelector('.scroll-seq__sticky');
@@ -109,8 +127,9 @@
       return p * (frames.length - 1);
     }
 
+    var imgsHD = [];
     function paint(idx) {
-      var im = imgs[idx];
+      var im = (imgsHD[idx] && imgsHD[idx].naturalWidth) ? imgsHD[idx] : imgs[idx];
       if (!im || !im.naturalWidth) return;
       var cw = canvas.clientWidth, ch = canvas.clientHeight;
       var iw = im.naturalWidth, ih = im.naturalHeight;
@@ -168,6 +187,19 @@
             paint(Math.round(currentF));
             if (hint) { hint.classList.add('is-on'); updateHint(); }
             kick();
+            if (hdframes.length) {
+              (function streamHD(j) {
+                if (j >= hdframes.length) return;
+                var hi = new Image();
+                hi.onload = function () {
+                  imgsHD[j] = hi;
+                  if (Math.round(currentF) === j) { drawn = -1; paint(j); }
+                  streamHD(j + 1);
+                };
+                hi.onerror = function () { streamHD(j + 1); };
+                hi.src = hdframes[j];
+              })(0);
+            }
           }
         };
         im.src = frames[idx];
@@ -307,6 +339,7 @@
     { "type": "text", "id": "frame_digits", "label": "Zero-padded digits", "default": "4" },
     { "type": "text", "id": "frame_extension", "label": "File extension", "default": "webp" },
     { "type": "text", "id": "frame_prefix_mobile", "label": "Mobile filename prefix (optional)", "info": "A lighter frame set for phones, same count/digits/extension (e.g. seq2m-). Leave empty to use the main set everywhere." },
+    { "type": "text", "id": "frame_prefix_mobile_hd", "label": "Mobile HD prefix (optional)", "info": "High-res portrait set streamed in the background after the fast set loads — frames upgrade to sharp as they arrive (e.g. seq2p-)." },
 
     { "type": "header", "content": "Scroll hint" },
     { "type": "checkbox", "id": "show_hint", "label": "Show scroll hint", "default": true, "info": "Appears once the frames have loaded; fades away as soon as the visitor scrolls." },
