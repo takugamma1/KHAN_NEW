@@ -30,7 +30,8 @@
     </div>
     {%- if section.settings.show_hint -%}
       <div class="scroll-seq__hint" data-seq-hint aria-hidden="true">
-        <span class="scroll-seq__hint-text">{{ section.settings.hint_text | default: 'Скролни надолу' }}</span>
+        <span class="scroll-seq__hint-text scroll-seq__hint-text--d">{{ section.settings.hint_text | default: 'Скролни надолу' }}</span>
+        <span class="scroll-seq__hint-text scroll-seq__hint-text--m">{{ section.settings.hint_text_mobile | default: 'Скролни нагоре' }}</span>
         <span class="scroll-seq__hint-chevs" aria-hidden="true"><i></i><i></i><i></i></span>
       </div>
     {%- endif -%}
@@ -280,9 +281,14 @@
     .scroll-seq__hint { transition: opacity 0.2s ease; }
     .scroll-seq__hint-chevs i { animation: none; opacity: 0.8; }
   }
+  .scroll-seq__hint-text--m { display: none; }
   @media screen and (max-width: 749px) {
     .scroll-seq__hint { padding: 12px 18px; bottom: clamp(20px, 5vh, 40px); }
     .scroll-seq__hint-text { font-size: 11px; letter-spacing: 0.2em; }
+    .scroll-seq__hint-text--d { display: none; }
+    .scroll-seq__hint-text--m { display: block; }
+    /* phones: you swipe UP — flip the chevrons to match */
+    .scroll-seq__hint-chevs { transform: rotate(180deg); }
   }
 
 {% endstylesheet %}
@@ -304,7 +310,8 @@
 
     { "type": "header", "content": "Scroll hint" },
     { "type": "checkbox", "id": "show_hint", "label": "Show scroll hint", "default": true, "info": "Appears once the frames have loaded; fades away as soon as the visitor scrolls." },
-    { "type": "text", "id": "hint_text", "label": "Hint text", "default": "Скролни надолу" },
+    { "type": "text", "id": "hint_text", "label": "Hint text (desktop)", "default": "Скролни надолу" },
+    { "type": "text", "id": "hint_text_mobile", "label": "Hint text (mobile)", "default": "Скролни нагоре" },
 
     { "type": "header", "content": "Scroll" },
     { "type": "paragraph", "content": "Scroll distance ≈ felt seconds × 1000. 6000px ≈ 6s, ~42px/frame (smooth). Increase = slower, decrease = faster." },
