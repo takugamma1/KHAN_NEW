@@ -78,6 +78,20 @@
     {%- endfor -%}
   ];
   {%- endif -%}
+  {%- assign o2prefix = section.settings.frame_prefix_orig_2x | strip -%}
+  {%- if o2prefix != blank -%}
+  window.SCROLLSEQ_O2 = window.SCROLLSEQ_O2 || {};
+  window.SCROLLSEQ_O2["{{ section.id }}"] = [
+    {%- for i in (1..fc) -%}
+      {%- assign numstr = i | append: '' -%}
+      {%- assign pad = digits | minus: numstr.size -%}
+      {%- assign fn = o2prefix -%}
+      {%- if pad > 0 -%}{%- for z in (1..pad) -%}{%- assign fn = fn | append: '0' -%}{%- endfor -%}{%- endif -%}
+      {%- assign fn = fn | append: numstr | append: '.' | append: ext -%}
+      "{{ fn | asset_url }}"{%- unless forloop.last -%},{% endunless %}
+    {%- endfor -%}
+  ];
+  {%- endif -%}
   {%- assign oprefix = section.settings.frame_prefix_orig | strip -%}
   {%- if oprefix != blank -%}
   window.SCROLLSEQ_O = window.SCROLLSEQ_O || {};
@@ -121,7 +135,11 @@
       hdframes = (window.SCROLLSEQ_HD || {})[id] || [];
     } else {
       hdframes = (window.SCROLLSEQ_HDD || {})[id] || [];
-      oframes = (window.SCROLLSEQ_O || {})[id] || [];
+      // Retina/HiDPI screens paint onto a backing store wider than the 1920px
+      // sources; there the pre-upscaled 4K set beats upscaling in the browser.
+      var o2frames = (window.SCROLLSEQ_O2 || {})[id] || [];
+      var backingW = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+      oframes = (o2frames.length && backingW > 2200) ? o2frames : ((window.SCROLLSEQ_O || {})[id] || []);
     }
     if (!frames.length) return;
     var canvas = root.querySelector('.scroll-seq__canvas');
@@ -225,6 +243,9 @@
       var w = sticky.clientWidth || 1, h = sticky.clientHeight || 1;
       canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // resizing the canvas resets context state — re-request quality resampling
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
       paint(Math.round(currentF));
     }
 
@@ -398,6 +419,7 @@
     { "type": "text", "id": "frame_prefix_mobile_hd", "label": "Mobile HD prefix (optional)", "info": "High-res portrait set streamed in the background after the fast set loads — frames upgrade to sharp as they arrive (e.g. seq2p-)." },
     { "type": "text", "id": "frame_prefix_hd", "label": "Desktop HD prefix (optional)", "info": "Full-resolution set streamed in the background on desktop — original-quality frames replace the fast ones as they arrive (e.g. seq2d-)." },
     { "type": "text", "id": "frame_prefix_orig", "label": "Lossless original prefix (optional)", "info": "Pixel-perfect originals fetched one frame at a time whenever scrolling pauses — the frame on screen upgrades to true original quality (e.g. seq2o-). Desktop only." },
+    { "type": "text", "id": "frame_prefix_orig_2x", "label": "Retina original prefix (optional)", "info": "Pre-upscaled 4K set used instead of the lossless originals on Retina/HiDPI screens, where it renders sharper (e.g. seq2u-). Desktop only." },
 
     { "type": "header", "content": "Scroll hint" },
     { "type": "checkbox", "id": "show_hint", "label": "Show scroll hint", "default": true, "info": "Appears once the frames have loaded; fades away as soon as the visitor scrolls." },
