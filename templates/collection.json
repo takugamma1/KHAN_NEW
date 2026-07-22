@@ -147,6 +147,7 @@
         "frame_prefix": "seq2-",
         "frame_prefix_mobile": "seq2m-",
         "frame_prefix_mobile_hd": "seq2p-",
+        "frame_prefix_hd": "seq2d-",
         "frame_count": "251",
         "frame_digits": "4",
         "frame_extension": "webp",
