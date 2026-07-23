@@ -109,14 +109,14 @@
   {%- comment -%} the product has no colour option yet — still show the hardcoded swatches {%- endcomment -%}
   {%- if scart_extra_colors != blank and scart_color_done == false -%}
     <div class="khan-scart__opt khan-scart__opt--color">
-      <span class="khan-scart__opt-name">{{ s.extra_colors_label | default: 'Цвят' }}</span>
-      <div class="khan-scart__opt-vals" role="group" aria-label="{{ s.extra_colors_label | default: 'Цвят' | escape }}">
+      <span class="khan-scart__opt-name">{{ s.extra_colors_label | default: 'Вкус' }}</span>
+      <div class="khan-scart__opt-vals" role="group" aria-label="{{ s.extra_colors_label | default: 'Вкус' | escape }}">
         {%- assign scart_faux = scart_extra_colors | split: ',' -%}
         {%- for fc in scart_faux -%}
           {%- assign fparts = fc | split: '|' -%}
           {%- assign flabel = fparts[0] | strip -%}
           {%- assign fhex = fparts[1] | strip -%}
-          <button type="button" class="khan-scart__optbtn khan-scart__optbtn--faux" data-khan-scart-faux data-val="{{ flabel | escape }}" aria-pressed="false" title="{{ flabel | escape }}"{% if fhex != blank %} style="--faux-dot: {{ fhex }};"{% endif %}>{% if fhex != blank %}<span class="khan-scart__swatch" aria-hidden="true"></span>{% endif %}{{ flabel }}</button>
+          <button type="button" class="khan-scart__optbtn khan-scart__optbtn--faux" data-khan-scart-faux data-val="{{ flabel | escape }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}" title="{{ flabel | escape }}"{% if fhex != blank %} style="--faux-dot: {{ fhex }};"{% endif %}>{% if fhex != blank %}<span class="khan-scart__swatch" aria-hidden="true"></span>{% endif %}{{ flabel }}</button>
         {%- endfor -%}
       </div>
     </div>
@@ -365,6 +365,16 @@
     flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%;
     background: var(--faux-dot, #2fae54);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(255 255 255 / 0.15);
+  }
+  /* selected flavour highlights in its own colour (keeps the brand's ring/tint language) */
+  .khan-scart__optbtn--faux[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--faux-dot, #560B1E) 20%, transparent);
+    border-color: var(--faux-dot, #560B1E);
+    color: var(--scart-text, #141414);
+    box-shadow: 0 0 0 1px var(--faux-dot, #560B1E);
+  }
+  .khan-scart__optbtn--faux[aria-pressed="true"] .khan-scart__swatch {
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.28), 0 0 0 2px rgb(255 255 255 / 0.9);
   }
   .khan-scart__optbtn:hover:not(.is-unavail) { border-color: var(--scart-btn1, #560B1E); }
   .khan-scart__optbtn[aria-pressed="true"] { background: var(--scart-btn1, #560B1E); color: #fff; border-color: var(--scart-btn1, #560B1E); }
