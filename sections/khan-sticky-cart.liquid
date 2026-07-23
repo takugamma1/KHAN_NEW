@@ -524,12 +524,12 @@
       display: flex; align-items: center; gap: 14px;
       padding: 8px 16px calc(14px + env(safe-area-inset-bottom, 0px));
     }
-    .khan-scart__action .khan-scart__price { flex: 0 1 auto; min-width: 0; flex-direction: row; align-items: baseline; gap: 6px; }
+    .khan-scart__action .khan-scart__price { flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: 6px; }
     .khan-scart__action .khan-scart__price-amt { font-size: 20px; white-space: nowrap; }
-    .khan-scart__action .khan-scart__price-cur { margin-top: 0; }
-    .khan-scart__form--m { flex: 1 1 auto; width: auto; margin: 0; }
-    .khan-scart__btn--m { width: 100%; min-width: 0; height: 54px; gap: 10px; padding: 0 16px; }
-    .khan-scart__btn--m .khan-scart__btn-label { white-space: nowrap; letter-spacing: 0.08em; line-height: 1.1; }
+    .khan-scart__action .khan-scart__price-cur { display: none; }   /* currency symbol is already in the amount */
+    .khan-scart__form--m { flex: 1 1 auto; width: auto; margin: 0; min-width: 0; }
+    .khan-scart__btn--m { width: 100%; min-width: 0; height: 54px; gap: 8px; padding: 0 14px; }
+    .khan-scart__btn--m .khan-scart__btn-label { white-space: nowrap; letter-spacing: 0.05em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; }
   }
 
   @media (prefers-reduced-motion: reduce) {
