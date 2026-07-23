@@ -190,21 +190,25 @@
       <button class="khan-scart__grip" type="button" data-khan-scart-toggle aria-label="{{ scart_title | escape }}"></button>
 
       <div class="khan-scart__peek" data-khan-scart-toggle>
+        {%- if scart_img != blank -%}
+          <div class="khan-scart__media khan-scart__media--peek">
+            <img data-khan-scart-img{% if scart_dynimg %} data-dyn="1"{% endif %} src="{{ scart_img | image_url: width: 200 }}" alt="{{ scart_title | escape }}" width="{{ scart_img.width | default: 200 }}" height="{{ scart_img.height | default: 200 }}" loading="lazy">
+          </div>
+        {%- endif -%}
         <div class="khan-scart__peek-info">
           <p class="khan-scart__title">{{ scart_title }}{{ scart_fav }}</p>
           {%- if scart_sub != blank -%}<p class="khan-scart__sub">{{ scart_sub }}</p>{%- endif -%}
         </div>
-        <div class="khan-scart__price">{{ scart_price }}</div>
-        <span class="khan-scart__chev" aria-hidden="true"></span>
+        {%- if scart_opts != blank -%}<span class="khan-scart__chev" aria-hidden="true"></span>{%- endif -%}
       </div>
 
-      <div class="khan-scart__expand">
-        {%- if scart_img != blank -%}
-          <div class="khan-scart__media khan-scart__media--big">
-            <img data-khan-scart-img{% if scart_dynimg %} data-dyn="1"{% endif %} src="{{ scart_img | image_url: width: 480 }}" alt="{{ scart_title | escape }}" width="{{ scart_img.width | default: 480 }}" height="{{ scart_img.height | default: 480 }}" loading="lazy">
-          </div>
-        {%- endif -%}
-        {%- if scart_opts != blank -%}<div class="khan-scart__opts khan-scart__opts--m">{{ scart_opts }}</div>{%- endif -%}
+      {%- if scart_opts != blank -%}
+        <div class="khan-scart__expand">
+          <div class="khan-scart__opts khan-scart__opts--m">{{ scart_opts }}</div>
+        </div>
+      {%- endif -%}
+
+      <div class="khan-scart__action">
         <div class="khan-scart__price khan-scart__price--big">{{ scart_price }}</div>
         <form class="khan-scart__form khan-scart__form--m" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
           {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
@@ -424,6 +428,12 @@
 
   @media screen and (min-width: 750px) {
     .khan-scart__sheet { display: none !important; }
+    /* one clean row: info flexes and truncates, controls stay put (no orphaned button) */
+    .khan-scart__bar { flex-wrap: nowrap; }
+    .khan-scart__info { flex: 1 1 auto; min-width: 40px; }
+    .khan-scart__opts { flex: 0 1 auto; }
+    .khan-scart__price { flex: 0 0 auto; padding-inline: clamp(4px, 1vw, 14px); }
+    .khan-scart__form { flex: 0 0 auto; }
   }
 
   @media screen and (max-width: 749px) {
@@ -456,16 +466,14 @@
       -webkit-backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
               backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
       box-shadow: 0 -16px 50px rgb(0 0 0 / 0.34), inset 0 1px 0 rgb(255 255 255 / 0.22);
-      max-height: 118px;
       overflow: hidden;
-      transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease;
       touch-action: pan-y;
     }
     .khan-scart__sheet::before {
       content: ""; position: absolute; left: 0; right: 0; top: 0; height: 140px; z-index: -1; pointer-events: none;
       background: linear-gradient(180deg, rgb(255 255 255 / 0.15) 0%, rgb(255 255 255 / 0) 100%);
     }
-    .khan-scart.is-expanded .khan-scart__sheet { max-height: var(--scart-sheet-h, 60vh); }
 
     .khan-scart__grip {
       flex: 0 0 auto;
@@ -475,12 +483,12 @@
       margin: 10px auto 2px; cursor: pointer;
     }
 
-    .khan-scart__peek { display: flex; align-items: center; gap: 14px; padding: 6px 18px 16px; cursor: pointer; }
+    .khan-scart__peek { display: flex; align-items: center; gap: 12px; padding: 2px 18px 12px; cursor: pointer; }
+    .khan-scart__media--peek { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+    .khan-scart__media--peek img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .khan-scart__peek-info { flex: 1 1 auto; min-width: 0; }
     .khan-scart__peek .khan-scart__title { font-size: 16px; }
-    .khan-scart__peek .khan-scart__sub { font-size: 11px; }
-    .khan-scart__peek .khan-scart__price { flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: 6px; }
-    .khan-scart__peek .khan-scart__price-cur { margin-top: 0; }
+    .khan-scart__peek .khan-scart__sub { font-size: 11px; margin-top: 4px; }
     .khan-scart__chev {
       flex: 0 0 auto; width: 0; height: 0;
       border-left: 6px solid transparent; border-right: 6px solid transparent;
@@ -489,24 +497,36 @@
     }
     .khan-scart.is-expanded .khan-scart__chev { transform: rotate(180deg); }
 
+    /* configuring area — collapses to zero; the add-to-cart lives below in the action row */
     .khan-scart__expand {
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-      padding: 8px 22px calc(24px + env(safe-area-inset-bottom, 0px));
+      display: flex; flex-direction: column; align-items: stretch; gap: 14px;
+      max-height: 0; opacity: 0; overflow: hidden;
+      padding: 0 20px;
+      transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.26s ease, padding 0.26s ease;
     }
-    .khan-scart__expand .khan-scart__media { width: 42vw; max-width: 200px; height: auto; aspect-ratio: 1 / 1; }
-    .khan-scart__expand .khan-scart__sizes { justify-content: center; }
-    .khan-scart__expand .khan-scart__size { min-width: 44px; height: 42px; border-radius: 12px; font-size: 13px; }
-    /* configuring area: stack option groups full width */
+    .khan-scart.is-expanded .khan-scart__expand {
+      max-height: var(--scart-sheet-h, 60vh);
+      overflow-y: auto;
+      opacity: 1;
+      padding: 4px 20px 6px;
+    }
     .khan-scart__opts--m { flex-direction: column; align-items: stretch; gap: 14px; width: 100%; }
     .khan-scart__opts--m .khan-scart__opt { flex-direction: column; align-items: flex-start; gap: 8px; }
     .khan-scart__opts--m .khan-scart__opt-name { font-size: 11px; }
-    .khan-scart__opts--m .khan-scart__opt-vals { gap: 8px; }
-    .khan-scart__opts--m .khan-scart__optbtn { min-width: 46px; height: 44px; border-radius: 12px; font-size: 13px; padding: 0 14px; }
-    .khan-scart__price--big .khan-scart__price-amt { font-size: clamp(28px, 8vw, 40px); }
-    .khan-scart__price--big { flex-direction: row; align-items: baseline; gap: 8px; }
-    .khan-scart__price--big .khan-scart__price-cur { margin-top: 0; }
-    .khan-scart__form--m { width: 100%; }
-    .khan-scart__btn--m { width: 100%; min-width: 0; height: 56px; }
+    .khan-scart__opts--m .khan-scart__opt-vals { gap: 8px; flex-wrap: wrap; }
+    .khan-scart__opts--m .khan-scart__optbtn { min-width: 46px; height: 44px; border-radius: 12px; font-size: 13px; padding: 0 16px; }
+    .khan-scart__opts--m .khan-scart__opt--color .khan-scart__optbtn { border-radius: 999px; }
+
+    /* always-visible checkout row: price + add-to-cart (never clipped) */
+    .khan-scart__action {
+      display: flex; align-items: center; gap: 14px;
+      padding: 8px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    }
+    .khan-scart__action .khan-scart__price { flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: 6px; }
+    .khan-scart__action .khan-scart__price-amt { font-size: 22px; }
+    .khan-scart__action .khan-scart__price-cur { margin-top: 0; }
+    .khan-scart__form--m { flex: 1 1 auto; width: auto; margin: 0; }
+    .khan-scart__btn--m { width: 100%; min-width: 0; height: 54px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
