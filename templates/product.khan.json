@@ -314,6 +314,8 @@
         "global_mode": false,
         "image": "shopify://shop_images/dd50840d-b32e-4a7d-b95d-dd1feccb0ec3.png",
         "show_sizes": true,
+        "extra_colors": "Зелен|#2fae54",
+        "extra_colors_label": "Цвят",
         "title": "Pre-Workout",
         "servings": "30 дози",
         "weight": "420г",
