@@ -66,6 +66,10 @@
   {%- if s.servings != blank and s.weight != blank -%}<span class="khan-scart__dot" aria-hidden="true">+</span>{%- endif -%}
   {%- if s.weight != blank -%}<span>{{ s.weight }}</span>{%- endif -%}
 {%- endcapture -%}
+{%- liquid
+  assign scart_extra_colors = s.extra_colors | strip
+  assign scart_color_done = false
+-%}
 {%- capture scart_opts -%}
   {%- if s.show_sizes and tp != blank and tp.variants.size > 1 -%}
     {%- for opt in tp.options_with_values -%}
@@ -87,9 +91,35 @@
               title="{{ val | escape }}"
             >{{ val }}</button>
           {%- endfor -%}
+          {%- comment -%} hardcoded placeholder swatches appended to the real colour group {%- endcomment -%}
+          {%- if is_color and scart_extra_colors != blank -%}
+            {%- assign scart_color_done = true -%}
+            {%- assign scart_faux = scart_extra_colors | split: ',' -%}
+            {%- for fc in scart_faux -%}
+              {%- assign fparts = fc | split: '|' -%}
+              {%- assign flabel = fparts[0] | strip -%}
+              {%- assign fhex = fparts[1] | strip -%}
+              <button type="button" class="khan-scart__optbtn khan-scart__optbtn--faux" data-khan-scart-faux data-val="{{ flabel | escape }}" aria-pressed="false" title="{{ flabel | escape }}"{% if fhex != blank %} style="--faux-dot: {{ fhex }};"{% endif %}>{% if fhex != blank %}<span class="khan-scart__swatch" aria-hidden="true"></span>{% endif %}{{ flabel }}</button>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     {%- endfor -%}
+  {%- endif -%}
+  {%- comment -%} the product has no colour option yet — still show the hardcoded swatches {%- endcomment -%}
+  {%- if scart_extra_colors != blank and scart_color_done == false -%}
+    <div class="khan-scart__opt khan-scart__opt--color">
+      <span class="khan-scart__opt-name">{{ s.extra_colors_label | default: 'Цвят' }}</span>
+      <div class="khan-scart__opt-vals" role="group" aria-label="{{ s.extra_colors_label | default: 'Цвят' | escape }}">
+        {%- assign scart_faux = scart_extra_colors | split: ',' -%}
+        {%- for fc in scart_faux -%}
+          {%- assign fparts = fc | split: '|' -%}
+          {%- assign flabel = fparts[0] | strip -%}
+          {%- assign fhex = fparts[1] | strip -%}
+          <button type="button" class="khan-scart__optbtn khan-scart__optbtn--faux" data-khan-scart-faux data-val="{{ flabel | escape }}" aria-pressed="false" title="{{ flabel | escape }}"{% if fhex != blank %} style="--faux-dot: {{ fhex }};"{% endif %}>{% if fhex != blank %}<span class="khan-scart__swatch" aria-hidden="true"></span>{% endif %}{{ flabel }}</button>
+        {%- endfor -%}
+      </div>
+    </div>
   {%- endif -%}
 {%- endcapture -%}
 {%- capture scart_variants_json -%}[{%- if tp != blank -%}{%- for var in tp.variants -%}{"id":{{ var.id }},"o":{{ var.options | json }},"p":{{ var.price | money | json }},"a":{% if var.available %}true{% else %}false{% endif %}{%- if scart_dynimg and var.image != blank -%},"img":{{ var.image | image_url: width: 480 | json }}{%- endif -%}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endif -%}]{%- endcapture -%}
@@ -330,6 +360,12 @@
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
   }
   .khan-scart__opt--color .khan-scart__optbtn { clip-path: none; border-radius: 999px; }
+  .khan-scart__optbtn--faux { display: inline-flex; align-items: center; gap: 7px; }
+  .khan-scart__swatch {
+    flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--faux-dot, #2fae54);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(255 255 255 / 0.15);
+  }
   .khan-scart__optbtn:hover:not(.is-unavail) { border-color: var(--scart-btn1, #560B1E); }
   .khan-scart__optbtn[aria-pressed="true"] { background: var(--scart-btn1, #560B1E); color: #fff; border-color: var(--scart-btn1, #560B1E); }
   .khan-scart__optbtn.is-unavail { opacity: 0.35; text-decoration: line-through; }
@@ -527,12 +563,28 @@
           each(root.querySelectorAll('[data-khan-scart-opt][data-oi="' + oi + '"]'), function (b) {
             b.setAttribute('aria-pressed', b.getAttribute('data-val') === val ? 'true' : 'false');
           });
+          // clear any hardcoded placeholder swatch in the same group
+          var grp = btn.closest('.khan-scart__opt');
+          if (grp) each(grp.querySelectorAll('[data-khan-scart-faux]'), function (f) { f.setAttribute('aria-pressed', 'false'); });
           applyVariant();
         }
         btn.addEventListener('click', onPick);
         cleanups.push(function () { btn.removeEventListener('click', onPick); });
       });
       if (variants.length && selected.length) applyVariant();
+
+      // --- hardcoded placeholder swatches (e.g. a colour with no real variant yet) ---
+      // Visual selection only: they don't resolve a variant or change price/availability.
+      each(root.querySelectorAll('[data-khan-scart-faux]'), function (btn) {
+        function onFaux(e) {
+          e.preventDefault();
+          var grp = btn.closest('.khan-scart__opt');
+          if (grp) each(grp.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', 'false'); });
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        btn.addEventListener('click', onFaux);
+        cleanups.push(function () { btn.removeEventListener('click', onFaux); });
+      });
 
       // --- add to cart (desktop + mobile forms) ---
       each(root.querySelectorAll('[data-khan-scart-form]'), function (form) {
@@ -630,7 +682,6 @@
           });
       }
       var lastPush = -1, lastParked = null;
-      var dockMq = window.matchMedia('(max-width: 749px)');
       function updateDock() {
         if (!docking) return;
         if (!parkEls.length) resolveParkEls();
@@ -645,23 +696,14 @@
           if (push < 0) push = 0;
         }
         push = Math.round(push);
-        if (dockMq.matches) {
-          // mobile: riding a (tall) footer up mid-screen looks broken — slide the
-          // sheet away instead, and bring it back when the footer leaves the view
-          if (lastPush !== 0) { lastPush = 0; root.style.setProperty('--scart-push', '0px'); }
-          var parked = push > 24;
-          if (parked !== lastParked) {
-            lastParked = parked;
-            root.classList.toggle('is-parked', parked);
-            if (parked) setExpanded(false);
-          }
-        } else {
-          // desktop: dock — the bar stops at the footer's edge and rides with it
-          if (lastParked !== false) { lastParked = false; root.classList.remove('is-parked'); }
-          if (push !== lastPush) {
-            lastPush = push;
-            root.style.setProperty('--scart-push', push + 'px');
-          }
+        // As soon as the footer starts entering the viewport, slide the cart
+        // fully out of view (desktop + mobile) instead of covering/riding it.
+        if (lastPush !== 0) { lastPush = 0; root.style.setProperty('--scart-push', '0px'); }
+        var parked = push > 24;
+        if (parked !== lastParked) {
+          lastParked = parked;
+          root.classList.toggle('is-parked', parked);
+          if (parked) setExpanded(false);
         }
       }
       if (docking) {
@@ -724,6 +766,8 @@
     { "type": "checkbox", "id": "global_mode", "label": "Global bar (hide on product pages)", "default": false, "info": "For the footer-group instance that covers all non-product pages." },
     { "type": "image_picker", "id": "image", "label": "Image (upload)", "info": "Shown in the bar instead of the product photo." },
     { "type": "checkbox", "id": "show_sizes", "label": "Show option pickers (color, size, …)", "default": true },
+    { "type": "text", "id": "extra_colors", "label": "Extra colour swatches (hardcoded)", "info": "TEMPORARY placeholder swatches with no real variant yet. Comma-separated; add an optional colour after |, e.g. Зелен|#2fae54, Син|#2b6cb0. They show in the colour picker but don't change price/variant." },
+    { "type": "text", "id": "extra_colors_label", "label": "Colour picker label", "default": "Цвят", "info": "Used only when the product has no colour option of its own." },
 
     { "type": "header", "content": "Text" },
     { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the product title." },
