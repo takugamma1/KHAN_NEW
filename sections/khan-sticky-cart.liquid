@@ -430,8 +430,10 @@
     .khan-scart__sheet { display: none !important; }
     /* one clean row: info flexes and truncates, controls stay put (no orphaned button) */
     .khan-scart__bar { flex-wrap: nowrap; }
-    .khan-scart__info { flex: 1 1 auto; min-width: 40px; }
-    .khan-scart__opts { flex: 0 1 auto; }
+    .khan-scart__info { flex: 1 1 auto; min-width: 96px; }
+    .khan-scart__sub { flex-wrap: nowrap; white-space: nowrap; }
+    .khan-scart__opts { flex: 0 0 auto; }              /* keep flavour pills on one line */
+    .khan-scart__opts .khan-scart__opt-vals { flex-wrap: nowrap; }
     .khan-scart__price { flex: 0 0 auto; padding-inline: clamp(4px, 1vw, 14px); }
     .khan-scart__form { flex: 0 0 auto; }
   }
@@ -522,11 +524,12 @@
       display: flex; align-items: center; gap: 14px;
       padding: 8px 16px calc(14px + env(safe-area-inset-bottom, 0px));
     }
-    .khan-scart__action .khan-scart__price { flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: 6px; }
-    .khan-scart__action .khan-scart__price-amt { font-size: 22px; }
+    .khan-scart__action .khan-scart__price { flex: 0 1 auto; min-width: 0; flex-direction: row; align-items: baseline; gap: 6px; }
+    .khan-scart__action .khan-scart__price-amt { font-size: 20px; white-space: nowrap; }
     .khan-scart__action .khan-scart__price-cur { margin-top: 0; }
     .khan-scart__form--m { flex: 1 1 auto; width: auto; margin: 0; }
-    .khan-scart__btn--m { width: 100%; min-width: 0; height: 54px; }
+    .khan-scart__btn--m { width: 100%; min-width: 0; height: 54px; gap: 10px; padding: 0 16px; }
+    .khan-scart__btn--m .khan-scart__btn-label { white-space: nowrap; letter-spacing: 0.08em; line-height: 1.1; }
   }
 
   @media (prefers-reduced-motion: reduce) {

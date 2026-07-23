@@ -325,7 +325,7 @@
         "position": "bottom",
         "stop_at_footer": true,
         "bottom_offset": 12,
-        "max_width": 800,
+        "max_width": 1000,
         "bar_height": 56,
         "radius": 60,
         "img_size": 54,
