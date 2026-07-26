@@ -173,30 +173,6 @@
             "text": "Clean energy and mental clarity\nto push harder, longer."
           }
         },
-        "ingredient_NRwaEM": {
-          "type": "ingredient",
-          "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-            "title": "L-Citrulline",
-            "text": "Boosts blood flow and nitric oxide\nfor enhanced pumps."
-          }
-        },
-        "ingredient_rRzgbR": {
-          "type": "ingredient",
-          "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-            "title": "Beta-Alanine",
-            "text": "Helps delay muscle fatigue\nso you can train harder."
-          }
-        },
-        "ingredient_93GiHL": {
-          "type": "ingredient",
-          "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-            "title": "Betaine Anhydrous",
-            "text": "Supports strength, power, and hydration\nfor max performance."
-          }
-        },
         "ingredient_Gki8zq": {
           "type": "ingredient",
           "settings": {
@@ -216,9 +192,6 @@
       },
       "block_order": [
         "ingredient_EiB7RC",
-        "ingredient_NRwaEM",
-        "ingredient_rRzgbR",
-        "ingredient_93GiHL",
         "ingredient_Gki8zq",
         "ingredient_6E8jgj"
       ],
