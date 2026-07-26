@@ -41,6 +41,8 @@
     --rocks-frame-flip: {% if section.settings.flip_frame %}-1{% else %}1{% endif %};
     --rocks-media-flip: {% if section.settings.flip_media %}-1{% else %}1{% endif %};
     --rocks-media-pos: {{ section.settings.media_position | default: 'center' }};
+    --rocks-media-fit: {{ section.settings.media_fit | default: 'cover' }};
+    --rocks-media-fit-m: {{ section.settings.media_fit_mobile | default: 'cover' }};
     --rocks-frame-pos: {{ section.settings.frame_position | default: 'center' }};
     --rocks-frame-offy: {{ section.settings.frame_offset_y | default: 0 }}px;
     --rocks-frame-pad-x: {{ section.settings.frame_pad_x | default: 0 }}px;
@@ -276,7 +278,7 @@
   .rocks-hero__media video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: var(--rocks-media-fit, cover);
     object-position: center var(--rocks-media-pos, center);
     display: block;
     transform: scaleY(var(--rocks-media-flip, 1));
@@ -287,6 +289,9 @@
   @media screen and (max-width: 749px) {
     .rocks-hero--mobimg .rocks-hero__media-item--d { display: none; }
     .rocks-hero--mobimg .rocks-hero__media-item--m { display: block; }
+    .rocks-hero__media-item,
+    .rocks-hero__media img,
+    .rocks-hero__media video { object-fit: var(--rocks-media-fit-m, cover); }
   }
 
   .rocks-hero__frame {
@@ -678,6 +683,27 @@
         { "value": "bottom", "label": "Bottom" }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "Background fit (desktop)",
+      "options": [
+        { "value": "cover", "label": "Fill (crops/zooms)" },
+        { "value": "contain", "label": "Fit whole image" }
+      ],
+      "default": "cover",
+      "info": "\"Fit whole image\" shows the full artwork without zooming — empty space is filled with the background colour."
+    },
+    {
+      "type": "select",
+      "id": "media_fit_mobile",
+      "label": "Background fit (mobile)",
+      "options": [
+        { "value": "cover", "label": "Fill (crops/zooms)" },
+        { "value": "contain", "label": "Fit whole image" }
+      ],
+      "default": "cover"
     },
     {
       "type": "header",
