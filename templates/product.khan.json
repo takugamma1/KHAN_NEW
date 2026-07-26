@@ -133,6 +133,7 @@
         "facts_blur": 8,
         "facts_opacity": 80,
         "peek": 64,
+        "tab_bg": "#0c0c0c",
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-26T151331.478.png",
         "bg_image_mobile": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_08_29_22_AM.png",
         "top_overlay": 0,
@@ -167,7 +168,7 @@
         "ingredient_EiB7RC": {
           "type": "ingredient",
           "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+            "poster": "shopify://shop_images/c24657f9-3d79-4da1-8f8e-f34b178da843.png",
             "title": "Caffeine",
             "text": "Clean energy and mental clarity\nto push harder, longer."
           }
