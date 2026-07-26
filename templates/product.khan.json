@@ -169,22 +169,22 @@
           "type": "ingredient",
           "settings": {
             "poster": "shopify://shop_images/c24657f9-3d79-4da1-8f8e-f34b178da843.png",
-            "title": "Caffeine",
-            "text": "Clean energy and mental clarity\nto push harder, longer."
+            "title": "",
+            "text": ""
           }
         },
         "ingredient_Gki8zq": {
           "type": "ingredient",
           "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-            "title": "Ingredient 5",
-            "text": "Short benefit description\non two lines."
+            "poster": "shopify://shop_images/c24657f9-3d79-4da1-8f8e-f34b178da843.png",
+            "title": "",
+            "text": ""
           }
         },
         "ingredient_6E8jgj": {
           "type": "ingredient",
           "settings": {
-            "video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
+            "poster": "shopify://shop_images/c24657f9-3d79-4da1-8f8e-f34b178da843.png",
             "title": "Ingredient 6",
             "text": "Short benefit description\non two lines."
           }
@@ -199,7 +199,7 @@
       "settings": {
         "eyebrow": "",
         "heading": "",
-        "columns": 2,
+        "columns": 1,
         "col_gap": 72,
         "row_gap": 52,
         "max_width": 1500,
