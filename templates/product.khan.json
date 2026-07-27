@@ -337,6 +337,7 @@
         "ing_11": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_41_12_AM.png",
             "title": "Siberian Ginseng",
             "sub": "300 mg",
             "info": "<p>Адаптоген, който повишава издръжливостта и устойчивостта на стрес.</p>"
