@@ -300,7 +300,6 @@
         "ing_07": {
           "type": "ingredient",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_59_49_PM.png",
             "title": "L-Theanine",
             "sub": "150 mg",
             "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
@@ -309,6 +308,7 @@
         "ing_08": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_59_49_PM_7f3b5430-3648-42d5-a8a7-a880f970e58e.png",
             "title": "Caffeine Anhydrous",
             "sub": "250 mg",
             "info": "<p>Стимулира централната нервна система за незабавна енергия и остър фокус.</p>"
