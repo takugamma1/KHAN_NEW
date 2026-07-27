@@ -133,6 +133,7 @@
         "facts_blur": 8,
         "facts_opacity": 80,
         "peek": 64,
+        "tab_bg": "#0c0c0c",
         "bg_image": "shopify://shop_images/Untitled_design_-_2026-06-26T151331.478.png",
         "bg_image_mobile": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_08_29_22_AM.png",
         "top_overlay": 0,
@@ -221,6 +222,7 @@
         "ingredient_Gki8zq",
         "ingredient_6E8jgj"
       ],
+      "disabled": true,
       "name": "Ingredients",
       "settings": {
         "eyebrow": "",
@@ -238,6 +240,171 @@
         "text_color": "#6f6f6f",
         "bar_color": "#0e0e0e",
         "color_scheme": ""
+      }
+    },
+    "khan_ibento_main": {
+      "type": "khan-ingredients-grid",
+      "blocks": {
+        "ing_01": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_37_45_PM.png",
+            "title": "Arginine AKG",
+            "sub": "2000 mg",
+            "info": "<p>Подпомага производството на азотен оксид за по-добро кръвоснабдяване и по-силна помпа.</p>"
+          }
+        },
+        "ing_02": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/926f60ca-20b1-4681-9c6b-850d71a1f268.png",
+            "title": "Beta-Alanine",
+            "sub": "2300 mg",
+            "info": "<p>Забавя мускулната умора и позволява по-дълги и по-интензивни серии.</p>"
+          }
+        },
+        "ing_03": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/4910d821-7003-4af3-82df-16fcb1c3d14b.png",
+            "title": "Magnesium + Calcium",
+            "sub": "500 mg",
+            "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
+          }
+        },
+        "ing_04": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/0e72ab87-09de-4342-b823-6661b8f1796c.png",
+            "title": "Citrulline",
+            "sub": "8000 mg",
+            "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
+          }
+        },
+        "ing_05": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_57_07_PM.png",
+            "title": "Betaine Anhydrous",
+            "sub": "2500 mg",
+            "info": "<p>Подкрепя силата, мощността и хидратацията на мускулните клетки.</p>"
+          }
+        },
+        "ing_06": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_31_37_AM.png",
+            "title": "L-Tyrosine",
+            "sub": "1500 mg",
+            "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
+          }
+        },
+        "ing_07": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_29_29_AM.png",
+            "title": "L-Theanine",
+            "sub": "150 mg",
+            "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
+          }
+        },
+        "ing_08": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_59_49_PM_7f3b5430-3648-42d5-a8a7-a880f970e58e.png",
+            "title": "Caffeine Anhydrous",
+            "sub": "250 mg",
+            "info": "<p>Стимулира централната нервна система за незабавна енергия и остър фокус.</p>"
+          }
+        },
+        "ing_09": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_03_53_AM.png",
+            "title": "Guarana",
+            "sub": "250 mg",
+            "info": "<p>Естествен източник на кофеин с плавно, удължено освобождаване.</p>"
+          }
+        },
+        "ing_10": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_35_44_AM.png",
+            "title": "Choline Bitartrate",
+            "sub": "500 mg",
+            "info": "<p>Подпомага връзката ум–мускул и концентрацията по време на тренировка.</p>"
+          }
+        },
+        "ing_11": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_41_12_AM.png",
+            "title": "Siberian Ginseng",
+            "sub": "300 mg",
+            "info": "<p>Адаптоген, който повишава издръжливостта и устойчивостта на стрес.</p>"
+          }
+        },
+        "ing_12": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/5c323119-3827-484c-b1ab-bd1ab4b95748.png",
+            "title": "Taurine",
+            "sub": "1000 mg",
+            "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
+          }
+        },
+        "ing_13": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/63fde4f3-18d6-45c4-92be-80f7b0d707a6.png",
+            "title": "Rhodiola Rosea",
+            "sub": "200 mg",
+            "info": "<p>Адаптоген за по-малко умора и по-добро представяне.</p>"
+          }
+        },
+        "ing_14": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_07_34_AM.png",
+            "title": "Cocoa Shells",
+            "sub": "250 mg",
+            "info": "<p>Кратко описание на съставката — редактирай ме.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "ing_01",
+        "ing_02",
+        "ing_03",
+        "ing_04",
+        "ing_05",
+        "ing_06",
+        "ing_07",
+        "ing_08",
+        "ing_09",
+        "ing_10",
+        "ing_11",
+        "ing_12",
+        "ing_13",
+        "ing_14"
+      ],
+      "name": "Ingredients bento grid",
+      "settings": {
+        "head_title": "PRE-WORKOUT",
+        "head_sub": "MAX ENERGY & PERFORMANCE",
+        "center_image": "shopify://shop_images/Vurtene_1.webp",
+        "max_width": 1060,
+        "gap": 14,
+        "radius": 22,
+        "pad_y": 72,
+        "section_bg": "#ffffff",
+        "card_bg": "#3b0211",
+        "card_hover": "#000000",
+        "card_text": "#ffffff",
+        "card_muted": "#e8d9dd",
+        "head_bg": "#560b1e",
+        "head_text_color": "#ffffff",
+        "accent_color": "#9a1f33"
       }
     },
     "khan_faq_pw": {
@@ -343,156 +510,6 @@
         "button_top": "#560b1e",
         "button_bottom": "#3b0211",
         "button_text": "#ffffff"
-      }
-    },
-    "khan_ibento_main": {
-      "type": "khan-ingredients-grid",
-      "blocks": {
-        "ing_01": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Arginine AKG",
-            "sub": "2000 mg",
-            "info": "<p>Подпомага производството на азотен оксид за по-добро кръвоснабдяване и по-силна помпа.</p>"
-          }
-        },
-        "ing_02": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Beta-Alanine",
-            "sub": "2300 mg",
-            "info": "<p>Забавя мускулната умора и позволява по-дълги и по-интензивни серии.</p>"
-          }
-        },
-        "ing_03": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Magnesium + Calcium",
-            "sub": "500 mg",
-            "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
-          }
-        },
-        "ing_04": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Citrulline",
-            "sub": "8000 mg",
-            "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
-          }
-        },
-        "ing_05": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Betaine Anhydrous",
-            "sub": "2500 mg",
-            "info": "<p>Подкрепя силата, мощността и хидратацията на мускулните клетки.</p>"
-          }
-        },
-        "ing_06": {
-          "type": "ingredient",
-          "settings": {
-            "title": "L-Tyrosine",
-            "sub": "1500 mg",
-            "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
-          }
-        },
-        "ing_07": {
-          "type": "ingredient",
-          "settings": {
-            "title": "L-Theanine",
-            "sub": "150 mg",
-            "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
-          }
-        },
-        "ing_08": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Caffeine Anhydrous",
-            "sub": "250 mg",
-            "info": "<p>Стимулира централната нервна система за незабавна енергия и остър фокус.</p>"
-          }
-        },
-        "ing_09": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Guarana",
-            "sub": "250 mg",
-            "info": "<p>Естествен източник на кофеин с плавно, удължено освобождаване.</p>"
-          }
-        },
-        "ing_10": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Choline Bitartrate",
-            "sub": "500 mg",
-            "info": "<p>Подпомага връзката ум–мускул и концентрацията по време на тренировка.</p>"
-          }
-        },
-        "ing_11": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Siberian Ginseng",
-            "sub": "300 mg",
-            "info": "<p>Адаптоген, който повишава издръжливостта и устойчивостта на стрес.</p>"
-          }
-        },
-        "ing_12": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Taurine",
-            "sub": "1000 mg",
-            "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
-          }
-        },
-        "ing_13": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Rhodiola Rosea",
-            "sub": "200 mg",
-            "info": "<p>Адаптоген за по-малко умора и по-добро представяне.</p>"
-          }
-        },
-        "ing_14": {
-          "type": "ingredient",
-          "settings": {
-            "title": "Съставка 14",
-            "sub": "0 mg",
-            "info": "<p>Кратко описание на съставката — редактирай ме.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "ing_01",
-        "ing_02",
-        "ing_03",
-        "ing_04",
-        "ing_05",
-        "ing_06",
-        "ing_07",
-        "ing_08",
-        "ing_09",
-        "ing_10",
-        "ing_11",
-        "ing_12",
-        "ing_13",
-        "ing_14"
-      ],
-      "name": "Ingredients bento grid",
-      "settings": {
-        "head_title": "PRE-WORKOUT",
-        "head_sub": "MAX ENERGY & PERFORMANCE",
-        "max_width": 1060,
-        "gap": 14,
-        "radius": 22,
-        "pad_y": 72,
-        "section_bg": "#ffffff",
-        "card_bg": "#3B0211",
-        "card_hover": "#9A1F33",
-        "card_text": "#ffffff",
-        "card_muted": "#e8d9dd",
-        "head_bg": "#560B1E",
-        "head_text_color": "#ffffff",
-        "accent_color": "#9A1F33"
       }
     }
   },
