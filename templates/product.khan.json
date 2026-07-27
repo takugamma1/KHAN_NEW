@@ -355,6 +355,7 @@
         "ing_13": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/63fde4f3-18d6-45c4-92be-80f7b0d707a6.png",
             "title": "Rhodiola Rosea",
             "sub": "200 mg",
             "info": "<p>Адаптоген за по-малко умора и по-добро представяне.</p>"
