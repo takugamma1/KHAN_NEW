@@ -292,6 +292,7 @@
         "ing_06": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_31_37_AM.png",
             "title": "L-Tyrosine",
             "sub": "1500 mg",
             "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
@@ -300,6 +301,7 @@
         "ing_07": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_29_29_AM.png",
             "title": "L-Theanine",
             "sub": "150 mg",
             "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
