@@ -386,7 +386,7 @@
         "pad_y": 72,
         "section_bg": "#ffffff",
         "card_bg": "#3b0211",
-        "card_hover": "#9a1f33",
+        "card_hover": "#000000",
         "card_text": "#ffffff",
         "card_muted": "#e8d9dd",
         "head_bg": "#560b1e",
