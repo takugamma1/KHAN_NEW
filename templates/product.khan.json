@@ -265,6 +265,7 @@
         "ing_03": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/4910d821-7003-4af3-82df-16fcb1c3d14b.png",
             "title": "Magnesium + Calcium",
             "sub": "500 mg",
             "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
@@ -379,7 +380,7 @@
       "settings": {
         "head_title": "PRE-WORKOUT",
         "head_sub": "MAX ENERGY & PERFORMANCE",
-        "center_image": "shopify://shop_images/Vurtene_2.webp",
+        "center_image": "shopify://shop_images/Vurtene_1.webp",
         "max_width": 1060,
         "gap": 14,
         "radius": 22,
