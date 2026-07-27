@@ -344,12 +344,163 @@
         "button_bottom": "#3b0211",
         "button_text": "#ffffff"
       }
+    },
+    "khan_ibento_main": {
+      "type": "khan-ingredients-grid",
+      "blocks": {
+        "ing_01": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Arginine AKG",
+            "sub": "2000 mg",
+            "info": "<p>Подпомага производството на азотен оксид за по-добро кръвоснабдяване и по-силна помпа.</p>"
+          }
+        },
+        "ing_02": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Beta-Alanine",
+            "sub": "2300 mg",
+            "info": "<p>Забавя мускулната умора и позволява по-дълги и по-интензивни серии.</p>"
+          }
+        },
+        "ing_03": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Magnesium + Calcium",
+            "sub": "500 mg",
+            "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
+          }
+        },
+        "ing_04": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Citrulline",
+            "sub": "8000 mg",
+            "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
+          }
+        },
+        "ing_05": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Betaine Anhydrous",
+            "sub": "2500 mg",
+            "info": "<p>Подкрепя силата, мощността и хидратацията на мускулните клетки.</p>"
+          }
+        },
+        "ing_06": {
+          "type": "ingredient",
+          "settings": {
+            "title": "L-Tyrosine",
+            "sub": "1500 mg",
+            "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
+          }
+        },
+        "ing_07": {
+          "type": "ingredient",
+          "settings": {
+            "title": "L-Theanine",
+            "sub": "150 mg",
+            "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
+          }
+        },
+        "ing_08": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Caffeine Anhydrous",
+            "sub": "250 mg",
+            "info": "<p>Стимулира централната нервна система за незабавна енергия и остър фокус.</p>"
+          }
+        },
+        "ing_09": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Guarana",
+            "sub": "250 mg",
+            "info": "<p>Естествен източник на кофеин с плавно, удължено освобождаване.</p>"
+          }
+        },
+        "ing_10": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Choline Bitartrate",
+            "sub": "500 mg",
+            "info": "<p>Подпомага връзката ум–мускул и концентрацията по време на тренировка.</p>"
+          }
+        },
+        "ing_11": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Siberian Ginseng",
+            "sub": "300 mg",
+            "info": "<p>Адаптоген, който повишава издръжливостта и устойчивостта на стрес.</p>"
+          }
+        },
+        "ing_12": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Taurine",
+            "sub": "1000 mg",
+            "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
+          }
+        },
+        "ing_13": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Rhodiola Rosea",
+            "sub": "200 mg",
+            "info": "<p>Адаптоген за по-малко умора и по-добро представяне.</p>"
+          }
+        },
+        "ing_14": {
+          "type": "ingredient",
+          "settings": {
+            "title": "Съставка 14",
+            "sub": "0 mg",
+            "info": "<p>Кратко описание на съставката — редактирай ме.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "ing_01",
+        "ing_02",
+        "ing_03",
+        "ing_04",
+        "ing_05",
+        "ing_06",
+        "ing_07",
+        "ing_08",
+        "ing_09",
+        "ing_10",
+        "ing_11",
+        "ing_12",
+        "ing_13",
+        "ing_14"
+      ],
+      "name": "Ingredients bento grid",
+      "settings": {
+        "head_title": "PRE-WORKOUT",
+        "head_sub": "MAX ENERGY & PERFORMANCE",
+        "max_width": 1500,
+        "gap": 14,
+        "radius": 22,
+        "pad_y": 72,
+        "section_bg": "#ffffff",
+        "card_bg": "#3B0211",
+        "card_hover": "#9A1F33",
+        "card_text": "#ffffff",
+        "card_muted": "#e8d9dd",
+        "head_bg": "#560B1E",
+        "head_text_color": "#ffffff",
+        "accent_color": "#9A1F33"
+      }
     }
   },
   "order": [
     "khan_preworkout_hero_KYCWMq",
     "khan_ingredients_hero_JggNdr",
     "khan_ingredients_Hynnfd",
+    "khan_ibento_main",
     "khan_faq_pw",
     "khan_sticky_cart_ebPXK4"
   ]

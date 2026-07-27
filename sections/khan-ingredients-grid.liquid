@@ -1,0 +1,408 @@
+{% liquid
+  assign s = section.settings
+%}
+<div
+  id="KhanIbento-{{ section.id }}"
+  class="khan-ibento"
+  data-khan-ibento
+  style="
+    --ib-bg: {{ s.section_bg }};
+    --ib-card-bg: {{ s.card_bg }};
+    --ib-card-hover: {{ s.card_hover }};
+    --ib-text: {{ s.card_text }};
+    --ib-muted: {{ s.card_muted }};
+    --ib-head-bg: {{ s.head_bg }};
+    --ib-head-text: {{ s.head_text_color }};
+    --ib-accent: {{ s.accent_color }};
+    --ib-radius: {{ s.radius }}px;
+    --ib-gap: {{ s.gap }}px;
+    --ib-maxw: {{ s.max_width }}px;
+    --ib-pad-y: {{ s.pad_y }}px;
+  "
+>
+  <div class="khan-ibento__inner">
+    <div class="khan-ibento__grid">
+
+      {%- comment -%} ===== header card (top-left, 2 cells wide) ===== {%- endcomment -%}
+      <div class="khan-ibento__head">
+        <h2 class="khan-ibento__head-title">{{ s.head_title }}</h2>
+        {%- if s.head_sub != blank -%}
+          <p class="khan-ibento__head-sub">{{ s.head_sub }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ===== center gif (2×2, desktop only) ===== {%- endcomment -%}
+      {%- if s.center_image != blank -%}
+        <div class="khan-ibento__gif">
+          <img
+            src="{{ s.center_image | image_url: width: 1400 }}"
+            alt="{{ s.center_image.alt | default: s.head_title | escape }}"
+            width="{{ s.center_image.width }}"
+            height="{{ s.center_image.height }}"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ===== ingredient cards ===== {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          class="khan-ibento__card"
+          data-ib-card
+          aria-haspopup="dialog"
+          {{ block.shopify_attributes }}
+        >
+          <span class="khan-ibento__img" aria-hidden="true">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 480 }}"
+                alt=""
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+          </span>
+          <span class="khan-ibento__name">{{ block.settings.title }}</span>
+          {%- if block.settings.sub != blank -%}
+            <span class="khan-ibento__dose">{{ block.settings.sub }}</span>
+          {%- endif -%}
+          <template data-ib-tpl>
+            {%- if block.settings.image != blank -%}
+              <div class="khan-ibento__pop-img">
+                <img src="{{ block.settings.image | image_url: width: 640 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+              </div>
+            {%- endif -%}
+            <h3 class="khan-ibento__pop-title">{{ block.settings.title }}</h3>
+            {%- if block.settings.sub != blank -%}
+              <p class="khan-ibento__pop-dose">{{ block.settings.sub }}</p>
+            {%- endif -%}
+            <div class="khan-ibento__pop-info rte">{{ block.settings.info }}</div>
+          </template>
+        </button>
+      {%- endfor -%}
+
+    </div>
+  </div>
+
+  {%- comment -%} ===== popup (one per section, filled from the clicked card) ===== {%- endcomment -%}
+  <div class="khan-ibento__overlay" data-ib-overlay aria-hidden="true">
+    <div class="khan-ibento__modal" role="dialog" aria-modal="true" aria-label="{{ 'Съставка' }}">
+      <button type="button" class="khan-ibento__close" data-ib-close aria-label="Затвори">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="khan-ibento__modal-body" data-ib-body></div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .khan-ibento {
+    background: var(--ib-bg, #ffffff);
+    padding: var(--ib-pad-y, 72px) clamp(14px, 3vw, 40px);
+  }
+  .khan-ibento__inner { max-width: var(--ib-maxw, 1500px); margin-inline: auto; }
+
+  .khan-ibento__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--ib-gap, 14px);
+  }
+
+  /* ---- header card: top-left, wide ---- */
+  .khan-ibento__head {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    background: var(--ib-head-bg, #560b1e);
+    border-radius: var(--ib-radius, 22px);
+    color: var(--ib-head-text, #ffffff);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(18px, 2.4vw, 36px);
+    gap: 10px;
+  }
+  .khan-ibento__head-title {
+    margin: 0;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1.02;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .khan-ibento__head-sub {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: clamp(11px, 1vw, 14px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  /* ---- center gif ---- */
+  .khan-ibento__gif {
+    grid-column: 3 / span 2;
+    grid-row: 2 / span 2;
+    border-radius: var(--ib-radius, 22px);
+    overflow: hidden;
+    background: var(--ib-card-bg, #3b0211);
+  }
+  .khan-ibento__gif img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ---- ingredient cards ---- */
+  .khan-ibento__card {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(12px, 1.4vw, 22px);
+    border: 0;
+    border-radius: var(--ib-radius, 22px);
+    background: var(--ib-card-bg, #3b0211);
+    color: var(--ib-text, #ffffff);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .khan-ibento__card:hover,
+  .khan-ibento__card:focus-visible {
+    background: var(--ib-card-hover, #9a1f33);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgb(0 0 0 / 0.18);
+  }
+  .khan-ibento__img {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0 10px;
+  }
+  .khan-ibento__img img {
+    max-width: 72%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.35s ease;
+  }
+  .khan-ibento__card:hover .khan-ibento__img img { transform: scale(1.06); }
+  .khan-ibento__name {
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: clamp(13px, 1.15vw, 17px);
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+  .khan-ibento__dose {
+    margin-top: 4px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: clamp(11px, 0.95vw, 14px);
+    letter-spacing: 0.12em;
+    opacity: 0.85;
+  }
+
+  /* ---- popup ---- */
+  .khan-ibento__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgb(0 0 0 / 0.55);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.32s ease;
+  }
+  .khan-ibento__overlay.is-open { opacity: 1; pointer-events: auto; }
+  .khan-ibento__modal {
+    position: relative;
+    width: min(480px, 100%);
+    max-height: min(78vh, 640px);
+    overflow-y: auto;
+    border-radius: 26px;
+    padding: clamp(24px, 4vw, 36px);
+    color: #fff;
+    background: rgb(12 12 12 / 0.88);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.18);
+    transform: translateY(26px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  }
+  .khan-ibento__overlay.is-open .khan-ibento__modal { transform: none; opacity: 1; }
+  .khan-ibento__close {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.06);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .khan-ibento__close:hover { background: var(--ib-accent, #9a1f33); transform: rotate(90deg); }
+  .khan-ibento__pop-img { display: flex; justify-content: center; margin-bottom: 16px; }
+  .khan-ibento__pop-img img { max-width: 55%; max-height: 170px; object-fit: contain; }
+  .khan-ibento__pop-title {
+    margin: 0 0 4px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif);
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .khan-ibento__pop-dose {
+    margin: 0 0 14px;
+    text-align: center;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ib-accent, #9a1f33);
+  }
+  .khan-ibento__pop-info { font-size: 14.5px; line-height: 1.65; color: rgb(255 255 255 / 0.82); text-align: center; }
+  .khan-ibento__pop-info p { margin: 0 0 10px; }
+  .khan-ibento__pop-info p:last-child { margin-bottom: 0; }
+  html.khan-ibento-lock { overflow: hidden; }
+
+  /* ---- mobile: 2 columns, no gif ---- */
+  @media screen and (max-width: 749px) {
+    .khan-ibento__grid { grid-template-columns: repeat(2, 1fr); }
+    .khan-ibento__head { grid-column: 1 / span 2; grid-row: auto; padding: 24px 20px; }
+    .khan-ibento__gif { display: none; }
+    .khan-ibento__card { aspect-ratio: 1 / 1; padding: 16px; }
+    .khan-ibento__name { font-size: 15px; }
+    .khan-ibento__dose { font-size: 12px; }
+    /* bottom-sheet popup */
+    .khan-ibento__overlay { align-items: flex-end; padding: 0; }
+    .khan-ibento__modal {
+      width: 100%;
+      max-height: 82svh;
+      border-radius: 26px 26px 0 0;
+      transform: translateY(100%);
+      padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .khan-ibento__card, .khan-ibento__img img, .khan-ibento__overlay, .khan-ibento__modal, .khan-ibento__close { transition: none; }
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    function each(list, fn) { for (var i = 0; i < list.length; i++) fn(list[i]); }
+
+    function init(root) {
+      if (!root || root.__khanIbentoReady) return;
+      root.__khanIbentoReady = true;
+
+      var overlay = root.querySelector('[data-ib-overlay]');
+      var body = root.querySelector('[data-ib-body]');
+      if (!overlay || !body) return;
+      var closeTimer = null;
+
+      function openPop(tpl) {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        body.innerHTML = '';
+        body.appendChild(tpl.content.cloneNode(true));
+        overlay.removeAttribute('aria-hidden');
+        document.documentElement.classList.add('khan-ibento-lock');
+        // next frame so the transition actually plays
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+        });
+      }
+      function closePop() {
+        if (!overlay.classList.contains('is-open')) return;
+        overlay.classList.remove('is-open');
+        document.documentElement.classList.remove('khan-ibento-lock');
+        closeTimer = setTimeout(function () { overlay.setAttribute('aria-hidden', 'true'); }, 400);
+      }
+
+      each(root.querySelectorAll('[data-ib-card]'), function (card) {
+        card.addEventListener('click', function () {
+          var tpl = card.querySelector('template[data-ib-tpl]');
+          if (tpl) openPop(tpl);
+        });
+      });
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay || e.target.closest('[data-ib-close]')) closePop();
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePop(); });
+    }
+
+    function initAll(scope) {
+      each((scope || document).querySelectorAll('[data-khan-ibento]'), init);
+    }
+    if (document.readyState !== 'loading') initAll();
+    else document.addEventListener('DOMContentLoaded', function () { initAll(); });
+    document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Ingredients bento grid",
+  "tag": "section",
+  "class": "khan-ibento-wrapper",
+  "max_blocks": 14,
+  "settings": [
+    { "type": "header", "content": "Header card" },
+    { "type": "text", "id": "head_title", "label": "Title", "default": "PRE-WORKOUT" },
+    { "type": "text", "id": "head_sub", "label": "Subtitle", "default": "MAX ENERGY & PERFORMANCE" },
+
+    { "type": "header", "content": "Center media" },
+    { "type": "image_picker", "id": "center_image", "label": "Center GIF / image", "info": "Shown in the middle of the grid on desktop. Hidden on mobile." },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 900, "max": 1900, "step": 20, "unit": "px", "default": 1500 },
+    { "type": "range", "id": "gap", "label": "Grid gap", "min": 8, "max": 30, "step": 2, "unit": "px", "default": 14 },
+    { "type": "range", "id": "radius", "label": "Corner radius", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 22 },
+    { "type": "range", "id": "pad_y", "label": "Section padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 72 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#3B0211" },
+    { "type": "color", "id": "card_hover", "label": "Card hover background", "default": "#9A1F33" },
+    { "type": "color", "id": "card_text", "label": "Card text", "default": "#ffffff" },
+    { "type": "color", "id": "card_muted", "label": "Card secondary text", "default": "#e8d9dd" },
+    { "type": "color", "id": "head_bg", "label": "Header card background", "default": "#560B1E" },
+    { "type": "color", "id": "head_text_color", "label": "Header card text", "default": "#ffffff" },
+    { "type": "color", "id": "accent_color", "label": "Accent (popup dose / close hover)", "default": "#9A1F33" }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Transparent PNG looks best, like the reference cards." },
+        { "type": "text", "id": "title", "label": "Name", "default": "Съставка" },
+        { "type": "text", "id": "sub", "label": "Dose (bottom line)", "default": "0 mg" },
+        { "type": "richtext", "id": "info", "label": "Popup text", "default": "<p>Кратко описание на съставката.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ingredients bento grid",
+      "blocks": [
+        { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" },
+        { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" },
+        { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" },
+        { "type": "ingredient" }, { "type": "ingredient" }
+      ]
+    }
+  ]
+}
+{% endschema %}
