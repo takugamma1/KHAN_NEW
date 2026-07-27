@@ -328,6 +328,7 @@
         "ing_10": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_35_44_AM.png",
             "title": "Choline Bitartrate",
             "sub": "500 mg",
             "info": "<p>Подпомага връзката ум–мускул и концентрацията по време на тренировка.</p>"
