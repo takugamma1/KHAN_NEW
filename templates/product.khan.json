@@ -317,6 +317,7 @@
         "ing_09": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_03_53_AM.png",
             "title": "Guarana",
             "sub": "250 mg",
             "info": "<p>Естествен източник на кофеин с плавно, удължено освобождаване.</p>"
