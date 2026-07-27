@@ -256,6 +256,7 @@
         "ing_02": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/926f60ca-20b1-4681-9c6b-850d71a1f268.png",
             "title": "Beta-Alanine",
             "sub": "2300 mg",
             "info": "<p>Забавя мускулната умора и позволява по-дълги и по-интензивни серии.</p>"
