@@ -283,6 +283,7 @@
         "ing_05": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_57_07_PM.png",
             "title": "Betaine Anhydrous",
             "sub": "2500 mg",
             "info": "<p>Подкрепя силата, мощността и хидратацията на мускулните клетки.</p>"
