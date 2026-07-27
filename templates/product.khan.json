@@ -358,8 +358,9 @@
         "ing_14": {
           "type": "ingredient",
           "settings": {
-            "title": "Съставка 14",
-            "sub": "0 mg",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_07_34_AM.png",
+            "title": "Cocoa Shells",
+            "sub": "250 mg",
             "info": "<p>Кратко описание на съставката — редактирай ме.</p>"
           }
         }
