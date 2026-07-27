@@ -274,6 +274,7 @@
         "ing_04": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/0e72ab87-09de-4342-b823-6661b8f1796c.png",
             "title": "Citrulline",
             "sub": "8000 mg",
             "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
