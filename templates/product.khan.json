@@ -247,6 +247,7 @@
         "ing_01": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/L-Arginine-AOR.webp",
             "title": "Arginine AKG",
             "sub": "2000 mg",
             "info": "<p>Подпомага производството на азотен оксид за по-добро кръвоснабдяване и по-силна помпа.</p>"
