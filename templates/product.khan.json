@@ -300,6 +300,7 @@
         "ing_07": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_27_2026_11_59_49_PM.png",
             "title": "L-Theanine",
             "sub": "150 mg",
             "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
