@@ -346,6 +346,7 @@
         "ing_12": {
           "type": "ingredient",
           "settings": {
+            "image": "shopify://shop_images/5c323119-3827-484c-b1ab-bd1ab4b95748.png",
             "title": "Taurine",
             "sub": "1000 mg",
             "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
