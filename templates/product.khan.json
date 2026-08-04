@@ -243,8 +243,38 @@
       }
     },
     "khan_ibento_main": {
-      "type": "khan-ingredients-grid",
+      "type": "khan-ingredient-groups",
       "blocks": {
+        "grp_pump": {
+          "type": "group",
+          "settings": {
+            "title": "<p>Pump<br/>&amp;<br/>performance</p>",
+            "head_bg": "#560B1E",
+            "head_text": "#ffffff",
+            "caption": "Разширен кръвоток, клетъчна хидратация и издръжливост за по-тежки серии",
+            "open_default": true
+          }
+        },
+        "grp_energy": {
+          "type": "group",
+          "settings": {
+            "title": "<p>Energy<br/>&amp;<br/>focus</p>",
+            "head_bg": "#560B1E",
+            "head_text": "#ffffff",
+            "caption": "Чиста енергия и остър фокус — без нервност и без краш",
+            "open_default": false
+          }
+        },
+        "grp_adapt": {
+          "type": "group",
+          "settings": {
+            "title": "<p>Adaptogens<br/>&amp;<br/>recovery</p>",
+            "head_bg": "#560B1E",
+            "head_text": "#ffffff",
+            "caption": "Адаптогени и минерали за устойчивост на стрес и възстановяване",
+            "open_default": false
+          }
+        },
         "ing_01": {
           "type": "ingredient",
           "settings": {
@@ -373,37 +403,40 @@
         }
       },
       "block_order": [
+        "grp_pump",
+        "ing_04",
         "ing_01",
         "ing_02",
-        "ing_03",
-        "ing_04",
         "ing_05",
-        "ing_06",
-        "ing_07",
+        "ing_12",
+        "grp_energy",
         "ing_08",
         "ing_09",
+        "ing_07",
+        "ing_06",
         "ing_10",
+        "grp_adapt",
         "ing_11",
-        "ing_12",
         "ing_13",
+        "ing_03",
         "ing_14"
       ],
-      "name": "Ingredients bento grid",
+      "name": "Ingredient groups",
       "settings": {
-        "head_title": "PRE-WORKOUT",
-        "head_sub": "MAX ENERGY & PERFORMANCE",
-        "center_image": "shopify://shop_images/Vurtene_1.webp",
-        "max_width": 1060,
+        "eyebrow": "",
+        "heading": "",
+        "max_width": 1400,
         "gap": 14,
         "radius": 22,
+        "title_size": 34,
         "pad_y": 72,
         "section_bg": "#ffffff",
+        "panel_bg": "#e9e9e9",
         "card_bg": "#3b0211",
-        "card_hover": "#000000",
+        "card_hover": "#9a1f33",
         "card_text": "#ffffff",
         "card_muted": "#e8d9dd",
-        "head_bg": "#560b1e",
-        "head_text_color": "#ffffff",
+        "caption_color": "#7a7a7a",
         "accent_color": "#9a1f33"
       }
     },
