@@ -330,6 +330,20 @@
         "particle_dir": "down",
         "color_scheme": ""
       }
+    },
+    "khan_statement_band_Hm4Qzt": {
+      "type": "khan-statement-band",
+      "name": "Statement band",
+      "settings": {
+        "heading": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>",
+        "accent": "This is KHAN.",
+        "heading_size": 32,
+        "min_height": 240,
+        "bg_color": "#ffffff",
+        "accent_color": "#9A1F33",
+        "max_width": 1200,
+        "color_scheme": ""
+      }
     }
   },
   "order": [
@@ -337,6 +351,7 @@
     "rocks_hero_6ig48b",
     "khan_our_story_9deQRY",
     "khan_launch_hero_KicyPi",
-    "khan_apparel_hero_faAPEW"
+    "khan_apparel_hero_faAPEW",
+    "khan_statement_band_Hm4Qzt"
   ]
 }
