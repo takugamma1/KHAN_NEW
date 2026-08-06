@@ -248,31 +248,21 @@
         "grp_pump": {
           "type": "ing_group",
           "settings": {
-            "title": "<p>Pump<br/>&amp;<br/>performance</p>",
-            "head_bg": "#560B1E",
+            "title": "<p>Pump<br/>&<br/>performance</p>",
+            "art": "shopify://shop_images/skull_white_transparent.png",
+            "head_bg": "#560b1e",
             "head_text": "#ffffff",
             "caption": "Разширен кръвоток, клетъчна хидратация и издръжливост за по-тежки серии",
             "open_default": true
           }
         },
-        "grp_energy": {
-          "type": "ing_group",
+        "ing_04": {
+          "type": "ingredient",
           "settings": {
-            "title": "<p>Energy<br/>&amp;<br/>focus</p>",
-            "head_bg": "#560B1E",
-            "head_text": "#ffffff",
-            "caption": "Чиста енергия и остър фокус — без нервност и без краш",
-            "open_default": false
-          }
-        },
-        "grp_adapt": {
-          "type": "ing_group",
-          "settings": {
-            "title": "<p>Adaptogens<br/>&amp;<br/>recovery</p>",
-            "head_bg": "#560B1E",
-            "head_text": "#ffffff",
-            "caption": "Адаптогени и минерали за устойчивост на стрес и възстановяване",
-            "open_default": false
+            "image": "shopify://shop_images/0e72ab87-09de-4342-b823-6661b8f1796c.png",
+            "title": "Citrulline",
+            "sub": "8000 mg",
+            "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
           }
         },
         "ing_01": {
@@ -293,24 +283,6 @@
             "info": "<p>Забавя мускулната умора и позволява по-дълги и по-интензивни серии.</p>"
           }
         },
-        "ing_03": {
-          "type": "ingredient",
-          "settings": {
-            "image": "shopify://shop_images/4910d821-7003-4af3-82df-16fcb1c3d14b.png",
-            "title": "Magnesium + Calcium",
-            "sub": "500 mg",
-            "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
-          }
-        },
-        "ing_04": {
-          "type": "ingredient",
-          "settings": {
-            "image": "shopify://shop_images/0e72ab87-09de-4342-b823-6661b8f1796c.png",
-            "title": "Citrulline",
-            "sub": "8000 mg",
-            "info": "<p>Увеличава азотния оксид, помпата и издръжливостта при тежки тренировки.</p>"
-          }
-        },
         "ing_05": {
           "type": "ingredient",
           "settings": {
@@ -320,22 +292,23 @@
             "info": "<p>Подкрепя силата, мощността и хидратацията на мускулните клетки.</p>"
           }
         },
-        "ing_06": {
+        "ing_12": {
           "type": "ingredient",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_31_37_AM.png",
-            "title": "L-Tyrosine",
-            "sub": "1500 mg",
-            "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
+            "image": "shopify://shop_images/5c323119-3827-484c-b1ab-bd1ab4b95748.png",
+            "title": "Taurine",
+            "sub": "1000 mg",
+            "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
           }
         },
-        "ing_07": {
-          "type": "ingredient",
+        "grp_energy": {
+          "type": "ing_group",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_29_29_AM.png",
-            "title": "L-Theanine",
-            "sub": "150 mg",
-            "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
+            "title": "<p>Energy<br/>&amp;<br/>focus</p>",
+            "head_bg": "#560b1e",
+            "head_text": "#ffffff",
+            "caption": "Чиста енергия и остър фокус — без нервност и без краш",
+            "open_default": false
           }
         },
         "ing_08": {
@@ -356,6 +329,24 @@
             "info": "<p>Естествен източник на кофеин с плавно, удължено освобождаване.</p>"
           }
         },
+        "ing_07": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_29_29_AM.png",
+            "title": "L-Theanine",
+            "sub": "150 mg",
+            "info": "<p>Изглажда действието на кофеина — чиста енергия без нервност.</p>"
+          }
+        },
+        "ing_06": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_28_2026_12_31_37_AM.png",
+            "title": "L-Tyrosine",
+            "sub": "1500 mg",
+            "info": "<p>Подпомага фокуса и менталната устойчивост под натоварване.</p>"
+          }
+        },
         "ing_10": {
           "type": "ingredient",
           "settings": {
@@ -363,6 +354,16 @@
             "title": "Choline Bitartrate",
             "sub": "500 mg",
             "info": "<p>Подпомага връзката ум–мускул и концентрацията по време на тренировка.</p>"
+          }
+        },
+        "grp_adapt": {
+          "type": "ing_group",
+          "settings": {
+            "title": "<p>Adaptogens<br/>&<br/>recovery</p>",
+            "head_bg": "#560b1e",
+            "head_text": "#ffffff",
+            "caption": "Адаптогени и минерали за устойчивост на стрес и възстановяване",
+            "open_default": false
           }
         },
         "ing_11": {
@@ -374,15 +375,6 @@
             "info": "<p>Адаптоген, който повишава издръжливостта и устойчивостта на стрес.</p>"
           }
         },
-        "ing_12": {
-          "type": "ingredient",
-          "settings": {
-            "image": "shopify://shop_images/5c323119-3827-484c-b1ab-bd1ab4b95748.png",
-            "title": "Taurine",
-            "sub": "1000 mg",
-            "info": "<p>Подпомага хидратацията, издръжливостта и възстановяването.</p>"
-          }
-        },
         "ing_13": {
           "type": "ingredient",
           "settings": {
@@ -390,6 +382,15 @@
             "title": "Rhodiola Rosea",
             "sub": "200 mg",
             "info": "<p>Адаптоген за по-малко умора и по-добро представяне.</p>"
+          }
+        },
+        "ing_03": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/4910d821-7003-4af3-82df-16fcb1c3d14b.png",
+            "title": "Magnesium + Calcium",
+            "sub": "500 mg",
+            "info": "<p>Ключови минерали за нормална мускулна функция и електролитен баланс.</p>"
           }
         },
         "ing_14": {
