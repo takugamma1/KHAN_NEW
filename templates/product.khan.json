@@ -360,6 +360,7 @@
           "type": "ing_group",
           "settings": {
             "title": "<p>Adaptogens<br/>&<br/>recovery</p>",
+            "art": "shopify://shop_images/ChatGPT_Image_Aug_6_2026_05_03_21_PM.png",
             "head_bg": "#560b1e",
             "head_text": "#ffffff",
             "caption": "Адаптогени и минерали за устойчивост на стрес и възстановяване",
