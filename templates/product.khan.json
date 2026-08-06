@@ -304,7 +304,8 @@
         "grp_energy": {
           "type": "ing_group",
           "settings": {
-            "title": "<p>Energy<br/>&amp;<br/>focus</p>",
+            "title": "<p>Energy<br/>&<br/>focus</p>",
+            "art": "shopify://shop_images/ChatGPT_Image_Aug_6_2026_05_35_58_PM.png",
             "head_bg": "#560b1e",
             "head_text": "#ffffff",
             "caption": "Чиста енергия и остър фокус — без нервност и без краш",
