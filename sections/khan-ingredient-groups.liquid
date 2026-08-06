@@ -36,6 +36,7 @@
           {%- if group_open -%}
               </div>
               {%- if current_caption != blank -%}<p class="khan-igr__caption">{{ current_caption }}</p>{%- endif -%}
+              </div>
             </div>
           </div>
         </div>
@@ -66,6 +67,7 @@
           </button>
           <div class="khan-igr__panel">
             <div class="khan-igr__panel-in">
+              <div class="khan-igr__box">
               <div class="khan-igr__cards">
         {%- elsif block.type == 'ingredient' and group_open -%}
                 <button
@@ -108,6 +110,7 @@
       {%- if group_open -%}
               </div>
               {%- if current_caption != blank -%}<p class="khan-igr__caption">{{ current_caption }}</p>{%- endif -%}
+              </div>
             </div>
           </div>
         </div>
@@ -149,21 +152,21 @@
     letter-spacing: 0.02em; text-transform: uppercase; color: #111;
   }
 
-  /* ---- groups layout: 2 side by side, odd last one centered full-width below ---- */
+  /* ---- groups layout: 2 side by side, odd last one same size, centered below ---- */
   .khan-igr__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--igr-gap, 14px);
     align-items: start;
   }
-  .khan-igr__group:last-child:nth-child(odd) { grid-column: 1 / -1; }
-
-  /* ---- group shell (light rounded panel) ---- */
-  .khan-igr__group {
-    background: var(--igr-panel-bg, #e9e9e9);
-    border-radius: var(--igr-radius, 22px);
-    padding: 10px;
+  .khan-igr__group:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - var(--igr-gap, 14px) / 2);
   }
+
+  /* ---- group shell (transparent — the grey box lives inside the dropdown) ---- */
+  .khan-igr__group { min-width: 0; }
 
   /* ---- group header (solid color, title left, art right, plus) ---- */
   .khan-igr__head {
@@ -174,7 +177,7 @@
     min-height: clamp(120px, 14vw, 190px);
     overflow: hidden;
     border: 0;
-    border-radius: calc(var(--igr-radius, 22px) - 6px);
+    border-radius: var(--igr-radius, 22px);
     background: var(--igr-head-bg, #560b1e);
     color: var(--igr-head-text, #ffffff);
     padding: clamp(18px, 2.4vw, 32px);
@@ -182,6 +185,7 @@
     cursor: pointer;
     text-align: left;
     isolation: isolate;
+    box-shadow: 0 10px 26px rgb(0 0 0 / 0.10);
   }
   .khan-igr__title {
     position: relative;
@@ -197,15 +201,27 @@
   .khan-igr__art {
     position: absolute;
     inset-block: 0;
-    right: clamp(48px, 6vw, 80px);
-    width: 46%;
+    right: clamp(40px, 5vw, 72px);
+    width: 52%;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     pointer-events: none;
   }
-  .khan-igr__art img { height: 112%; width: auto; max-width: 100%; object-fit: contain; object-position: right center; opacity: 0.95; }
+  .khan-igr__art img {
+    height: 165%;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    object-position: right center;
+    opacity: 0.92;
+    transform: rotate(-8deg) translateY(4%);
+    filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35));
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .khan-igr__head:hover .khan-igr__art img { transform: rotate(-3deg) translateY(2%) scale(1.05); }
+  .khan-igr__group.is-open .khan-igr__art img { transform: rotate(0deg) translateY(0) scale(1.02); }
   .khan-igr__plus {
     position: absolute;
     top: 50%; right: clamp(14px, 1.8vw, 24px);
@@ -239,12 +255,19 @@
   .khan-igr__group.is-open .khan-igr__panel { grid-template-rows: 1fr; }
   .khan-igr__group.is-open .khan-igr__panel-in { visibility: visible; transition-delay: 0s; }
 
+  /* ---- grey box: appears only with the dropdown, wraps just the ingredients ---- */
+  .khan-igr__box {
+    background: var(--igr-panel-bg, #e9e9e9);
+    border-radius: var(--igr-radius, 22px);
+    padding: 10px;
+    margin-top: var(--igr-gap, 14px);
+  }
+
   /* ---- ingredient cards ---- */
   .khan-igr__cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
     gap: 10px;
-    padding-top: 10px;
   }
   .khan-igr__card {
     position: relative;
@@ -367,8 +390,9 @@
   /* ---- mobile: single column ---- */
   @media screen and (max-width: 749px) {
     .khan-igr__grid { grid-template-columns: 1fr; }
-    .khan-igr__group:last-child:nth-child(odd) { grid-column: auto; }
+    .khan-igr__group:last-child:nth-child(odd) { grid-column: auto; justify-self: stretch; width: auto; }
     .khan-igr__head { min-height: 110px; padding-right: 64px; }
+    .khan-igr__art img { height: 135%; }
     .khan-igr__cards { grid-template-columns: repeat(2, 1fr); }
     .khan-igr__name { font-size: 14px; }
     .khan-igr__dose { font-size: 11px; }
@@ -385,7 +409,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .khan-igr__panel, .khan-igr__plus, .khan-igr__card, .khan-igr__img img,
-    .khan-igr__overlay, .khan-igr__modal, .khan-igr__close { transition: none; }
+    .khan-igr__art img, .khan-igr__overlay, .khan-igr__modal, .khan-igr__close { transition: none; }
   }
 {% endstylesheet %}
 
