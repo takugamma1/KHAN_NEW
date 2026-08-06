@@ -246,7 +246,7 @@
       "type": "khan-ingredient-groups",
       "blocks": {
         "grp_pump": {
-          "type": "group",
+          "type": "ing_group",
           "settings": {
             "title": "<p>Pump<br/>&amp;<br/>performance</p>",
             "head_bg": "#560B1E",
@@ -256,7 +256,7 @@
           }
         },
         "grp_energy": {
-          "type": "group",
+          "type": "ing_group",
           "settings": {
             "title": "<p>Energy<br/>&amp;<br/>focus</p>",
             "head_bg": "#560B1E",
@@ -266,7 +266,7 @@
           }
         },
         "grp_adapt": {
-          "type": "group",
+          "type": "ing_group",
           "settings": {
             "title": "<p>Adaptogens<br/>&amp;<br/>recovery</p>",
             "head_bg": "#560B1E",

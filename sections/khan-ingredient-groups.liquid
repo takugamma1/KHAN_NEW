@@ -32,7 +32,7 @@
     <div class="khan-igr__grid">
       {%- assign group_open = false -%}
       {%- for block in section.blocks -%}
-        {%- if block.type == 'group' -%}
+        {%- if block.type == 'ing_group' -%}
           {%- if group_open -%}
               </div>
               {%- if current_caption != blank -%}<p class="khan-igr__caption">{{ current_caption }}</p>{%- endif -%}
@@ -493,7 +493,7 @@
   ],
   "blocks": [
     {
-      "type": "group",
+      "type": "ing_group",
       "name": "Group",
       "settings": [
         { "type": "richtext", "id": "title", "label": "Title", "info": "Use line breaks for a stacked title.", "default": "<p>Pump &amp; performance</p>" },
@@ -519,11 +519,11 @@
     {
       "name": "Ingredient groups",
       "blocks": [
-        { "type": "group", "settings": { "title": "<p>Pump<br/>&amp;<br/>performance</p>", "open_default": true } },
+        { "type": "ing_group", "settings": { "title": "<p>Pump<br/>&amp;<br/>performance</p>", "open_default": true } },
         { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" },
-        { "type": "group", "settings": { "title": "<p>Energy<br/>&amp;<br/>focus</p>" } },
+        { "type": "ing_group", "settings": { "title": "<p>Energy<br/>&amp;<br/>focus</p>" } },
         { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" },
-        { "type": "group", "settings": { "title": "<p>Endurance<br/>&amp;<br/>recovery</p>" } },
+        { "type": "ing_group", "settings": { "title": "<p>Endurance<br/>&amp;<br/>recovery</p>" } },
         { "type": "ingredient" }, { "type": "ingredient" }, { "type": "ingredient" }
       ]
     }
