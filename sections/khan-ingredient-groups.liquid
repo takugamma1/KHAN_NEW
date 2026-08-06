@@ -201,8 +201,8 @@
   .khan-igr__art {
     position: absolute;
     inset-block: 0;
-    right: clamp(40px, 5vw, 72px);
-    width: 52%;
+    right: -3%;
+    width: 62%;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -219,6 +219,8 @@
     transform: rotate(-8deg) translateY(4%);
     filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35));
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+            mask-image: linear-gradient(to right, transparent 0%, #000 38%);
   }
   .khan-igr__head:hover .khan-igr__art img { transform: rotate(-3deg) translateY(2%) scale(1.05); }
   .khan-igr__group.is-open .khan-igr__art img { transform: rotate(0deg) translateY(0) scale(1.02); }
