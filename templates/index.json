@@ -170,31 +170,47 @@
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Science first",
-            "text": "<p>Backed by research. Built on evidence. No trends. Just results.</p>"
+            "title": "НАУКАТА НА ПЪРВО МЯСТО",
+            "text": "<p>Всяка формула, клинично дозирана, описана и тествана от самите нас.</p>"
           }
         },
         "feature_WDfpBG": {
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "No compromises",
-            "text": "<p>No fillers. No shortcuts. Only what earns a place in the formula.</p>"
+            "title": "ЕНЕРГИЯ БЕЗ СРИВ",
+            "text": "<p>Без излишни съставки, всяка се допълва една с друга.</p>"
           }
         },
         "feature_88FMQn": {
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Built for performance",
-            "text": "<p>Formulated for those who demand more from their mind and body.</p>"
+            "title": "БЕЗКОМПРОМИСНО КАЧЕСТВО",
+            "text": "<p>Всички артикули са произведени в професионални предприятия в България.</p>"
+          }
+        },
+        "feature_cpLTU9": {
+          "type": "feature",
+          "settings": {
+            "title": "НАСЛЕДСТВО, НЕ ТЕНДЕНЦИЯ",
+            "text": "<p>Модернизирани мотиви от българските носии и глаголицата.</p>"
+          }
+        },
+        "feature_RGmBct": {
+          "type": "feature",
+          "settings": {
+            "title": "СМИСЪЛ ВГРАДЕН В ЕСТЕТИКА",
+            "text": "<p>Всяка дреха, всяка формула носи история. </p>"
           }
         }
       },
       "block_order": [
         "feature_ME8aAQ",
         "feature_WDfpBG",
-        "feature_88FMQn"
+        "feature_88FMQn",
+        "feature_cpLTU9",
+        "feature_RGmBct"
       ],
       "name": "Our story",
       "settings": {
@@ -202,11 +218,11 @@
         "eyebrow": "Нашата история",
         "eyebrow_color": "#560b1e",
         "eyebrow_size": 13,
-        "heading": "<p>ИЗГРАДЕН ОТ <strong>ДИСЦИПЛИНА.</strong></p>",
-        "heading_size": 80,
+        "heading": "<p>СИЛА ОТ ИСТОРИЯТА<br/><strong>ЗДРАВЕ ЗА БЪДЕЩЕТО</strong></p>",
+        "heading_size": 76,
         "heading_color": "#111111",
         "accent_color": "#9a1f33",
-        "body": "<p>Khan supplements was born from a simple truth: <strong>results are earned, never given.</strong></p><p>We created formulations that support the relentless pursuit of more — more focus, more energy, more performance. Every ingredient, every dose, every detail is chosen with purpose and proven by science.</p><p><strong>This isn't just supplementation. It's a standard.</strong></p>",
+        "body": "<p>Вдъхновени от хановете, които са градили<strong> сила с</strong> <strong>разум, дисциплина с воля и отговорност</strong> към поколенията след тях.<br/><br/>Вярваме, че<strong> истинската сила</strong> не е моментен изблик, а устойчивост, която се изгражда и съхранява с времето.<br/><br/>Не създаваме просто формули, добавки и дрехи. <br/><strong>Това е напомняне</strong> - предназначено за хора, които не се страхуват да потеглят по <strong>неотъпканата пътека</strong> пред себе си, както предците им.<br/></p>",
         "body_size": 14,
         "text_color": "#1a1a1a",
         "show_feat_icons": false,
@@ -231,7 +247,7 @@
         "bg_color": "#ffffff",
         "max_width": 1500,
         "column_gap": 80,
-        "padding_top": 96,
+        "padding_top": 80,
         "padding_bottom": 96,
         "padding_inline": 56,
         "color_scheme": ""
@@ -248,7 +264,7 @@
         "eyebrow": "Supplement",
         "heading": "<p>Pre-<br/><strong>workout</strong></p>",
         "show_divider": true,
-        "description": "<p>Forged for the work<br/>that comes before the work.</p><p>Six clinical-dose ingredients.<br/>No sweeteners. No filler.</p>",
+        "description": "<p>Без компромиси във формулата.<br/><br/>За тези, на които им е писнало<br/> от евтини обещания.</p><p>НАй-висок клас суровини.<br/>ЧЕТИРИНАДЕСЕТ КЛИНИЧНО ДОЗИРАНИ СЪСТАВКИ.</p>",
         "btn1_text": "Reserve · 047 / 500",
         "btn1_link": "shopify://products/pre-workout",
         "btn2_text": "Open the product",
@@ -287,13 +303,13 @@
       "type": "khan-apparel-hero",
       "name": "Apparel hero",
       "settings": {
-        "image": "shopify://shop_images/067f2ed6-fc7a-4007-98c8-72c099ef4aff.png",
-        "image_width": 40,
-        "fade_height": 5,
+        "image": "shopify://shop_images/Hoodie_back.png",
+        "image_width": 46,
+        "fade_height": 15,
         "eyebrow": "Apparel",
-        "heading": "<p>Heritage<br/><strong>F/W 26.</strong></p>",
+        "heading": "<p>КОЛЕКЦИЯ<br/><strong>KHAN 26</strong></p>",
         "show_divider": true,
-        "description": "<p>Fourteen pieces. Cut and sewn in Sofia.</p><p>Numbered hangtags.</p><p>The drop closes when the lot does.</p>",
+        "description": "<p>ОСЕМ АРТИКУЛА, ШИТИ И КРОЕНИ В БЪЛГАРИЯ</p><p>ЛИМИТИРАНИ БРОЙКИ.</p><p>26.07.811</p>",
         "btn1_text": "Enter the archive",
         "btn1_link": "shopify://collections/frontpage",
         "btn1_plus": false,
@@ -304,7 +320,7 @@
         "frame_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
         "frame_width": 560,
         "copyright": "© 2026 Khan Apparel. All rights reserved.",
-        "tagline": "Born from past. Built for now.",
+        "tagline": "42°55'42.80\"N | 26°39'59.91\"E",
         "bg_color": "#ffffff",
         "text_color": "#141414",
         "accent_color": "#9a1f33",
@@ -335,14 +351,15 @@
       "type": "khan-statement-band",
       "name": "Statement band",
       "settings": {
-        "heading": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>",
-        "accent": "This is KHAN.",
-        "heading_size": 32,
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
+        "heading": "<p>Не създаваме просто формули, добавки и дрехи. <br/></p>",
+        "accent": "Неотъпканата пътека ли е по-страшна или гледката към нея?",
+        "heading_size": 30,
         "min_height": 240,
         "bg_color": "#ffffff",
-        "accent_color": "#9A1F33",
+        "accent_color": "#FFFFFF",
         "max_width": 1200,
-        "color_scheme": ""
+        "color_scheme": "scheme-1"
       }
     }
   },
