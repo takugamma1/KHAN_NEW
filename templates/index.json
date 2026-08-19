@@ -352,12 +352,12 @@
       "name": "Statement band",
       "settings": {
         "image": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
-        "heading": "<p>Не създаваме просто формули, добавки и дрехи. <br/></p>",
+        "heading": "<p><br/></p>",
         "accent": "Неотъпканата пътека ли е по-страшна или гледката към нея?",
         "heading_size": 30,
         "min_height": 240,
         "bg_color": "#ffffff",
-        "accent_color": "#FFFFFF",
+        "accent_color": "#ffffff",
         "max_width": 1200,
         "color_scheme": "scheme-1"
       }
