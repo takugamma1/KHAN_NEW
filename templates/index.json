@@ -89,7 +89,7 @@
       "name": "Rocks hero",
       "settings": {
         "media_type": "image",
-        "background_image": "shopify://shop_images/stranica_2.png",
+        "background_image": "shopify://shop_images/HOME.png",
         "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Jul_26_2026_11_03_26_PM.png",
         "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
         "flip_media": false,
