@@ -343,32 +343,32 @@
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Premium fabric",
-            "text": "<p>High performance material with a smooth feel and exceptional durability.</p>"
+            "title": "КАК ИЗБИРАМЕ",
+            "text": "<p>Всеки материал минава през ръцете ни, преди да стигне до продукта.</p>"
           }
         },
         "feature_yfkiL9": {
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Moisture wicking",
-            "text": "<p>Advanced moisture control keeps you dry and comfortable in any condition.</p>"
+            "title": "КАК СЪЗДАВАМЕ",
+            "text": "<p>Дизайните са наши, направени от български дизайнер. Не купуваме шаблони, не копираме.</p>"
           }
         },
         "feature_kAQWFF": {
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Built to move",
-            "text": "<p>Ergonomic fit and flexible construction designed for maximum movement.</p>"
+            "title": "КАК ТЕСТВАМЕ",
+            "text": "<p>Всяка дреха се носи от нас първо. Ако не издържи на нашето ежедневие, не стига до Вас.</p>"
           }
         },
         "feature_dNQqPD": {
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/ChatGPT_Image_May_25_2026_05_24_39_PM_13.png",
-            "title": "Made to last",
-            "text": "<p>Reinforced stitching and high quality materials built for the long haul.</p>"
+            "title": "КАК ДОСТАВЯМЕ",
+            "text": "<p>Опаковано в България. Изпратено с уважение към времето Ви.</p>"
           }
         }
       },
@@ -385,9 +385,9 @@
         "glass": true,
         "bg_color": "#0a0a0a",
         "glass_blur": 0,
-        "heading": "<p>кур</p>",
+        "heading": "<p>КАК<strong> РАБОТИМ</strong></p>",
         "heading_size": 40,
-        "body": "<p>Every detail is intentional. From the fabric we choose to the way it's built — this is performance without compromise.</p>",
+        "body": "<p>Всеки детайл е обмислен. Изборът на материя, шевовете, дизайнът - това не са бързи решения.</p>",
         "body_size": 13,
         "media_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
         "icon_size": 56,
