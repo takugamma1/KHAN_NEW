@@ -89,7 +89,7 @@
       "name": "Rocks hero",
       "settings": {
         "media_type": "image",
-        "background_image": "shopify://shop_images/HOME.png",
+        "background_image": "shopify://shop_images/HOME_2c75f836-2bfa-4e25-979a-f399f5bb9e5a.png",
         "background_image_mobile": "shopify://shop_images/mobile_image_f3fcd23e-6993-477c-a2bb-cf218235e5f5.png",
         "background_video": "shopify://files/videos/hf_20260531_164612_5d57b2ef-f8d8-47a2-bb58-d33f45f2a2e8.mp4",
         "flip_media": false,
