@@ -165,9 +165,9 @@
             "product": "",
             "label": "",
             "image": "shopify://shop_images/KHAN_-_T-Shirt.png",
-            "button_label": "811",
+            "button_label": "2607 - ТЕНИСКА",
             "button_link": "",
-            "edition_text": "1/100",
+            "edition_text": "39,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
@@ -175,11 +175,11 @@
           "type": "product",
           "settings": {
             "product": "сет",
-            "label": "(ИМЕ НА СЕТ)",
+            "label": "",
             "image": "shopify://shop_images/Hoodie_back.png",
-            "button_label": "ХУДИ",
+            "button_label": "2608 - ХУДИ",
             "button_link": "shopify://products/сет",
-            "edition_text": "1/100",
+            "edition_text": "59,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
@@ -189,9 +189,9 @@
             "product": "",
             "label": "",
             "image": "shopify://shop_images/pants_side.png",
-            "button_label": "ДОЛНИЩЕ",
+            "button_label": "2609 - ДОЛНИЩЕ",
             "button_link": "",
-            "edition_text": "1/100",
+            "edition_text": "59,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
@@ -200,9 +200,9 @@
           "settings": {
             "product": "тениска-тест",
             "label": "(ИМЕ НА ТЕНИСКА)",
-            "button_label": "РАШГАРД",
+            "button_label": "2610 - РАШГАРД",
             "button_link": "shopify://products/тениска-тест",
-            "edition_text": "1/100",
+            "edition_text": "34,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
             "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
@@ -212,9 +212,9 @@
           "settings": {
             "product": "тениска-без-ръкав",
             "label": "(ИМЕ НА БЕЗРЪКАВ)",
-            "button_label": "ПОТНИК",
+            "button_label": "2611 - ПОТНИК",
             "button_link": "shopify://products/тениска-без-ръкав",
-            "edition_text": "1/100",
+            "edition_text": "29,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
@@ -224,9 +224,9 @@
             "product": "",
             "label": "",
             "image": "shopify://shop_images/wife_beat_back.png",
-            "button_label": "ПОТНИК СЛИМ",
+            "button_label": "2612 - ПОТНИК СЛИМ",
             "button_link": "",
-            "edition_text": "1/100",
+            "edition_text": "19,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         }
@@ -242,7 +242,7 @@
       "name": "Collection grid",
       "settings": {
         "heading": "<p>КОЛЕКЦИЯ</p>",
-        "subheading": "Built different. Made to last.",
+        "subheading": "ВСЯКА ДРЕХА НОСИ ИСТОРИЯ. ВСЕКИ, КОЙТО Я НОСИ, Я ПРОДЪЛЖАВА.",
         "heading_size": 72,
         "subheading_size": 13,
         "heading_color": "#560b1e",
@@ -279,15 +279,29 @@
         "feature_rJTNzp": {
           "type": "feature",
           "settings": {
-            "title": "Reactive dye",
-            "text": "<p>High quality reactive dyeing process for long lasting color that won't fade.</p>"
+            "title": "качество",
+            "text": "<p>Най-висок клас италиански и български платове.</p>"
           }
         },
         "feature_NbApQB": {
           "type": "feature",
           "settings": {
-            "title": "Pre-shrunk",
-            "text": "<p>Fabric pre-shrunk to minimize shrinkage and maintain the perfect fit after wash.</p>"
+            "title": "Кройки",
+            "text": "<p>Шити и кроени в професионално българско предприятие.</p>"
+          }
+        },
+        "feature_WQTHWj": {
+          "type": "feature",
+          "settings": {
+            "title": "дизайн",
+            "text": "<p>Рисувани и дигитализирани на ръка принтове, печати и бродерия от екипа зад KHAN.</p>"
+          }
+        },
+        "feature_DnQLrW": {
+          "type": "feature",
+          "settings": {
+            "title": "история",
+            "text": "<p>Авторски мотиви, вдъхновени от глаголицата, нашите владетели и традиционни носии.</p>"
           }
         },
         "detail_w69jei": {
@@ -326,6 +340,8 @@
       "block_order": [
         "feature_rJTNzp",
         "feature_NbApQB",
+        "feature_WQTHWj",
+        "feature_DnQLrW",
         "detail_w69jei",
         "detail_JKmm4R",
         "detail_VwV6NF",
@@ -333,17 +349,17 @@
       ],
       "name": "Materials & craft",
       "settings": {
-        "eyebrow": "Materials & craft",
-        "heading": "<p>Built different<br/><strong>Made to last.</strong></p>",
+        "eyebrow": "Материали и изработка",
+        "heading": "<p>ТЪКА̀НИ <br/>ДА ИЗДЪРЖАТ<br/><strong>ШИТИ <br/>ДА ОСТАНАТ</strong></p>",
         "heading_size": 56,
-        "body": "<p>Carefully selected materials. Premium quality. Maximum durability. Comfort that performs.</p>",
+        "body": "<p>Внимателно подбрани материи. Премиум качество. Максимална издръжливост и комфорт.</p>",
         "featured_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-        "stat_label": "Fabric weight",
+        "stat_label": "качество на плата",
         "stat_value": "320",
         "stat_unit": "GSM",
         "stat_size": 80,
-        "stat_caption": "Thick. Durable. Comfortable.",
-        "colors_label": "Available colors",
+        "stat_caption": "Тежък, Издръжлив, Удобен.",
+        "colors_label": "Разцветки",
         "color_1": "#000000",
         "color_2": "#8b1616",
         "color_3": "#f5f5f5",
