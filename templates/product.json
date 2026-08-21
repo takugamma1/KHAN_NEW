@@ -413,9 +413,9 @@
           "settings": {
             "product": "тениска-тест",
             "label": "ТЕНИСКА ИМЕ",
-            "button_label": "Shop now",
+            "button_label": "2610 - РАШГАРД",
             "button_link": "",
-            "edition_text": "1/100",
+            "edition_text": "34,99€",
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
             "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
           }
@@ -425,11 +425,10 @@
           "settings": {
             "product": "тениска-без-ръкав",
             "label": "ТЕНИСКА БЕЗ РЪКАВИ ИМЕ",
-            "button_label": "Shop now",
+            "button_label": "2611 - ПОТНИК",
             "button_link": "",
-            "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
-            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
+            "edition_text": "29,99€",
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
         "product_9pq9M6": {
@@ -437,11 +436,10 @@
           "settings": {
             "product": "сет",
             "label": "СЕТ ИМЕ",
-            "button_label": "Shop now",
+            "button_label": "shop now",
             "button_link": "",
             "edition_text": "1/100",
-            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png",
-            "bubble_2": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_48_54_AM.png"
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         }
       },
