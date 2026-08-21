@@ -308,32 +308,32 @@
           "type": "detail",
           "settings": {
             "video": "shopify://files/videos/6279035-uhd_2160_4096_25fps.mp4",
-            "title": "Woven label",
-            "text": "<p>Premium woven label for an authentic finish.</p>"
-          }
-        },
-        "detail_JKmm4R": {
-          "type": "detail",
-          "settings": {
-            "poster": "shopify://shop_images/istockphoto-1995092423-612x612.jpg",
-            "title": "YKK zippers",
-            "text": "<p>Top quality YKK zippers for smooth operation and durability.</p>"
+            "title": "Бродерия",
+            "text": "<p>вечна бродерия шита директно в тъканта</p>"
           }
         },
         "detail_VwV6NF": {
           "type": "detail",
           "settings": {
             "poster": "shopify://shop_images/att.I40-ZEmdG9TyFwqVLajvAEXkxTb6Mf3jIUqrtXaiFXw.jpg",
-            "title": "Premium prints",
-            "text": "<p>High density prints that withstand time, wash after wash.</p>"
+            "title": "дишаща материя",
+            "text": "<p>Не задържа потта, движи се с тялото.</p>"
+          }
+        },
+        "detail_JKmm4R": {
+          "type": "detail",
+          "settings": {
+            "poster": "shopify://shop_images/istockphoto-1995092423-612x612.jpg",
+            "title": "Щампа и ситопечат",
+            "text": "<p>Всеки принт е нанесен на ръка чрез ситопечат. Не се износва.</p>"
           }
         },
         "detail_xJdGLQ": {
           "type": "detail",
           "settings": {
             "poster": "shopify://shop_images/Screenshot_2026-06-04_at_16.22.53.png",
-            "title": "Brushed fleece",
-            "text": "<p>Soft inner fleece for extra warmth and all day comfort.</p>"
+            "title": "Двойни шевове",
+            "text": "<p>Всички натоварени точки са двойно подсилени за устойчивост.</p>"
           }
         }
       },
@@ -343,8 +343,8 @@
         "feature_WQTHWj",
         "feature_DnQLrW",
         "detail_w69jei",
-        "detail_JKmm4R",
         "detail_VwV6NF",
+        "detail_JKmm4R",
         "detail_xJdGLQ"
       ],
       "name": "Materials & craft",
