@@ -280,7 +280,8 @@
             "heading": "Описание",
             "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица. Изграден да издържа.</p>",
             "table": "",
-            "open": false
+            "open": false,
+            "mf_body_key": "tab_description"
           }
         },
         "tab_size": {
@@ -289,7 +290,9 @@
             "heading": "Размери & крой",
             "body": "<p>Oversized fit – препоръчваме твоя обикновен размер за relaxed или един под за по-fitted.</p>",
             "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90",
-            "open": false
+            "open": false,
+            "mf_body_key": "size_fit",
+            "mf_table_key": "size_table"
           }
         }
       },
