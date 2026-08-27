@@ -12,7 +12,11 @@
     section settings, which stay as the shared fallback.
   endcomment
   assign mf = p.metafields.khan
-  assign tagline = mf.tagline.value | default: s.tagline
+  comment
+    Tagline doubles as the product ID number: khan.tagline metafield, else the
+    variant SKU, else the section's shared tagline.
+  endcomment
+  assign tagline = mf.tagline.value | default: cur.sku | default: s.tagline
   assign insp_heading = mf.insp_heading.value | default: s.insp_heading
   assign insp_intro = mf.insp_intro.value | default: s.insp_intro
   assign insp_expanded_heading = mf.insp_expanded_heading.value | default: s.insp_expanded_heading
@@ -788,7 +792,7 @@
     { "type": "range", "id": "max_photos", "label": "Max photos shown per colour", "min": 1, "max": 12, "step": 1, "default": 12 },
     { "type": "paragraph", "content": "To tag a photo explicitly: set it as that variant's image, or put the colour name in the photo's alt text (e.g. \"Черно\"). Untagged photos before any colour photo show for every colour." },
     { "type": "checkbox", "id": "enable_animations", "label": "Entrance animations", "default": true, "info": "Content fades in as the section appears. Image changes always crossfade." },
-    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last." },
+    { "type": "text", "id": "tagline", "label": "Tagline / ID number (fallback)", "default": "Built different. Made to last.", "info": "Shown under the title. Per product it is overridden by the khan.tagline metafield, or by the variant SKU when set." },
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
 
