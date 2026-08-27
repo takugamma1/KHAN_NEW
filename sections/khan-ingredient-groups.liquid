@@ -391,6 +391,7 @@
 
   /* ---- mobile: single column ---- */
   @media screen and (max-width: 749px) {
+    .khan-igr { padding-block: calc(var(--igr-pad-y, 72px) * 0.3); }
     .khan-igr__grid { grid-template-columns: 1fr; }
     .khan-igr__group:last-child:nth-child(odd) { grid-column: auto; justify-self: stretch; width: auto; }
     .khan-igr__head { min-height: 110px; padding-right: 64px; }

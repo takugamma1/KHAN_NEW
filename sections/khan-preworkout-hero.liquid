@@ -13,6 +13,7 @@
     --ph-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
     --ph-bg-zoom: {{ s.bg_zoom | default: 100 }};
     --ph-bg-zoom-m: {{ s.bg_zoom_mobile | default: 100 }};
+    --ph-bg-fit: {{ s.bg_fit | default: 'cover' }};
     --ph-minh: {{ s.min_height }}px;
     --ph-maxw: {{ s.max_width }}px;
     --ph-pad-y: {{ s.padding_y }}px;
@@ -104,7 +105,7 @@
   }
 
   .khan-phero__bg { position: absolute; inset: 0; z-index: 0; }
-  .khan-phero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transform: scale(calc(var(--ph-bg-zoom, 100) / 100)); transform-origin: center; }
+  .khan-phero__bg-img { width: 100%; height: 100%; object-fit: var(--ph-bg-fit, cover); object-position: center; display: block; transform: scale(calc(var(--ph-bg-zoom, 100) / 100)); transform-origin: center; }
   .khan-phero__overlay {
     position: absolute; inset: 0;
     background: rgb(0 0 0 / var(--ph-overlay, 0.3));
@@ -170,8 +171,8 @@
 
   /* responsive */
   @media screen and (max-width: 900px) {
-    /* stacked flow: labels / title / subtext / jar / formula */
-    .khan-phero { flex-direction: column; align-items: stretch; justify-content: flex-start; min-height: 0; gap: 28px; }
+    /* stacked flow: labels / title / subtext / jar / formula; ~30% of the desktop padding */
+    .khan-phero { flex-direction: column; align-items: stretch; justify-content: flex-start; min-height: 0; gap: 20px; padding: calc((var(--ph-pad-y, 96px) + 40px) * 0.3) clamp(20px, 5vw, 72px) calc(var(--ph-pad-y, 96px) * 0.3); }
     .khan-phero__inner { display: contents; }
     .khan-phero__left { order: 1; max-width: 100%; width: 100%; position: relative; z-index: 1; }
     .khan-phero__bg { position: static; inset: auto; order: 2; height: calc(var(--ph-bg-zoom-m, 100) * 2.8px); }
@@ -195,6 +196,7 @@
   "settings": [
     { "type": "header", "content": "Background" },
     { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_fit", "label": "Background fit — desktop", "options": [ { "value": "cover", "label": "Fill (may crop)" }, { "value": "contain", "label": "Fit whole image (no crop)" } ], "default": "cover", "info": "Use \"Fit whole image\" for the rotating jar so it never gets cut off." },
     { "type": "range", "id": "bg_zoom", "label": "Background zoom — desktop", "min": 40, "max": 130, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "bg_zoom_mobile", "label": "Background zoom — mobile", "min": 30, "max": 230, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "overlay_opacity", "label": "Dark overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 30 },

@@ -325,7 +325,9 @@
   }
 
   @media screen and (max-width: 749px) {
-    .khan-story { padding-inline: 22px; }
+    /* compact mobile rhythm: ~30% of the desktop vertical padding */
+    .khan-story { padding-inline: 22px; padding-block: calc(var(--ks-pt, 96px) * 0.3) calc(var(--ks-pb, 96px) * 0.3); }
+    .khan-story__grid { gap: 36px; }
     .khan-story__heading { font-size: calc(var(--ks-heading-size, 92px) * 0.46); }
     .khan-story__deco-asterisk, .khan-story__sideline, .khan-story__plus, .khan-story__bracket { display: none; }
     /* hide the icon "swatches" on mobile -> features become clean text rows */

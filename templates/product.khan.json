@@ -39,7 +39,8 @@
         "right_width": 230,
         "max_width": 1680,
         "padding_y": 96,
-        "color_scheme": ""
+        "color_scheme": "",
+        "bg_fit": "contain"
       }
     },
     "khan_ingredients_hero_JggNdr": {

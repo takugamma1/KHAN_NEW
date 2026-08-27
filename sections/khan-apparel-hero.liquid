@@ -25,6 +25,7 @@
     --ah-img-w: {{ s.image_width }}%;
     --ah-fade-h: {{ s.fade_height }}%;
     --ah-heading: {{ s.heading_size }}px;
+    --ah-heading-m: {{ s.heading_size_mobile | default: 48 }}px;
     --ah-eyebrow: {{ s.eyebrow_size }}px;
     --ah-desc: {{ s.desc_size }}px;
     --ah-btn-h: {{ s.button_height }}px;
@@ -216,7 +217,7 @@
     .khan-ahero__content { max-width: 100%; }
     .khan-ahero__image { position: static; width: 100%; height: clamp(360px, 78vw, 560px); margin-top: 32px; order: 5; }
     .khan-ahero__fade { height: clamp(120px, 22vh, 220px); }
-    .khan-ahero__heading { font-size: min(var(--ah-heading, 128px), 17vw); }
+    .khan-ahero__heading { font-size: min(var(--ah-heading-m, 48px), 13vw); }
     .khan-ahero__inner { display: flex; flex-direction: column; }
   }
   @media screen and (max-width: 600px) {
@@ -274,6 +275,7 @@
 
     { "type": "header", "content": "Sizes & spacing" },
     { "type": "range", "id": "heading_size", "label": "Heading size", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 128 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Heading size — mobile", "min": 24, "max": 90, "step": 2, "unit": "px", "default": 48 },
     { "type": "range", "id": "eyebrow_size", "label": "Eyebrow size", "min": 11, "max": 18, "step": 1, "unit": "px", "default": 13 },
     { "type": "range", "id": "desc_size", "label": "Description size", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 15 },
     { "type": "range", "id": "button_height", "label": "Button height", "min": 40, "max": 64, "step": 2, "unit": "px", "default": 50 },

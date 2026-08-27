@@ -422,6 +422,10 @@
   @media screen and (max-width: 990px) {
     .khan-coll__grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
   }
+  @media screen and (max-width: 749px) {
+    /* compact mobile rhythm: ~30% of the desktop vertical padding */
+    .khan-coll { padding-block: calc(var(--coll-pt, 96px) * 0.3) calc(var(--coll-pb, 96px) * 0.3); }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .khan-coll__card { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; }

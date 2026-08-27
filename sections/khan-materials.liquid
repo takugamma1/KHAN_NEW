@@ -224,6 +224,10 @@
     .khan-mat__features { max-width: 620px; }
     .khan-mat__right { flex-direction: row; flex-wrap: wrap; gap: 28px 48px; }
   }
+  @media screen and (max-width: 749px) {
+    /* compact mobile rhythm: ~30% of the desktop vertical padding */
+    .khan-mat { padding-block: calc(var(--mat-pt, 80px) * 0.3) calc(var(--mat-pb, 80px) * 0.3); }
+  }
   @media screen and (max-width: 600px) {
     .khan-mat__details { grid-template-columns: repeat(2, 1fr); }
     .khan-mat__features { grid-template-columns: 1fr; }

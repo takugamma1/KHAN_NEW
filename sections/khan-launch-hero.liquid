@@ -212,7 +212,9 @@
 
   /* responsive */
   @media screen and (max-width: 900px) {
-    .khan-lhero__inner { flex-direction: column; align-items: stretch; gap: 40px; min-height: 0; }
+    /* compact mobile rhythm: ~30% of the desktop vertical padding */
+    .khan-lhero { padding-block: calc(var(--lh-pad-y, 80px) * 0.3); }
+    .khan-lhero__inner { flex-direction: column; align-items: stretch; gap: 20px; min-height: 0; }
     .khan-lhero--img-right .khan-lhero__media { order: 0; }
     .khan-lhero__media { max-height: 56vh; }
     .khan-lhero__heading { font-size: min(var(--lh-heading, 130px), 18vw); }

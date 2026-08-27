@@ -34,7 +34,7 @@
         "show_logo": true,
         "logo_white": true,
         "logo_width": 220,
-        "logo_width_mobile": 140,
+        "logo_width_mobile": 300,
         "logo_pulse": true,
         "pulse_amount": 35,
         "pulse_opacity": 90,
@@ -103,7 +103,7 @@
         "frame_offset_y": -20,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
-        "mobile_height": 90,
+        "mobile_height": 25,
         "frame_position_mobile": "center",
         "frame_scale_mobile": 115,
         "frame_offset_y_mobile": 0,
@@ -259,7 +259,7 @@
       "settings": {
         "image": "shopify://shop_images/Vurtene_2.webp",
         "image_position": "left",
-        "img_zoom": 200,
+        "img_zoom": 175,
         "img_minh": 680,
         "eyebrow": "Supplement",
         "heading": "<p>Pre-<br/><strong>workout</strong></p>",
@@ -344,7 +344,8 @@
         "particle_color": "#560b1e",
         "particle_color_2": "#dfdfdf",
         "particle_dir": "down",
-        "color_scheme": ""
+        "color_scheme": "",
+        "heading_size_mobile": 44
       }
     },
     "khan_statement_band_Hm4Qzt": {
