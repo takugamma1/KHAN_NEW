@@ -77,25 +77,15 @@
 
             {%- if s.show_edition -%}
               {%- liquid
+                # Price badge: typed override wins, else the product's live price.
                 assign edition_text = block.settings.edition_text
                 if edition_text == blank and p != blank
-                  assign qty = 0
-                  assign tracked = false
-                  for v in p.variants
-                    if v.inventory_management != blank
-                      assign tracked = true
-                      assign qty = qty | plus: v.inventory_quantity
-                    endif
-                  endfor
-                  if tracked
-                    assign qty_str = qty | at_least: 0 | prepend: '00' | slice: -3, 3
-                    assign edition_text = qty_str | append: '/' | append: s.edition_total
-                  endif
+                  assign edition_text = p.selected_or_first_available_variant.price | money
                 endif
               -%}
               {%- if edition_text != blank -%}
                 <span class="khan-coll__edition">
-                  <span class="khan-coll__edition-kicker">Edition</span>
+                  <span class="khan-coll__edition-kicker">{{ s.edition_kicker | default: 'Цена' }}</span>
                   <strong class="khan-coll__edition-num">{{ edition_text }}</strong>
                 </span>
               {%- endif -%}
@@ -484,8 +474,8 @@
     { "type": "range", "id": "swatch_size", "label": "Bubble size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 30 },
 
     { "type": "header", "content": "Card badges" },
-    { "type": "checkbox", "id": "show_edition", "label": "Show edition tag (left)", "default": true },
-    { "type": "text", "id": "edition_total", "label": "Edition total", "default": "500", "info": "Remaining count comes from product inventory. Override per card in the block settings." },
+    { "type": "checkbox", "id": "show_edition", "label": "Show price tag (left)", "default": true },
+    { "type": "text", "id": "edition_kicker", "label": "Price tag label", "default": "Цена" },
     { "type": "checkbox", "id": "show_fav", "label": "Show favorites badge (right)", "default": true },
     { "type": "color", "id": "fav_color", "label": "Favorites badge color", "default": "#3B0211" },
     { "type": "color", "id": "fav_color_active", "label": "Favorites badge color — favourited", "default": "#9A1F33", "info": "Brighter red shows the product is in favourites." },
@@ -510,7 +500,7 @@
         { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
         { "type": "url", "id": "button_link", "label": "Button link override" },
-        { "type": "text", "id": "edition_text", "label": "Edition tag override", "info": "e.g. 047/500 — leave blank to use live inventory" },
+        { "type": "text", "id": "edition_text", "label": "Price override", "info": "Leave blank to show the product's live price automatically." },
         { "type": "header", "content": "Variant bubbles (showcase)" },
         { "type": "image_picker", "id": "bubble_1", "label": "Bubble 1" },
         { "type": "image_picker", "id": "bubble_2", "label": "Bubble 2" },

@@ -17,6 +17,31 @@
     variant SKU, else the section's shared tagline.
   endcomment
   assign tagline = mf.tagline.value | default: cur.sku | default: s.tagline
+
+  comment
+    Limited-edition counter above the title: remaining = live inventory across
+    tracked variants; total = khan.edition_total metafield, else section setting.
+  endcomment
+  assign edition_total = mf.edition_total.value | default: s.edition_total
+  assign edition_qty = blank
+  if s.show_edition and p != blank
+    assign eq = 0
+    assign etracked = false
+    for v in p.variants
+      if v.inventory_management != blank
+        assign etracked = true
+        assign eq = eq | plus: v.inventory_quantity
+      endif
+    endfor
+    if etracked
+      assign eq = eq | at_least: 0
+      if eq < 1000
+        assign edition_qty = eq | prepend: '00' | slice: -3, 3
+      else
+        assign edition_qty = eq
+      endif
+    endif
+  endif
   assign insp_heading = mf.insp_heading.value | default: s.insp_heading
   assign insp_intro = mf.insp_intro.value | default: s.insp_intro
   assign insp_expanded_heading = mf.insp_expanded_heading.value | default: s.insp_expanded_heading
@@ -152,6 +177,13 @@
         {%- comment -%} ===== info / buy ===== {%- endcomment -%}
         <div class="khan-product__info">
           <p class="khan-product__count" data-rev style="--rev: 2"><span data-counter>01</span> / <span data-counter-total>{% if media_count < 10 %}0{% endif %}{{ media_count | default: 1 }}</span></p>
+
+          {%- if edition_qty != blank -%}
+            <p class="khan-product__edition" data-rev style="--rev: 2">
+              <span class="khan-product__edition-label">{{ s.edition_label | default: 'Лимитирана серия' }}</span>
+              <strong class="khan-product__edition-num">{{ edition_qty }}{% if edition_total != blank %}/{{ edition_total }}{% endif %}</strong>
+            </p>
+          {%- endif -%}
 
           <h1 class="khan-product__title" data-rev style="--rev: 3">{{ p.title | default: 'Product title' }}</h1>
           {%- if tagline != blank -%}<p class="khan-product__tagline" data-rev style="--rev: 4">{{ tagline }}</p>{%- endif -%}
@@ -569,7 +601,7 @@
   }
 
   /* mono helper */
-  .khan-product__count, .khan-product__tagline, .khan-product__desc, .khan-product__feat-label,
+  .khan-product__count, .khan-product__edition, .khan-product__tagline, .khan-product__desc, .khan-product__feat-label,
   .khan-product__size-label, .khan-product__size, .khan-product__guide, .khan-product__price,
   .khan-product__atc, .khan-product__buynow, .khan-product__corner {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -595,6 +627,8 @@
 
   /* ---- info ---- */
   .khan-product__count { margin: 0 0 18px; font-size: 14px; letter-spacing: 0.2em; color: var(--kp-accent, #560B1E); }
+  .khan-product__edition { display: flex; align-items: baseline; gap: 10px; margin: -8px 0 16px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--kp-muted, #555); }
+  .khan-product__edition-num { color: var(--kp-accent, #560B1E); letter-spacing: 0.12em; }
   .khan-product__title {
     margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: min(var(--kp-title-size, 64px), 7vw); line-height: 0.92; letter-spacing: -0.01em;
@@ -795,6 +829,11 @@
     { "type": "text", "id": "tagline", "label": "Tagline / ID number (fallback)", "default": "Built different. Made to last.", "info": "Shown under the title. Per product it is overridden by the khan.tagline metafield, or by the variant SKU when set." },
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
+
+    { "type": "header", "content": "Limited edition counter" },
+    { "type": "checkbox", "id": "show_edition", "label": "Show remaining count above the title", "default": true, "info": "Counts live inventory across the product's variants — inventory tracking must be on for the product." },
+    { "type": "text", "id": "edition_label", "label": "Label", "default": "Лимитирана серия" },
+    { "type": "text", "id": "edition_total", "label": "Edition total (fallback)", "default": "500", "info": "Per product: set the khan.edition_total metafield to override." },
 
     { "type": "header", "content": "Inspiration disclosure" },
     { "type": "paragraph", "content": "Per-product text: fill the product metafields khan.insp_heading, khan.insp_intro, khan.insp_expanded_text, khan.insp_expanded_heading and khan.insp_image on each product. The fields below are the shared fallback." },
