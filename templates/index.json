@@ -261,7 +261,7 @@
         "image_position": "left",
         "img_zoom": 175,
         "img_minh": 680,
-        "eyebrow": "Supplement",
+        "eyebrow": "ДОБАВКИ",
         "heading": "<p>Pre-<br/><strong>workout</strong></p>",
         "show_divider": true,
         "description": "<p>Без компромиси във формулата.<br/><br/>За тези, на които им е писнало<br/> от евтини обещания.</p><p>НАй-висок клас суровини.<br/>ЧЕТИРИНАДЕСЕТ КЛИНИЧНО ДОЗИРАНИ СЪСТАВКИ.</p>",
@@ -306,7 +306,7 @@
         "image": "shopify://shop_images/Hoodie_back.png",
         "image_width": 46,
         "fade_height": 15,
-        "eyebrow": "Apparel",
+        "eyebrow": "ДРЕХИ",
         "heading": "<p>КОЛЕКЦИЯ<br/><strong>KHAN 26</strong></p>",
         "show_divider": true,
         "description": "<p>ОСЕМ АРТИКУЛА, ШИТИ И КРОЕНИ В БЪЛГАРИЯ</p><p>ЛИМИТИРАНИ БРОЙКИ.</p><p>26.07.811</p>",
@@ -330,6 +330,7 @@
         "btn_outline": "#141414",
         "btn_outline_text": "#141414",
         "heading_size": 92,
+        "heading_size_mobile": 44,
         "eyebrow_size": 13,
         "desc_size": 15,
         "button_height": 48,
@@ -344,8 +345,7 @@
         "particle_color": "#560b1e",
         "particle_color_2": "#dfdfdf",
         "particle_dir": "down",
-        "color_scheme": "",
-        "heading_size_mobile": 44
+        "color_scheme": ""
       }
     },
     "khan_statement_band_Hm4Qzt": {
