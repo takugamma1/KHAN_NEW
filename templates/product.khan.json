@@ -14,11 +14,12 @@
       "name": "Pre-workout hero",
       "settings": {
         "bg_image": "shopify://shop_images/Vurtene_1.webp",
+        "bg_fit": "contain",
         "bg_zoom": 80,
         "bg_zoom_mobile": 95,
         "overlay_opacity": 0,
         "min_height": 1000,
-        "top_left": "[ 42°55'42.80\"N, 26°39'59.91\"E ]",
+        "top_left": "",
         "top_right": "Pre-workout",
         "corner_top": 96,
         "eyebrow": "",
@@ -39,8 +40,7 @@
         "right_width": 230,
         "max_width": 1680,
         "padding_y": 96,
-        "color_scheme": "",
-        "bg_fit": "contain"
+        "color_scheme": ""
       }
     },
     "khan_ingredients_hero_JggNdr": {
