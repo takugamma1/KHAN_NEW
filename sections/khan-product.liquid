@@ -93,6 +93,7 @@
     --kp-bottom-shift: {{ s.bottom_shift | default: 0 }}px;
     --kp-bottom-h-m: {{ s.bottom_height_mobile | default: 220 }}px;
     --kp-bottom-shift-m: {{ s.bottom_shift_mobile | default: 0 }}px;
+    --kp-bottom-gap-m: {{ s.bottom_gap_mobile | default: 8 }}px;
     --kp-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   data-khan-product
@@ -784,7 +785,7 @@
   @media screen and (max-width: 749px) {
     /* the overlay is only ~210px tall on phones, so it gets its own height/shift and the
        bottom padding reserves exactly the part of it that stays above the edge */
-    .khan-product { padding-bottom: calc(var(--kp-bottom-h-m, 220px) - var(--kp-bottom-shift-m, 0px) + 24px); }
+    .khan-product { padding-bottom: calc(var(--kp-bottom-h-m, 220px) - var(--kp-bottom-shift-m, 0px) + var(--kp-bottom-gap-m, 8px)); }
     .khan-product__bottom { transform: translateY(var(--kp-bottom-shift-m, 0px)); }
     .khan-product__bottom-img { height: var(--kp-bottom-h-m, 220px); max-height: none; }
     .khan-product__grid { grid-template-columns: 1fr; }
@@ -858,8 +859,9 @@
     { "type": "image_picker", "id": "bottom_image", "label": "Image" },
     { "type": "range", "id": "bottom_height", "label": "Overlay max height", "min": 60, "max": 700, "step": 10, "unit": "px", "default": 360 },
     { "type": "range", "id": "bottom_shift", "label": "Push image down", "min": 0, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Slides the image below the section edge so less of it stays visible." },
-    { "type": "range", "id": "bottom_height_mobile", "label": "Overlay height — mobile", "min": 80, "max": 600, "step": 10, "unit": "px", "default": 220, "info": "On phones the image is cropped to this height, bottom-aligned, so the rocks always stay in view." },
+    { "type": "range", "id": "bottom_height_mobile", "label": "Overlay height — mobile", "min": 40, "max": 600, "step": 10, "unit": "px", "default": 220, "info": "On phones the image is cropped to this height, bottom-aligned. The rocks file is transparent above the ridge, so a smaller value trims the empty space above the rocks." },
     { "type": "range", "id": "bottom_shift_mobile", "label": "Push image down — mobile", "min": 0, "max": 300, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "bottom_gap_mobile", "label": "Gap above overlay — mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 8, "info": "Space between the last content and the top of the overlay box." },
     { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide on mobile (avoids a 2nd product image)", "default": true },
 
     { "type": "header", "content": "Decoration" },
