@@ -18,6 +18,7 @@
         "intro": "<p>Пиши ни за поръчки, партньорства или каквото и да е друго. Отговаряме до 24 часа в работни дни.</p>",
         "email": "info@khan.bg",
         "phone": "",
+        "instagram": "",
         "button_label": "Изпрати",
         "success_text": "Съобщението е изпратено. Ще се свържем с теб възможно най-скоро.",
         "card_opacity": 92,
@@ -25,7 +26,7 @@
         "card_radius": 22,
         "max_width": 880,
         "bg_color": "#ffffff",
-        "accent_color": "#560B1E",
+        "accent_color": "#9A1F33",
         "padding_top": 140,
         "padding_bottom": 96,
         "color_scheme": ""
