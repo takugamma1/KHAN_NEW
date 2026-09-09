@@ -39,7 +39,7 @@
         "corner_size": 12,
         "right_width": 230,
         "max_width": 1680,
-        "padding_y": 96,
+        "padding_y": 40,
         "color_scheme": ""
       }
     },
