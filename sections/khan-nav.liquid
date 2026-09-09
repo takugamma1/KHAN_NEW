@@ -12,6 +12,8 @@
     --nav-border: {{ s.border_color }};
     --nav-text: {{ s.text_color }};
     --nav-accent: {{ s.accent_color }};
+    --nav-acct-in: {{ s.acct_in_bg | default: s.accent_color }};
+    --nav-acct-dot: {{ s.acct_dot_color | default: '#22C55E' }};
     --nav-blur: {{ s.blur }}px;
     --nav-h: {{ s.pill_height }}px;
     --nav-logo: {{ s.logo_size }}px;
@@ -56,12 +58,23 @@
       {%- comment -%} Right actions: cart (+ burger on mobile) {%- endcomment -%}
       <div class="khan-nav__actions">
         {%- if s.show_account -%}
-          <a class="khan-nav__acct" href="{{ routes.account_url }}" aria-label="Account">
+          {%- capture acct_svg -%}
             <svg class="khan-nav__acct-ic" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
               <path d="M10.6666 4H21.3333L23.3333 9.33333V13.3333L21.3333 16H10.6666L8.66663 13.3333V9.33333L10.6666 4Z" fill="currentColor"></path>
               <path d="M4.66663 29.3334H27.3333L25.3333 21.3334L22.6666 18.6667H9.33329L6.66663 21.3334L4.66663 29.3334Z" fill="currentColor"></path>
             </svg>
-          </a>
+          {%- endcapture -%}
+          {%- if customer -%}
+            {%- comment -%} Logged in: filled bubble + status dot, initial instead of the glyph {%- endcomment -%}
+            {%- assign acct_name = customer.first_name | default: customer.email -%}
+            {%- assign acct_initial = acct_name | strip | slice: 0, 1 | upcase -%}
+            <a class="khan-nav__acct khan-nav__acct--in" href="{{ routes.account_url }}" aria-label="Профил: {{ acct_name | escape }}" title="{{ acct_name | escape }}">
+              {%- if s.acct_show_initial -%}<span class="khan-nav__acct-initial" aria-hidden="true">{{ acct_initial }}</span>{%- else -%}{{ acct_svg }}{%- endif -%}
+              <span class="khan-nav__acct-dot" aria-hidden="true"></span>
+            </a>
+          {%- else -%}
+            <a class="khan-nav__acct" href="{{ routes.account_url }}" aria-label="Account">{{ acct_svg }}</a>
+          {%- endif -%}
         {%- endif -%}
 
         {%- if s.show_favs -%}
@@ -294,6 +307,11 @@
   .khan-nav__acct { color: var(--nav-text, #f3f3f3); text-decoration: none; }
   .khan-nav__acct:hover { background: rgb(255 255 255 / 0.14); }
   .khan-nav__acct-ic { width: calc(var(--nav-logo, 26px) - 2px); height: auto; display: block; }
+  /* logged-in state: filled bubble, customer initial, green status dot */
+  .khan-nav__acct--in { position: relative; background: var(--nav-acct-in, var(--nav-accent, #560B1E)); color: #fff; border-radius: 999px; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18); }
+  .khan-nav__acct--in:hover { background: var(--nav-acct-in, var(--nav-accent, #560B1E)); filter: brightness(1.12); }
+  .khan-nav__acct-initial { font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: calc(var(--nav-logo, 26px) - 8px); line-height: 1; letter-spacing: 0.02em; }
+  .khan-nav__acct-dot { position: absolute; top: -1px; right: -1px; width: 12px; height: 12px; border-radius: 50%; background: var(--nav-acct-dot, #22C55E); border: 2px solid rgb(0 0 0 / 0.5); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 0 8px var(--nav-acct-dot, #22C55E); }
 
   /* ---- menu (desktop) ---- */
   .khan-nav__menu {
@@ -374,6 +392,8 @@
     .khan-nav__logo-img,
     .khan-nav__cart-ic,
     .khan-nav__acct-ic { width: 18px; }
+    .khan-nav__acct-initial { font-size: 15px; }
+    .khan-nav__acct-dot { width: 10px; height: 10px; }
     .khan-nav__fav-ic { height: 16px; width: auto; }
     .khan-nav__actions { gap: 8px; }
     .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
@@ -508,6 +528,9 @@
     { "type": "select", "id": "logo_style", "label": "Logo style", "options": [ { "value": "plain", "label": "Plain (no circle)" }, { "value": "bubble", "label": "Bubble (circle)" } ], "default": "plain" },
     { "type": "range", "id": "logo_width", "label": "Plain logo width", "min": 60, "max": 240, "step": 4, "unit": "px", "default": 120 },
     { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": true },
+    { "type": "checkbox", "id": "acct_show_initial", "label": "Logged in: show the customer's initial instead of the icon", "default": true, "info": "When a customer is logged in the bubble fills with the colour below and gets a status dot." },
+    { "type": "color", "id": "acct_in_bg", "label": "Logged in: bubble fill", "default": "#560B1E" },
+    { "type": "color", "id": "acct_dot_color", "label": "Logged in: status dot", "default": "#22C55E" },
     { "type": "checkbox", "id": "show_favs", "label": "Show favourites icon", "default": true },
     { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
 
