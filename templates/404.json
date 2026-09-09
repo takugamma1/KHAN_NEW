@@ -273,7 +273,8 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
-      }
+      },
+      "disabled": true
     },
     "khan_404": {
       "type": "khan-404",
@@ -317,7 +318,8 @@
     }
   },
   "order": [
+    "khan_404",
     "main",
-    "khan_404"
+    "product_list_iA96Tq"
   ]
 }
