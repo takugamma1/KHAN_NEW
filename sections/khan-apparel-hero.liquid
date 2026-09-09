@@ -19,7 +19,11 @@
     --ah-btn-outline: {{ s.btn_outline }};
     --ah-btn-outline-text: {{ s.btn_outline_text }};
     --ah-maxw: {{ s.max_width }}px;
-    --ah-pad-y: {{ s.padding_y }}px;
+    --ah-pt: {{ s.padding_top | default: 72 }}px;
+    --ah-pb: {{ s.padding_bottom | default: 72 }}px;
+    --ah-pt-m: {{ s.padding_top_mobile | default: 24 }}px;
+    --ah-pb-m: {{ s.padding_bottom_mobile | default: 24 }}px;
+    --ah-img-h-m: {{ s.image_height_mobile | default: 360 }}px;
     --ah-minh: {{ s.min_height }}px;
     --ah-content-w: {{ s.content_width }}%;
     --ah-img-w: {{ s.image_width }}%;
@@ -117,7 +121,7 @@
     background: var(--ah-bg, #f1f1ee);
     color: var(--ah-text, #141414);
     min-height: var(--ah-minh, 860px);
-    padding: var(--ah-pad-y, 72px) clamp(20px, 5vw, 72px);
+    padding: var(--ah-pt, 72px) clamp(20px, 5vw, 72px) var(--ah-pb, 72px);
   }
 
   /* z0 — image below the gradient */
@@ -140,7 +144,7 @@
   .khan-ahero__inner {
     position: relative; z-index: 2;
     max-width: var(--ah-maxw, 1660px); margin-inline: auto;
-    min-height: calc(var(--ah-minh, 860px) - (var(--ah-pad-y, 72px) * 2));
+    min-height: calc(var(--ah-minh, 860px) - var(--ah-pt, 72px) - var(--ah-pb, 72px));
     display: flex; flex-direction: column;
   }
   .khan-ahero__content { max-width: var(--ah-content-w, 52%); }
@@ -212,10 +216,11 @@
 
   /* responsive */
   @media screen and (max-width: 900px) {
-    .khan-ahero { min-height: 0; }
+    .khan-ahero { min-height: 0; padding: var(--ah-pt-m, 24px) clamp(20px, 5vw, 72px) var(--ah-pb-m, 24px); }
     .khan-ahero__inner { min-height: 0; }
     .khan-ahero__content { max-width: 100%; }
-    .khan-ahero__image { position: static; width: 100%; height: clamp(360px, 78vw, 560px); margin-top: 32px; order: 5; }
+    /* image sits above the text on phones; its height is an editor setting, no extra gap */
+    .khan-ahero__image { position: static; width: 100%; height: var(--ah-img-h-m, 360px); margin-top: 0; order: 5; }
     .khan-ahero__fade { height: clamp(120px, 22vh, 220px); }
     .khan-ahero__heading { font-size: min(var(--ah-heading-m, 48px), 13vw); }
     .khan-ahero__inner { display: flex; flex-direction: column; }
@@ -283,7 +288,11 @@
     { "type": "range", "id": "content_width", "label": "Content width", "min": 40, "max": 70, "step": 1, "unit": "%", "default": 52 },
     { "type": "range", "id": "min_height", "label": "Min height", "min": 520, "max": 1100, "step": 20, "unit": "px", "default": 860 },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1660 },
-    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_top", "label": "Padding top — desktop", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom — desktop", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Padding top — mobile", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Padding bottom — mobile", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "image_height_mobile", "label": "Image height — mobile", "min": 160, "max": 700, "step": 10, "unit": "px", "default": 360, "info": "The product image is drawn bottom-aligned inside this box; lower it to trim empty space above the image." },
 
     { "type": "header", "content": "Particles" },
     { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": false },
