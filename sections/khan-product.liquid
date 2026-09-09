@@ -205,10 +205,9 @@
             </div>
           {%- endif -%}
 
+          {%- comment -%} The product's own description lives in the Описание tab; this slot is only for a section-level override. {%- endcomment -%}
           {%- if s.description != blank -%}
             <div class="khan-product__desc" data-rev style="--rev: 6">{{ s.description }}</div>
-          {%- elsif p.description != blank -%}
-            <div class="khan-product__desc" data-rev style="--rev: 6">{{ p.description }}</div>
           {%- endif -%}
 
           {%- if s.show_inspiration and insp_heading != blank -%}
@@ -290,7 +289,10 @@
                   # Per-product tab copy: khan.<key> metafields beat the block text.
                   assign tab_body = block.settings.body
                   assign tab_table = block.settings.table
-                  if block.settings.mf_body_key != blank
+                  if block.settings.use_product_description
+                    # standard: the Описание tab shows the product's own description
+                    assign tab_body = p.description
+                  elsif block.settings.mf_body_key != blank
                     assign mf_body = p.metafields.khan[block.settings.mf_body_key]
                     if mf_body.value != blank
                       capture tab_body
@@ -898,6 +900,7 @@
         { "type": "image_picker", "id": "icon", "label": "Icon (optional)" },
         { "type": "text", "id": "heading", "label": "Heading", "default": "Описание" },
         { "type": "richtext", "id": "body", "label": "Text" },
+        { "type": "checkbox", "id": "use_product_description", "label": "Use the product's own description", "default": false, "info": "Standard for the Описание tab: shows the description from the product's admin page. The text above and the metafield key below are then ignored." },
         { "type": "textarea", "id": "table", "label": "Size table (optional)", "info": "One row per line; separate cells with | . The first row is the header." },
         { "type": "checkbox", "id": "open", "label": "Open by default", "default": false },
         { "type": "header", "content": "Per-product override" },
