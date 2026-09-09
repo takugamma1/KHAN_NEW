@@ -4,7 +4,7 @@
 
 <div
   id="KhanAbout-{{ section.id }}"
-  class="khan-about color-{{ s.color_scheme }}{% if s.text_grain %} khan-about--grain{% endif %}"
+  class="khan-about color-{{ s.color_scheme }}{% if s.text_grain %} khan-about--grain{% endif %}{% if s.band_align == 'center' %} khan-about--band-center{% endif %}"
   style="
     --ab-bg: {{ s.bg_color }};
     --ab-heading: {{ s.heading_color }};
@@ -21,10 +21,24 @@
     --ab-band-minh: {{ s.band_min_height }}px;
     --ab-maxw: {{ s.max_width }}px;
     --ab-pt: {{ s.padding_top }}px;
+    --ab-band-gap: {{ s.band_gap_top | default: 64 }}px;
+    --ab-band-py: {{ s.band_padding_y | default: 48 }}px;
+    --ab-band-minh-m: {{ s.band_min_height_mobile | default: 260 }}px;
+    --ab-band-size-m: {{ s.band_heading_size_mobile | default: 22 }}px;
+    --ab-band-heading-color: {{ s.band_heading_color | default: '#ffffff' }};
+    --ab-band-accent-color: {{ s.band_accent_color | default: s.accent_color }};
+    --ab-band-accent-size: {{ s.band_accent_size | default: 13 }}px;
+    --ab-band-ov: {{ s.band_overlay | default: 82 | divided_by: 100.0 }};
+    --ab-band-ch: {{ s.band_heading_max | default: 18 }};
+    --ab-band-align: {{ s.band_align | default: 'left' }};
+    --ab-band-imgpos: {{ s.band_image_position | default: 'center' }};
     --ab-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   data-khan-about
 >
+  {%- if s.show_particles -%}
+    {% render 'khan-particles', count: s.particle_count, size: s.particle_size, color1: s.particle_color, color2: s.particle_color_2, direction: s.particle_dir %}
+  {%- endif -%}
   <div class="khan-about__inner">
 
     {%- comment -%} top bar — only when there is content for it {%- endcomment -%}
@@ -101,7 +115,7 @@
     padding-top: var(--ab-pt, 40px);
     overflow: hidden;
   }
-  .khan-about__inner { max-width: min(var(--ab-maxw, 1200px), 100%); margin-inline: auto; padding-inline: clamp(18px, 4vw, 48px); }
+  .khan-about__inner { position: relative; z-index: 1; max-width: min(var(--ab-maxw, 1200px), 100%); margin-inline: auto; padding-inline: clamp(18px, 4vw, 48px); }
 
   /* mono helper */
   .khan-about__eyebrow, .khan-about__topright, .khan-about__body, .khan-about__feat-title,
@@ -140,19 +154,22 @@
   .khan-about__feat-text p { margin: 0; }
 
   /* ---- bottom band (full-bleed) ---- */
-  .khan-about__band { position: relative; margin-top: clamp(48px, 6vw, 80px); min-height: var(--ab-band-minh, 420px); display: flex; align-items: center; overflow: hidden; isolation: isolate; }
+  .khan-about__band { position: relative; margin-top: var(--ab-band-gap, 64px); min-height: var(--ab-band-minh, 420px); display: flex; align-items: center; overflow: hidden; isolation: isolate; }
   .khan-about__band-bg { position: absolute; inset: 0; z-index: 0; }
-  .khan-about__band-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-  .khan-about__band-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.45) 60%, rgb(0 0 0 / 0.2) 100%); }
-  .khan-about__band-content { position: relative; z-index: 1; max-width: min(var(--ab-maxw, 1200px), 100%); width: 100%; margin-inline: auto; padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 48px); }
+  .khan-about__band-img { width: 100%; height: 100%; object-fit: cover; object-position: var(--ab-band-imgpos, center); display: block; }
+  /* the darkening gradient scales with the "Darken image" setting (0 = image untouched) */
+  .khan-about__band-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / calc(var(--ab-band-ov, 0.82) * 1)) 0%, rgb(0 0 0 / calc(var(--ab-band-ov, 0.82) * 0.55)) 60%, rgb(0 0 0 / calc(var(--ab-band-ov, 0.82) * 0.25)) 100%); }
+  .khan-about__band-content { position: relative; z-index: 1; max-width: min(var(--ab-maxw, 1200px), 100%); width: 100%; margin-inline: auto; padding: var(--ab-band-py, 48px) clamp(18px, 4vw, 48px); text-align: var(--ab-band-align, left); }
   .khan-about__band-heading {
     margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
     font-size: min(var(--ab-band-size, 32px), 7vw); line-height: 1.05; letter-spacing: 0.01em;
-    text-transform: uppercase; color: #fff; max-width: 18ch;
+    text-transform: uppercase; color: var(--ab-band-heading-color, #fff); max-width: calc(var(--ab-band-ch, 18) * 1ch);
   }
+  .khan-about--band-center .khan-about__band-heading { margin-inline: auto; }
   .khan-about__band-heading p { margin: 0; }
   .khan-about__band-heading :is(strong, b) { color: var(--ab-accent, #560B1E); font-weight: inherit; }
-  .khan-about__band-accent { margin: 18px 0 0; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ab-accent, #560B1E); }
+  .khan-about__band-accent { margin: 18px 0 0; font-size: var(--ab-band-accent-size, 13px); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ab-band-accent-color, var(--ab-accent, #560B1E)); }
+  .khan-about__band-heading:empty + .khan-about__band-accent, .khan-about__band-content > .khan-about__band-accent:first-child { margin-top: 0; }
 
 
   /* ---- grain on text ---- */
@@ -166,6 +183,10 @@
     .khan-about__story { grid-template-columns: 1fr; }
     .khan-about__feats { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
     .khan-about__feat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  }
+  @media screen and (max-width: 749px) {
+    .khan-about__band { min-height: var(--ab-band-minh-m, 260px); }
+    .khan-about__band-heading { font-size: min(var(--ab-band-size-m, 22px), 8vw); }
   }
   @media screen and (max-width: 520px) {
     .khan-about__feats { grid-template-columns: 1fr; }
@@ -202,10 +223,29 @@
 
     { "type": "header", "content": "Bottom statement band" },
     { "type": "image_picker", "id": "band_image", "label": "Background image" },
+    { "type": "select", "id": "band_image_position", "label": "Image focus", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "range", "id": "band_overlay", "label": "Darken image", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 82, "info": "0 leaves the image untouched." },
     { "type": "richtext", "id": "band_heading", "label": "Heading", "default": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>" },
+    { "type": "color", "id": "band_heading_color", "label": "Heading color", "default": "#ffffff" },
+    { "type": "range", "id": "band_heading_size", "label": "Band heading size — desktop", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "band_heading_size_mobile", "label": "Band heading size — mobile", "min": 14, "max": 40, "step": 1, "unit": "px", "default": 22 },
+    { "type": "range", "id": "band_heading_max", "label": "Heading max width", "min": 10, "max": 40, "step": 1, "unit": "ch", "default": 18, "info": "In characters — lower it to wrap the text sooner." },
     { "type": "text", "id": "band_accent", "label": "Accent line", "default": "This is KHAN." },
-    { "type": "range", "id": "band_heading_size", "label": "Band heading size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 32 },
-    { "type": "range", "id": "band_min_height", "label": "Band height", "min": 240, "max": 700, "step": 20, "unit": "px", "default": 420 },
+    { "type": "range", "id": "band_accent_size", "label": "Accent line size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 13 },
+    { "type": "color", "id": "band_accent_color", "label": "Accent line color", "default": "#9A1F33" },
+    { "type": "select", "id": "band_align", "label": "Text alignment", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ], "default": "left" },
+    { "type": "range", "id": "band_min_height", "label": "Band height — desktop", "min": 240, "max": 700, "step": 20, "unit": "px", "default": 420 },
+    { "type": "range", "id": "band_min_height_mobile", "label": "Band height — mobile", "min": 120, "max": 600, "step": 10, "unit": "px", "default": 260 },
+    { "type": "range", "id": "band_gap_top", "label": "Gap above band", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "band_padding_y", "label": "Band inner padding (top & bottom)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+
+    { "type": "header", "content": "Particles" },
+    { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": true },
+    { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 50 },
+    { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#dfdfdf" },
+    { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#560B1E" },
+    { "type": "select", "id": "particle_dir", "label": "Particle direction", "options": [ { "value": "down", "label": "Falling (blood drops)" }, { "value": "up", "label": "Rising" } ], "default": "down" },
 
     { "type": "header", "content": "Style" },
     { "type": "checkbox", "id": "text_grain", "label": "Grain on text", "default": true },
