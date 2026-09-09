@@ -185,7 +185,21 @@
       var h = tab.offsetHeight || 120;
       var r = root.getBoundingClientRect();
       var pin = window.innerHeight * 0.5 - h / 2;
-      tab.style.top = Math.min(Math.max(pin, r.top), r.bottom - h) + 'px';
+      var top = Math.min(Math.max(pin, r.top), r.bottom - h);
+      /* never sit on the sticky add-to-cart bar: cap the bubble above it, and while the
+         section hasn't scrolled up far enough for the bubble to fit, keep it hidden */
+      var limit = window.innerHeight;
+      var cart = document.querySelector('[data-khan-scart] .khan-scart__bar') || document.querySelector('[data-khan-scart]');
+      if (cart) {
+        var c = cart.getBoundingClientRect();
+        var cs = getComputedStyle(cart);
+        if (c.height > 0 && c.top < window.innerHeight && cs.visibility !== 'hidden' && parseFloat(cs.opacity) > 0.05) limit = Math.min(limit, c.top);
+      }
+      var maxTop = limit - 12 - h;
+      var hidden = false;
+      if (top > maxTop) { top = maxTop; if (top < r.top) hidden = true; }
+      tab.style.top = top + 'px';
+      tab.style.visibility = hidden ? 'hidden' : '';
     }
     function onScroll() { if (rafPending) return; rafPending = true; requestAnimationFrame(function () { rafPending = false; updateTabPos(); }); }
 
@@ -271,7 +285,7 @@
       window.removeEventListener('pointercancel', onUp);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
-      if (tab) tab.style.top = '';
+      if (tab) { tab.style.top = ''; tab.style.visibility = ''; }
       if (scrim) scrim.removeEventListener('click', closeFromScrim);
       var inner = root.querySelector('.khan-ihero__inner');
       if (anchor.parentNode) { anchor.parentNode.insertBefore(facts, anchor); anchor.parentNode.removeChild(anchor); }
