@@ -313,7 +313,8 @@
         "muted_color": "#b9b9b9",
         "accent_color": "#9a1f33",
         "accent_color_2": "#560b1e",
-        "color_scheme": ""
+        "color_scheme": "",
+        "mark_spin": 8
       }
     }
   },

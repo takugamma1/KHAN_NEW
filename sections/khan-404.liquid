@@ -4,7 +4,7 @@
 
 <div
   id="Khan404-{{ section.id }}"
-  class="khan-404 color-{{ s.color_scheme }}{% if s.text_grain %} khan-404--grain{% endif %}{% if s.hide_bottom_mobile %} khan-404--hide-bottom-m{% endif %}"
+  class="khan-404 color-{{ s.color_scheme }}{% if s.text_grain %} khan-404--grain{% endif %}{% if s.hide_bottom_mobile %} khan-404--hide-bottom-m{% endif %}{% if s.mark_spin == 0 %} khan-404--still{% endif %}"
   style="
     --k4-bg: {{ s.bg_color }};
     --k4-text: {{ s.text_color }};
@@ -15,6 +15,7 @@
     --k4-heading-size: {{ s.heading_size }}px;
     --k4-minh: {{ s.min_height }}svh;
     --k4-corner-top: {{ s.corner_top | default: 96 }}px;
+    --k4-spin: {{ s.mark_spin | default: 8 }}s;
     --k4-bottom-h: {{ s.bottom_height }}px;
     --k4-bottom-h-m: {{ s.bottom_height_mobile }}px;
     --k4-bottom-op: {{ s.bottom_opacity | default: 100 | divided_by: 100.0 }};
@@ -116,8 +117,10 @@
     display: inline-block; width: 0.74em; height: 0.86em; margin: 0 0.02em;
     background: var(--k4-accent, #9A1F33);
     -webkit-mask: var(--k4-mark) center / contain no-repeat; mask: var(--k4-mark) center / contain no-repeat;
-    animation: k4-spin 28s linear infinite;
+    animation: k4-spin var(--k4-spin, 8s) linear infinite;
+    will-change: transform;
   }
+  .khan-404--still .khan-404__code-mark { animation: none; }
   @keyframes k4-spin { to { transform: rotate(360deg); } }
 
   /* heading + text */
@@ -182,9 +185,6 @@
     .khan-404--hide-bottom-m .khan-404__bottom { display: none; }
     .khan-404--hide-bottom-m { padding-bottom: 72px; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .khan-404__code-mark { animation: none; }
-  }
 {% endstylesheet %}
 
 {% schema %}
@@ -197,6 +197,7 @@
     { "type": "header", "content": "Text" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Грешка · 404" },
     { "type": "select", "id": "code_style", "label": "Big number", "options": [ { "value": "asterisk", "label": "4 ✱ 4 (asterisk as the zero)" }, { "value": "plain", "label": "404" } ], "default": "asterisk" },
+    { "type": "range", "id": "mark_spin", "label": "Asterisk spin — seconds per turn", "min": 0, "max": 40, "step": 2, "unit": "s", "default": 8, "info": "0 = still. Lower is faster." },
     { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Няма такава <strong>пътека.</strong></p>" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Страницата, която търсиш, не съществува или е преместена. Върни се към началото или разгледай колекцията.</p>" },
     { "type": "text", "id": "btn1_text", "label": "Primary button", "default": "Към началото" },
