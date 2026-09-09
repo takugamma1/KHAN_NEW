@@ -94,7 +94,8 @@
         "color_scheme": "",
         "padding-block-start": 100,
         "padding-block-end": 100
-      }
+      },
+      "disabled": true
     },
     "product_list_iA96Tq": {
       "type": "product-list",
@@ -273,10 +274,50 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "khan_404": {
+      "type": "khan-404",
+      "name": "404 page (KHAN)",
+      "settings": {
+        "eyebrow": "Грешка · 404",
+        "code_style": "asterisk",
+        "heading": "<p>Няма такава <strong>пътека.</strong></p>",
+        "text": "<p>Страницата, която търсиш, не съществува или е преместена. Върни се към началото или разгледай колекцията.</p>",
+        "btn1_text": "Към началото",
+        "btn1_link": "/",
+        "btn2_text": "Виж колекцията",
+        "btn2_link": "shopify://collections/all",
+        "show_search": true,
+        "search_placeholder": "Търси продукт…",
+        "top_left": "KHAN // изгубена пътека",
+        "top_right": "404",
+        "corner_top": 96,
+        "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
+        "bottom_height": 360,
+        "bottom_height_mobile": 160,
+        "bottom_opacity": 100,
+        "hide_bottom_mobile": false,
+        "show_particles": true,
+        "particle_count": 60,
+        "particle_size": 2,
+        "particle_color": "#9a1f33",
+        "particle_color_2": "#dfdfdf",
+        "particle_dir": "down",
+        "code_size": 220,
+        "heading_size": 48,
+        "min_height": 80,
+        "text_grain": false,
+        "bg_color": "#0a0a0a",
+        "text_color": "#f3f3f3",
+        "muted_color": "#b9b9b9",
+        "accent_color": "#9a1f33",
+        "accent_color_2": "#560b1e",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
-    "product_list_iA96Tq"
+    "khan_404"
   ]
 }

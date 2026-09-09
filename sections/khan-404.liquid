@@ -1,0 +1,245 @@
+{% liquid
+  assign s = section.settings
+%}
+
+<div
+  id="Khan404-{{ section.id }}"
+  class="khan-404 color-{{ s.color_scheme }}{% if s.text_grain %} khan-404--grain{% endif %}{% if s.hide_bottom_mobile %} khan-404--hide-bottom-m{% endif %}"
+  style="
+    --k4-bg: {{ s.bg_color }};
+    --k4-text: {{ s.text_color }};
+    --k4-muted: {{ s.muted_color }};
+    --k4-accent: {{ s.accent_color }};
+    --k4-accent-2: {{ s.accent_color_2 }};
+    --k4-code-size: {{ s.code_size }}px;
+    --k4-heading-size: {{ s.heading_size }}px;
+    --k4-minh: {{ s.min_height }}svh;
+    --k4-corner-top: {{ s.corner_top | default: 96 }}px;
+    --k4-bottom-h: {{ s.bottom_height }}px;
+    --k4-bottom-h-m: {{ s.bottom_height_mobile }}px;
+    --k4-bottom-op: {{ s.bottom_opacity | default: 100 | divided_by: 100.0 }};
+    --k4-mark: url('{{ 'asterisk.png' | asset_url }}');
+    --k4-grain: url('{{ 'khan-grain.png' | asset_url }}');
+  "
+>
+  {%- if s.show_particles -%}
+    {% render 'khan-particles', count: s.particle_count, size: s.particle_size, color1: s.particle_color, color2: s.particle_color_2, direction: s.particle_dir %}
+  {%- endif -%}
+
+  {%- if s.top_left != blank -%}<span class="khan-404__corner khan-404__corner--tl">{{ s.top_left }}</span>{%- endif -%}
+  {%- if s.top_right != blank -%}<span class="khan-404__corner khan-404__corner--tr">{{ s.top_right }}</span>{%- endif -%}
+
+  <div class="khan-404__inner">
+    {%- if s.eyebrow != blank -%}
+      <p class="khan-404__eyebrow"><span class="khan-404__flag" aria-hidden="true"></span>{{ s.eyebrow }}</p>
+    {%- endif -%}
+
+    <p class="khan-404__code" aria-label="404">
+      {%- if s.code_style == 'asterisk' -%}
+        <span aria-hidden="true">4</span><span class="khan-404__code-mark" aria-hidden="true"></span><span aria-hidden="true">4</span>
+      {%- else -%}
+        <span aria-hidden="true">404</span>
+      {%- endif -%}
+    </p>
+
+    {%- if s.heading != blank -%}<h1 class="khan-404__heading">{{ s.heading }}</h1>{%- endif -%}
+    {%- if s.text != blank -%}<div class="khan-404__text">{{ s.text }}</div>{%- endif -%}
+
+    {%- if s.btn1_text != blank or s.btn2_text != blank -%}
+      <div class="khan-404__btns">
+        {%- if s.btn1_text != blank -%}
+          <a class="khan-404__btn khan-404__btn--fill" href="{{ s.btn1_link | default: routes.root_url }}">
+            <span class="khan-404__btn-inner">{{ s.btn1_text }}<span class="khan-404__btn-plus" aria-hidden="true">+</span></span>
+          </a>
+        {%- endif -%}
+        {%- if s.btn2_text != blank -%}
+          <a class="khan-404__btn khan-404__btn--outline" href="{{ s.btn2_link | default: routes.all_products_collection_url }}">
+            <span class="khan-404__btn-inner">{{ s.btn2_text }}<svg class="khan-404__btn-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 6l7 6-7 6" stroke="currentColor" stroke-width="2"></path></svg></span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if s.show_search -%}
+      <form class="khan-404__search" action="{{ routes.search_url }}" method="get" role="search">
+        <input class="khan-404__search-input" type="search" name="q" placeholder="{{ s.search_placeholder | default: 'Търси…' | escape }}" aria-label="{{ s.search_placeholder | default: 'Търси…' | escape }}" autocomplete="off">
+        <button class="khan-404__search-btn" type="submit" aria-label="{{ 'actions.search' | t }}">→</button>
+      </form>
+    {%- endif -%}
+  </div>
+
+  {%- if s.bottom_image != blank -%}
+    <div class="khan-404__bottom" aria-hidden="true">
+      {{ s.bottom_image | image_url: width: 2600 | image_tag: class: 'khan-404__bottom-img', loading: 'eager', widths: '800, 1200, 1600, 2000, 2600', sizes: '100vw', alt: '' }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .khan-404 {
+    position: relative; isolation: isolate; overflow: hidden;
+    min-height: var(--k4-minh, 80svh);
+    display: flex; align-items: center; justify-content: center;
+    background: var(--k4-bg, #0a0a0a); color: var(--k4-text, #f3f3f3);
+    padding: clamp(110px, 16vh, 180px) clamp(20px, 5vw, 72px) calc(var(--k4-bottom-h, 360px) * 0.55 + 60px);
+    text-align: center;
+  }
+
+  /* corners */
+  .khan-404__corner {
+    position: absolute; z-index: 2; top: var(--k4-corner-top, 96px);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap;
+  }
+  .khan-404__corner--tl { left: clamp(20px, 5vw, 72px); color: var(--k4-muted, #b9b9b9); }
+  .khan-404__corner--tr { right: clamp(20px, 5vw, 72px); color: var(--k4-accent, #9A1F33); }
+  .khan-404__corner--tr::before { content: "[ "; }
+  .khan-404__corner--tr::after { content: " ]"; }
+
+  .khan-404__inner { position: relative; z-index: 2; width: 100%; max-width: 860px; margin-inline: auto; }
+
+  /* eyebrow */
+  .khan-404__eyebrow {
+    margin: 0 0 22px; display: inline-flex; align-items: center; gap: 12px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--k4-accent, #9A1F33);
+  }
+  .khan-404__flag { width: 30px; height: 9px; background: var(--k4-accent, #9A1F33); clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%); }
+
+  /* the big code — the zero is the KHAN asterisk */
+  .khan-404__code {
+    margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.02em;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--k4-code-size, 220px), 34vw); line-height: 0.9; letter-spacing: -0.02em; color: #fff;
+  }
+  .khan-404__code-mark {
+    display: inline-block; width: 0.74em; height: 0.86em; margin: 0 0.02em;
+    background: var(--k4-accent, #9A1F33);
+    -webkit-mask: var(--k4-mark) center / contain no-repeat; mask: var(--k4-mark) center / contain no-repeat;
+    animation: k4-spin 28s linear infinite;
+  }
+  @keyframes k4-spin { to { transform: rotate(360deg); } }
+
+  /* heading + text */
+  .khan-404__heading {
+    margin: 22px 0 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: min(var(--k4-heading-size, 48px), 8vw); line-height: 1; letter-spacing: 0.01em;
+    text-transform: uppercase; color: var(--k4-text, #f3f3f3);
+  }
+  .khan-404__heading p { margin: 0; }
+  .khan-404__heading :is(strong, b) { color: var(--k4-accent, #9A1F33); font-weight: inherit; }
+  .khan-404__text {
+    margin: 18px auto 0; max-width: 54ch;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 14px; line-height: 1.65; letter-spacing: 0.05em; text-transform: uppercase; color: var(--k4-muted, #b9b9b9);
+  }
+  .khan-404__text p { margin: 0 0 10px; }
+  .khan-404__text p:last-child { margin-bottom: 0; }
+
+  /* buttons */
+  .khan-404__btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 34px; }
+  .khan-404__btn { display: inline-block; text-decoration: none; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: transform 0.15s ease, filter 0.15s ease; }
+  .khan-404__btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .khan-404__btn-inner {
+    display: flex; align-items: center; justify-content: center; gap: 12px; height: 50px; padding: 0 30px;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+  }
+  .khan-404__btn-plus { font-size: 19px; line-height: 1; }
+  .khan-404__btn-arrow { width: 18px; height: 18px; flex: 0 0 auto; }
+  .khan-404__btn--fill { background: linear-gradient(180deg, var(--k4-accent, #9A1F33), var(--k4-accent-2, #560B1E)); }
+  .khan-404__btn--fill .khan-404__btn-inner { color: #fff; }
+  .khan-404__btn--outline { background: rgb(255 255 255 / 0.45); padding: 1.5px; }
+  .khan-404__btn--outline .khan-404__btn-inner { clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); background: var(--k4-bg, #0a0a0a); color: var(--k4-text, #f3f3f3); transition: background 0.22s ease, color 0.22s ease; }
+  .khan-404__btn--outline:hover { filter: none; }
+  .khan-404__btn--outline:hover .khan-404__btn-inner { background: #fff; color: #0a0a0a; }
+
+  /* search */
+  .khan-404__search { display: flex; align-items: center; gap: 0; max-width: 440px; margin: 30px auto 0; border-bottom: 1px solid rgb(255 255 255 / 0.28); }
+  .khan-404__search-input {
+    flex: 1 1 auto; min-width: 0; padding: 12px 4px; border: 0; background: transparent; color: var(--k4-text, #f3f3f3);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; outline: none;
+  }
+  .khan-404__search-input::placeholder { color: var(--k4-muted, #b9b9b9); opacity: 0.8; }
+  .khan-404__search-btn { flex: 0 0 auto; border: 0; background: transparent; color: var(--k4-accent, #9A1F33); font-size: 22px; line-height: 1; padding: 6px 8px; cursor: pointer; }
+  .khan-404__search:focus-within { border-bottom-color: var(--k4-accent, #9A1F33); }
+
+  /* bottom rocks overlay */
+  .khan-404__bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none; line-height: 0; }
+  .khan-404__bottom-img { display: block; width: 100%; height: var(--k4-bottom-h, 360px); object-fit: cover; object-position: bottom center; opacity: var(--k4-bottom-op, 1); }
+
+  /* grain on the big type */
+  .khan-404--grain :is(.khan-404__code, .khan-404__heading) { -webkit-mask-image: var(--k4-grain); mask-image: var(--k4-grain); -webkit-mask-size: 260px; mask-size: 260px; }
+
+  @media screen and (max-width: 749px) {
+    .khan-404 { padding: 96px 20px calc(var(--k4-bottom-h-m, 160px) * 0.7 + 40px); min-height: 0; }
+    .khan-404__corner { top: 80px; font-size: 11px; letter-spacing: 0.14em; }
+    .khan-404__code { font-size: min(var(--k4-code-size, 220px), 38vw); }
+    .khan-404__btns { flex-direction: column; align-items: stretch; }
+    .khan-404__btn-inner { padding: 0 20px; }
+    .khan-404__bottom-img { height: var(--k4-bottom-h-m, 160px); }
+    .khan-404--hide-bottom-m .khan-404__bottom { display: none; }
+    .khan-404--hide-bottom-m { padding-bottom: 72px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .khan-404__code-mark { animation: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "404 page (KHAN)",
+  "tag": "section",
+  "class": "khan-404-wrapper section-wrapper",
+  "enabled_on": { "templates": ["404"] },
+  "settings": [
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Грешка · 404" },
+    { "type": "select", "id": "code_style", "label": "Big number", "options": [ { "value": "asterisk", "label": "4 ✱ 4 (asterisk as the zero)" }, { "value": "plain", "label": "404" } ], "default": "asterisk" },
+    { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>Няма такава <strong>пътека.</strong></p>" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Страницата, която търсиш, не съществува или е преместена. Върни се към началото или разгледай колекцията.</p>" },
+    { "type": "text", "id": "btn1_text", "label": "Primary button", "default": "Към началото" },
+    { "type": "url", "id": "btn1_link", "label": "Primary button link", "info": "Empty = home page." },
+    { "type": "text", "id": "btn2_text", "label": "Outlined button", "default": "Виж колекцията" },
+    { "type": "url", "id": "btn2_link", "label": "Outlined button link", "info": "Empty = all products." },
+    { "type": "checkbox", "id": "show_search", "label": "Show search field", "default": true },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Търси продукт…" },
+
+    { "type": "header", "content": "Corner labels" },
+    { "type": "text", "id": "top_left", "label": "Top-left label", "default": "KHAN // изгубена пътека" },
+    { "type": "text", "id": "top_right", "label": "Top-right tag", "default": "404", "info": "Shown inside [ brackets ]." },
+    { "type": "range", "id": "corner_top", "label": "Corner labels: distance from top", "min": 16, "max": 200, "step": 4, "unit": "px", "default": 96 },
+
+    { "type": "header", "content": "Bottom rocks image" },
+    { "type": "image_picker", "id": "bottom_image", "label": "Image", "info": "Transparent rocks PNG, bottom-aligned, bleeds under the text." },
+    { "type": "range", "id": "bottom_height", "label": "Image height — desktop", "min": 100, "max": 700, "step": 10, "unit": "px", "default": 360 },
+    { "type": "range", "id": "bottom_height_mobile", "label": "Image height — mobile", "min": 60, "max": 400, "step": 10, "unit": "px", "default": 160 },
+    { "type": "range", "id": "bottom_opacity", "label": "Image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide image on mobile", "default": false },
+
+    { "type": "header", "content": "Particles" },
+    { "type": "checkbox", "id": "show_particles", "label": "Show particles", "default": true },
+    { "type": "range", "id": "particle_count", "label": "Particle count", "min": 0, "max": 400, "step": 10, "default": 60 },
+    { "type": "range", "id": "particle_size", "label": "Particle size", "min": 1, "max": 6, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "particle_color", "label": "Particle color 1", "default": "#9A1F33" },
+    { "type": "color", "id": "particle_color_2", "label": "Particle color 2", "default": "#dfdfdf" },
+    { "type": "select", "id": "particle_dir", "label": "Particle direction", "options": [ { "value": "down", "label": "Falling (blood drops)" }, { "value": "up", "label": "Rising" } ], "default": "down" },
+
+    { "type": "header", "content": "Sizes & style" },
+    { "type": "range", "id": "code_size", "label": "Big number size", "min": 100, "max": 320, "step": 10, "unit": "px", "default": 220 },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 48 },
+    { "type": "range", "id": "min_height", "label": "Min height", "min": 50, "max": 100, "step": 5, "unit": "svh", "default": 80 },
+    { "type": "checkbox", "id": "text_grain", "label": "Grain on the big type", "default": false },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#0a0a0a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#b9b9b9" },
+    { "type": "color", "id": "accent_color", "label": "Accent (red)", "default": "#9A1F33" },
+    { "type": "color", "id": "accent_color_2", "label": "Accent (button bottom)", "default": "#560B1E" },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "404 page (KHAN)" }
+  ]
+}
+{% endschema %}
