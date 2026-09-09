@@ -124,6 +124,10 @@
         "logo_style": "plain",
         "logo_width": 92,
         "show_account": true,
+        "acct_show_initial": true,
+        "acct_in_bg": "#9A1F33",
+        "acct_dot_color": "#22c55e",
+        "show_favs": true,
         "show_cart": true,
         "sticky": true,
         "full_width": true,
@@ -139,7 +143,7 @@
         "bubble_tint": "#ffffff14",
         "border_color": "#ffffff24",
         "text_color": "#f3f3f3",
-        "accent_color": "#9A1F33",
+        "accent_color": "#9a1f33",
         "color_scheme": ""
       }
     }
