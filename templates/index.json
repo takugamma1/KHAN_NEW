@@ -139,7 +139,7 @@
         "asterisk_size": 26,
         "asterisk_gap": 60,
         "asterisk_inset": 42,
-        "section_height": "full-screen",
+        "section_height": "medium",
         "section_height_custom": 100,
         "show_particles": true,
         "particle_count": 50,
@@ -338,18 +338,18 @@
         "content_width": 70,
         "min_height": 860,
         "max_width": 1660,
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24,
+        "image_height_mobile": 360,
         "show_particles": true,
         "particle_count": 50,
         "particle_size": 2,
         "particle_color": "#560b1e",
         "particle_color_2": "#dfdfdf",
         "particle_dir": "down",
-        "color_scheme": "",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "padding_top_mobile": 24,
-        "padding_bottom_mobile": 24,
-        "image_height_mobile": 360
+        "color_scheme": ""
       }
     },
     "khan_statement_band_Hm4Qzt": {
