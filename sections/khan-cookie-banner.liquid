@@ -1,0 +1,221 @@
+{% liquid
+  assign s = section.settings
+  assign policy_url = s.policy_link | default: shop.privacy_policy.url
+%}
+
+{%- if s.show_banner -%}
+<div
+  id="KhanCookie-{{ section.id }}"
+  class="khan-cookie khan-cookie--{{ s.position }}"
+  style="
+    --ck-glass: {{ s.glass_tint }};
+    --ck-blur: {{ s.blur }}px;
+    --ck-border: {{ s.border_color }};
+    --ck-text: {{ s.text_color }};
+    --ck-muted: {{ s.muted_color }};
+    --ck-accent: {{ s.accent_color }};
+    --ck-accent-2: {{ s.accent_color_2 }};
+    --ck-maxw: {{ s.max_width }}px;
+    --ck-radius: {{ s.radius }}px;
+    --ck-mark: url('{{ 'asterisk.png' | asset_url }}');
+  "
+  role="dialog"
+  aria-modal="false"
+  aria-label="{{ s.heading | default: 'Cookies' | escape }}"
+  data-khan-cookie
+  data-design-mode="{% if request.design_mode %}true{% else %}false{% endif %}"
+  data-show-everywhere="{% if s.show_everywhere %}true{% else %}false{% endif %}"
+  hidden
+>
+  <div class="khan-cookie__card">
+    <span class="khan-cookie__mark" aria-hidden="true"></span>
+    <div class="khan-cookie__body">
+      {%- if s.heading != blank -%}<p class="khan-cookie__heading">{{ s.heading }}</p>{%- endif -%}
+      {%- if s.text != blank -%}<div class="khan-cookie__text">{{ s.text }}</div>{%- endif -%}
+      {%- if s.policy_label != blank and policy_url != blank -%}
+        <a class="khan-cookie__policy" href="{{ policy_url }}">{{ s.policy_label }}</a>
+      {%- endif -%}
+    </div>
+    <div class="khan-cookie__actions">
+      <button type="button" class="khan-cookie__btn khan-cookie__btn--fill" data-cookie-accept>
+        <span class="khan-cookie__btn-inner">{{ s.accept_label | default: 'Приемам' }}</span>
+      </button>
+      <button type="button" class="khan-cookie__btn khan-cookie__btn--outline" data-cookie-decline>
+        <span class="khan-cookie__btn-inner">{{ s.decline_label | default: 'Само необходимите' }}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('KhanCookie-{{ section.id }}');
+    if (!root) return;
+    var KEY = 'khan:cookie-consent';
+    var designMode = root.getAttribute('data-design-mode') === 'true';
+    var everywhere = root.getAttribute('data-show-everywhere') === 'true';
+
+    function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+    function remember(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+    function show() {
+      root.hidden = false;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('is-in'); }); });
+    }
+    function hide() {
+      root.classList.remove('is-in');
+      setTimeout(function () { root.hidden = true; }, 420);
+    }
+    function api() { return window.Shopify && window.Shopify.customerPrivacy; }
+
+    /* Consent goes through Shopify's Customer Privacy API so apps, pixels and
+       analytics honour it exactly like the built-in banner would. */
+    function setConsent(allow) {
+      var cp = api();
+      var consent = { analytics: allow, marketing: allow, preferences: allow, sale_of_data: allow };
+      if (cp && typeof cp.setTrackingConsent === 'function') {
+        try { cp.setTrackingConsent(consent, function () {}); } catch (e) {}
+      }
+      remember(allow ? 'all' : 'necessary');
+      hide();
+    }
+    root.querySelector('[data-cookie-accept]').addEventListener('click', function () { setConsent(true); });
+    root.querySelector('[data-cookie-decline]').addEventListener('click', function () { setConsent(false); });
+
+    function decide() {
+      if (designMode) { show(); return; }
+      var cp = api();
+      var needsConsent = false;
+      if (cp && typeof cp.shouldShowBanner === 'function') {
+        try { needsConsent = cp.shouldShowBanner(); } catch (e) { needsConsent = false; }
+      }
+      if (needsConsent) { show(); return; }
+      if (everywhere && !stored()) { show(); }
+    }
+
+    if (window.Shopify && typeof window.Shopify.loadFeatures === 'function') {
+      window.Shopify.loadFeatures([{ name: 'consent-tracking-api', version: '0.1' }], function () { decide(); });
+    } else {
+      decide();
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% stylesheet %}
+  .khan-cookie {
+    position: fixed; z-index: 2147483000; /* above the sticky cart and the nav */
+    left: 0; right: 0; bottom: 0;
+    display: flex; justify-content: center;
+    padding: 0 16px 18px;
+    pointer-events: none;
+  }
+  .khan-cookie--left { justify-content: flex-start; }
+  .khan-cookie--right { justify-content: flex-end; }
+  .khan-cookie[hidden] { display: none; }
+
+  .khan-cookie__card {
+    pointer-events: auto;
+    width: 100%; max-width: var(--ck-maxw, 720px);
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px;
+    padding: 18px 20px;
+    color: var(--ck-text, #f3f3f3);
+    background: var(--ck-glass, rgb(21 21 21 / 0.82));
+    -webkit-backdrop-filter: blur(var(--ck-blur, 18px)); backdrop-filter: blur(var(--ck-blur, 18px));
+    border: 1px solid var(--ck-border, rgb(255 255 255 / 0.14));
+    border-radius: var(--ck-radius, 22px);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.08);
+    transform: translateY(24px); opacity: 0;
+    transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.35s ease;
+  }
+  .khan-cookie.is-in .khan-cookie__card { transform: none; opacity: 1; }
+
+  .khan-cookie__mark {
+    width: 30px; height: 36px; flex: 0 0 auto;
+    background: var(--ck-accent, #560B1E);
+    -webkit-mask: var(--ck-mark) center / contain no-repeat; mask: var(--ck-mark) center / contain no-repeat;
+  }
+
+  .khan-cookie__heading {
+    margin: 0 0 6px; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
+    font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ck-text, #f3f3f3);
+  }
+  .khan-cookie__text, .khan-cookie__policy, .khan-cookie__btn-inner {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  .khan-cookie__text { font-size: 12px; line-height: 1.55; letter-spacing: 0.04em; color: var(--ck-muted, #bdbdbd); }
+  .khan-cookie__text p { margin: 0 0 6px; }
+  .khan-cookie__text p:last-child { margin-bottom: 0; }
+  .khan-cookie__policy {
+    display: inline-block; margin-top: 8px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ck-text, #f3f3f3); text-decoration: none; border-bottom: 1px solid rgb(255 255 255 / 0.35);
+  }
+  .khan-cookie__policy:hover { border-bottom-color: var(--ck-accent, #560B1E); }
+
+  .khan-cookie__actions { display: flex; flex-direction: column; gap: 10px; }
+  .khan-cookie__btn {
+    appearance: none; border: 0; padding: 0; margin: 0; background: transparent; cursor: pointer;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .khan-cookie__btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .khan-cookie__btn-inner {
+    display: flex; align-items: center; justify-content: center; height: 42px; padding: 0 24px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+  }
+  .khan-cookie__btn--fill { background: linear-gradient(180deg, var(--ck-accent, #560B1E), var(--ck-accent-2, #3B0211)); }
+  .khan-cookie__btn--fill .khan-cookie__btn-inner { color: #fff; }
+  .khan-cookie__btn--outline { background: rgb(255 255 255 / 0.28); padding: 1.5px; }
+  .khan-cookie__btn--outline .khan-cookie__btn-inner {
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    background: rgb(20 20 20 / 0.9); color: var(--ck-text, #f3f3f3);
+  }
+  .khan-cookie__btn--outline:hover .khan-cookie__btn-inner { background: #000; }
+
+  @media screen and (max-width: 749px) {
+    .khan-cookie { padding: 0 10px 10px; }
+    .khan-cookie__card { grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 16px; }
+    .khan-cookie__actions { grid-column: 1 / -1; flex-direction: row; }
+    .khan-cookie__btn { flex: 1 1 0; }
+    .khan-cookie__btn-inner { padding: 0 12px; font-size: 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .khan-cookie__card { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cookie banner (KHAN)",
+  "tag": "div",
+  "class": "khan-cookie-wrapper",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "paragraph", "content": "Replaces Shopify's built-in cookie banner — turn that one off in Settings → Customer privacy → Cookie banner so visitors don't see two. Consent is passed to Shopify's Customer Privacy API." },
+    { "type": "checkbox", "id": "show_banner", "label": "Show cookie banner", "default": true },
+    { "type": "checkbox", "id": "show_everywhere", "label": "Show in every country", "default": false, "info": "Off = only where consent is legally required (EU/UK etc.), same rule as Shopify's banner. On = every first-time visitor sees it." },
+
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Бисквитки" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Използваме бисквитки, за да работи магазинът и за да разбираме как го ползвате. Приеми всички или остави само необходимите.</p>" },
+    { "type": "text", "id": "accept_label", "label": "Accept button", "default": "Приемам всички" },
+    { "type": "text", "id": "decline_label", "label": "Decline button", "default": "Само необходимите" },
+    { "type": "text", "id": "policy_label", "label": "Policy link text", "default": "Политика за поверителност" },
+    { "type": "url", "id": "policy_link", "label": "Policy link", "info": "Leave empty to use the store's privacy policy page." },
+
+    { "type": "header", "content": "Look" },
+    { "type": "select", "id": "position", "label": "Position", "options": [ { "value": "center", "label": "Bottom center" }, { "value": "left", "label": "Bottom left" }, { "value": "right", "label": "Bottom right" } ], "default": "center" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 420, "max": 1100, "step": 20, "unit": "px", "default": 720 },
+    { "type": "range", "id": "radius", "label": "Corner radius", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 22 },
+    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 18 },
+    { "type": "color", "id": "glass_tint", "label": "Glass tint", "default": "#151515d1" },
+    { "type": "color", "id": "border_color", "label": "Border / edge", "default": "#ffffff24" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f3f3f3" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#bdbdbd" },
+    { "type": "color", "id": "accent_color", "label": "Accent (button top)", "default": "#560B1E" },
+    { "type": "color", "id": "accent_color_2", "label": "Accent (button bottom)", "default": "#3B0211" }
+  ],
+  "presets": [
+    { "name": "Cookie banner (KHAN)" }
+  ]
+}
+{% endschema %}
