@@ -289,7 +289,7 @@
         "col_gap": 64,
         "min_height": 760,
         "max_width": 1640,
-        "padding_y": 80,
+        "padding_y": 40,
         "show_particles": true,
         "particle_count": 50,
         "particle_size": 2,
