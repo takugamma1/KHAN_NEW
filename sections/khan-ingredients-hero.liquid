@@ -17,7 +17,10 @@
     --ih-aster: url('{{ 'asterisk.png' | asset_url }}');
     --ih-minh: {{ s.min_height }}px;
     --ih-maxw: {{ s.max_width }}px;
-    --ih-pad-y: {{ s.padding_y }}px;
+    --ih-pt: {{ s.padding_top | default: 136 }}px;
+    --ih-pb: {{ s.padding_bottom | default: 96 }}px;
+    --ih-pt-m: {{ s.padding_top_mobile | default: 24 }}px;
+    --ih-pb-m: {{ s.padding_bottom_mobile | default: 16 }}px;
     --ih-heading: {{ s.heading_size }}px;
     --ih-eyebrow: {{ s.eyebrow_size }}px;
     --ih-contentw: {{ s.content_width }}px;
@@ -299,7 +302,7 @@
     background: var(--ih-bg, #f4f4f2);
     display: flex;
     align-items: stretch;
-    padding: calc(var(--ih-pad-y, 96px) + 40px) clamp(20px, 5vw, 72px) var(--ih-pad-y, 96px);
+    padding: var(--ih-pt, 136px) clamp(20px, 5vw, 72px) var(--ih-pb, 96px);
   }
 
   .khan-ihero__bg { position: absolute; inset: 0; z-index: 0; }
@@ -429,7 +432,7 @@
   /* ---------- mobile: finger-following RIGHT-side drawer ---------- */
   @media screen and (max-width: 749px) {
     /* collapse the desktop min-height and use ~30% of the desktop padding */
-    .khan-ihero { min-height: 0; flex-direction: column; padding: calc((var(--ih-pad-y, 96px) + 40px) * 0.3) clamp(20px, 5vw, 72px) calc(var(--ih-pad-y, 96px) * 0.3); }
+    .khan-ihero { min-height: 0; flex-direction: column; padding: var(--ih-pt-m, 24px) clamp(20px, 5vw, 72px) var(--ih-pb-m, 16px); }
     /* the background becomes an in-flow image band whose height follows the width,
        so the jar crop is the same on every phone width */
     .khan-ihero__bg { position: relative; inset: auto; flex: 0 0 auto; width: 100%; height: auto; aspect-ratio: 100 / var(--ih-bg-h-m, 78); }
@@ -566,7 +569,10 @@
     { "type": "range", "id": "content_width", "label": "Content width", "min": 360, "max": 820, "step": 10, "unit": "px", "default": 560 },
     { "type": "range", "id": "corner_size", "label": "Corner label size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
     { "type": "range", "id": "max_width", "label": "Max width", "min": 1100, "max": 1900, "step": 20, "unit": "px", "default": 1680 },
-    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_top", "label": "Padding top — desktop", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 136 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom — desktop", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Padding top — mobile", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Padding bottom — mobile", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 16 },
     { "type": "range", "id": "content_offset", "label": "Nudge content up / down", "min": -300, "max": 300, "step": 10, "unit": "px", "default": 0 },
     {
       "type": "select", "id": "content_valign", "label": "Vertical position",

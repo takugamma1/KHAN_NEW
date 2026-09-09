@@ -213,10 +213,13 @@
         "content_width": 360,
         "corner_size": 12,
         "max_width": 1900,
-        "padding_y": 84,
         "content_offset": 0,
         "content_valign": "flex-start",
-        "color_scheme": ""
+        "color_scheme": "",
+        "padding_top": 124,
+        "padding_bottom": 84,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 16
       }
     },
     "khan_ingredients_Hynnfd": {
