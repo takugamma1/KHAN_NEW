@@ -91,6 +91,8 @@
     --kp-pb: {{ s.padding_bottom }}px;
     --kp-bottom-h: {{ s.bottom_height }}px;
     --kp-bottom-shift: {{ s.bottom_shift | default: 0 }}px;
+    --kp-bottom-h-m: {{ s.bottom_height_mobile | default: 220 }}px;
+    --kp-bottom-shift-m: {{ s.bottom_shift_mobile | default: 0 }}px;
     --kp-grain: url('{{ 'khan-grain.png' | asset_url }}');
   "
   data-khan-product
@@ -780,7 +782,11 @@
     .khan-product__info { grid-column: 1 / -1; }
   }
   @media screen and (max-width: 749px) {
-    .khan-product { padding-bottom: 140px; }
+    /* the overlay is only ~210px tall on phones, so it gets its own height/shift and the
+       bottom padding reserves exactly the part of it that stays above the edge */
+    .khan-product { padding-bottom: calc(var(--kp-bottom-h-m, 220px) - var(--kp-bottom-shift-m, 0px) + 24px); }
+    .khan-product__bottom { transform: translateY(var(--kp-bottom-shift-m, 0px)); }
+    .khan-product__bottom-img { height: var(--kp-bottom-h-m, 220px); max-height: none; }
     .khan-product__grid { grid-template-columns: 1fr; }
     /* thumbnails hide on mobile — the image becomes a finger-following snap carousel */
     .khan-product__thumbs { display: none; }
@@ -852,6 +858,8 @@
     { "type": "image_picker", "id": "bottom_image", "label": "Image" },
     { "type": "range", "id": "bottom_height", "label": "Overlay max height", "min": 60, "max": 700, "step": 10, "unit": "px", "default": 360 },
     { "type": "range", "id": "bottom_shift", "label": "Push image down", "min": 0, "max": 300, "step": 10, "unit": "px", "default": 0, "info": "Slides the image below the section edge so less of it stays visible." },
+    { "type": "range", "id": "bottom_height_mobile", "label": "Overlay height — mobile", "min": 80, "max": 600, "step": 10, "unit": "px", "default": 220, "info": "On phones the image is cropped to this height, bottom-aligned, so the rocks always stay in view." },
+    { "type": "range", "id": "bottom_shift_mobile", "label": "Push image down — mobile", "min": 0, "max": 300, "step": 10, "unit": "px", "default": 0 },
     { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide on mobile (avoids a 2nd product image)", "default": true },
 
     { "type": "header", "content": "Decoration" },

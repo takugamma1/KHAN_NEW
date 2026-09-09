@@ -340,7 +340,9 @@
         "max_width": 1820,
         "padding_top": 64,
         "padding_bottom": 200,
-        "color_scheme": ""
+        "color_scheme": "",
+        "bottom_height_mobile": 220,
+        "bottom_shift_mobile": 0
       }
     },
     "khan_engineered_3R4Qkt": {
