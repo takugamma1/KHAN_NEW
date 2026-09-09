@@ -282,11 +282,36 @@
         "padding-block-start": 20,
         "padding-block-end": 48
       }
+    },
+    "khan_cookie_banner": {
+      "type": "khan-cookie-banner",
+      "name": "Cookie banner (KHAN)",
+      "settings": {
+        "show_banner": true,
+        "show_everywhere": false,
+        "heading": "Бисквитки",
+        "text": "<p>Използваме бисквитки, за да работи магазинът и за да разбираме как го ползвате. Приеми всички или остави само необходимите.</p>",
+        "accept_label": "Приемам всички",
+        "decline_label": "Само необходимите",
+        "policy_label": "Политика за поверителност",
+        "policy_link": "",
+        "position": "center",
+        "max_width": 720,
+        "radius": 22,
+        "blur": 18,
+        "glass_tint": "#151515d1",
+        "border_color": "#ffffff24",
+        "text_color": "#f3f3f3",
+        "muted_color": "#bdbdbd",
+        "accent_color": "#560b1e",
+        "accent_color_2": "#3b0211"
+      }
     }
   },
   "order": [
     "khan_footer_QbUJzn",
     "footer_m9NzUG",
-    "footer_utilities_jLGE8U"
+    "footer_utilities_jLGE8U",
+    "khan_cookie_banner"
   ]
 }
