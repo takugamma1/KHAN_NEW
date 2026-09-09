@@ -12,6 +12,8 @@
     --ih-muted: {{ s.muted_color }};
     --ih-bg: {{ s.bg_color }};
     --ih-top: {{ s.top_overlay | divided_by: 100.0 }};
+    --ih-bg-h-m: {{ s.bg_height_mobile | default: 77 }};
+    --ih-bg-pos-m: {{ s.bg_pos_mobile | default: 48 }}%;
     --ih-aster: url('{{ 'asterisk.png' | asset_url }}');
     --ih-minh: {{ s.min_height }}px;
     --ih-maxw: {{ s.max_width }}px;
@@ -427,7 +429,12 @@
   /* ---------- mobile: finger-following RIGHT-side drawer ---------- */
   @media screen and (max-width: 749px) {
     /* collapse the desktop min-height and use ~30% of the desktop padding */
-    .khan-ihero { min-height: 0; padding: calc((var(--ih-pad-y, 96px) + 40px) * 0.3) clamp(20px, 5vw, 72px) calc(var(--ih-pad-y, 96px) * 0.3); }
+    .khan-ihero { min-height: 0; flex-direction: column; padding: calc((var(--ih-pad-y, 96px) + 40px) * 0.3) clamp(20px, 5vw, 72px) calc(var(--ih-pad-y, 96px) * 0.3); }
+    /* the background becomes an in-flow image band whose height follows the width,
+       so the jar crop is the same on every phone width */
+    .khan-ihero__bg { position: relative; inset: auto; flex: 0 0 auto; width: 100%; height: auto; aspect-ratio: 100 / var(--ih-bg-h-m, 77); }
+    .khan-ihero__bg-img { object-position: center var(--ih-bg-pos-m, 48%); }
+    .khan-ihero__corner { top: 12px; }
     .khan-ihero__inner { flex-direction: column; align-items: center; gap: 20px; }
     .khan-ihero__jar-img { width: min(82vw, 420px); }
     .khan-ihero__heading { font-size: min(var(--ih-heading, 88px), 15vw); }
@@ -528,6 +535,8 @@
     { "type": "image_picker", "id": "bg_image", "label": "Background image (optional texture)" },
     { "type": "image_picker", "id": "bg_image_mobile", "label": "Background image — mobile", "info": "Used instead of the background image on phones (≤749px). Leave empty to reuse the desktop image." },
     { "type": "range", "id": "top_overlay", "label": "Top gradient", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 0 },
+    { "type": "range", "id": "bg_height_mobile", "label": "Image band height — mobile", "min": 40, "max": 180, "step": 1, "unit": "%", "default": 77, "info": "On phones the background image becomes a band this tall (as % of the screen width) and is cropped to it — raise it to show more of the image." },
+    { "type": "range", "id": "bg_pos_mobile", "label": "Image focus — mobile", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 48, "info": "Which part of the image stays inside the band: 0 = top, 100 = bottom." },
     { "type": "range", "id": "min_height", "label": "Height", "min": 480, "max": 1000, "step": 20, "unit": "px", "default": 820 },
 
     { "type": "header", "content": "Corner labels" },

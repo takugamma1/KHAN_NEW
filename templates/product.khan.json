@@ -214,7 +214,9 @@
         "padding_y": 84,
         "content_offset": 0,
         "content_valign": "flex-start",
-        "color_scheme": ""
+        "color_scheme": "",
+        "bg_height_mobile": 77,
+        "bg_pos_mobile": 48
       }
     },
     "khan_ingredients_Hynnfd": {
