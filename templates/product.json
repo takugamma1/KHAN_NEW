@@ -281,7 +281,8 @@
             "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица. Изграден да издържа.</p>",
             "table": "",
             "open": false,
-            "mf_body_key": "tab_description"
+            "mf_body_key": "tab_description",
+            "mf_table_key": ""
           }
         },
         "tab_size": {
