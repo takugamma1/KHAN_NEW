@@ -435,8 +435,9 @@
     .khan-ihero { min-height: 0; flex-direction: column; padding: var(--ih-pt-m, 24px) clamp(20px, 5vw, 72px) var(--ih-pb-m, 16px); }
     /* the background becomes an in-flow image band whose height follows the width,
        so the jar crop is the same on every phone width */
-    .khan-ihero__bg { position: relative; inset: auto; flex: 0 0 auto; width: 100%; height: auto; aspect-ratio: 100 / var(--ih-bg-h-m, 78); }
-    .khan-ihero__bg-img { object-position: center var(--ih-bg-pos-m, 48%); }
+    .khan-ihero__bg { position: relative; inset: auto; flex: 0 0 auto; width: 100%; height: auto; min-height: 0; overflow: hidden; aspect-ratio: 100 / var(--ih-bg-h-m, 78); }
+    /* absolutely positioned so the image can't stretch the band to its own natural height */
+    .khan-ihero__bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center var(--ih-bg-pos-m, 48%); }
     .khan-ihero__corner { top: 12px; }
     .khan-ihero__inner { flex-direction: column; align-items: center; gap: 20px; }
     .khan-ihero__jar-img { width: min(82vw, 420px); }
