@@ -155,8 +155,10 @@
 
   /* search */
   .khan-404__search { display: flex; align-items: center; gap: 0; max-width: 440px; margin: 30px auto 0; border-bottom: 1px solid rgb(255 255 255 / 0.28); }
-  .khan-404__search-input {
-    flex: 1 1 auto; min-width: 0; padding: 12px 4px; border: 0; background: transparent; color: var(--k4-text, #f3f3f3);
+  .khan-404__search-input, .khan-404__search-input:focus {
+    -webkit-appearance: none; appearance: none;
+    flex: 1 1 auto; min-width: 0; padding: 12px 4px; border: 0; border-radius: 0; box-shadow: none;
+    background: transparent; background-color: transparent; color: var(--k4-text, #f3f3f3);
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; outline: none;
   }
   .khan-404__search-input::placeholder { color: var(--k4-muted, #b9b9b9); opacity: 0.8; }
