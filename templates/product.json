@@ -279,11 +279,11 @@
           "settings": {
             "heading": "Описание",
             "body": "<p>Oversized streetwear комплект. Тежък 400gsm органичен памук, печат вдъхновен от тракийски символи и глаголица. Изграден да издържа.</p>",
+            "use_product_description": true,
             "table": "",
             "open": false,
             "mf_body_key": "",
-            "mf_table_key": "",
-            "use_product_description": true
+            "mf_table_key": ""
           }
         },
         "tab_size": {
@@ -291,11 +291,11 @@
           "settings": {
             "heading": "Размери & крой",
             "body": "<p>Oversized fit – препоръчваме твоя обикновен размер за relaxed или един под за по-fitted.</p>",
+            "use_product_description": true,
             "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90",
             "open": false,
             "mf_body_key": "size_fit",
-            "mf_table_key": "size_table",
-            "use_product_description": false
+            "mf_table_key": "size_table"
           }
         }
       },
@@ -324,7 +324,7 @@
         "insp_intro": "Всеки дизайн черпи от българските шевици, глаголицата или прабългарските мотиви. Нищо не е декорация, всичко има корен и смисъл.",
         "insp_toggle_label": "Виж вдъхновението",
         "insp_hide_label": "Скрий",
-        "insp_expanded_text": "<p>Всеки елемент върху този суитшърт е избран с цел.</p><p>В горната част на гърба се разкрива <strong>розетата от Плиска</strong> : най-старият мистериозен български символ, открит в столицата на Първото българско царство. Значението ѝ остава неразгадано и до днес. Обкръжават я <strong>прабългарски руни</strong>, преработени от наш дизайнер в собствен шрифт, вдъхновен от глаголицата.</p><p>Под розетата се спуска <strong>меч</strong>, изписан вертикално с думата <strong>ЧЕСТТА</strong> на преработената глаголиц<strong>а,</strong> символ на силата, която пазим и предаваме. Около острието - модерен sigillism допълващ връзката с настоящето. Тъмен, преплетен, обвиващ меча като корен, който държи наследството живо.<br/><br/>Не носим тези символи, за да си спомним миналото. Носим ги, за да не забравяме кои сме. Глаголицата, розетата, мечът - това не са реликви. Те са напомняне, че славният път се извървява всеки ден, от всеки от нас.<br/><br/></p>",
+        "insp_expanded_text": "<p>{{ section.settings.product_fallback.metafields.khan.insp_intro | metafield_tag }}</p>",
         "insp_expanded_heading": "Глаголица – оригиналната българска азбука",
         "insp_image": "shopify://shop_images/HOME-16-9-rectangle_2_eea08555-aba0-410d-98fb-f6d666e479b6.png",
         "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
@@ -332,6 +332,7 @@
         "bottom_shift": 90,
         "bottom_height_mobile": 90,
         "bottom_shift_mobile": 0,
+        "bottom_gap_mobile": 8,
         "hide_bottom_mobile": false,
         "show_deco": false,
         "corner_text": "",
@@ -344,8 +345,7 @@
         "max_width": 1820,
         "padding_top": 64,
         "padding_bottom": 200,
-        "color_scheme": "",
-        "bottom_gap_mobile": 8
+        "color_scheme": ""
       }
     },
     "khan_engineered_3R4Qkt": {
