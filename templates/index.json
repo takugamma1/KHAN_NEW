@@ -12,7 +12,8 @@
     "rocks_hero_Ax9Kp2": {
       "type": "rocks-hero",
       "settings": {
-        "media_type": "image",
+        "media_type": "video",
+        "background_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
         "flip_media": false,
         "media_position": "center",
         "media_fit": "cover",
