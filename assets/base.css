@@ -26,6 +26,8 @@ body {
 }
 
 html {
+  /* dark canvas: iOS overscroll + the areas behind Safari's bars match the brand */
+  background-color: #0a0a0a;
   /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) var(--color-background);

@@ -168,7 +168,7 @@
     top: 0; left: 0; right: 0;
     z-index: 60;
     width: 100%;
-    padding: var(--nav-top, 16px) clamp(14px, 4vw, 40px) 0;
+    padding: calc(var(--nav-top, 16px) + env(safe-area-inset-top, 0px)) clamp(14px, 4vw, 40px) 0;
     pointer-events: none;
   }
   .khan-nav-outer--sticky { position: fixed; }

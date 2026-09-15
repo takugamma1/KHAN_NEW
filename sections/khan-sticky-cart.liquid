@@ -233,7 +233,7 @@
     padding-inline: clamp(12px, 3vw, 36px);
     pointer-events: none;
   }
-  .khan-scart--bottom { bottom: var(--scart-edge, 20px); }
+  .khan-scart--bottom { bottom: calc(var(--scart-edge, 20px) + env(safe-area-inset-bottom, 0px)); }
   .khan-scart--top { top: var(--scart-edge, 20px); }
 
   .khan-scart__backdrop { display: none; }
@@ -440,7 +440,7 @@
 
   @media screen and (max-width: 749px) {
     .khan-scart { padding-inline: 0; }
-    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: 0; }
+    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: env(safe-area-inset-bottom, 0px); }
     .khan-scart__inner { max-width: none; }
 
     .khan-scart__bar { display: none; }
