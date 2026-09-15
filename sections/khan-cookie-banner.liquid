@@ -4,6 +4,8 @@
 %}
 
 {%- if s.show_banner -%}
+{%- comment -%} One banner only: hide Shopify's built-in cookie banner while this one is on (consent still goes through the same API). {%- endcomment -%}
+<style>#shopify-pc__banner { display: none !important; }</style>
 <div
   id="KhanCookie-{{ section.id }}"
   class="khan-cookie khan-cookie--{{ s.position }}"
