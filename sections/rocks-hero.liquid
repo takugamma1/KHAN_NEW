@@ -8,6 +8,10 @@
   if bg_type == 'video' and section.settings.background_video != blank
     assign has_video = true
   endif
+  assign has_video_m = false
+  if has_video and section.settings.background_video_mobile != blank
+    assign has_video_m = true
+  endif
 
   assign fetch_priority = 'auto'
   if section.index == 1
@@ -28,7 +32,7 @@
 
 <div
   id="RocksHero-{{ section.id }}"
-  class="rocks-hero color-{{ section.settings.color_scheme }}{% if section.settings.text_grain %} rocks-hero--grain{% endif %}{% if section.settings.background_image_mobile != blank %} rocks-hero--mobimg{% endif %}"
+  class="rocks-hero color-{{ section.settings.color_scheme }}{% if section.settings.text_grain %} rocks-hero--grain{% endif %}{% if section.settings.background_image_mobile != blank %} rocks-hero--mobimg{% endif %}{% if has_video_m %} rocks-hero--mobvid{% endif %}"
   style="
     {% if section.settings.section_height == 'custom' %}
       --rocks-hero-min-height: {{ section.settings.section_height_custom }}svh;
@@ -43,6 +47,8 @@
     --rocks-media-pos: {{ section.settings.media_position | default: 'center' }};
     --rocks-media-fit: {{ section.settings.media_fit | default: 'cover' }};
     --rocks-media-fit-m: {{ section.settings.media_fit_mobile | default: 'cover' }};
+    --rocks-media-opacity: {{ section.settings.media_opacity | default: 100 | divided_by: 100.0 }};
+    --rocks-media-opacity-m: {{ section.settings.media_opacity_mobile | default: 100 | divided_by: 100.0 }};
     --rocks-frame-pos: {{ section.settings.frame_position | default: 'center' }};
     --rocks-frame-offy: {{ section.settings.frame_offset_y | default: 0 }}px;
     --rocks-frame-pad-x: {{ section.settings.frame_pad_x | default: 0 }}px;
@@ -129,9 +135,23 @@
           loop: true,
           controls: false,
           muted: true,
-          class: 'rocks-hero__media-item',
+          class: 'rocks-hero__media-item rocks-hero__media-item--d',
           data-testid: 'rocks-hero-video'
       }}
+      {%- if has_video_m -%}
+        {{
+          section.settings.background_video_mobile
+          | video_tag:
+            poster: nil,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            preload: 'metadata',
+            class: 'rocks-hero__media-item rocks-hero__media-item--m',
+            data-testid: 'rocks-hero-video-mobile'
+        }}
+      {%- endif -%}
     {%- endif -%}
   </div>
 
@@ -282,16 +302,19 @@
     object-position: center var(--rocks-media-pos, center);
     display: block;
     transform: scaleY(var(--rocks-media-flip, 1));
+    opacity: var(--rocks-media-opacity, 1);
   }
 
   /* separate mobile background image (used instead of the desktop one ≤749px when set) */
   .rocks-hero__media-item--m { display: none; }
   @media screen and (max-width: 749px) {
-    .rocks-hero--mobimg .rocks-hero__media-item--d { display: none; }
-    .rocks-hero--mobimg .rocks-hero__media-item--m { display: block; }
+    .rocks-hero--mobimg .rocks-hero__media-item--d,
+    .rocks-hero--mobvid .rocks-hero__media-item--d { display: none; }
+    .rocks-hero--mobimg .rocks-hero__media-item--m,
+    .rocks-hero--mobvid .rocks-hero__media-item--m { display: block; }
     .rocks-hero__media-item,
     .rocks-hero__media img,
-    .rocks-hero__media video { object-fit: var(--rocks-media-fit-m, cover); }
+    .rocks-hero__media video { object-fit: var(--rocks-media-fit-m, cover); opacity: var(--rocks-media-opacity-m, 1); }
   }
 
   .rocks-hero__frame {
@@ -672,6 +695,15 @@
       "label": "Background video",
       "visible_if": "{{ section.settings.media_type == 'video' }}"
     },
+    {
+      "type": "video",
+      "id": "background_video_mobile",
+      "label": "Background video — mobile",
+      "info": "Portrait video for phones (≤749px). Leave empty to play the desktop video on phones too.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    { "type": "range", "id": "media_opacity", "label": "Background opacity — desktop", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100, "info": "Fades the image/video towards the section's background colour." },
+    { "type": "range", "id": "media_opacity_mobile", "label": "Background opacity — mobile", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
     { "type": "checkbox", "id": "flip_media", "label": "Flip background upside down", "default": false, "info": "Mirrors the rocks vertically (e.g. rocks hanging from the top)." },
     {
       "type": "select",

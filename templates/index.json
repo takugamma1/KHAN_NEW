@@ -82,7 +82,9 @@
         "usp_text_size": 14,
         "usp_title_color": "#560b1e",
         "usp_text_color": "#ffffff",
-        "usp_divider_color": "#ffffff47"
+        "usp_divider_color": "#ffffff47",
+        "media_opacity": 100,
+        "media_opacity_mobile": 100
       }
     },
     "rocks_hero_6ig48b": {
@@ -161,7 +163,9 @@
         "usp_text_size": 14,
         "usp_title_color": "#560b1e",
         "usp_text_color": "#ffffff",
-        "usp_divider_color": "#000000"
+        "usp_divider_color": "#000000",
+        "media_opacity": 100,
+        "media_opacity_mobile": 100
       }
     },
     "khan_our_story_9deQRY": {
