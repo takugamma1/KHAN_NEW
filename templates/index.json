@@ -263,6 +263,7 @@
       "name": "Launch hero",
       "settings": {
         "image": "shopify://shop_images/Vurtene_2.webp",
+        "video_file": "khan-jar-launch.mp4",
         "image_position": "left",
         "img_zoom": 175,
         "img_minh": 680,

@@ -29,12 +29,12 @@
   <div class="khan-phero__bg" aria-hidden="true">
     {%- liquid
       assign ph_poster = blank
-      if s.bg_image != blank
-        assign ph_poster = s.bg_image | image_url: width: 1600
+      if s.bg_video_poster_file != blank
+        assign ph_poster = s.bg_video_poster_file | asset_url
       endif
     -%}
     {%- if s.bg_video != blank -%}
-      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', poster: ph_poster, class: 'khan-phero__bg-img' }}
+      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-phero__bg-img' }}
     {%- elsif s.bg_video_file != blank -%}
       <video class="khan-phero__bg-img" autoplay muted loop playsinline preload="auto"{% if ph_poster != blank %} poster="{{ ph_poster }}"{% endif %}>
         <source src="{{ s.bg_video_file | asset_url }}" type="video/mp4">
@@ -207,9 +207,10 @@
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     { "type": "header", "content": "Background" },
-    { "type": "image_picker", "id": "bg_image", "label": "Background image", "info": "Also used as the poster (first frame) when a video is set." },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image", "info": "Shown when no video is set." },
     { "type": "video", "id": "bg_video", "label": "Background video", "info": "Use a short looping MP4 instead of an animated GIF — GIFs stutter until fully downloaded." },
     { "type": "text", "id": "bg_video_file", "label": "Video file in theme assets", "info": "Fallback when no video is picked above, e.g. khan-jar-preworkout.mp4" },
+    { "type": "text", "id": "bg_video_poster_file", "label": "Poster image in theme assets", "info": "Small JPEG shown until the first frame loads, e.g. khan-jar-preworkout-poster.jpg" },
     { "type": "select", "id": "bg_fit", "label": "Background fit — desktop", "options": [ { "value": "cover", "label": "Fill (may crop)" }, { "value": "contain", "label": "Fit whole image (no crop)" } ], "default": "cover", "info": "Use \"Fit whole image\" for the rotating jar so it never gets cut off." },
     { "type": "range", "id": "bg_zoom", "label": "Background zoom — desktop", "min": 40, "max": 130, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "bg_zoom_mobile", "label": "Background zoom — mobile", "min": 30, "max": 230, "step": 5, "unit": "%", "default": 100 },
