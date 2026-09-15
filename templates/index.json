@@ -139,7 +139,7 @@
         "asterisk_size": 26,
         "asterisk_gap": 60,
         "asterisk_inset": 42,
-        "section_height": "large",
+        "section_height": "custom",
         "section_height_custom": 100,
         "show_particles": true,
         "particle_count": 50,
