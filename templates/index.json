@@ -13,8 +13,8 @@
       "type": "rocks-hero",
       "settings": {
         "media_type": "video",
-        "background_video": "shopify://files/videos/5815281-hd_1920_1080_25fps.mp4",
-        "media_opacity": 30,
+        "background_video": "shopify://files/videos/видео проба сайт.mp4",
+        "media_opacity": 15,
         "media_opacity_mobile": 30,
         "flip_media": false,
         "media_position": "center",
