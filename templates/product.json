@@ -289,7 +289,7 @@
         "tab_size": {
           "type": "tab",
           "settings": {
-            "heading": "Размери & крой",
+            "heading": "Размери & кройки",
             "body": "<p>Oversized fit – препоръчваме твоя обикновен размер за relaxed или един под за по-fitted.</p>",
             "use_product_description": true,
             "table": "Размер | Гръд | Дължина | Талия\nS | 112 | 71 | 78\nM | 118 | 73 | 82\nL | 124 | 75 | 86\nXL | 130 | 77 | 90",
