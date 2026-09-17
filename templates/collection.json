@@ -183,6 +183,17 @@
             "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
           }
         },
+        "product_h8mKyn": {
+          "type": "product",
+          "settings": {
+            "product": "долнище",
+            "label": "",
+            "button_label": "2609 - Долнище",
+            "button_link": "",
+            "edition_text": "",
+            "bubble_1": "shopify://shop_images/ChatGPT_Image_Jul_12_2026_12_55_56_AM.png"
+          }
+        },
         "product_Nx6k4d": {
           "type": "product",
           "settings": {
@@ -222,6 +233,7 @@
       "block_order": [
         "product_x3DNMh",
         "product_AHzttH",
+        "product_h8mKyn",
         "product_Nx6k4d",
         "product_3Rr7gz",
         "product_7qTqYg"
