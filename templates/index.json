@@ -14,7 +14,7 @@
       "settings": {
         "media_type": "video",
         "background_video": "shopify://files/videos/видео проба 3.mp4",
-        "media_opacity": 20,
+        "media_opacity": 15,
         "media_opacity_mobile": 25,
         "flip_media": false,
         "media_position": "center",
