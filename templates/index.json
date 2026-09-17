@@ -310,8 +310,8 @@
       "type": "khan-apparel-hero",
       "name": "Apparel hero",
       "settings": {
-        "image": "shopify://shop_images/Hoodie_back.png",
-        "image_width": 46,
+        "image": "shopify://shop_images/KHAN_-_T-Shirt.png",
+        "image_width": 54,
         "fade_height": 15,
         "eyebrow": "ДРЕХИ",
         "heading": "<p>КОЛЕКЦИЯ<br/><strong>KHAN 26</strong></p>",
