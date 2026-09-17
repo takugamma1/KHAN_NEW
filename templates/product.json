@@ -326,7 +326,6 @@
         "insp_hide_label": "Скрий",
         "insp_expanded_text": "<p>{{ section.settings.product_fallback.metafields.khan.insp_intro | metafield_tag }}<br/><br/></p>",
         "insp_expanded_heading": "",
-        "insp_image": "shopify://shop_images/HOME-16-9-rectangle_2_eea08555-aba0-410d-98fb-f6d666e479b6.png",
         "bottom_image": "shopify://shop_images/33111cc9-bc3d-470f-a245-72c9cb880e3a.png",
         "bottom_height": 660,
         "bottom_shift": 90,
