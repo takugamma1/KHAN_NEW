@@ -29,7 +29,7 @@
         "frame_pad_x": 0,
         "mobile_height": 100,
         "frame_position_mobile": "center",
-        "frame_scale_mobile": 140,
+        "frame_scale_mobile": 100,
         "frame_offset_y_mobile": 0,
         "frame_pad_y_mobile": 0,
         "frame_pad_x_mobile": 0,
