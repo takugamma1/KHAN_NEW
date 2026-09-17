@@ -321,7 +321,7 @@
         "show_inspiration": true,
         "insp_open": false,
         "insp_heading": "ВСЯКА ДРЕХА НОСИ ИСТОРИЯ.",
-        "insp_intro": "Всеки дизайн черпи от българските шевици, глаголицата или прабългарските мотиви. Нищо не е декорация, всичко има корен и смисъл.",
+        "insp_intro": "Всеки дизайн черпи от българските шевици, глаголицата или прабългарските мотиви.",
         "insp_toggle_label": "Виж вдъхновението",
         "insp_hide_label": "Скрий",
         "insp_expanded_text": "<p>{{ section.settings.product_fallback.metafields.khan.insp_intro | metafield_tag }}<br/><br/></p>",
