@@ -12,12 +12,37 @@
     v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
     v.removeAttribute('controls');
   }
+  /* Autoplay blocked for good (iPhone Low Power Mode, Safari "never auto-play")? Animated
+     images are never blocked, so a video that names one in data-khan-fallback is replaced by it. */
+  function swapToImage(v) {
+    var url = v.getAttribute('data-khan-fallback');
+    if (!url || v.__khanSwap) return false;
+    v.__khanSwap = true;
+    var img = new Image();
+    img.className = v.className;
+    img.alt = '';
+    img.decoding = 'async';
+    img.setAttribute('aria-hidden', 'true');
+    img.onload = function () { if (v.parentNode) { try { v.pause(); } catch (e) {} v.parentNode.replaceChild(img, v); } };
+    img.onerror = function () { v.__khanSwap = false; arm(); };
+    img.src = url;
+    return true;
+  }
+  function blocked(v) { if (!swapToImage(v)) arm(); }
   function tryPlay(v) {
-    if (!v.paused) return;
+    if (!v.paused || v.__khanSwap) return;
     prep(v);
     var p;
-    try { p = v.play(); } catch (e) { arm(); return; }
-    if (p && typeof p.then === 'function') p.then(disarmIfAllPlaying, arm);
+    try { p = v.play(); } catch (e) { blocked(v); return; }
+    if (p && typeof p.then === 'function') p.then(disarmIfAllPlaying, function () { blocked(v); });
+    /* some browsers neither play nor reject: if a visible, loaded video still stands still, fall back */
+    if (!v.__khanDog) {
+      v.__khanDog = true;
+      setTimeout(function () {
+        v.__khanDog = false;
+        if (document.visibilityState === 'visible' && inView(v) && v.paused && v.readyState >= 2) blocked(v);
+      }, 3000);
+    }
   }
   function all() { return Array.prototype.slice.call(document.querySelectorAll(SEL)); }
   function inView(v) {

@@ -42,7 +42,8 @@
         "right_width": 230,
         "max_width": 1680,
         "padding_y": 160,
-        "color_scheme": ""
+        "color_scheme": "",
+        "bg_video_fallback_file": "khan-jar-preworkout.webp"
       }
     },
     "khan_ingredients_hero_JggNdr": {

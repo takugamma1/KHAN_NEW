@@ -303,7 +303,8 @@
         "particle_color": "#560b1e",
         "particle_color_2": "#dfdfdf",
         "particle_dir": "down",
-        "color_scheme": ""
+        "color_scheme": "",
+        "video_fallback_file": "khan-jar-launch.webp"
       }
     },
     "khan_apparel_hero_faAPEW": {

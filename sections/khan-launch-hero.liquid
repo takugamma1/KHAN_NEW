@@ -42,11 +42,15 @@
         if s.video_poster_file != blank
           assign lh_poster = s.video_poster_file | asset_url
         endif
+        assign lh_fallback = blank
+        if s.video_fallback_file != blank
+          assign lh_fallback = s.video_fallback_file | asset_url
+        endif
       -%}
       {%- if s.video != blank -%}
-        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true', data-khan-autoplay: 'true' }}
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true', data-khan-autoplay: 'true', data-khan-fallback: lh_fallback }}
       {%- elsif s.video_file != blank -%}
-        <video class="khan-lhero__img" data-khan-autoplay autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
+        <video class="khan-lhero__img" data-khan-autoplay{% if lh_fallback != blank %} data-khan-fallback="{{ lh_fallback }}"{% endif %} autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
           <source src="{{ s.video_file | asset_url }}" type="video/mp4">
         </video>
       {%- elsif s.image != blank -%}
@@ -255,6 +259,7 @@
     { "type": "video", "id": "video", "label": "Video", "info": "Use a short looping MP4 instead of an animated GIF — GIFs stutter until fully downloaded." },
     { "type": "text", "id": "video_file", "label": "Video file in theme assets", "info": "Fallback when no video is picked above, e.g. khan-jar-launch.mp4" },
     { "type": "text", "id": "video_poster_file", "label": "Poster image in theme assets", "info": "Small JPEG shown until the first frame loads, e.g. khan-jar-launch-poster.jpg" },
+    { "type": "text", "id": "video_fallback_file", "label": "Animated fallback in theme assets", "info": "Animated WebP shown instead of the video when the browser blocks autoplay (iPhone Low Power Mode, Safari auto-play off), e.g. khan-jar-launch.webp" },
     { "type": "select", "id": "image_position", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
     { "type": "range", "id": "img_zoom", "label": "Image zoom — desktop", "min": 50, "max": 250, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "img_minh", "label": "Image area height — desktop", "min": 0, "max": 900, "step": 20, "unit": "px", "default": 0 },
