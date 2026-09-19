@@ -144,7 +144,15 @@
         "border_color": "#ffffff24",
         "text_color": "#f3f3f3",
         "accent_color": "#9a1f33",
-        "color_scheme": ""
+        "color_scheme": "",
+        "upsell_enable": true,
+        "upsell_product_a": "сет",
+        "upsell_product_b": "долнище",
+        "upsell_percent": 15,
+        "upsell_eyebrow": "Завърши сета",
+        "upsell_button": "Добави",
+        "upsell_note": "Отстъпката се прилага автоматично в количката.",
+        "upsell_done": "Сетът е пълен — отстъпката е приложена."
       }
     }
   },

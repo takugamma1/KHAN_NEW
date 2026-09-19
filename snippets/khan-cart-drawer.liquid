@@ -35,7 +35,10 @@
             </div>
           </div>
           <div class="khan-cdrawer__right">
-            <p class="khan-cdrawer__price">{{ item.final_line_price | money }}</p>
+            <p class="khan-cdrawer__price">{% if item.original_line_price > item.final_line_price %}<s>{{ item.original_line_price | money }}</s>{% endif %}{{ item.final_line_price | money }}</p>
+            {%- for alloc in item.line_level_discount_allocations -%}
+              <p class="khan-cdrawer__disc">{{ alloc.discount_application.title }}</p>
+            {%- endfor -%}
             <button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>
           </div>
         </div>
@@ -44,6 +47,42 @@
     </div>
 
     <footer class="khan-cdrawer__foot"{% if cart.item_count == 0 %} hidden{% endif %} data-khan-cdrawer-foot>
+      {%- comment -%} Set upsell: one of the pair is in the cart -> offer the other with the discount badge (drawn by JS from the config below) {%- endcomment -%}
+      <div class="khan-cdrawer__upsell" data-khan-cdrawer-upsell hidden></div>
+      {%- liquid
+        assign up_a = upsell.upsell_product_a
+        assign up_b = upsell.upsell_product_b
+      -%}
+      {%- if upsell.upsell_enable and up_a != blank and up_b != blank -%}
+        <script type="application/json" data-khan-cdrawer-upsell-config>
+          {
+            "percent": {{ upsell.upsell_percent | default: 15 }},
+            "eyebrow": {{ upsell.upsell_eyebrow | default: 'Завърши сета' | json }},
+            "button": {{ upsell.upsell_button | default: 'Добави' | json }},
+            "note": {{ upsell.upsell_note | json }},
+            "done": {{ upsell.upsell_done | json }},
+            "products": [
+              {%- for i in (1..2) -%}
+                {%- if i == 1 -%}{%- assign up_p = up_a -%}{%- else -%}{%- assign up_p = up_b -%}{%- endif -%}
+                {
+                  "id": {{ up_p.id }},
+                  "title": {{ up_p.title | json }},
+                  "url": {{ up_p.url | json }},
+                  "image": {% if up_p.featured_image != blank %}{{ up_p.featured_image | image_url: width: 240 | json }}{% else %}""{% endif %},
+                  "variants": [
+                    {%- for v in up_p.variants -%}
+                      { "id": {{ v.id }}, "title": {{ v.title | json }}, "available": {{ v.available }}, "price": {{ v.price }} }{% unless forloop.last %},{% endunless %}
+                    {%- endfor -%}
+                  ]
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ]
+          }
+        </script>
+      {%- endif -%}
+      <div class="khan-cdrawer__saved" data-khan-cdrawer-saved{% if cart.total_discount == 0 %} hidden{% endif %}>
+        <span>Отстъпка</span><span data-khan-cdrawer-saved-amt>−{{ cart.total_discount | money }}</span>
+      </div>
       <div class="khan-cdrawer__total">
         <span class="khan-cdrawer__total-label">Обща сума</span>
         <span class="khan-cdrawer__total-amt" data-khan-cdrawer-total>{{ cart.total_price | money }}</span>
@@ -66,7 +105,21 @@
     var footEl = root.querySelector('[data-khan-cdrawer-foot]');
     var countEl = root.querySelector('[data-khan-cdrawer-count]');
     var totalEl = root.querySelector('[data-khan-cdrawer-total]');
+    var savedEl = root.querySelector('[data-khan-cdrawer-saved]');
+    var savedAmtEl = root.querySelector('[data-khan-cdrawer-saved-amt]');
+    var upEl = root.querySelector('[data-khan-cdrawer-upsell]');
+    var upCfg = null, upPick = {}, lastCart = null;
+    try {
+      var upCfgEl = root.querySelector('[data-khan-cdrawer-upsell-config]');
+      if (upCfgEl) upCfg = JSON.parse(upCfgEl.textContent);
+    } catch (e) { upCfg = null; }
     var busy = false;
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
 
     function money(cents, currency) {
       try {
@@ -112,12 +165,85 @@
           + '<button type="button" data-khan-cdrawer-qty="1" aria-label="Увеличи">+</button>'
           + '</div></div>'
           + '<div class="khan-cdrawer__right">'
-          + '<p class="khan-cdrawer__price">' + money(it.final_line_price, cart.currency) + '</p>'
+          + '<p class="khan-cdrawer__price">' + (it.original_line_price > it.final_line_price ? '<s>' + money(it.original_line_price, cart.currency) + '</s>' : '') + money(it.final_line_price, cart.currency) + '</p>'
+          + (it.line_level_discount_allocations || []).map(function (a) { return '<p class="khan-cdrawer__disc">' + esc(a.discount_application && a.discount_application.title) + '</p>'; }).join('')
           + '<button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>'
           + '</div></div>';
       });
       itemsEl.querySelectorAll('.khan-cdrawer__item').forEach(function (n) { n.remove(); });
       if (emptyEl) emptyEl.insertAdjacentHTML('beforebegin', html);
+
+      if (savedEl) {
+        savedEl.hidden = !(cart.total_discount > 0);
+        if (savedAmtEl) savedAmtEl.textContent = '−' + money(cart.total_discount, cart.currency);
+      }
+      lastCart = cart;
+      renderUpsell(cart);
+    }
+
+    /* ---------- set upsell: hoodie in the cart -> offer the sweatpants (and the reverse) ---------- */
+    function renderUpsell(cart) {
+      if (!upEl) return;
+      function hide() { upEl.hidden = true; upEl.innerHTML = ''; }
+      if (!upCfg || !upCfg.products || upCfg.products.length < 2) return hide();
+      var A = upCfg.products[0], B = upCfg.products[1], inA = null, inB = null;
+      cart.items.forEach(function (it) {
+        if (it.product_id === A.id && !inA) inA = it;
+        if (it.product_id === B.id && !inB) inB = it;
+      });
+      if (inA && inB) {
+        if (!(cart.total_discount > 0) || !upCfg.done) return hide();
+        upEl.hidden = false;
+        upEl.innerHTML = '<p class="khan-cdrawer__up-done"><span aria-hidden="true">✓</span>' + esc(upCfg.done) + '</p>';
+        return;
+      }
+      if (!inA && !inB) return hide();
+
+      var offer = inA ? B : A, have = inA || inB;
+      var avail = offer.variants.filter(function (v) { return v.available; });
+      if (!avail.length) return hide();
+      var chosen = null;
+      avail.forEach(function (v) { if (v.id === upPick[offer.id]) chosen = v; });
+      if (!chosen) avail.forEach(function (v) { if (!chosen && have.variant_title && v.title === have.variant_title) chosen = v; });
+      if (!chosen) chosen = avail[0];
+      upPick[offer.id] = chosen.id;
+
+      var pct = upCfg.percent || 15;
+      var nowPrice = Math.round(chosen.price * (100 - pct) / 100);
+      var sizes = '';
+      if (offer.variants.length > 1) {
+        sizes = '<div class="khan-cdrawer__up-sizes" role="group" aria-label="Размер">' + offer.variants.map(function (v) {
+          return '<button type="button" class="khan-cdrawer__up-size' + (v.id === chosen.id ? ' is-on' : '') + '" data-khan-cdrawer-up-size="' + v.id + '"' + (v.available ? '' : ' disabled') + '>' + esc(v.title) + '</button>';
+        }).join('') + '</div>';
+      }
+      upEl.hidden = false;
+      upEl.innerHTML =
+        '<div class="khan-cdrawer__up-card">'
+        + '<span class="khan-cdrawer__up-badge">−' + pct + '%</span>'
+        + '<a class="khan-cdrawer__up-thumb" href="' + esc(offer.url) + '">' + (offer.image ? '<img src="' + esc(offer.image) + '" alt="" width="64" height="64" loading="lazy">' : '') + '</a>'
+        + '<div class="khan-cdrawer__up-body">'
+        + '<p class="khan-cdrawer__up-eyebrow">' + esc(upCfg.eyebrow) + '</p>'
+        + '<a class="khan-cdrawer__up-title" href="' + esc(offer.url) + '">' + esc(offer.title) + '</a>'
+        + '<p class="khan-cdrawer__up-price"><s>' + money(chosen.price, cart.currency) + '</s><strong>' + money(nowPrice, cart.currency) + '</strong></p>'
+        + '</div></div>'
+        + '<div class="khan-cdrawer__up-row">' + sizes
+        + '<button type="button" class="khan-cdrawer__up-add" data-khan-cdrawer-up-add="' + chosen.id + '"><span>' + esc(upCfg.button) + ' +</span></button>'
+        + '</div>'
+        + (upCfg.note ? '<p class="khan-cdrawer__up-note">' + esc(upCfg.note) + '</p>' : '');
+    }
+
+    function addUpsell(variantId) {
+      if (busy) return;
+      busy = true;
+      root.classList.add('is-busy');
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+      })
+        .then(function () { return refresh(); })
+        .catch(function () {})
+        .then(function () { busy = false; root.classList.remove('is-busy'); });
     }
 
     function refresh() {
@@ -148,6 +274,16 @@
         return;
       }
       if (e.target.closest('[data-khan-cdrawer-close]')) { close(); return; }
+
+      var upSize = e.target.closest('[data-khan-cdrawer-up-size]');
+      if (upSize && lastCart && upCfg) {
+        var vid = parseInt(upSize.getAttribute('data-khan-cdrawer-up-size'), 10);
+        upCfg.products.forEach(function (p) { p.variants.forEach(function (v) { if (v.id === vid) upPick[p.id] = vid; }); });
+        renderUpsell(lastCart);
+        return;
+      }
+      var upAdd = e.target.closest('[data-khan-cdrawer-up-add]');
+      if (upAdd) { addUpsell(parseInt(upAdd.getAttribute('data-khan-cdrawer-up-add'), 10)); return; }
 
       var qtyBtn = e.target.closest('[data-khan-cdrawer-qty]');
       if (qtyBtn) {
@@ -295,7 +431,68 @@
     font-family: ui-monospace, monospace; font-size: 13px; letter-spacing: 0.08em; color: #9a9a9a;
   }
 
+  .khan-cdrawer__price s { margin-right: 6px; color: #7d7d7d; font-size: 11px; }
+  .khan-cdrawer__disc { margin: -4px 0 8px; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #e0566a; }
+  .khan-cdrawer.is-busy .khan-cdrawer__upsell { opacity: 0.5; pointer-events: none; }
+
   .khan-cdrawer__foot { padding: 18px 24px 22px; border-top: 1px solid rgb(255 255 255 / 0.10); }
+
+  /* ---- set upsell card ---- */
+  .khan-cdrawer__upsell { margin: 0 0 16px; transition: opacity 0.2s ease; }
+  .khan-cdrawer__up-card {
+    position: relative; display: flex; align-items: center; gap: 14px;
+    padding: 14px; padding-right: 74px;
+    background: linear-gradient(135deg, rgb(86 11 30 / 0.55), rgb(20 20 20 / 0.6) 62%);
+    border: 1px solid rgb(154 31 51 / 0.55);
+    border-radius: 14px;
+  }
+  .khan-cdrawer__up-badge {
+    position: absolute; top: 12px; right: 12px;
+    padding: 6px 12px 5px;
+    background: #9A1F33; color: #fff;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 13px; letter-spacing: 0.06em; line-height: 1;
+    clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+  }
+  .khan-cdrawer__up-thumb { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 10px; overflow: hidden; background: rgb(255 255 255 / 0.92); display: block; }
+  .khan-cdrawer__up-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .khan-cdrawer__up-body { flex: 1 1 auto; min-width: 0; }
+  .khan-cdrawer__up-eyebrow { margin: 0 0 4px; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #e0566a; }
+  .khan-cdrawer__up-title {
+    display: block; margin: 0 0 4px; color: #fff; text-decoration: none;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .khan-cdrawer__up-price { margin: 0; font-family: ui-monospace, monospace; font-size: 13px; color: #fff; }
+  .khan-cdrawer__up-price s { margin-right: 8px; color: #8a8a8a; font-size: 12px; }
+  .khan-cdrawer__up-price strong { font-weight: 700; }
+  .khan-cdrawer__up-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .khan-cdrawer__up-sizes { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .khan-cdrawer__up-size {
+    min-width: 34px; height: 30px; padding: 0 10px; cursor: pointer;
+    background: transparent; color: #fff; border: 1px solid rgb(255 255 255 / 0.28); border-radius: 999px;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .khan-cdrawer__up-size:hover { border-color: #fff; }
+  .khan-cdrawer__up-size.is-on { background: #fff; color: #0c0c0c; border-color: #fff; }
+  .khan-cdrawer__up-size[disabled] { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+  .khan-cdrawer__up-add {
+    flex: 0 0 auto; margin-left: auto; height: 34px; padding: 0 20px; cursor: pointer;
+    background: #fff; color: #0c0c0c; border: 0;
+    font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .khan-cdrawer__up-add:hover { background: #9A1F33; color: #fff; }
+  .khan-cdrawer__up-note { margin: 8px 0 0; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; color: #7a7a7a; }
+  .khan-cdrawer__up-done {
+    display: flex; align-items: center; gap: 10px; margin: 0; padding: 11px 14px;
+    background: rgb(86 11 30 / 0.4); border: 1px solid rgb(154 31 51 / 0.55); border-radius: 12px;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+  }
+  .khan-cdrawer__up-done span { color: #e0566a; font-size: 14px; }
+  .khan-cdrawer__saved { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #e0566a; }
+  .khan-cdrawer__saved[hidden] { display: none; }
   .khan-cdrawer__total { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
   .khan-cdrawer__total-label {
     font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #9a9a9a;

@@ -152,7 +152,7 @@
 </div>
 
 {%- comment -%} Cart drawer (opens from the cart icon; replaces the /cart page nav) {%- endcomment -%}
-{% render 'khan-cart-drawer' %}
+{% render 'khan-cart-drawer', upsell: section.settings %}
 
 {% stylesheet %}
   /* neutralize any background/padding the theme applies to the section wrapper */
@@ -532,6 +532,17 @@
     { "type": "color", "id": "acct_dot_color", "label": "Logged in: status dot", "default": "#22C55E" },
     { "type": "checkbox", "id": "show_favs", "label": "Show favourites icon", "default": true },
     { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
+
+    { "type": "header", "content": "Cart drawer — set upsell" },
+    { "type": "paragraph", "content": "When one of the two products is in the cart, the drawer offers the other one with a discount badge. The discount itself must exist in Shopify admin → Discounts as an automatic discount — this widget only advertises it." },
+    { "type": "checkbox", "id": "upsell_enable", "label": "Show the set upsell", "default": true },
+    { "type": "product", "id": "upsell_product_a", "label": "Product A (e.g. hoodie)" },
+    { "type": "product", "id": "upsell_product_b", "label": "Product B (e.g. sweatpants)" },
+    { "type": "range", "id": "upsell_percent", "label": "Discount shown", "min": 5, "max": 50, "step": 5, "unit": "%", "default": 15 },
+    { "type": "text", "id": "upsell_eyebrow", "label": "Eyebrow", "default": "Завърши сета" },
+    { "type": "text", "id": "upsell_button", "label": "Button", "default": "Добави" },
+    { "type": "text", "id": "upsell_note", "label": "Small note", "default": "Отстъпката се прилага автоматично в количката." },
+    { "type": "text", "id": "upsell_done", "label": "Message when both are in the cart", "default": "Сетът е пълен — отстъпката е приложена." },
 
     { "type": "header", "content": "Position" },
     { "type": "checkbox", "id": "sticky", "label": "Stick to top on scroll", "default": true },
