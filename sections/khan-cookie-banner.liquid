@@ -57,8 +57,16 @@
     var designMode = root.getAttribute('data-design-mode') === 'true';
     var everywhere = root.getAttribute('data-show-everywhere') === 'true';
 
-    function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-    function remember(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+    /* the visitor's answer is kept in localStorage AND a 1-year first-party cookie */
+    function stored() {
+      try { var v = localStorage.getItem(KEY); if (v) return v; } catch (e) {}
+      var m = document.cookie.match(/(?:^|; )khan_cookie_consent=([^;]+)/);
+      return m ? m[1] : null;
+    }
+    function remember(v) {
+      try { localStorage.setItem(KEY, v); } catch (e) {}
+      document.cookie = 'khan_cookie_consent=' + v + '; path=/; max-age=31536000; SameSite=Lax';
+    }
     function show() {
       root.hidden = false;
       requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('is-in'); }); });
@@ -71,12 +79,15 @@
 
     /* Consent goes through Shopify's Customer Privacy API so apps, pixels and
        analytics honour it exactly like the built-in banner would. */
-    function setConsent(allow) {
+    function applyConsent(allow) {
       var cp = api();
       var consent = { analytics: allow, marketing: allow, preferences: allow, sale_of_data: allow };
       if (cp && typeof cp.setTrackingConsent === 'function') {
         try { cp.setTrackingConsent(consent, function () {}); } catch (e) {}
       }
+    }
+    function setConsent(allow) {
+      applyConsent(allow);
       remember(allow ? 'all' : 'necessary');
       hide();
     }
@@ -85,6 +96,16 @@
 
     function decide() {
       if (designMode) { show(); return; }
+      /* already answered: never ask again. If Shopify still thinks it needs an answer
+         (its own record didn't stick), quietly hand it the stored choice. */
+      var choice = stored();
+      if (choice) {
+        var cpi = api();
+        var still = false;
+        try { still = !!(cpi && typeof cpi.shouldShowBanner === 'function' && cpi.shouldShowBanner()); } catch (e) {}
+        if (still) applyConsent(choice === 'all');
+        return;
+      }
       var cp = api();
       var needsConsent = false;
       if (cp && typeof cp.shouldShowBanner === 'function') {
