@@ -111,7 +111,7 @@
         "mobile_height": 65,
         "frame_position_mobile": "center",
         "frame_scale_mobile": 115,
-        "frame_offset_y_mobile": 0,
+        "frame_offset_y_mobile": 30,
         "frame_pad_y_mobile": 0,
         "frame_pad_x_mobile": 0,
         "bg_color": "#ffffff",
