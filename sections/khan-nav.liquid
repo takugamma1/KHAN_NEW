@@ -89,13 +89,9 @@
 
             <div class="khan-nav__favs-pop" data-khan-favs-pop hidden>
               <p class="khan-favs__head">Любими</p>
-              {%- if customer -%}
-                <div class="khan-favs__list" data-khan-favs-list></div>
-                <p class="khan-favs__empty" data-khan-favs-empty hidden>Все още нямаш любими продукти.</p>
-              {%- else -%}
-                <p class="khan-favs__empty">Влез в профила си, за да запазваш любими продукти.</p>
-                <a class="khan-favs__login" href="{{ routes.account_login_url }}">Вход</a>
-              {%- endif -%}
+              {%- comment -%} No account needed: favourites live in the browser and are backed up on the visitor's Shopify cart (see assets/khan-favs.js). {%- endcomment -%}
+              <div class="khan-favs__list" data-khan-favs-list></div>
+              <p class="khan-favs__empty" data-khan-favs-empty hidden>Все още нямаш любими. Натисни значката върху продукт, за да го запазиш.</p>
             </div>
           </div>
         {%- endif -%}

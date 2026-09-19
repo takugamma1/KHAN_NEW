@@ -1,4 +1,8 @@
-/* khan-favs.js — theme favourites (wishlist), stored in the browser (localStorage).
+/* khan-favs.js — theme favourites (wishlist). No account needed.
+   Stored in the browser (localStorage) and backed up on the visitor's Shopify cart as the
+   cart attribute "khan_favs" (product handles). The cart cookie is set by Shopify's server, so
+   the backup survives the browser wiping script storage (Safari does that after 7 idle days);
+   on the next visit the list is restored from it. Same browser/device only.
    API: window.KHANFavs { list, has, add, remove, toggle }. Fires 'khan:favs:change'.
    Wiring (all automatic, works after section reloads):
    - [data-khan-fav data-handle data-title data-price data-image data-url]  -> toggle button (gets .is-fav + aria-pressed)
@@ -11,9 +15,65 @@
   function read() {
     try { return JSON.parse(window.localStorage.getItem(KEY)) || []; } catch (e) { return []; }
   }
-  function write(list) {
+  function write(list, opts) {
     try { window.localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
     document.dispatchEvent(new CustomEvent('khan:favs:change'));
+    if (!opts || !opts.local) pushRemote();
+  }
+
+  /* ---------- server backup on the Shopify cart ---------- */
+  var ATTR = 'khan_favs';
+  var pushTimer = 0;
+  function root() { return (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/'; }
+  function handlesOf(list) { return list.map(function (p) { return p.handle; }).join(','); }
+  function pushRemote() {
+    if (!window.fetch) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(function () {
+      var attrs = {}; attrs[ATTR] = handlesOf(read());
+      fetch(root() + 'cart/update.js', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ attributes: attrs })
+      }).catch(function () {});
+    }, 500);
+  }
+  function money(cents, currency) {
+    try {
+      return new Intl.NumberFormat(document.documentElement.lang || 'bg', { style: 'currency', currency: currency }).format(cents / 100);
+    } catch (e) { return (cents / 100).toFixed(2); }
+  }
+  function fetchProduct(handle) {
+    return fetch(root() + 'products/' + encodeURIComponent(handle) + '.js', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (p) {
+        if (!p) return null;
+        var cur = (window.Shopify && window.Shopify.currency && window.Shopify.currency.active) || 'EUR';
+        var img = p.featured_image || (p.images && p.images[0]) || '';
+        if (img && img.indexOf('//') === 0) img = 'https:' + img;
+        return { handle: p.handle, title: p.title, price: money(p.price, cur), image: img, url: p.url || (root() + 'products/' + p.handle) };
+      })
+      .catch(function () { return null; });
+  }
+  /* once per page load: restore an emptied browser list from the cart, or bring the cart up to date */
+  function syncRemote() {
+    if (!window.fetch) return;
+    fetch(root() + 'cart.js', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (cart) {
+        if (!cart) return;
+        var remote = (cart.attributes && cart.attributes[ATTR]) || '';
+        var local = read();
+        if (!local.length && remote) {
+          var handles = remote.split(',').filter(Boolean);
+          return Promise.all(handles.map(fetchProduct)).then(function (items) {
+            items = items.filter(Boolean);
+            if (items.length && !read().length) write(items, { local: true });
+          });
+        }
+        if (handlesOf(local) !== remote) pushRemote();
+      })
+      .catch(function () {});
   }
 
   var api = {
@@ -102,4 +162,5 @@
   document.addEventListener('shopify:section:load', refresh);
   if (document.readyState !== 'loading') refresh();
   else document.addEventListener('DOMContentLoaded', refresh);
+  syncRemote();
 })();
