@@ -12,18 +12,30 @@
     v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
     v.removeAttribute('controls');
   }
-  /* Autoplay blocked for good (iPhone Low Power Mode, Safari "never auto-play")? Animated
-     images are never blocked, so a video that names one in data-khan-fallback is replaced by it. */
+  /* Autoplay blocked for good (iPhone Low Power Mode, Safari "never auto-play")? A video that
+     names a sprite sheet in data-khan-fallback is replaced by it: one JPEG holding every frame,
+     stepped with background-position — only the visible frame is drawn from the already-decoded
+     sheet, so it stays smooth where animated GIF/WebP decoding stutters. data-khan-fallback-grid="6x8", data-khan-fallback-dur="3.32". */
   function swapToImage(v) {
     var url = v.getAttribute('data-khan-fallback');
     if (!url || v.__khanSwap) return false;
     v.__khanSwap = true;
+    var grid = (v.getAttribute('data-khan-fallback-grid') || '6x8').split('x');
+    var cols = parseInt(grid[0], 10) || 6, rows = parseInt(grid[1], 10) || 8;
+    var dur = parseFloat(v.getAttribute('data-khan-fallback-dur')) || 3.32;
     var img = new Image();
-    img.className = v.className;
-    img.alt = '';
-    img.decoding = 'async';
-    img.setAttribute('aria-hidden', 'true');
-    img.onload = function () { if (v.parentNode) { try { v.pause(); } catch (e) {} v.parentNode.replaceChild(img, v); } };
+    img.onload = function () {
+      if (!v.parentNode) return;
+      var box = document.createElement('div');
+      box.className = v.className + ' khan-sprite';
+      box.setAttribute('aria-hidden', 'true');
+      box.style.setProperty('--ks-cols', cols);
+      box.style.setProperty('--ks-rows', rows);
+      box.style.setProperty('--ks-dur', dur + 's');
+      box.style.backgroundImage = 'url("' + url + '")';
+      try { v.pause(); } catch (e) {}
+      v.parentNode.replaceChild(box, v);
+    };
     img.onerror = function () { v.__khanSwap = false; arm(); };
     img.src = url;
     return true;

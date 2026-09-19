@@ -38,9 +38,9 @@
       endif
     -%}
     {%- if s.bg_video != blank -%}
-      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-phero__bg-img', data-khan-autoplay: 'true', data-khan-fallback: ph_fallback }}
+      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-phero__bg-img', data-khan-autoplay: 'true', data-khan-fallback: ph_fallback, data-khan-fallback-grid: s.bg_video_fallback_grid, data-khan-fallback-dur: s.bg_video_fallback_duration }}
     {%- elsif s.bg_video_file != blank -%}
-      <video class="khan-phero__bg-img" data-khan-autoplay{% if ph_fallback != blank %} data-khan-fallback="{{ ph_fallback }}"{% endif %} autoplay muted loop playsinline webkit-playsinline preload="auto"{% if ph_poster != blank %} poster="{{ ph_poster }}"{% endif %}>
+      <video class="khan-phero__bg-img" data-khan-autoplay{% if ph_fallback != blank %} data-khan-fallback="{{ ph_fallback }}" data-khan-fallback-grid="{{ s.bg_video_fallback_grid | default: '6x8' }}" data-khan-fallback-dur="{{ s.bg_video_fallback_duration | default: '3.32' }}"{% endif %} autoplay muted loop playsinline webkit-playsinline preload="auto"{% if ph_poster != blank %} poster="{{ ph_poster }}"{% endif %}>
         <source src="{{ s.bg_video_file | asset_url }}" type="video/mp4">
       </video>
     {%- elsif s.bg_image != blank -%}
@@ -120,7 +120,13 @@
     padding: calc(var(--ph-pad-y, 96px) + 40px) clamp(20px, 5vw, 72px) var(--ph-pad-y, 96px);
   }
 
-  .khan-phero__bg { position: absolute; inset: 0; z-index: 0; }
+  .khan-phero__bg { position: absolute; inset: 0; z-index: 0; container-type: size; }
+  /* sprite fallback: "contain" it in the background box and keep it centred */
+  .khan-phero__bg .khan-sprite {
+    position: absolute; top: 50%; left: 50%;
+    width: min(100cqw, calc(100cqh * 16 / 9));
+    transform: translate(-50%, -50%) scale(calc(var(--ph-bg-zoom, 100) / 100));
+  }
   .khan-phero__bg-img { width: 100%; height: 100%; object-fit: var(--ph-bg-fit, cover); object-position: center; display: block; transform: scale(calc(var(--ph-bg-zoom, 100) / 100)); transform-origin: center; }
   .khan-phero__overlay {
     position: absolute; inset: 0;
@@ -193,6 +199,7 @@
     .khan-phero__left { order: 1; max-width: 100%; width: 100%; position: relative; z-index: 1; }
     .khan-phero__bg { position: static; inset: auto; order: 2; height: calc(var(--ph-bg-zoom-m, 100) * 2.8px); }
     .khan-phero__bg-img { object-fit: contain; transform: none; }
+    .khan-phero__bg .khan-sprite { transform: translate(-50%, -50%); }
     .khan-phero__overlay { display: none; }
     .khan-phero__right { order: 3; max-width: 100%; width: 100%; position: relative; z-index: 1; }
     .khan-phero__heading { font-size: min(var(--ph-heading, 104px), 12.5vw); }
@@ -215,7 +222,9 @@
     { "type": "video", "id": "bg_video", "label": "Background video", "info": "Use a short looping MP4 instead of an animated GIF — GIFs stutter until fully downloaded." },
     { "type": "text", "id": "bg_video_file", "label": "Video file in theme assets", "info": "Fallback when no video is picked above, e.g. khan-jar-preworkout.mp4" },
     { "type": "text", "id": "bg_video_poster_file", "label": "Poster image in theme assets", "info": "Small JPEG shown until the first frame loads, e.g. khan-jar-preworkout-poster.jpg" },
-    { "type": "text", "id": "bg_video_fallback_file", "label": "Animated fallback in theme assets", "info": "Animated WebP shown instead of the video when the browser blocks autoplay (iPhone Low Power Mode, Safari auto-play off), e.g. khan-jar-preworkout.webp" },
+    { "type": "text", "id": "bg_video_fallback_file", "label": "Sprite-sheet fallback in theme assets", "info": "One JPEG with every frame in a grid, shown instead of the video when the browser blocks autoplay (iPhone Low Power Mode, Safari auto-play off), e.g. khan-jar-preworkout-sprite.jpg" },
+    { "type": "text", "id": "bg_video_fallback_grid", "label": "Sprite grid (columns x rows)", "default": "6x8" },
+    { "type": "text", "id": "bg_video_fallback_duration", "label": "Sprite loop length (seconds)", "default": "3.32" },
     { "type": "select", "id": "bg_fit", "label": "Background fit — desktop", "options": [ { "value": "cover", "label": "Fill (may crop)" }, { "value": "contain", "label": "Fit whole image (no crop)" } ], "default": "cover", "info": "Use \"Fit whole image\" for the rotating jar so it never gets cut off." },
     { "type": "range", "id": "bg_zoom", "label": "Background zoom — desktop", "min": 40, "max": 130, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "bg_zoom_mobile", "label": "Background zoom — mobile", "min": 30, "max": 230, "step": 5, "unit": "%", "default": 100 },

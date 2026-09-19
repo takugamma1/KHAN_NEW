@@ -48,9 +48,9 @@
         endif
       -%}
       {%- if s.video != blank -%}
-        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true', data-khan-autoplay: 'true', data-khan-fallback: lh_fallback }}
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true', data-khan-autoplay: 'true', data-khan-fallback: lh_fallback, data-khan-fallback-grid: s.video_fallback_grid, data-khan-fallback-dur: s.video_fallback_duration }}
       {%- elsif s.video_file != blank -%}
-        <video class="khan-lhero__img" data-khan-autoplay{% if lh_fallback != blank %} data-khan-fallback="{{ lh_fallback }}"{% endif %} autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
+        <video class="khan-lhero__img" data-khan-autoplay{% if lh_fallback != blank %} data-khan-fallback="{{ lh_fallback }}" data-khan-fallback-grid="{{ s.video_fallback_grid | default: '6x8' }}" data-khan-fallback-dur="{{ s.video_fallback_duration | default: '3.32' }}"{% endif %} autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
           <source src="{{ s.video_file | asset_url }}" type="video/mp4">
         </video>
       {%- elsif s.image != blank -%}
@@ -148,6 +148,20 @@
   /* iOS shows a big play button when it refuses autoplay — these loops are decorative, keep the poster instead */
   video[data-khan-autoplay]::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
   video[data-khan-autoplay]::-webkit-media-controls { display: none !important; }
+
+  /* sprite-sheet fallback for the looping videos (see assets/khan-video-autoplay.js).
+     background-position steps, NOT transforms: a transformed sheet becomes one giant GPU layer
+     (cols x rows times the box, times the pixel ratio) and simply fails to paint. */
+  .khan-sprite {
+    display: block; position: relative; width: 100%; height: auto !important; aspect-ratio: 16 / 9;
+    background-repeat: no-repeat;
+    background-size: calc(100% * var(--ks-cols, 6)) calc(100% * var(--ks-rows, 8));
+    animation:
+      khan-sprite-x calc(var(--ks-dur, 3.32s) / var(--ks-rows, 8)) steps(var(--ks-cols, 6), jump-none) infinite,
+      khan-sprite-y var(--ks-dur, 3.32s) steps(var(--ks-rows, 8), jump-none) infinite;
+  }
+  @keyframes khan-sprite-x { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+  @keyframes khan-sprite-y { from { background-position-y: 0%; } to { background-position-y: 100%; } }
   .khan-lhero {
     position: relative;
     background: var(--lh-bg, #f1f1ee);
@@ -259,7 +273,9 @@
     { "type": "video", "id": "video", "label": "Video", "info": "Use a short looping MP4 instead of an animated GIF — GIFs stutter until fully downloaded." },
     { "type": "text", "id": "video_file", "label": "Video file in theme assets", "info": "Fallback when no video is picked above, e.g. khan-jar-launch.mp4" },
     { "type": "text", "id": "video_poster_file", "label": "Poster image in theme assets", "info": "Small JPEG shown until the first frame loads, e.g. khan-jar-launch-poster.jpg" },
-    { "type": "text", "id": "video_fallback_file", "label": "Animated fallback in theme assets", "info": "Animated WebP shown instead of the video when the browser blocks autoplay (iPhone Low Power Mode, Safari auto-play off), e.g. khan-jar-launch.webp" },
+    { "type": "text", "id": "video_fallback_file", "label": "Sprite-sheet fallback in theme assets", "info": "One JPEG with every frame in a grid, shown instead of the video when the browser blocks autoplay (iPhone Low Power Mode, Safari auto-play off), e.g. khan-jar-launch-sprite.jpg" },
+    { "type": "text", "id": "video_fallback_grid", "label": "Sprite grid (columns x rows)", "default": "6x8" },
+    { "type": "text", "id": "video_fallback_duration", "label": "Sprite loop length (seconds)", "default": "3.32" },
     { "type": "select", "id": "image_position", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
     { "type": "range", "id": "img_zoom", "label": "Image zoom — desktop", "min": 50, "max": 250, "step": 5, "unit": "%", "default": 100 },
     { "type": "range", "id": "img_minh", "label": "Image area height — desktop", "min": 0, "max": 900, "step": 20, "unit": "px", "default": 0 },
