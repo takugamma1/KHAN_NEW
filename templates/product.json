@@ -343,7 +343,7 @@
         "accent_color": "#560b1e",
         "title_size": 64,
         "max_width": 1820,
-        "padding_top": 64,
+        "padding_top": 84,
         "padding_bottom": 200,
         "color_scheme": ""
       }

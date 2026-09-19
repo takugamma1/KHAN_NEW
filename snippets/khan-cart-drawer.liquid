@@ -26,7 +26,16 @@
           <div class="khan-cdrawer__info">
             <p class="khan-cdrawer__name">{{ item.product_title }}</p>
             {%- unless item.variant_title == blank or item.variant_title contains 'Default' -%}
-              <p class="khan-cdrawer__variant">{{ item.variant_title }}</p>
+              {%- if item.product.has_only_default_variant -%}
+                <p class="khan-cdrawer__variant">{{ item.variant_title }}</p>
+              {%- else -%}
+                {%- comment -%} size / variant switcher: a bare select with a chevron (native picker on phones) {%- endcomment -%}
+                <select class="khan-cdrawer__vsel" data-khan-cdrawer-variant data-hydrated aria-label="Смени размер">
+                  {%- for v in item.product.variants -%}
+                    <option value="{{ v.id }}"{% if v.id == item.variant_id %} selected{% endif %}{% unless v.available or v.id == item.variant_id %} disabled{% endunless %}>{{ v.title }}</option>
+                  {%- endfor -%}
+                </select>
+              {%- endif -%}
             {%- endunless -%}
             <div class="khan-cdrawer__qty">
               <button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>
@@ -158,7 +167,11 @@
           + '<div class="khan-cdrawer__thumb">' + (img ? '<img src="' + img + '" alt="" width="56" height="56" loading="lazy">' : '') + '</div>'
           + '<div class="khan-cdrawer__info">'
           + '<p class="khan-cdrawer__name">' + it.product_title + '</p>'
-          + (it.variant_title && it.variant_title.indexOf('Default') === -1 ? '<p class="khan-cdrawer__variant">' + it.variant_title + '</p>' : '')
+          + (it.variant_title && it.variant_title.indexOf('Default') === -1
+              ? (it.product_has_only_default_variant
+                  ? '<p class="khan-cdrawer__variant">' + esc(it.variant_title) + '</p>'
+                  : '<select class="khan-cdrawer__vsel" data-khan-cdrawer-variant data-handle="' + esc(it.handle) + '" aria-label="Смени размер"><option value="' + it.variant_id + '" selected>' + esc(it.variant_title) + '</option></select>')
+              : '')
           + '<div class="khan-cdrawer__qty">'
           + '<button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>'
           + '<span>' + it.quantity + '</span>'
@@ -179,7 +192,57 @@
       }
       lastCart = cart;
       renderUpsell(cart);
+      hydrateVariants();
     }
+
+    /* ---------- size / variant switcher on a line ---------- */
+    var productCache = {};
+    function getProduct(handle) {
+      if (!productCache[handle]) {
+        productCache[handle] = fetch('/products/' + encodeURIComponent(handle) + '.js', { headers: { 'Accept': 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; });
+      }
+      return productCache[handle];
+    }
+    function hydrateVariants() {
+      itemsEl.querySelectorAll('[data-khan-cdrawer-variant]:not([data-hydrated])').forEach(function (sel) {
+        sel.setAttribute('data-hydrated', '');
+        var current = parseInt(sel.value, 10);
+        getProduct(sel.getAttribute('data-handle')).then(function (p) {
+          if (!p || !p.variants || !sel.isConnected) return;
+          sel.innerHTML = p.variants.map(function (v) {
+            return '<option value="' + v.id + '"' + (v.id === current ? ' selected' : '') + (!v.available && v.id !== current ? ' disabled' : '') + '>' + esc(v.title) + '</option>';
+          }).join('');
+        });
+      });
+    }
+    /* Shopify has no "swap variant" call: one update removes the old line and adds (or tops up) the new variant */
+    function swapVariant(key, newId, qty) {
+      if (busy) return;
+      var existing = 0;
+      if (lastCart) lastCart.items.forEach(function (it) { if (it.variant_id === newId && it.key !== key) existing += it.quantity; });
+      var updates = {}; updates[key] = 0; updates[newId] = existing + qty;
+      busy = true;
+      root.classList.add('is-busy');
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ updates: updates })
+      })
+        .then(function (r) { if (!r.ok) throw new Error('update failed'); return r.json(); })
+        .then(render)
+        .catch(function () { return refresh(); })
+        .then(function () { busy = false; root.classList.remove('is-busy'); });
+    }
+    document.addEventListener('change', function (e) {
+      var sel = e.target.closest ? e.target.closest('[data-khan-cdrawer-variant]') : null;
+      if (!sel) return;
+      var row = sel.closest('.khan-cdrawer__item');
+      if (!row) return;
+      var qty = parseInt(row.querySelector('.khan-cdrawer__qty span').textContent, 10) || 1;
+      swapVariant(row.getAttribute('data-key'), parseInt(sel.value, 10), qty);
+    });
 
     /* ---------- set upsell: hoodie in the cart -> offer the sweatpants (and the reverse) ---------- */
     function renderUpsell(cart) {
@@ -411,6 +474,21 @@
     margin: 0 0 8px;
     font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; color: #9a9a9a;
   }
+  /* size switcher: looks like the plain variant text, plus a chevron */
+  .khan-cdrawer__vsel {
+    display: block; margin: 0 0 8px; max-width: 100%;
+    appearance: none; -webkit-appearance: none;
+    padding: 2px 18px 2px 0; border: 0; border-bottom: 1px solid rgb(255 255 255 / 0.22); border-radius: 0;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23cfcfcf' stroke-width='1.6'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E") right 2px center / 10px 10px no-repeat;
+    color: #cfcfcf; cursor: pointer;
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; line-height: 1.4;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .khan-cdrawer__vsel:hover, .khan-cdrawer__vsel:focus { color: #fff; border-bottom-color: #fff; outline: 0; background-color: transparent; }
+  .khan-cdrawer__vsel option { background: #111; color: #fff; }
+  /* iOS zooms the page when a focused select is under 16px — keep 16px and shrink it visually */
+  @media screen and (max-width: 700px) { .khan-cdrawer__vsel { font-size: 16px; letter-spacing: 0.04em; transform: scale(0.75); transform-origin: left center; margin-bottom: 4px; } }
+
   .khan-cdrawer__qty { display: inline-flex; align-items: center; gap: 2px; border: 1px solid rgb(255 255 255 / 0.18); }
   .khan-cdrawer__qty button {
     width: 26px; height: 26px; background: transparent; border: 0; color: #fff;
