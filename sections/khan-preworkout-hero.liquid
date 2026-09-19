@@ -34,9 +34,9 @@
       endif
     -%}
     {%- if s.bg_video != blank -%}
-      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-phero__bg-img' }}
+      {{ s.bg_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-phero__bg-img', data-khan-autoplay: 'true' }}
     {%- elsif s.bg_video_file != blank -%}
-      <video class="khan-phero__bg-img" autoplay muted loop playsinline preload="auto"{% if ph_poster != blank %} poster="{{ ph_poster }}"{% endif %}>
+      <video class="khan-phero__bg-img" data-khan-autoplay autoplay muted loop playsinline webkit-playsinline preload="auto"{% if ph_poster != blank %} poster="{{ ph_poster }}"{% endif %}>
         <source src="{{ s.bg_video_file | asset_url }}" type="video/mp4">
       </video>
     {%- elsif s.bg_image != blank -%}

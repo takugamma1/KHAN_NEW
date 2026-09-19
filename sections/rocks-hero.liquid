@@ -136,7 +136,8 @@
           controls: false,
           muted: true,
           class: 'rocks-hero__media-item rocks-hero__media-item--d',
-          data-testid: 'rocks-hero-video'
+          data-testid: 'rocks-hero-video',
+          data-khan-autoplay: 'true'
       }}
       {%- if has_video_m -%}
         {{
@@ -149,7 +150,8 @@
             muted: true,
             preload: 'metadata',
             class: 'rocks-hero__media-item rocks-hero__media-item--m',
-            data-testid: 'rocks-hero-video-mobile'
+            data-testid: 'rocks-hero-video-mobile',
+            data-khan-autoplay: 'true'
         }}
       {%- endif -%}
     {%- endif -%}

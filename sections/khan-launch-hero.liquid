@@ -44,9 +44,9 @@
         endif
       -%}
       {%- if s.video != blank -%}
-        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true' }}
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'auto', class: 'khan-lhero__img', aria-hidden: 'true', data-khan-autoplay: 'true' }}
       {%- elsif s.video_file != blank -%}
-        <video class="khan-lhero__img" autoplay muted loop playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
+        <video class="khan-lhero__img" data-khan-autoplay autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true"{% if lh_poster != blank %} poster="{{ lh_poster }}"{% endif %}>
           <source src="{{ s.video_file | asset_url }}" type="video/mp4">
         </video>
       {%- elsif s.image != blank -%}
@@ -141,6 +141,9 @@
 </div>
 
 {% stylesheet %}
+  /* iOS shows a big play button when it refuses autoplay — these loops are decorative, keep the poster instead */
+  video[data-khan-autoplay]::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+  video[data-khan-autoplay]::-webkit-media-controls { display: none !important; }
   .khan-lhero {
     position: relative;
     background: var(--lh-bg, #f1f1ee);
