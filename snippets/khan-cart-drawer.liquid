@@ -37,7 +37,7 @@
           <div class="khan-cdrawer__right">
             <p class="khan-cdrawer__price">{% if item.original_line_price > item.final_line_price %}<s>{{ item.original_line_price | money }}</s>{% endif %}{{ item.final_line_price | money }}</p>
             {%- for alloc in item.line_level_discount_allocations -%}
-              <p class="khan-cdrawer__disc">{{ alloc.discount_application.title }}</p>
+              {%- if alloc.amount > 0 -%}<p class="khan-cdrawer__disc">{{ alloc.discount_application.title }}</p>{%- endif -%}
             {%- endfor -%}
             <button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>
           </div>
@@ -166,7 +166,7 @@
           + '</div></div>'
           + '<div class="khan-cdrawer__right">'
           + '<p class="khan-cdrawer__price">' + (it.original_line_price > it.final_line_price ? '<s>' + money(it.original_line_price, cart.currency) + '</s>' : '') + money(it.final_line_price, cart.currency) + '</p>'
-          + (it.line_level_discount_allocations || []).map(function (a) { return '<p class="khan-cdrawer__disc">' + esc(a.discount_application && a.discount_application.title) + '</p>'; }).join('')
+          + (it.line_level_discount_allocations || []).filter(function (a) { return a.amount > 0; }).map(function (a) { return '<p class="khan-cdrawer__disc">' + esc(a.discount_application && a.discount_application.title) + '</p>'; }).join('')
           + '<button class="khan-cdrawer__remove" type="button" data-khan-cdrawer-remove aria-label="Премахни">Премахни</button>'
           + '</div></div>';
       });
@@ -204,12 +204,17 @@
       if (!avail.length) return hide();
       var chosen = null;
       avail.forEach(function (v) { if (v.id === upPick[offer.id]) chosen = v; });
-      if (!chosen) avail.forEach(function (v) { if (!chosen && have.variant_title && v.title === have.variant_title) chosen = v; });
+      var haveParts = String(have.variant_title || '').split(' / ');
+      if (!chosen) avail.forEach(function (v) {
+        if (chosen) return;
+        var parts = String(v.title).split(' / ');
+        if (parts.some(function (p) { return haveParts.indexOf(p) > -1; })) chosen = v;
+      });
       if (!chosen) chosen = avail[0];
       upPick[offer.id] = chosen.id;
 
       var pct = upCfg.percent || 15;
-      var nowPrice = Math.round(chosen.price * (100 - pct) / 100);
+      var nowPrice = chosen.price - Math.floor(chosen.price * pct / 100); /* Shopify floors the discount amount */
       var sizes = '';
       if (offer.variants.length > 1) {
         sizes = '<div class="khan-cdrawer__up-sizes" role="group" aria-label="Размер">' + offer.variants.map(function (v) {
