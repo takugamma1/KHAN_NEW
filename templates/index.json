@@ -24,7 +24,7 @@
         "frame_fit": "cover",
         "frame_position": "center",
         "flip_frame": false,
-        "frame_offset_y": -10,
+        "frame_offset_y": 0,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
         "mobile_height": 100,
@@ -369,7 +369,7 @@
         "heading_size": 18,
         "min_height": 240,
         "bg_color": "#ffffff",
-        "accent_color": "#FFFFFF",
+        "accent_color": "#ffffff",
         "max_width": 1200,
         "color_scheme": "scheme-1"
       }
