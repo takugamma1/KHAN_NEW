@@ -391,6 +391,9 @@
     .khan-nav__acct-initial { font-size: 15px; }
     .khan-nav__acct-dot { width: 10px; height: 10px; }
     .khan-nav__fav-ic { height: 16px; width: auto; }
+    /* phones: the bubble hangs off the whole bar (not the icon), so it can never leave the screen */
+    .khan-nav__favs { position: static; }
+    .khan-nav__favs-pop { left: 0; right: 0; width: auto; max-height: min(70svh, 520px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .khan-nav__actions { gap: 8px; }
     .khan-nav__cart-count { min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; }
     .khan-nav__burger-ic { width: 18px; height: 18px; }
