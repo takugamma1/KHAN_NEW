@@ -13,9 +13,9 @@
       "type": "rocks-hero",
       "settings": {
         "media_type": "video",
-        "background_video": "shopify://files/videos/видео проба 3.mp4",
-        "media_opacity": 15,
-        "media_opacity_mobile": 25,
+        "background_video": "shopify://files/videos/PROBA 6.mp4",
+        "media_opacity": 30,
+        "media_opacity_mobile": 35,
         "flip_media": false,
         "media_position": "center",
         "media_fit": "cover",
