@@ -16,6 +16,9 @@
         "bg_image": "shopify://shop_images/Vurtene_1.webp",
         "bg_video_file": "khan-jar-preworkout.mp4",
         "bg_video_poster_file": "khan-jar-preworkout-poster.jpg",
+        "bg_video_fallback_file": "khan-jar-preworkout-sprite.jpg",
+        "bg_video_fallback_grid": "6x8",
+        "bg_video_fallback_duration": "3.32",
         "bg_fit": "contain",
         "bg_zoom": 80,
         "bg_zoom_mobile": 95,
@@ -42,10 +45,7 @@
         "right_width": 230,
         "max_width": 1680,
         "padding_y": 160,
-        "color_scheme": "",
-        "bg_video_fallback_file": "khan-jar-preworkout-sprite.jpg",
-        "bg_video_fallback_grid": "6x8",
-        "bg_video_fallback_duration": "3.32"
+        "color_scheme": ""
       }
     },
     "khan_ingredients_hero_JggNdr": {
@@ -435,7 +435,7 @@
           "type": "ing_group",
           "settings": {
             "title": "<p>Adaptogens & recovery</p>",
-            "art": "shopify://shop_images/ChatGPT_Image_Aug_6_2026_05_03_21_PM.png",
+            "art": "shopify://shop_images/IMG_3063.png",
             "head_bg": "#560b1e",
             "head_text": "#ffffff",
             "caption": "Сибирският женшен дава издръжлива енергия, родиолата пази мозъка от умора, а тауринът работи на клетъчно ниво и омекотява целия профил. Заедно поддържат енергията дълго след стимулантите.",
