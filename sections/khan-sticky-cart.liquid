@@ -148,7 +148,7 @@
     --scart-radius: {{ s.radius }}px;
     --scart-maxw: {{ s.max_width }}px;
     --scart-edge: {{ s.bottom_offset }}px;
-    --scart-edge-m: {{ s.bottom_offset_mobile | default: 12 }}px;
+    --scart-pb-m: {{ s.bottom_offset_mobile | default: 22 }}px;
     --scart-img: {{ s.img_size }}px;
     --scart-title: {{ s.title_size }}px;
     --scart-sub: {{ s.sub_size }}px;
@@ -454,9 +454,11 @@
   }
 
   @media screen and (max-width: 749px) {
-    /* floating sheet: a gap to the bottom edge (+ the home indicator) and the sides */
-    .khan-scart { padding-inline: var(--scart-edge-m, 12px); }
-    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: calc(var(--scart-edge-m, 12px) + env(safe-area-inset-bottom, 0px)); }
+    /* flush to the bottom edge; the breathing room lives inside the sheet (action row padding).
+       No env() offset on the container: iOS Safari changes safe-area-inset-bottom as its toolbar
+       collapses on scroll, which used to lift the whole sheet mid-scroll. */
+    .khan-scart { padding-inline: 0; }
+    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: 0; }
     .khan-scart__inner { max-width: none; }
 
     .khan-scart__bar { display: none; }
@@ -479,8 +481,8 @@
       color: var(--scart-text, #141414);
       background: var(--scart-glass, rgb(20 20 20 / 0.6));
       background: color-mix(in srgb, var(--scart-glass, #1a1a1a) 70%, transparent);
-      border: 1px solid color-mix(in srgb, var(--scart-text, #ffffff) 18%, transparent);
-      border-radius: 24px;
+      border-top: 1px solid color-mix(in srgb, var(--scart-text, #ffffff) 18%, transparent);
+      border-radius: 24px 24px 0 0;
       -webkit-backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
               backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
       box-shadow: 0 -16px 50px rgb(0 0 0 / 0.34), inset 0 1px 0 rgb(255 255 255 / 0.22);
@@ -538,7 +540,9 @@
     /* always-visible checkout row: price + add-to-cart (never clipped) */
     .khan-scart__action {
       display: flex; align-items: center; gap: 14px;
-      padding: 8px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+      /* one fixed gap under the button; it only grows if the home indicator needs more room
+         (at the default 22px it stays the same whether Safari's toolbar is shown or not) */
+      padding: 8px 16px max(var(--scart-pb-m, 22px), calc(env(safe-area-inset-bottom, 0px) - 12px));
     }
     .khan-scart__action .khan-scart__price { flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: 6px; }
     .khan-scart__action .khan-scart__price-amt { font-size: 20px; white-space: nowrap; }
@@ -842,7 +846,7 @@
     { "type": "select", "id": "position", "label": "Stick to (desktop)", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
     { "type": "checkbox", "id": "stop_at_footer", "label": "Stop at the footer (never cover it)", "default": true },
     { "type": "range", "id": "bottom_offset", "label": "Edge offset (desktop)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
-    { "type": "range", "id": "bottom_offset_mobile", "label": "Edge offset (mobile)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 12, "info": "Gap between the sheet and the bottom / sides of the screen on phones (the iPhone home-indicator area is added on top)." },
+    { "type": "range", "id": "bottom_offset_mobile", "label": "Space under the button (mobile)", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 22, "info": "Gap between the add-to-cart button and the bottom of the screen on phones. The sheet itself stays attached to the bottom edge." },
     { "type": "range", "id": "max_width", "label": "Max width (desktop)", "min": 700, "max": 1500, "step": 20, "unit": "px", "default": 1100 },
     { "type": "range", "id": "bar_height", "label": "Bar height (desktop)", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
     { "type": "range", "id": "radius", "label": "Corner radius (desktop)", "min": 16, "max": 60, "step": 2, "unit": "px", "default": 40 },
