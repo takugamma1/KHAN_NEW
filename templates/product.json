@@ -312,12 +312,14 @@
         "group_untagged": true,
         "max_photos": 12,
         "enable_animations": true,
+        "show_sku": true,
+        "sku_label": "Арт. №",
         "tagline": "",
         "description": "",
         "size_guide_link": "",
         "show_edition": true,
         "edition_label": "Лимитирана серия",
-        "edition_total": "500",
+        "edition_total": "200",
         "show_inspiration": true,
         "insp_open": false,
         "insp_heading": "ВСЯКА ДРЕХА НОСИ ИСТОРИЯ.",
@@ -335,6 +337,7 @@
         "bottom_gap_mobile": 8,
         "hide_bottom_mobile": false,
         "show_deco": false,
+        "show_ring": false,
         "corner_text": "",
         "text_grain": false,
         "bg_color": "#ffffff",
@@ -345,9 +348,7 @@
         "max_width": 1820,
         "padding_top": 84,
         "padding_bottom": 200,
-        "color_scheme": "",
-        "show_sku": true,
-        "sku_label": "Арт. №"
+        "color_scheme": ""
       }
     },
     "khan_engineered_3R4Qkt": {
@@ -514,6 +515,7 @@
         "position": "bottom",
         "stop_at_footer": true,
         "bottom_offset": 20,
+        "bottom_offset_mobile": 22,
         "max_width": 1100,
         "bar_height": 72,
         "radius": 40,
@@ -531,8 +533,7 @@
         "accent_color": "#ffffff",
         "button_top": "#560b1e",
         "button_bottom": "#3b0211",
-        "button_text": "#ffffff",
-        "bottom_offset_mobile": 22
+        "button_text": "#ffffff"
       }
     }
   },
