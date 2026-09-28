@@ -596,6 +596,7 @@
       function applyVariant() {
         var vr = findVariant();
         if (vr) each(root.querySelectorAll('input[name="id"]'), function (inp) { inp.value = vr.id; });
+        if (vr) document.dispatchEvent(new CustomEvent('khan:variant:change', { detail: { id: vr.id } }));
         if (vr && vr.p) each(root.querySelectorAll('[data-khan-scart-amt]'), function (el) { el.innerHTML = vr.p; });
         if (vr && vr.img) each(root.querySelectorAll('[data-khan-scart-img][data-dyn]'), function (img) { img.src = vr.img; });
         var avail = !!(vr && vr.a);

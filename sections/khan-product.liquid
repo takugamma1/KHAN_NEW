@@ -13,10 +13,10 @@
   endcomment
   assign mf = p.metafields.khan
   comment
-    Tagline doubles as the product ID number: khan.tagline metafield, else the
-    variant SKU, else the section's shared tagline.
+    The product number now comes from the variant SKU (own line under the title);
+    the tagline is free text: khan.tagline metafield, else the section's tagline.
   endcomment
-  assign tagline = mf.tagline.value | default: cur.sku | default: s.tagline
+  assign tagline = mf.tagline.value | default: s.tagline
 
   comment
     Limited-edition counter above the title: remaining = live inventory across
@@ -189,6 +189,13 @@
           {%- endif -%}
 
           <h1 class="khan-product__title" data-rev style="--rev: 3">{{ p.title | default: 'Product title' }}</h1>
+          {%- if s.show_sku and p != blank -%}
+            <p class="khan-product__sku" data-rev style="--rev: 4" data-khan-sku{% if cur.sku == blank %} hidden{% endif %}>
+              {%- if s.sku_label != blank -%}<span class="khan-product__sku-label">{{ s.sku_label }}</span> {% endif -%}
+              <span data-khan-sku-value>{{ cur.sku }}</span>
+            </p>
+            <script type="application/json" data-khan-sku-map>{ {%- for v in p.variants -%}"{{ v.id }}": {{ v.sku | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%} }</script>
+          {%- endif -%}
           {%- if tagline != blank -%}<p class="khan-product__tagline" data-rev style="--rev: 4">{{ tagline }}</p>{%- endif -%}
           <span class="khan-product__rule" aria-hidden="true"></span>
 
@@ -355,6 +362,21 @@
   {%- endif -%}
 </div>
 
+<script>
+  (function () {
+    var box = document.getElementById('KhanProduct-{{ section.id }}');
+    var skuEl = box && box.querySelector('[data-khan-sku]');
+    var mapEl = box && box.querySelector('[data-khan-sku-map]');
+    if (!skuEl || !mapEl) return;
+    var map = {};
+    try { map = JSON.parse(mapEl.textContent); } catch (e) {}
+    document.addEventListener('khan:variant:change', function (e) {
+      var sku = e.detail && map[String(e.detail.id)];
+      skuEl.querySelector('[data-khan-sku-value]').textContent = sku || '';
+      skuEl.hidden = !sku;
+    });
+  })();
+</script>
 <script>
   (function () {
     var root = document.getElementById('KhanProduct-{{ section.id }}');
@@ -641,6 +663,9 @@
     font-size: min(var(--kp-title-size, 64px), 7vw); line-height: 0.92; letter-spacing: -0.01em;
     text-transform: uppercase; color: var(--kp-text, #111);
   }
+  .khan-product__sku { margin: 12px 0 0; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--kp-muted, #666); }
+  .khan-product__sku[hidden] { display: none; }
+  .khan-product__sku [data-khan-sku-value] { color: var(--kp-accent, #560B1E); }
   .khan-product__tagline { margin: 12px 0 0; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kp-accent, #560B1E); }
   .khan-product__rule { display: block; height: 1px; background: rgb(0 0 0 / 0.2); margin: 22px 0; }
   .khan-product__desc { font-size: 14px; line-height: 1.7; letter-spacing: 0.02em; text-transform: uppercase; color: var(--kp-text, #1a1a1a); }
@@ -837,7 +862,9 @@
     { "type": "range", "id": "max_photos", "label": "Max photos shown per colour", "min": 1, "max": 12, "step": 1, "default": 12 },
     { "type": "paragraph", "content": "To tag a photo explicitly: set it as that variant's image, or put the colour name in the photo's alt text (e.g. \"Черно\"). Untagged photos before any colour photo show for every colour." },
     { "type": "checkbox", "id": "enable_animations", "label": "Entrance animations", "default": true, "info": "Content fades in as the section appears. Image changes always crossfade." },
-    { "type": "text", "id": "tagline", "label": "Tagline / ID number (fallback)", "default": "Built different. Made to last.", "info": "Shown under the title. Per product it is overridden by the khan.tagline metafield, or by the variant SKU when set." },
+    { "type": "checkbox", "id": "show_sku", "label": "Show the SKU under the title", "default": true, "info": "Taken from the variant SKU in the product admin; follows the selected size / colour." },
+    { "type": "text", "id": "sku_label", "label": "SKU label", "default": "Арт. №" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Built different. Made to last.", "info": "Optional line under the SKU. Per product it is overridden by the khan.tagline metafield." },
     { "type": "richtext", "id": "description", "label": "Description override", "info": "Leave empty to use the product description." },
     { "type": "url", "id": "size_guide_link", "label": "Size guide link" },
 

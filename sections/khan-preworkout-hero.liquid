@@ -81,6 +81,10 @@
       {%- if s.heading != blank -%}
         <div class="khan-phero__heading">{{ s.heading }}</div>
       {%- endif -%}
+      {%- assign ph_sku = product.selected_or_first_available_variant.sku -%}
+      {%- if s.show_sku and ph_sku != blank -%}
+        <p class="khan-phero__sku">{%- if s.sku_label != blank -%}<span>{{ s.sku_label }}</span> {% endif -%}<strong>{{ ph_sku }}</strong></p>
+      {%- endif -%}
       {%- if s.subtext != blank -%}
         <div class="khan-phero__sub">{{ s.subtext }}</div>
       {%- endif -%}
@@ -167,6 +171,8 @@
   }
   .khan-phero__heading :where(p) { margin: 0; }
   .khan-phero__heading :where(strong) { color: var(--ph-accent, #560B1E); font-weight: 900; }
+  .khan-phero__sku { margin: clamp(12px, 1.4vw, 18px) 0 0; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ph-muted, #b9b9b9); }
+  .khan-phero__sku strong { color: var(--ph-accent, #560B1E); font-weight: 700; }
   .khan-phero__sub {
     margin-top: clamp(20px, 2.4vw, 32px);
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -239,6 +245,8 @@
     { "type": "header", "content": "Left — name & subtext" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Pre-workout" },
     { "type": "richtext", "id": "heading", "label": "Heading / name", "default": "<p>Fuel the<br/><strong>discipline.</strong></p>" },
+    { "type": "checkbox", "id": "show_sku", "label": "Show the SKU under the name", "default": true, "info": "Taken from the product's SKU in the admin." },
+    { "type": "text", "id": "sku_label", "label": "SKU label", "default": "Арт. №" },
     { "type": "richtext", "id": "subtext", "label": "Subtext", "default": "<p>Clean energy.<br/>Relentless <strong>performance.</strong></p>" },
 
     { "type": "header", "content": "Right — description" },

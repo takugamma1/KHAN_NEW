@@ -312,7 +312,7 @@
         "group_untagged": true,
         "max_photos": 12,
         "enable_animations": true,
-        "tagline": "2610",
+        "tagline": "",
         "description": "",
         "size_guide_link": "",
         "show_edition": true,
@@ -345,7 +345,9 @@
         "max_width": 1820,
         "padding_top": 84,
         "padding_bottom": 200,
-        "color_scheme": ""
+        "color_scheme": "",
+        "show_sku": true,
+        "sku_label": "Арт. №"
       }
     },
     "khan_engineered_3R4Qkt": {
