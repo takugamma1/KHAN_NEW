@@ -158,7 +158,7 @@
         </div>
 
         <div class="khan-product__stage" data-rev style="--rev: 1">
-          <span class="khan-product__ring" aria-hidden="true"></span>
+          {%- if s.show_ring -%}<span class="khan-product__ring" aria-hidden="true"></span>{%- endif -%}
           <div class="khan-product__main">
             {%- if p.featured_media != blank -%}
               <img data-main-image src="{{ p.featured_media | image_url: width: 1600 }}" alt="{{ p.featured_media.alt | default: p.title }}" width="{{ p.featured_media.width }}" height="{{ p.featured_media.height }}" loading="eager">
@@ -896,7 +896,8 @@
     { "type": "checkbox", "id": "hide_bottom_mobile", "label": "Hide on mobile (avoids a 2nd product image)", "default": true },
 
     { "type": "header", "content": "Decoration" },
-    { "type": "checkbox", "id": "show_deco", "label": "Show ring, crosshairs & corner text", "default": true },
+    { "type": "checkbox", "id": "show_deco", "label": "Show crosshairs & corner text", "default": true },
+    { "type": "checkbox", "id": "show_ring", "label": "Show circles behind the product image", "default": false },
     { "type": "textarea", "id": "corner_text", "label": "Corner text", "default": "K // 26\nApparel div.\nBuilt for now." },
 
     { "type": "header", "content": "Style" },
