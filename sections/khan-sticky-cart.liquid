@@ -629,8 +629,12 @@
           if (grp) each(grp.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', 'false'); });
           btn.setAttribute('aria-pressed', 'true');
           var val = btn.getAttribute('data-val');
-          each(root.querySelectorAll('[data-khan-scart-faux]'), function (b) {
-            if (b.closest('.khan-scart__opt') !== grp && b.getAttribute('data-val') === val) b.setAttribute('aria-pressed', 'true');
+          /* mirror the pick in the other copy of the group (desktop bar / mobile sheet) */
+          each(root.querySelectorAll('.khan-scart__opt'), function (g) {
+            if (g === grp || !g.querySelector('[data-khan-scart-faux][data-val="' + val.replace(/"/g, '\\"') + '"]')) return;
+            each(g.querySelectorAll('button'), function (b) {
+              b.setAttribute('aria-pressed', b.hasAttribute('data-khan-scart-faux') && b.getAttribute('data-val') === val ? 'true' : 'false');
+            });
           });
           each(root.querySelectorAll('[data-khan-scart-faux-prop]'), function (inp) { inp.value = val; });
         }
