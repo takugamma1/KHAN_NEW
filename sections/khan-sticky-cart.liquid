@@ -148,6 +148,7 @@
     --scart-radius: {{ s.radius }}px;
     --scart-maxw: {{ s.max_width }}px;
     --scart-edge: {{ s.bottom_offset }}px;
+    --scart-edge-m: {{ s.bottom_offset_mobile | default: 12 }}px;
     --scart-img: {{ s.img_size }}px;
     --scart-title: {{ s.title_size }}px;
     --scart-sub: {{ s.sub_size }}px;
@@ -453,8 +454,9 @@
   }
 
   @media screen and (max-width: 749px) {
-    .khan-scart { padding-inline: 0; }
-    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: env(safe-area-inset-bottom, 0px); }
+    /* floating sheet: a gap to the bottom edge (+ the home indicator) and the sides */
+    .khan-scart { padding-inline: var(--scart-edge-m, 12px); }
+    .khan-scart--bottom, .khan-scart--top { top: auto; bottom: calc(var(--scart-edge-m, 12px) + env(safe-area-inset-bottom, 0px)); }
     .khan-scart__inner { max-width: none; }
 
     .khan-scart__bar { display: none; }
@@ -477,8 +479,8 @@
       color: var(--scart-text, #141414);
       background: var(--scart-glass, rgb(20 20 20 / 0.6));
       background: color-mix(in srgb, var(--scart-glass, #1a1a1a) 70%, transparent);
-      border-top: 1px solid color-mix(in srgb, var(--scart-text, #ffffff) 18%, transparent);
-      border-radius: 24px 24px 0 0;
+      border: 1px solid color-mix(in srgb, var(--scart-text, #ffffff) 18%, transparent);
+      border-radius: 24px;
       -webkit-backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
               backdrop-filter: blur(max(var(--scart-blur, 18px), 18px)) saturate(180%);
       box-shadow: 0 -16px 50px rgb(0 0 0 / 0.34), inset 0 1px 0 rgb(255 255 255 / 0.22);
@@ -691,17 +693,19 @@
         cleanups.push(function () { c.removeEventListener('click', onClose); });
       });
 
-      // --- swipe up/down on the sheet ---
+      // --- swipe down closes an open sheet ---
+      // Opening is tap-only (peek / grip): a thumb scrolling the page over the bar used to count
+      // as a swipe up and pop the sheet open. A gesture that scrolled the page never toggles.
       var sheet = root.querySelector('[data-khan-scart-sheet]');
       if (sheet) {
-        var startY = 0, dy = 0, tracking = false;
-        function ts(e) { startY = e.touches[0].clientY; dy = 0; tracking = true; }
+        var startY = 0, dy = 0, startScroll = 0, tracking = false;
+        function ts(e) { startY = e.touches[0].clientY; dy = 0; startScroll = window.scrollY; tracking = true; }
         function tm(e) { if (tracking) dy = e.touches[0].clientY - startY; }
         function te() {
           if (!tracking) return;
           tracking = false;
-          if (dy < -40) setExpanded(true);
-          else if (dy > 40) setExpanded(false);
+          if (Math.abs(window.scrollY - startScroll) > 6) return;
+          if (dy > 40 && root.classList.contains('is-expanded')) setExpanded(false);
         }
         sheet.addEventListener('touchstart', ts, { passive: true });
         sheet.addEventListener('touchmove', tm, { passive: true });
@@ -838,6 +842,7 @@
     { "type": "select", "id": "position", "label": "Stick to (desktop)", "options": [ { "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" } ], "default": "bottom" },
     { "type": "checkbox", "id": "stop_at_footer", "label": "Stop at the footer (never cover it)", "default": true },
     { "type": "range", "id": "bottom_offset", "label": "Edge offset (desktop)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "bottom_offset_mobile", "label": "Edge offset (mobile)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 12, "info": "Gap between the sheet and the bottom / sides of the screen on phones (the iPhone home-indicator area is added on top)." },
     { "type": "range", "id": "max_width", "label": "Max width (desktop)", "min": 700, "max": 1500, "step": 20, "unit": "px", "default": 1100 },
     { "type": "range", "id": "bar_height", "label": "Bar height (desktop)", "min": 56, "max": 110, "step": 2, "unit": "px", "default": 72 },
     { "type": "range", "id": "radius", "label": "Corner radius (desktop)", "min": 16, "max": 60, "step": 2, "unit": "px", "default": 40 },
