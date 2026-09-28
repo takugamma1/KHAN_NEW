@@ -37,6 +37,19 @@
                 </select>
               {%- endif -%}
             {%- endunless -%}
+            {%- assign kopts = item.properties['_khan_opts'] -%}
+            {%- if kopts != blank -%}
+              {%- comment -%} placeholder option saved as a line property (e.g. Вкус) — switchable like a size {%- endcomment -%}
+              {%- assign kparts = kopts | split: '::' -%}
+              {%- assign klabel = kparts[0] -%}
+              {%- assign kvals = kparts[1] | split: ',' -%}
+              <select class="khan-cdrawer__vsel" data-khan-cdrawer-prop="{{ klabel | escape }}" aria-label="{{ klabel | escape }}">
+                {%- for kv in kvals -%}
+                  {%- assign kn = kv | split: '|' | first | strip -%}
+                  <option value="{{ kn | escape }}"{% if item.properties[klabel] == kn %} selected{% endif %}>{{ kn }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
             <div class="khan-cdrawer__qty">
               <button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>
               <span>{{ item.quantity }}</span>
@@ -172,6 +185,7 @@
                   ? '<p class="khan-cdrawer__variant">' + esc(it.variant_title) + '</p>'
                   : '<select class="khan-cdrawer__vsel" data-khan-cdrawer-variant data-handle="' + esc(it.handle) + '" aria-label="Смени размер"><option value="' + it.variant_id + '" selected>' + esc(it.variant_title) + '</option></select>')
               : '')
+          + propSelect(it)
           + '<div class="khan-cdrawer__qty">'
           + '<button type="button" data-khan-cdrawer-qty="-1" aria-label="Намали">−</button>'
           + '<span>' + it.quantity + '</span>'
@@ -193,6 +207,42 @@
       lastCart = cart;
       renderUpsell(cart);
       hydrateVariants();
+    }
+
+    /* ---------- placeholder option (e.g. Вкус) stored as a line property ---------- */
+    function propSelect(it) {
+      var raw = it.properties && it.properties._khan_opts;
+      if (!raw) return '';
+      var cut = String(raw).indexOf('::');
+      if (cut < 0) return '';
+      var label = raw.slice(0, cut);
+      var cur = it.properties[label];
+      var opts = raw.slice(cut + 2).split(',').map(function (x) { return x.split('|')[0].trim(); }).filter(Boolean);
+      return '<select class="khan-cdrawer__vsel" data-khan-cdrawer-prop="' + esc(label) + '" aria-label="' + esc(label) + '">'
+        + opts.map(function (o) { return '<option value="' + esc(o) + '"' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('')
+        + '</select>';
+    }
+    function swapProp(key, label, value, qty) {
+      if (busy) return;
+      busy = true;
+      root.classList.add('is-busy');
+      (lastCart ? Promise.resolve(lastCart) : fetch('/cart.js').then(function (r) { return r.json(); }))
+        .then(function (cart) {
+          var line = null;
+          cart.items.forEach(function (it) { if (it.key === key) line = it; });
+          var props = {};
+          if (line && line.properties) Object.keys(line.properties).forEach(function (k) { props[k] = line.properties[k]; });
+          props[label] = value;
+          return fetch('/cart/change.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ id: key, quantity: qty, properties: props })
+          });
+        })
+        .then(function (r) { if (!r.ok) throw new Error('change failed'); return r.json(); })
+        .then(render)
+        .catch(function () { return refresh(); })
+        .then(function () { busy = false; root.classList.remove('is-busy'); });
     }
 
     /* ---------- size / variant switcher on a line ---------- */
@@ -236,6 +286,14 @@
         .then(function () { busy = false; root.classList.remove('is-busy'); });
     }
     document.addEventListener('change', function (e) {
+      var psel = e.target.closest ? e.target.closest('[data-khan-cdrawer-prop]') : null;
+      if (psel) {
+        var prow = psel.closest('.khan-cdrawer__item');
+        if (!prow) return;
+        var pqty = parseInt(prow.querySelector('.khan-cdrawer__qty span').textContent, 10) || 1;
+        swapProp(prow.getAttribute('data-key'), psel.getAttribute('data-khan-cdrawer-prop'), psel.value, pqty);
+        return;
+      }
       var sel = e.target.closest ? e.target.closest('[data-khan-cdrawer-variant]') : null;
       if (!sel) return;
       var row = sel.closest('.khan-cdrawer__item');

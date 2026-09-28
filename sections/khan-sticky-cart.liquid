@@ -179,6 +179,13 @@
       <div class="khan-scart__price">{{ scart_price }}</div>
       <form class="khan-scart__form" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
         {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
+        {%- comment -%} placeholder options (e.g. flavours with no real variant): record the choice on the line so it reaches the cart + order; _khan_opts lets the cart drawer offer the other values {%- endcomment -%}
+        {%- if scart_extra_colors != blank and scart_color_done == false -%}
+          {%- assign faux_label = s.extra_colors_label | default: 'Вкус' | strip -%}
+          {%- assign faux_first = scart_extra_colors | split: ',' | first | split: '|' | first | strip -%}
+          <input type="hidden" name="properties[{{ faux_label | escape }}]" value="{{ faux_first | escape }}" data-khan-scart-faux-prop>
+          <input type="hidden" name="properties[_khan_opts]" value="{{ faux_label | escape }}::{{ scart_extra_colors | escape }}">
+        {%- endif -%}
         <input type="hidden" name="quantity" value="1">
         <button class="khan-scart__btn" type="submit"{% if scart_disabled %} disabled{% endif %}>
           <span class="khan-scart__btn-label">{{ scart_btn_label }}</span>        </button>
@@ -212,6 +219,13 @@
         <div class="khan-scart__price khan-scart__price--big">{{ scart_price }}</div>
         <form class="khan-scart__form khan-scart__form--m" data-khan-scart-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
           {%- if v != blank -%}<input type="hidden" name="id" value="{{ v.id }}">{%- endif -%}
+        {%- comment -%} placeholder options (e.g. flavours with no real variant): record the choice on the line so it reaches the cart + order; _khan_opts lets the cart drawer offer the other values {%- endcomment -%}
+        {%- if scart_extra_colors != blank and scart_color_done == false -%}
+          {%- assign faux_label = s.extra_colors_label | default: 'Вкус' | strip -%}
+          {%- assign faux_first = scart_extra_colors | split: ',' | first | split: '|' | first | strip -%}
+          <input type="hidden" name="properties[{{ faux_label | escape }}]" value="{{ faux_first | escape }}" data-khan-scart-faux-prop>
+          <input type="hidden" name="properties[_khan_opts]" value="{{ faux_label | escape }}::{{ scart_extra_colors | escape }}">
+        {%- endif -%}
           <input type="hidden" name="quantity" value="1">
           <button class="khan-scart__btn khan-scart__btn--m" type="submit"{% if scart_disabled %} disabled{% endif %}>
             <span class="khan-scart__btn-label">{{ scart_btn_label }}</span>
@@ -606,14 +620,19 @@
       });
       if (variants.length && selected.length) applyVariant();
 
-      // --- hardcoded placeholder swatches (e.g. a colour with no real variant yet) ---
-      // Visual selection only: they don't resolve a variant or change price/availability.
+      // --- hardcoded placeholder swatches (e.g. a flavour with no real variant yet) ---
+      // They don't resolve a variant or change price/availability; the choice travels as a line property.
       each(root.querySelectorAll('[data-khan-scart-faux]'), function (btn) {
         function onFaux(e) {
           e.preventDefault();
           var grp = btn.closest('.khan-scart__opt');
           if (grp) each(grp.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', 'false'); });
           btn.setAttribute('aria-pressed', 'true');
+          var val = btn.getAttribute('data-val');
+          each(root.querySelectorAll('[data-khan-scart-faux]'), function (b) {
+            if (b.closest('.khan-scart__opt') !== grp && b.getAttribute('data-val') === val) b.setAttribute('aria-pressed', 'true');
+          });
+          each(root.querySelectorAll('[data-khan-scart-faux-prop]'), function (inp) { inp.value = val; });
         }
         btn.addEventListener('click', onFaux);
         cleanups.push(function () { btn.removeEventListener('click', onFaux); });
