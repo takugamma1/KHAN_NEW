@@ -1,14 +1,37 @@
+{%- comment -%} an emptied richtext leaves "<p><br/></p>" behind — treat that as no heading (it used to add a blank line) {%- endcomment -%}
 {% liquid
   assign s = section.settings
+  assign heading_txt = s.heading | strip_html | strip
 %}
+{%- comment -%} hyphenated words ("по-страшна") stay on one line instead of breaking at the hyphen; tags are left untouched {%- endcomment -%}
+{%- capture heading_html -%}
+  {%- assign hwords = s.heading | split: ' ' -%}
+  {%- for w in hwords -%}
+    {%- if w contains '-' -%}
+      {%- if w contains '<' or w contains '>' or w contains '=' -%}{{ w }}{%- else -%}<span class="khan-band__nb">{{ w }}</span>{%- endif -%}
+    {%- else -%}{{ w }}{%- endif -%}
+    {%- unless forloop.last -%}{{ ' ' }}{%- endunless -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- capture accent_html -%}
+  {%- assign awords = s.accent | escape | split: ' ' -%}
+  {%- for w in awords -%}
+    {%- if w contains '-' -%}<span class="khan-band__nb">{{ w }}</span>{%- else -%}{{ w }}{%- endif -%}
+    {%- unless forloop.last -%}{{ ' ' }}{%- endunless -%}
+  {%- endfor -%}
+{%- endcapture -%}
 
 <div
   id="KhanBand-{{ section.id }}"
-  class="khan-band color-{{ s.color_scheme }}"
+  class="khan-band khan-band--{{ s.text_align | default: 'center' }} color-{{ s.color_scheme }}"
   style="
     --kb-bg: {{ s.bg_color }};
     --kb-accent: {{ s.accent_color }};
     --kb-size: {{ s.heading_size }}px;
+    --kb-size-m: {{ s.heading_size_mobile | default: 22 }}px;
+    --kb-hw: {{ s.heading_width | default: 100 }}%;
+    --kb-accent-size: {{ s.accent_size | default: 13 }}px;
+    --kb-accent-size-m: {{ s.accent_size_mobile | default: 12 }}px;
     --kb-minh: {{ s.min_height }}px;
     --kb-maxw: {{ s.max_width }}px;
   "
@@ -20,8 +43,8 @@
     <span class="khan-band__overlay"></span>
   </div>
   <div class="khan-band__content">
-    {%- if s.heading != blank -%}<div class="khan-band__heading">{{ s.heading }}</div>{%- endif -%}
-    {%- if s.accent != blank -%}<p class="khan-band__accent">{{ s.accent }}</p>{%- endif -%}
+    {%- if heading_txt != blank -%}<div class="khan-band__heading">{{ heading_html }}</div>{%- endif -%}
+    {%- if s.accent != blank -%}<p class="khan-band__accent">{{ accent_html }}</p>{%- endif -%}
   </div>
 </div>
 
@@ -37,14 +60,30 @@
   .khan-band__img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
   .khan-band__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.45) 60%, rgb(0 0 0 / 0.2) 100%); }
   .khan-band__content { position: relative; z-index: 1; max-width: min(var(--kb-maxw, 1200px), 100%); width: 100%; margin-inline: auto; padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 48px); }
+  /* the heading uses the whole content width (Heading width setting) and balances its lines,
+     so a sentence takes as few lines as it needs instead of the old 18ch column */
   .khan-band__heading {
     margin: 0; font-family: 'Nexa', var(--font-heading--family, sans-serif); font-weight: 900;
-    font-size: min(var(--kb-size, 32px), 7vw); line-height: 1.05; letter-spacing: 0.01em;
-    text-transform: uppercase; color: #fff; max-width: 18ch;
+    font-size: var(--kb-size, 32px); line-height: 1.05; letter-spacing: 0.01em;
+    text-transform: uppercase; color: #fff; max-width: var(--kb-hw, 100%);
+    text-wrap: balance;
   }
   .khan-band__heading p { margin: 0; }
+  .khan-band__nb { white-space: nowrap; }
   .khan-band__heading :is(strong, b) { color: var(--kb-accent, #560B1E); font-weight: inherit; }
-  .khan-band__accent { margin: 18px 0 0; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--kb-accent, #560B1E); }
+  .khan-band__accent { margin: 18px 0 0; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: var(--kb-accent-size, 13px); line-height: 1.4; letter-spacing: 0.18em; text-transform: uppercase; color: var(--kb-accent, #560B1E); text-wrap: balance; }
+  .khan-band__heading + .khan-band__accent { margin-top: 18px; }
+  .khan-band__content > .khan-band__accent:first-child { margin-top: 0; }
+
+  .khan-band--center .khan-band__content { text-align: center; }
+  .khan-band--center .khan-band__heading { margin-inline: auto; }
+  .khan-band--right .khan-band__content { text-align: right; }
+  .khan-band--right .khan-band__heading { margin-inline-start: auto; }
+
+  @media screen and (max-width: 749px) {
+    .khan-band__heading { font-size: var(--kb-size-m, 22px); }
+    .khan-band__accent { font-size: var(--kb-accent-size-m, 12px); letter-spacing: 0.12em; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -58,7 +97,12 @@
     { "type": "paragraph", "content": "Bold text uses the accent color." },
     { "type": "richtext", "id": "heading", "label": "Heading", "default": "<p>We don't just make clothes. We craft statements. This isn't fashion.</p>" },
     { "type": "text", "id": "accent", "label": "Accent line", "default": "This is KHAN." },
-    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 32 },
+    { "type": "select", "id": "text_align", "label": "Text alignment", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ], "default": "center" },
+    { "type": "range", "id": "heading_size", "label": "Heading size (desktop)", "min": 18, "max": 56, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Heading size (mobile)", "min": 14, "max": 40, "step": 2, "unit": "px", "default": 22 },
+    { "type": "range", "id": "heading_width", "label": "Heading width", "min": 40, "max": 100, "step": 5, "unit": "%", "default": 100, "info": "Share of the content width the heading may use. 100% = fewest lines." },
+    { "type": "range", "id": "accent_size", "label": "Accent text size (desktop)", "min": 10, "max": 40, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "accent_size_mobile", "label": "Accent text size (mobile)", "min": 10, "max": 32, "step": 1, "unit": "px", "default": 12 },
     { "type": "range", "id": "min_height", "label": "Band height", "min": 240, "max": 700, "step": 20, "unit": "px", "default": 240 },
     { "type": "color", "id": "bg_color", "label": "Background (no image)", "default": "#ffffff" },
     { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#9A1F33" },
