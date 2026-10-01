@@ -108,7 +108,7 @@
         "frame_offset_y": 0,
         "frame_pad_y": 0,
         "frame_pad_x": 0,
-        "mobile_height": 75,
+        "mobile_height": 85,
         "frame_position_mobile": "center",
         "frame_scale_mobile": 115,
         "frame_offset_y_mobile": 30,
